@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREEZERS ESPORT</title>
+<title>Freezers "Feitmenn" Club Europe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -82,8 +82,11 @@
     0%,100%{ filter:drop-shadow(0 0 8px rgba(28,127,206,0.45)); }
     50%{ filter:drop-shadow(0 0 16px rgba(159,224,255,0.65)); }
   }
-  .brand-name{font-family:'Teko',sans-serif; font-size:24px; font-weight:700; letter-spacing:0.06em;}
-  .brand-name span{color:var(--frost);}
+  .brand-name{font-family:'Teko',sans-serif; font-size:24px; font-weight:700; letter-spacing:0.06em; line-height:1; display:flex; flex-direction:column;}
+  .brand-name .brand-sub{
+    font-family:'Inter',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.09em;
+    text-transform:uppercase; color:var(--frost); margin-top:3px;
+  }
   nav{display:flex; gap:34px;}
   nav a{
     font-size:13px; letter-spacing:0.10em; text-transform:uppercase;
@@ -117,7 +120,7 @@
     font-size:clamp(56px, 10vw, 128px);
     position:relative; z-index:1;
   }
-  .hero h1 .line2{color:var(--frost); display:block;}
+  .hero h1 .line2{color:var(--frost); display:block; font-size:0.4em; letter-spacing:0.02em; margin-top:0.12em;}
   .hero p.lead{
     max-width:520px; color:var(--muted); font-size:17px; line-height:1.65;
     margin-top:26px; position:relative; z-index:1;
@@ -233,6 +236,13 @@
     transform:scale(0.9);
   }
   .player-card:hover .p-avatar-ring{opacity:1; transform:scale(1);}
+  .p-avatar-wrap{position:relative; flex-shrink:0;}
+  .flag-badge{
+    position:absolute; bottom:-3px; right:-3px; z-index:2;
+    width:20px; height:14px; object-fit:cover; border-radius:3px;
+    border:1.5px solid var(--bg);
+    box-shadow:0 1px 4px rgba(0,0,0,0.55);
+  }
   .p-head-meta{min-width:0;}
 
   /* ---------- frost hover overlay (icy crack reveal) ---------- */
@@ -470,6 +480,7 @@
   .clip-head{display:flex; align-items:center; gap:12px;}
   .clip-head .p-avatar{width:42px; height:42px;}
   .clip-head .initials{font-size:16px;}
+  .clip-head .flag-badge{width:16px; height:11px; bottom:-2px; right:-2px;}
   .clip-name{font-family:'Teko',sans-serif; font-size:24px; letter-spacing:0.01em;}
   .clip-role{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted-2); letter-spacing:0.08em; text-transform:uppercase;}
   .clip-kd{display:flex; align-items:baseline; gap:8px;}
@@ -585,7 +596,7 @@
   <div class="wrap nav-row">
     <div class="brand">
       <img src="data:image/png;base64,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" alt="Freezers Esport logo">
-      <div class="brand-name">FREEZERS<span> ESPORT</span></div>
+      <div class="brand-name">FREEZERS<span class="brand-sub">„Feitmenn“ Club Europe</span></div>
     </div>
     <nav>
       <a href="#o-tymu">O týmu</a>
@@ -617,7 +628,7 @@
   </svg>
   <div class="wrap">
     <div class="eyebrow">Counter-Strike 2 · Team Roster</div>
-    <h1 class="display">FREEZERS<span class="line2">ESPORT</span></h1>
+    <h1 class="display">FREEZERS<span class="line2">„Feitmenn“ Club Europe</span></h1>
     <p class="lead">Pětka, která hraje s chladnou hlavou i ve žhavých rundách. Taktika, disciplína a jeden cíl — posouvat se výš, turnaj po turnaji.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="#sestava">Zobrazit sestavu</a>
@@ -822,24 +833,27 @@ const DISCORD_URL = "https://discord.gg/ejC5YhPRbG";
 
 /* ============ roster data ============ */
 const groupA = [
-  { role: "Rifler / Nader", name: "feitmenn", tag: "Kapitán & Coach", steamId: "76561199714994891", faceitNick: "5fii" },
-  { role: "Entry Fragger", name: "Akka", steamId: "76561199242107755", faceitNick: "Dittoslavko" },
-  { role: "Sniper", name: "SeinZ", steamId: "76561199070224984", faceitNick: "Nekowawa" },
-  { role: "Lurker", name: "Marusino", steamId: "76561199671050779", faceitNick: "marusino" },
-  { role: "Rifler", name: "Bombaklad", steamId: "76561199148018541", faceitNick: "bombakladP" }
+  { role: "Rifler / Nader", name: "feitmenn", tag: "Kapitán & Coach", steamId: "76561199714994891", faceitNick: "5fii", country: "cz" },
+  { role: "Entry Fragger", name: "Akka", steamId: "76561199242107755", faceitNick: "Dittoslavko", country: "sk" },
+  { role: "Sniper", name: "SeinZ", steamId: "76561199070224984", faceitNick: "Nekowawa", country: "cz" },
+  { role: "Lurker", name: "Marusino", steamId: "76561199671050779", faceitNick: "marusino", country: "cz" },
+  { role: "Rifler", name: "Bombaklad", steamId: "76561199148018541", faceitNick: "bombakladP", country: "cz" }
 ];
 
 const groupB = [
-  { role: "Skupina B", name: 'Nicolas "AC"', steamId: "76561199810927679", faceitNick: "69nicolas69" },
-  { role: "Skupina B", name: 'HarDrive "Hard"', steamId: "76561199797543717", faceitUrl: "https://www.faceit.com/en/players/HarDrive_mt" },
-  { role: "Skupina B", name: "Samičák", steamId: "76561198347183872", faceitNick: null },
-  { role: "Skupina B", name: "Dufw3kk", steamId: "76561199101221780", faceitUrl: "https://www.faceit.com/en/players/1DUFA1/cs2" },
-  { role: "Skupina B", name: "Filuta", steamId: "76561199034641564", faceitUrl: "https://www.faceit.com/en/players/martin1str" }
+  { role: "Skupina B", name: 'Nicolas "AC"', steamId: "76561199810927679", faceitNick: "69nicolas69", country: "sk" },
+  { role: "Skupina B", name: 'HarDrive "Hard"', steamId: "76561199797543717", faceitUrl: "https://www.faceit.com/en/players/HarDrive_mt", country: "ua" },
+  { role: "Skupina B", name: "Samičák", steamId: "76561198347183872", faceitNick: null, country: "cz" },
+  { role: "Skupina B", name: "Dufw3kk", steamId: "76561199101221780", faceitUrl: "https://www.faceit.com/en/players/1DUFA1/cs2", country: "cz" },
+  { role: "Skupina B", name: "Filuta", steamId: "76561199034641564", faceitUrl: "https://www.faceit.com/en/players/martin1str", country: "cz" }
 ];
 
 const groupC = [
-  { role: "Záloha", name: "Papir", handle: "KittyDiff", steamUrl: "https://steamcommunity.com/id/KittyDiff", faceitNick: null }
+  { role: "Záloha", name: "Papir", handle: "KittyDiff", steamUrl: "https://steamcommunity.com/id/KittyDiff", faceitNick: null, country: "cz" }
 ];
+
+const COUNTRY_NAMES = { cz: "Česko", sk: "Slovensko", ua: "Ukrajina" };
+
 
 function renderRoster(list, containerId){
   const el = document.getElementById(containerId);
@@ -872,10 +886,13 @@ function renderRoster(list, containerId){
         <circle cx="220" cy="90" r="1.6" fill="${p.tag ? '#ffd28c' : '#9fe0ff'}" opacity="0.5"/>
       </svg>
       <div class="p-avatar-row">
-        <div class="p-avatar">
-          <span class="initials">${initials}</span>
-          <img id="${avatarId}" alt="${displayName} Steam avatar">
-          <div class="p-avatar-ring"></div>
+        <div class="p-avatar-wrap">
+          <div class="p-avatar">
+            <span class="initials">${initials}</span>
+            <img id="${avatarId}" alt="${displayName} Steam avatar">
+            <div class="p-avatar-ring"></div>
+          </div>
+          ${p.country ? `<img class="flag-badge" src="https://flagcdn.com/24x18/${p.country}.png" srcset="https://flagcdn.com/48x36/${p.country}.png 2x" alt="${COUNTRY_NAMES[p.country] || p.country}" title="${COUNTRY_NAMES[p.country] || p.country}">` : ''}
         </div>
         <div class="p-head-meta">
           <div class="${roleClass}">${p.role}</div>
@@ -955,15 +972,25 @@ const clips = [
 ];
 
 const clipsGrid = document.getElementById('clipsGrid');
+const NATIONALITY_BY_NAME = {};
+[...groupA, ...groupB, ...groupC].forEach(p => { NATIONALITY_BY_NAME[p.name] = p.country; });
+
 clips.forEach((c, i) => {
   const card = document.createElement('div');
   card.className = 'clip-card' + (c.mvp ? ' has-clip' : '');
   const initials = c.name.replace(/["“”]/g,'').trim().slice(0,2).toUpperCase();
   const mediaId = `clip-media-${i}`;
+  const country = NATIONALITY_BY_NAME[c.name];
+  const flagHtml = country
+    ? `<img class="flag-badge" src="https://flagcdn.com/24x18/${country}.png" srcset="https://flagcdn.com/48x36/${country}.png 2x" alt="${COUNTRY_NAMES[country] || country}" title="${COUNTRY_NAMES[country] || country}">`
+    : '';
   card.innerHTML = `
     ${c.mvp ? '<div class="clip-ribbon">MVP klip</div>' : ''}
     <div class="clip-head">
-      <div class="p-avatar"><span class="initials">${initials}</span></div>
+      <div class="p-avatar-wrap">
+        <div class="p-avatar"><span class="initials">${initials}</span></div>
+        ${flagHtml}
+      </div>
       <div>
         <div class="clip-name">${c.name}</div>
         <div class="clip-role">${c.role}</div>
