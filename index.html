@@ -199,6 +199,10 @@
   .p-role.captain{color:var(--frost);}
   .p-name{font-family:'Teko',sans-serif; font-size:40px; font-weight:600; margin:6px 0 4px; text-transform:uppercase; letter-spacing:0.01em;}
   .p-name.tbd{color:var(--muted-2); font-style:normal;}
+  .p-handle{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted-2);
+    margin:-2px 0 10px; letter-spacing:0.02em;
+  }
   .p-tag{
     display:inline-block; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
     color:#08111f; background:var(--frost); padding:3px 9px; font-weight:700; margin-bottom:16px;
@@ -657,10 +661,12 @@
       <div class="roster-tab-slider" id="rosterSlider"></div>
       <div class="roster-tab active" data-tab="a">Skupina A</div>
       <div class="roster-tab" data-tab="b">Skupina B</div>
+      <div class="roster-tab" data-tab="c">Záloha</div>
     </div>
 
     <div class="roster-grid roster-panel active reveal reveal-stagger" id="roster-a"></div>
     <div class="roster-grid roster-panel reveal reveal-stagger" id="roster-b"></div>
+    <div class="roster-grid roster-panel reveal reveal-stagger" id="roster-c"></div>
   </div>
 </section>
 
@@ -831,10 +837,14 @@ const groupB = [
   { role: "Skupina B", name: "Filuta", steamId: "76561199034641564", faceitUrl: "https://www.faceit.com/en/players/martin1str" }
 ];
 
+const groupC = [
+  { role: "Záloha", name: "Papir", handle: "KittyDiff", steamUrl: "https://steamcommunity.com/id/KittyDiff", faceitNick: null }
+];
+
 function renderRoster(list, containerId){
   const el = document.getElementById(containerId);
   list.forEach(p => {
-    const steamUrl = `https://steamcommunity.com/profiles/${p.steamId}`;
+    const steamUrl = p.steamUrl || `https://steamcommunity.com/profiles/${p.steamId}`;
     const faceitUrl = p.faceitUrl || (p.faceitNick ? `https://www.faceit.com/en/players/${p.faceitNick}` : null);
 
     const card = document.createElement('div');
@@ -844,7 +854,7 @@ function renderRoster(list, containerId){
     const displayName = p.name || 'Doplní se';
     const initials = p.name ? p.name.replace(/["“”]/g,'').trim().slice(0, 2).toUpperCase() : '?';
     const nameHtml = p.name
-      ? `<div class="p-name">${p.name}</div>`
+      ? `<div class="p-name">${p.name}</div>${p.handle ? `<div class="p-handle">${p.handle}</div>` : ''}`
       : `<div class="p-name tbd">${displayName}</div>`;
     const tagHtml = p.tag ? `<div class="p-tag">${p.tag}</div>` : '';
 
@@ -852,7 +862,7 @@ function renderRoster(list, containerId){
       ? `<a class="p-link faceit" href="${faceitUrl}" target="_blank" rel="noopener">${faceitChip}</a>`
       : ``;
 
-    const avatarId = `avatar-${p.steamId}`;
+    const avatarId = `avatar-${(p.steamId || p.steamUrl).replace(/[^a-zA-Z0-9]/g, '')}`;
 
     card.innerHTML = `
       <svg class="frost-crack" viewBox="0 0 300 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -879,14 +889,15 @@ function renderRoster(list, containerId){
       </div>
     `;
     el.appendChild(card);
-    loadSteamAvatar(p.steamId, avatarId);
+    loadSteamAvatar(steamUrl, avatarId);
   });
 }
 renderRoster(groupA, 'roster-a');
 renderRoster(groupB, 'roster-b');
+renderRoster(groupC, 'roster-c');
 
-async function loadSteamAvatar(steamId, imgId){
-  const xmlUrl = `https://steamcommunity.com/profiles/${steamId}/?xml=1`;
+async function loadSteamAvatar(profileUrl, imgId){
+  const xmlUrl = `${profileUrl.replace(/\/$/, '')}/?xml=1`;
   const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(xmlUrl)}`;
   try {
     const res = await fetch(proxyUrl);
@@ -910,31 +921,37 @@ async function loadSteamAvatar(steamId, imgId){
 /* ============ roster tabs ============ */
 const tabs = document.querySelectorAll('#rosterTabs .roster-tab');
 const slider = document.getElementById('rosterSlider');
-const panelA = document.getElementById('roster-a');
-const panelB = document.getElementById('roster-b');
+const panels = {
+  a: document.getElementById('roster-a'),
+  b: document.getElementById('roster-b'),
+  c: document.getElementById('roster-c')
+};
 
 function setTab(which){
+  const tabArr = Array.from(tabs);
+  const idx = tabArr.findIndex(t => t.dataset.tab === which);
   tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === which));
-  slider.style.width = '50%';
-  slider.style.transform = which === 'a' ? 'translateX(0%)' : 'translateX(100%)';
-  panelA.classList.toggle('active', which === 'a');
-  panelB.classList.toggle('active', which === 'b');
+  const w = 100 / tabArr.length;
+  slider.style.width = `${w}%`;
+  slider.style.transform = `translateX(${idx * 100}%)`;
+  Object.keys(panels).forEach(key => panels[key].classList.toggle('active', key === which));
 }
 tabs.forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
 setTab('a');
 
 /* ============ clips & MVP ============ */
 const clips = [
-  { name: "feitmenn", role: "Kapitán & Coach", clipId: "6a57e8000fee664948e1c3dd", mvp: true },
+  { name: "feitmenn", role: "Kapitán & Coach", embedSrc: "https://allstar.gg/iframe?clip=6a57e8000fee664948e1c3dd", mvp: true },
   { name: "Akka", role: "Entry Fragger" },
-  { name: "SeinZ", role: "Sniper" },
+  { name: "SeinZ", role: "Sniper", embedSrc: "https://allstar.gg/iframe?clip=69ab40643a05a8dac6fa62dc" },
   { name: "Marusino", role: "Lurker" },
   { name: "Bombaklad", role: "Rifler" },
   { name: 'Nicolas "AC"', role: "Skupina B" },
   { name: 'HarDrive "Hard"', role: "Skupina B" },
   { name: "Samičák", role: "Skupina B" },
   { name: "Dufw3kk", role: "Skupina B" },
-  { name: "Filuta", role: "Skupina B" }
+  { name: "Filuta", role: "Skupina B" },
+  { name: "Papir", role: "Záloha", embedSrc: "https://medal.tv/games/counter-strike-2/clips/n8iPARedSmHVyfc7_" }
 ];
 
 const clipsGrid = document.getElementById('clipsGrid');
@@ -952,18 +969,18 @@ clips.forEach((c, i) => {
         <div class="clip-role">${c.role}</div>
       </div>
     </div>
-    ${c.clipId
+    ${c.embedSrc
       ? `<div class="clip-media clip-media-big" id="${mediaId}">
-           <button class="clip-play" onclick="playClip('${mediaId}','${c.clipId}')">${playIcon}Přehrát klip</button>
+           <button class="clip-play" onclick="playClip('${mediaId}', '${c.embedSrc}')">${playIcon}Přehrát klip</button>
          </div>`
       : `<div class="clip-empty">Klip zatím nepřidán</div>`}
   `;
   clipsGrid.appendChild(card);
 });
 
-function playClip(mediaId, clipId){
+function playClip(mediaId, embedSrc){
   const el = document.getElementById(mediaId);
-  el.innerHTML = `<iframe src="https://allstar.gg/iframe?clip=${clipId}" allowfullscreen scrolling="no" allow="encrypted-media *;"></iframe>`;
+  el.innerHTML = `<iframe src="${embedSrc}" allowfullscreen scrolling="no" allow="autoplay; encrypted-media *; fullscreen *;"></iframe>`;
 }
 
 /* ============ rules modal ============ */
