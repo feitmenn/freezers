@@ -341,6 +341,33 @@
   }
   .slot-fill:hover{ box-shadow:0 8px 26px rgba(28,127,206,0.4); transform:translateY(-2px); }
 
+  /* closed / filled slot */
+  .slot-card.closed{ opacity:0.62; filter:grayscale(0.4); }
+  .slot-card.closed:hover{ transform:none; border-style:dashed; border-color:var(--line); }
+  .slot-tag.closed{ color:var(--muted-2); border-color:var(--muted-2); }
+  .slot-fill.closed{
+    background:rgba(255,255,255,0.05); color:var(--muted-2); cursor:not-allowed;
+    box-shadow:none; width:100%;
+  }
+  .slot-fill.closed:hover{ box-shadow:none; transform:none; }
+
+  .tooltip-wrap{ position:relative; display:block; width:100%; }
+  .tooltip-wrap .tooltip-text{
+    position:absolute; bottom:calc(100% + 10px); left:50%;
+    transform:translateX(-50%) translateY(4px);
+    background:#0c1226; border:1px solid var(--line); color:var(--text);
+    font-size:12px; font-family:'Inter',sans-serif; font-weight:600;
+    padding:8px 14px; white-space:nowrap; border-radius:3px;
+    opacity:0; pointer-events:none; z-index:10;
+    transition:opacity .2s ease, transform .2s ease;
+    box-shadow:0 10px 26px rgba(0,0,0,0.45);
+  }
+  .tooltip-wrap .tooltip-text::after{
+    content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:6px solid transparent; border-top-color:#0c1226;
+  }
+  .tooltip-wrap:hover .tooltip-text{ opacity:1; transform:translateX(-50%) translateY(0); }
+
   .coach-card{
     margin-top:26px;
     background:linear-gradient(160deg, rgba(255,210,140,0.06), rgba(10,14,28,0.6));
@@ -725,11 +752,14 @@
     <p class="slots-intro reveal">Rozšiřujeme tým a bereme klidně i hráče, kterým se dnes říká <strong>„špatný“</strong> — pokud v tobě vidíme snahu a chuť růst, rank teď neřešíme. Chceš se posunout? Klikni na slot — než tě pustíme na náš Discord, stačí odsouhlasit pár pravidel.</p>
 
     <div class="slots-grid reveal reveal-stagger">
-      <div class="slot-card shard-card-sm tilt">
-        <div class="slot-tag">Otevřený slot</div>
+      <div class="slot-card shard-card-sm tilt closed">
+        <div class="slot-tag closed">Obsazeno</div>
         <h3>Rifler</h3>
         <p>Hledáme spolehlivého riflera na standardní i entry pozice. Aktivní přístup a ochota trénovat role jsou důležitější než aktuální rank.</p>
-        <button class="slot-fill" onclick="openRulesModal()">Obsadit</button>
+        <div class="tooltip-wrap">
+          <button class="slot-fill closed" disabled>Obsazeno</button>
+          <span class="tooltip-text">Pozice je plně obsazena</span>
+        </div>
       </div>
       <div class="slot-card shard-card-sm tilt">
         <div class="slot-tag">Otevřený slot</div>
