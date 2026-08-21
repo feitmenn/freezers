@@ -496,6 +496,25 @@
   }
   .slot-fill.closed:hover{ box-shadow:none; transform:none; }
 
+  /* ================= NEW: pink slot variant (Manager / Streamer) ================= */
+  .slot-card.pink{ border-left:4px solid #ff5fa2; }
+  .slot-card.pink .tilt::after, .slot-card.pink::after{ background:linear-gradient(90deg, transparent, #ff5fa2, #ffb3d9, transparent); }
+  .slot-tag.pink{ color:#ff5fa2; border-color:#ff5fa2; background:rgba(255,95,162,0.1); }
+  .seat-badge.pink{
+    color:#ff8fc0; background:rgba(255,95,162,0.12); border-color:rgba(255,95,162,0.55);
+    animation:seat-pulse-pink 1.7s ease-in-out infinite;
+  }
+  .seat-badge.pink .dot{ background:#ff5fa2; box-shadow:0 0 8px #ff5fa2; }
+  @keyframes seat-pulse-pink{
+    0%,100%{ box-shadow:0 0 0 rgba(255,95,162,0); border-color:rgba(255,95,162,0.55); }
+    50%{ box-shadow:0 0 16px rgba(255,95,162,0.55); border-color:rgba(255,140,190,0.9); }
+  }
+  .slot-fill.pink{
+    background:#ff5fa2; color:#2b0716; border:2px solid #ff5fa2;
+    box-shadow:4px 4px 0 rgba(255,95,162,0.35);
+  }
+  .slot-fill.pink:hover{ box-shadow:1px 1px 0 rgba(255,95,162,0.35); transform:translate(3px,3px); }
+
   .tooltip-wrap{ position:relative; display:block; width:100%; }
   .tooltip-wrap .tooltip-text{
     position:absolute; bottom:calc(100% + 10px); left:50%;
@@ -913,8 +932,22 @@
         <div class="slot-tag" data-i18n="recruit.openSlot">Open slot</div>
         <h3 data-i18n="recruit.trial.name">Trial</h3>
         <p data-i18n="recruit.trial.desc">General open tryouts — a flexible way in if you don't fit a listed role yet. Show us what you've got over a 2-week trial period.</p>
-        <span class="seat-badge"><span class="dot"></span><span data-i18n="recruit.seats5">5 seats left!</span></span>
+        <span class="seat-badge"><span class="dot"></span><span data-i18n="recruit.seats3">3 seats left!</span></span>
         <button class="slot-fill" onclick="openTrialModal('Trial')" data-i18n="recruit.apply">Apply</button>
+      </div>
+      <div class="slot-card shard-card-sm tilt pink">
+        <div class="slot-tag pink" data-i18n="recruit.openSlot">Open slot</div>
+        <h3>Manager</h3>
+        <p data-i18n="recruit.manager.desc">Looking for someone to help run the business side — partnerships, scheduling, organization. Only one spot is open between Manager and Streamer.</p>
+        <span class="seat-badge pink"><span class="dot"></span><span data-i18n="recruit.seatsShared">1 seat shared with Streamer</span></span>
+        <a class="slot-fill pink" href="mailto:freezersesport@yahoo.com?subject=Application%20-%20Manager" data-i18n="recruit.applyEmail">Apply via email</a>
+      </div>
+      <div class="slot-card shard-card-sm tilt pink">
+        <div class="slot-tag pink" data-i18n="recruit.openSlot">Open slot</div>
+        <h3 data-i18n="recruit.streamer.name">Twitch Streamer</h3>
+        <p data-i18n="recruit.streamer.desc">Represent Freezers on Twitch as our streamer. Only one spot is open between Streamer and Manager.</p>
+        <span class="seat-badge pink"><span class="dot"></span><span data-i18n="recruit.seatsShared">1 seat shared with Manager</span></span>
+        <a class="slot-fill pink" href="mailto:freezersesport@yahoo.com?subject=Application%20-%20Twitch%20Streamer" data-i18n="recruit.applyEmail">Apply via email</a>
       </div>
     </div>
 
@@ -1116,7 +1149,12 @@ const TRANSLATIONS = {
     "recruit.igl.desc":`A player who can read the game and call under pressure. This role is currently filled by Nicolas "AC" — no openings right now.`,
     "recruit.trial.name":"Trial",
     "recruit.trial.desc":"General open tryouts — a flexible way in if you don't fit a listed role yet. Show us what you've got over a 2-week trial period.",
-    "recruit.seats5":"5 seats left!",
+    "recruit.seats3":"3 seats left!",
+    "recruit.manager.desc":"Looking for someone to help run the business side — partnerships, scheduling, organization. Only one spot is open between Manager and Streamer.",
+    "recruit.seatsShared":"1 seat shared between the two",
+    "recruit.streamer.name":"Twitch Streamer",
+    "recruit.streamer.desc":"Represent Freezers on Twitch as our streamer. Only one spot is open between Streamer and Manager.",
+    "recruit.applyEmail":"Apply via email",
     "recruit.tutoring.title":"Individual tutoring &amp; coaching",
     "recruit.tutoring.desc":"Besides recruiting for the roster, we also offer individual coaching — we'll go through your demos, fix decision-making and in-game habits, and help you reach your dream rank. Open to players outside the team too.",
     "partners.num":"05 / PARTNERSHIPS","partners.title":`Open <span>partnerships</span>`,
@@ -1191,7 +1229,12 @@ const TRANSLATIONS = {
     "recruit.igl.desc":`Hráč, který umí číst hru a komunikovat pod tlakem. Tuto roli aktuálně zastává Nicolas "AC" — momentálně bez volných míst.`,
     "recruit.trial.name":"Zkouška",
     "recruit.trial.desc":"Obecný otevřený nábor — flexibilní cesta dovnitř, pokud zatím nesedíš do žádné konkrétní role. Ukaž nám, co v tobě je, během 2týdenní zkušební doby.",
-    "recruit.seats5":"Zbývá 5 míst!",
+    "recruit.seats3":"Zbývají 3 místa!",
+    "recruit.manager.desc":"Hledáme někoho, kdo pomůže s byznysovou stránkou týmu — spolupráce, plánování, organizace. Mezi Manažerem a Streamerem je volné jen jedno místo.",
+    "recruit.seatsShared":"1 místo sdílené mezi oběma pozicemi",
+    "recruit.streamer.name":"Twitch Streamer",
+    "recruit.streamer.desc":"Reprezentuj Freezers na Twitchi jako náš streamer. Mezi Streamerem a Manažerem je volné jen jedno místo.",
+    "recruit.applyEmail":"Přihlásit se e-mailem",
     "recruit.tutoring.title":"Individuální doučování &amp; coaching",
     "recruit.tutoring.desc":"Kromě náboru do sestavy nabízíme i individuální coaching — projdeme demáčka, opravíme rozhodování a herní návyky, ať se dostaneš na svůj vysněný rank. Platí i pro hráče mimo tým.",
     "partners.num":"05 / SPOLUPRÁCE","partners.title":`Otevřené <span>spolupráce</span>`,
@@ -1266,7 +1309,12 @@ const TRANSLATIONS = {
     "recruit.igl.desc":`Hráč, ktorý vie čítať hru a komunikovať pod tlakom. Túto rolu aktuálne zastáva Nicolas "AC" — momentálne bez voľných miest.`,
     "recruit.trial.name":"Skúška",
     "recruit.trial.desc":"Všeobecný otvorený nábor — flexibilná cesta dovnútra, ak zatiaľ nezapadáš do žiadnej konkrétnej role. Ukáž nám, čo v tebe je, počas 2-týždňovej skúšobnej doby.",
-    "recruit.seats5":"Zostáva 5 miest!",
+    "recruit.seats3":"Zostávajú 3 miesta!",
+    "recruit.manager.desc":"Hľadáme niekoho, kto pomôže s biznisovou stránkou tímu — spolupráce, plánovanie, organizácia. Medzi Manažérom a Streamerom je voľné len jedno miesto.",
+    "recruit.seatsShared":"1 miesto zdieľané medzi oboma pozíciami",
+    "recruit.streamer.name":"Twitch Streamer",
+    "recruit.streamer.desc":"Reprezentuj Freezers na Twitchi ako náš streamer. Medzi Streamerom a Manažérom je voľné len jedno miesto.",
+    "recruit.applyEmail":"Prihlásiť sa e-mailom",
     "recruit.tutoring.title":"Individuálne doučovanie &amp; koučing",
     "recruit.tutoring.desc":"Okrem náboru do zostavy ponúkame aj individuálny koučing — prejdeme demáčka, opravíme rozhodovanie a herné návyky, aby si sa dostal na svoj vysnívaný rank. Platí aj pre hráčov mimo tímu.",
     "partners.num":"05 / SPOLUPRÁCE","partners.title":`Otvorené <span>spolupráce</span>`,
@@ -1362,7 +1410,8 @@ const players = [
   { role: "Universal", name: "Filuta", steamId: "76561199034641564", faceitUrl: "https://www.faceit.com/en/players/martin1str", country: "cz" },
   { role: "Rifler", name: "cloudyi", steamUrl: "https://steamcommunity.com/profiles/76561199838475165/", faceitUrl: "https://www.faceit.com/en/players/Kyrenz", country: "cz" },
   { role: "Player", name: "MICHI", steamUrl: "https://steamcommunity.com/profiles/76561199036106286/", faceitUrl: "https://www.faceit.com/en/players/MJfrmda33", country: "cz" },
-  { role: "Rifler", name: "Krabik77", steamUrl: "https://steamcommunity.com/profiles/76561199223157612/", faceitUrl: "https://www.faceit.com/en/players/Krabik77", country: "cz" }
+  { role: "Rifler", name: "Krabik77", steamUrl: "https://steamcommunity.com/profiles/76561199223157612/", faceitUrl: "https://www.faceit.com/en/players/Krabik77", country: "cz" },
+  { role: "Player", name: "veny1232", steamUrl: "https://steamcommunity.com/profiles/76561199752348063", faceitUrl: "https://www.faceit.com/en/players/veny1232", country: "cz" }
 ];
 
 function renderRoster(list, containerId){
@@ -1473,7 +1522,8 @@ const clips = [
   { name: "Filuta", role: "Universal" },
   { name: "cloudyi", role: "Rifler" },
   { name: "MICHI", role: "Player" },
-  { name: "Krabik77", role: "Rifler", embedSrc: "https://allstar.gg/iframe?clip=6a3563a614f0d7a31309bdf1" }
+  { name: "Krabik77", role: "Rifler", embedSrc: "https://allstar.gg/iframe?clip=6a3563a614f0d7a31309bdf1" },
+  { name: "veny1232", role: "Player" }
 ];
 
 const NATIONALITY_BY_NAME = {};
