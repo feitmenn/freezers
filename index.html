@@ -286,6 +286,22 @@
   .trophy-card a:hover{text-decoration:underline;}
 
   /* ---------- roster ---------- */
+  .roster-tier{ margin-bottom:56px; }
+  .roster-tier:last-child{ margin-bottom:0; }
+  .roster-tier-head{
+    display:flex; align-items:center; gap:16px; margin-bottom:22px;
+  }
+  .roster-tier-label{
+    font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; text-transform:uppercase;
+    letter-spacing:-0.01em; white-space:nowrap; padding-bottom:4px; border-bottom:3px solid;
+  }
+  .roster-tier-line{ flex:1; height:1px; background:var(--line); }
+  .roster-tier-head.main .roster-tier-label{ color:var(--blue-bright); border-color:var(--blue-bright); }
+  .roster-tier-head.reserve .roster-tier-label{ color:var(--muted); border-color:var(--muted-2); }
+  .roster-tier-head.academy .roster-tier-label{ color:#5eead4; border-color:#5eead4; }
+  .roster-tier .roster-grid{ opacity:0.97; }
+  .roster-tier:has(.roster-tier-head.reserve) .player-card{ opacity:0.88; }
+
   .roster-grid{
     display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:22px;
   }
@@ -351,6 +367,10 @@
     100%{ background-position:-200% 0; }
   }
   .p-avatar-ring{ display:none; }
+  .p-avatar .initials{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:var(--frost);
+    display:flex; align-items:center; justify-content:center; width:100%; height:100%;
+  }
   .p-avatar-wrap{position:relative; flex-shrink:0;}
   .flag-badge{
     position:absolute; bottom:-4px; right:-4px; z-index:2;
@@ -871,7 +891,29 @@
     </div>
     <div class="divider"></div>
 
-    <div class="roster-grid reveal reveal-stagger" id="roster"></div>
+    <div class="roster-tier reveal">
+      <div class="roster-tier-head main">
+        <span class="roster-tier-label" data-i18n="roster.main">Main Roster</span>
+        <span class="roster-tier-line"></span>
+      </div>
+      <div class="roster-grid reveal reveal-stagger" id="roster-main"></div>
+    </div>
+
+    <div class="roster-tier reveal">
+      <div class="roster-tier-head reserve">
+        <span class="roster-tier-label" data-i18n="roster.reserve">Reserve</span>
+        <span class="roster-tier-line"></span>
+      </div>
+      <div class="roster-grid reveal reveal-stagger" id="roster-reserve"></div>
+    </div>
+
+    <div class="roster-tier reveal">
+      <div class="roster-tier-head academy">
+        <span class="roster-tier-label" data-i18n="roster.academy">Academy</span>
+        <span class="roster-tier-line"></span>
+      </div>
+      <div class="roster-grid reveal reveal-stagger" id="roster-academy"></div>
+    </div>
   </div>
 </section>
 
@@ -1123,6 +1165,7 @@ const TRANSLATIONS = {
     "about.p2":"We believe discipline in practice carries over into matches — that's why we train roles, not just aim. The goal is steady progress in tournaments and gradually building a name in the scene.",
     "about.trophy":`3rd place finish in the tournament hosted on <strong style="color:var(--frost)">nehtronix.online</strong> — the team's first big result on the way up.`,
     "roster.num":"02 / ROSTER","roster.title":`Our <span>players</span>`,
+    "roster.main":"Main Roster","roster.reserve":"Reserve","roster.academy":"Academy",
     "clips.num":"03 / CLIP HALL","clips.title":`Freezers <span>clip hall</span>`,
     "clips.intro":"A rundown of player clips. Anyone with a clip uploaded can be played right here on the page.",
     "clips.play":"Play clip","clips.empty":"No clip yet",
@@ -1203,6 +1246,7 @@ const TRANSLATIONS = {
     "about.p2":"Věříme, že disciplína v přípravě se přenáší do zápasu — proto trénujeme role, ne jen aim. Cílem je stabilní progres v turnajích a postupné budování jména na scéně.",
     "about.trophy":`3. místo v turnaji pořádaném na <strong style="color:var(--frost)">nehtronix.online</strong> — první velký výsledek na cestě týmu.`,
     "roster.num":"02 / SESTAVA","roster.title":`Naši <span>hráči</span>`,
+    "roster.main":"Hlavní sestava","roster.reserve":"Záloha","roster.academy":"Akademie",
     "clips.num":"03 / SÍŇ KLIPŮ","clips.title":`Síň klipů týmu <span>Freezers</span>`,
     "clips.intro":"Přehled hráčských klipů. Kdo má nahraný klip, jde rovnou přehrát na stránce.",
     "clips.play":"Přehrát klip","clips.empty":"Klip zatím nepřidán",
@@ -1283,6 +1327,7 @@ const TRANSLATIONS = {
     "about.p2":"Veríme, že disciplína v príprave sa prenáša do zápasu — preto trénujeme role, nielen aim. Cieľom je stabilný progres v turnajoch a postupné budovanie mena na scéne.",
     "about.trophy":`3. miesto na turnaji usporiadanom na <strong style="color:var(--frost)">nehtronix.online</strong> — prvý veľký výsledok na ceste tímu.`,
     "roster.num":"02 / ZOSTAVA","roster.title":`Naši <span>hráči</span>`,
+    "roster.main":"Hlavná zostava","roster.reserve":"Záloha","roster.academy":"Akadémia",
     "clips.num":"03 / SIEŇ KLIPOV","clips.title":`Sieň klipov tímu <span>Freezers</span>`,
     "clips.intro":"Prehľad hráčskych klipov. Kto má nahraný klip, dá sa prehrať rovno na stránke.",
     "clips.play":"Prehrať klip","clips.empty":"Klip zatiaľ nepridaný",
@@ -1361,10 +1406,11 @@ const COUNTRY_NAMES_I18N = {
 };
 const TAG_TRANSLATIONS = {
   "Captain": { en: "Captain", cs: "Kapitán", sk: "Kapitán" },
-  "Captain & IGL": { en: "Captain & IGL", cs: "Kapitán & IGL", sk: "Kapitán & IGL" }
+  "Sub Captain": { en: "Sub Captain", cs: "Zástupce kapitána", sk: "Zástupca kapitána" }
 };
 const ROLE_TRANSLATIONS = {
-  "Player": { en: "Player", cs: "Hráč", sk: "Hráč" }
+  "Player": { en: "Player", cs: "Hráč", sk: "Hráč" },
+  "Reserve": { en: "Reserve", cs: "Záloha", sk: "Záloha" }
 };
 
 function getTicketTemplate(role){
@@ -1385,9 +1431,13 @@ function setLanguage(lang){
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
   // re-render dynamic sections so tags / role names / country names re-localize
-  document.getElementById('roster').innerHTML = '';
+  document.getElementById('roster-main').innerHTML = '';
+  document.getElementById('roster-reserve').innerHTML = '';
+  document.getElementById('roster-academy').innerHTML = '';
   document.getElementById('clipsGrid').innerHTML = '';
-  renderRoster(players, 'roster');
+  renderRoster(mainRoster, 'roster-main');
+  renderRoster(reserve, 'roster-reserve');
+  renderRoster(academy, 'roster-academy');
   renderClips();
   initTilts();
   try { localStorage.setItem('freezers_lang', lang); } catch (e) {}
@@ -1398,26 +1448,35 @@ document.querySelectorAll('#langSwitch button').forEach(btn => {
 });
 
 /* ============ roster data ============ */
-const players = [
-  { role: "IGL / Anchor Rifler", name: "feitmenn", tag: "Captain", steamId: "76561199714994891", faceitNick: "5fii", country: "cz" },
-  { role: "Entry Fragger", name: "Akka", steamId: "76561199242107755", faceitNick: "Dittoslavko", country: "sk" },
-  { role: "Sniper", name: "SeinZ", steamId: "76561199070224984", faceitNick: "Nekowawa", country: "cz" },
-  { role: "Lurker", name: "Marusino", steamId: "76561199671050779", faceitNick: "marusino", country: "cz" },
-  { role: "Captain & IGL", name: 'Nicolas "AC"', tag: "Captain & IGL", tagColor: "green", steamId: "76561199810927679", faceitNick: "69nicolas69", country: "sk" },
-  { role: "Rifler", name: 'HarDrive "Hard"', steamId: "76561199797543717", faceitUrl: "https://www.faceit.com/en/players/HarDrive_mt", country: "ua" },
-  { role: "Universal", name: "Samičák", steamId: "76561198347183872", faceitNick: null, country: "cz" },
-  { role: "Lurker", name: "Dufw3kk", steamId: "76561199101221780", faceitUrl: "https://www.faceit.com/en/players/1DUFA1/cs2", country: "cz" },
-  { role: "Universal", name: "Filuta", steamId: "76561199034641564", faceitUrl: "https://www.faceit.com/en/players/martin1str", country: "cz" },
-  { role: "Rifler", name: "cloudyi", steamUrl: "https://steamcommunity.com/profiles/76561199838475165/", faceitUrl: "https://www.faceit.com/en/players/Kyrenz", country: "cz" },
-  { role: "Player", name: "MICHI", steamUrl: "https://steamcommunity.com/profiles/76561199036106286/", faceitUrl: "https://www.faceit.com/en/players/MJfrmda33", country: "cz" },
-  { role: "Rifler", name: "Krabik77", steamUrl: "https://steamcommunity.com/profiles/76561199223157612/", faceitUrl: "https://www.faceit.com/en/players/Krabik77", country: "cz" },
-  { role: "Player", name: "veny1232", steamUrl: "https://steamcommunity.com/profiles/76561199752348063", faceitUrl: "https://www.faceit.com/en/players/veny1232", country: "cz" }
+const mainRoster = [
+  { role: "Entry Fragger / Support", name: "Reformed", country: "cz" },
+  { role: "Anchor", name: "Filuta", tag: "Sub Captain", tagColor: "green", steamId: "76561199034641564", faceitUrl: "https://www.faceit.com/en/players/martin1str", country: "cz" },
+  { role: "Lurker", name: "Krabik77", steamUrl: "https://steamcommunity.com/profiles/76561199223157612/", faceitUrl: "https://www.faceit.com/en/players/Krabik77", country: "cz" },
+  { role: "IGL", name: "feitmenn", tag: "Captain", steamId: "76561199714994891", faceitNick: "5fii", country: "cz" },
+  { role: "IGL / Entry Fragger", name: 'Nicolas "AC"', steamId: "76561199810927679", faceitNick: "69nicolas69", country: "sk" }
 ];
+
+const reserve = [
+  { role: "Reserve", name: "cloudyi", steamUrl: "https://steamcommunity.com/profiles/76561199838475165/", faceitUrl: "https://www.faceit.com/en/players/Kyrenz", country: "cz" },
+  { role: "Anchor", name: "MICHI", steamUrl: "https://steamcommunity.com/profiles/76561199036106286/", faceitUrl: "https://www.faceit.com/en/players/MJfrmda33", country: "cz" }
+];
+
+const academy = [
+  { role: "Lurker", name: "Marusino", steamId: "76561199671050779", faceitNick: "marusino", country: "cz" },
+  { role: "Sniper", name: "SeinZ", tag: "Captain", steamId: "76561199070224984", faceitNick: "Nekowawa", country: "cz" },
+  { role: "Lurker", name: "veny1232", steamUrl: "https://steamcommunity.com/profiles/76561199752348063", faceitUrl: "https://www.faceit.com/en/players/veny1232", country: "cz" },
+  { role: "IGL", name: "cloudyi", tag: "Sub Captain", tagColor: "green", steamUrl: "https://steamcommunity.com/profiles/76561199838475165/", faceitUrl: "https://www.faceit.com/en/players/Kyrenz", country: "cz" }
+];
+
+const players = [...mainRoster, ...reserve, ...academy];
+
+let avatarIdSeq = 0;
 
 function renderRoster(list, containerId){
   const el = document.getElementById(containerId);
   list.forEach(p => {
-    const steamUrl = p.steamUrl || `https://steamcommunity.com/profiles/${p.steamId}`;
+    const hasSteam = !!(p.steamId || p.steamUrl);
+    const steamUrl = p.steamUrl || (p.steamId ? `https://steamcommunity.com/profiles/${p.steamId}` : null);
     const faceitUrl = p.faceitUrl || (p.faceitNick ? `https://www.faceit.com/en/players/${p.faceitNick}` : null);
 
     const card = document.createElement('div');
@@ -1438,8 +1497,13 @@ function renderRoster(list, containerId){
     const faceitLink = faceitUrl
       ? `<a class="p-link faceit" href="${faceitUrl}" target="_blank" rel="noopener">${faceitChip}</a>`
       : ``;
+    const steamLink = hasSteam
+      ? `<a class="p-link steam" href="${steamUrl}" target="_blank" rel="noopener">${steamIcon}Steam</a>`
+      : ``;
+    const noLinks = !hasSteam && !faceitUrl;
 
-    const avatarId = `avatar-${(p.steamId || p.steamUrl).replace(/[^a-zA-Z0-9]/g, '')}`;
+    avatarIdSeq += 1;
+    const avatarId = `avatar-${avatarIdSeq}`;
 
     card.innerHTML = `
       <svg class="frost-crack" viewBox="0 0 300 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -1451,8 +1515,7 @@ function renderRoster(list, containerId){
       <div class="p-avatar-row">
         <div class="p-avatar-wrap">
           <div class="p-avatar">
-            <img id="${avatarId}" alt="${displayName} Steam avatar">
-            <div class="avatar-skeleton"></div>
+            ${hasSteam ? `<img id="${avatarId}" alt="${displayName} Steam avatar"><div class="avatar-skeleton"></div>` : `<span class="initials">${displayName.slice(0,2).toUpperCase()}</span>`}
             <div class="p-avatar-ring"></div>
           </div>
           ${p.country ? `<img class="flag-badge" src="https://flagcdn.com/24x18/${p.country}.png" srcset="https://flagcdn.com/48x36/${p.country}.png 2x" alt="${countryNames[p.country] || p.country}" title="${countryNames[p.country] || p.country}">` : ''}
@@ -1463,16 +1526,15 @@ function renderRoster(list, containerId){
       </div>
       ${nameHtml}
       ${tagHtml}
-      <div class="p-links${faceitUrl ? '' : ' single'}">
-        <a class="p-link steam" href="${steamUrl}" target="_blank" rel="noopener">${steamIcon}Steam</a>
-        ${faceitLink}
-      </div>
+      ${noLinks ? '' : `<div class="p-links${(hasSteam && faceitUrl) ? '' : ' single'}">${steamLink}${faceitLink}</div>`}
     `;
     el.appendChild(card);
-    loadSteamAvatar(steamUrl, avatarId);
+    if (hasSteam) loadSteamAvatar(steamUrl, avatarId);
   });
 }
-renderRoster(players, 'roster');
+renderRoster(mainRoster, 'roster-main');
+renderRoster(reserve, 'roster-reserve');
+renderRoster(academy, 'roster-academy');
 
 const AVATAR_PROXIES = [
   url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
@@ -1512,18 +1574,15 @@ async function loadSteamAvatar(profileUrl, imgId){
 /* ============ clips ============ */
 const clips = [
   { name: "feitmenn", role: "Captain", embedSrc: "https://allstar.gg/iframe?clip=6a57e8000fee664948e1c3dd" },
-  { name: "Akka", role: "Entry Fragger" },
-  { name: "SeinZ", role: "Sniper", embedSrc: "https://allstar.gg/iframe?clip=69ab40643a05a8dac6fa62dc" },
+  { name: 'Nicolas "AC"', role: "IGL / Entry Fragger", embedSrc: "https://allstar.gg/iframe?clip=6a6cd3c2f13a78728c2a1f92" },
+  { name: "Filuta", role: "Anchor" },
+  { name: "Krabik77", role: "Lurker", embedSrc: "https://allstar.gg/iframe?clip=6a3563a614f0d7a31309bdf1" },
+  { name: "Reformed", role: "Entry Fragger / Support" },
+  { name: "cloudyi", role: "IGL" },
+  { name: "MICHI", role: "Anchor" },
   { name: "Marusino", role: "Lurker" },
-  { name: 'Nicolas "AC"', role: "Captain & IGL", embedSrc: "https://allstar.gg/iframe?clip=6a6cd3c2f13a78728c2a1f92" },
-  { name: 'HarDrive "Hard"', role: "Rifler", embedSrc: "https://medal.tv/games/counter-strike-2/clip/ne7bKxrTMnO_iqAgr" },
-  { name: "Samičák", role: "Universal", embedSrc: "https://medal.tv/games/counter-strike-2/clip/ndISkNdUqlO0Big8Z" },
-  { name: "Dufw3kk", role: "Lurker" },
-  { name: "Filuta", role: "Universal" },
-  { name: "cloudyi", role: "Rifler" },
-  { name: "MICHI", role: "Player" },
-  { name: "Krabik77", role: "Rifler", embedSrc: "https://allstar.gg/iframe?clip=6a3563a614f0d7a31309bdf1" },
-  { name: "veny1232", role: "Player" }
+  { name: "SeinZ", role: "Sniper", embedSrc: "https://allstar.gg/iframe?clip=69ab40643a05a8dac6fa62dc" },
+  { name: "veny1232", role: "Lurker" }
 ];
 
 const NATIONALITY_BY_NAME = {};
