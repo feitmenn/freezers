@@ -1,476 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="preload" as="image" href="/images/freezers-logo.png"/>
-    <link rel="preload" as="image" href="/images/hero-ice.jpg"/>
-    <link rel="preload" as="image" href="/images/player-avatar.png"/>
-    <link rel="preload" as="image" href="/images/faceit.png"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"/>
-    <title>Freezers Esport — Czechoslovak CS2 Team</title>
-    <meta name="description" content="Freezers „Feitmenn&quot; Club Europe — a Czechoslovak Counter-Strike 2 team. Roster, results, clips, recruitment and open partnerships."/>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-    <link rel="manifest" href="/manifest.json"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-  </head>
-  <body>
-    <div class="fz-root">
-      <canvas class="fz-ice-canvas" aria-hidden="true"></canvas>
-      <div class="fz-progress" style="width:0%" aria-hidden="true"></div>
-      <button type="button" class="fz-collab-banner">
-        <span class="fz-collab-banner-mark" aria-hidden="true">✦</span>
-        <span class="fz-collab-banner-text">
-          <span>OPEN COLLABORATIONS</span>
-          <span class="fz-collab-banner-sub">Even for the smallest Discord servers — click here</span>
-        </span>
-      </button>
-      <header class="fz-header">
-        <div class="fz-wrap fz-nav-row">
-          <a href="#hero" class="fz-brand">
-            <img src="/images/freezers-logo.png" alt="Freezers Esport logo"/>
-            <span class="fz-brand-name">Freezers<span class="fz-brand-sub">Esport · Since 2025</span></span>
-          </a>
-          <nav class="fz-nav" aria-label="Main navigation">
-            <a href="#o-tymu">About</a>
-            <a href="#sestava">Roster</a>
-            <a href="#uspechy">Results</a>
-            <a href="#klipy">Clips</a>
-            <a href="#server">Community Server</a>
-            <a href="#nabor">Recruitment</a>
-            <a href="#spoluprace">Partners</a>
-            <a href="#kontakt">Contact</a>
-          </nav>
-          <div class="fz-lang-switch" role="group" aria-label="Language">
-            <button type="button" class="active">EN</button>
-            <button type="button">CS</button>
-            <button type="button">SK</button>
-          </div>
-        </div>
-      </header>
-      <main id="top">
-        <section class="fz-hero" id="hero">
-          <div class="fz-hero-bg-wrap">
-            <img class="fz-hero-bg" src="/images/hero-ice.jpg" alt="" aria-hidden="true"/>
-            <div class="fz-hero-veil"></div>
-            <div class="fz-hero-mist" aria-hidden="true"></div>
-          </div>
-          <div class="fz-cubes" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <div class="fz-wrap fz-hero-inner">
-            <span class="fz-eyebrow">Counter-Strike 2 · Team Roster</span>
-            <h1 class="fz-hero-title fz-display">Freezers <span class="fz-hero-esport">ESPORT</span></h1>
-            <p class="fz-hero-since fz-mono">Since 2025</p>
-            <p class="fz-lead">A five-man team that plays with a cold head, even in the hottest rounds. Tactics, discipline, and one goal — climbing higher, tournament by tournament.</p>
-            <div class="fz-hero-actions">
-              <button type="button" class="fz-btn fz-btn-primary">View roster</button>
-              <button type="button" class="fz-btn fz-btn-ghost">Our results</button>
-            </div>
-          </div>
-        </section>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freezers Esport — Czechoslovak CS2 Team</title>
+<meta name="description" content="Freezers „Feitmenn&quot; Club Europe — a Czechoslovak Counter-Strike 2 team. Roster, results, clips, recruitment and open partnerships.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+:root {
+  --sea-ink: 189 47% 17%;
+  --sea-ink-soft: 188 22% 33%;
+  --lagoon: 177 42% 52%;
+  --lagoon-deep: 185 50% 39%;
+  --palm: 148 39% 30%;
+  --sand: 127 23% 92%;
+  --foam: 137 41% 97%;
+  --surface: 0 0% 100% / 0.74;
+  --surface-strong: 0 0% 100% / 0.9;
+  --line: 189 47% 17% / 0.14;
+  --inset-glint: 0 0% 100% / 0.82;
+  --kicker: 148 39% 30% / 0.9;
+  --bg-base: 145 33% 93%;
+  --header-bg: 94 100% 99% / 0.84;
+  --chip-bg: 0 0% 100% / 0.8;
+  --chip-line: 148 39% 30% / 0.18;
+  --link-bg-hover: 0 0% 100% / 0.9;
+  --hero-a: 177 42% 52% / 0.36;
+  --hero-b: 148 39% 30% / 0.2;
 
-        <section class="fz-section" id="o-tymu">
-          <div class="fz-wrap">
-            <div class="fz-sec-head fz-reveal" data-num="01">
-              <div class="fz-sec-num">01 / ABOUT US</div>
-              <h2 class="fz-display fz-sec-title">Who we are</h2>
-            </div>
-            <div class="fz-about-grid">
-              <div class="fz-about-text fz-reveal">
-                <p><strong>Freezers Esport</strong> is a Czechoslovak CS2 team built on players with clearly defined roles — from entering the site to lurking to the final clutch. The team is led by <strong>FILAS</strong>, who serves as team captain.</p>
-                <p>We believe discipline in practice carries over into matches — that's why we train roles, not just aim. The goal is steady progress in tournaments and gradually building a name in the scene.</p>
-              </div>
-              <div class="fz-reveal">
-                <div class="fz-trophy-grid">
-                  <div class="fz-trophy-card">
-                    <div class="fz-trophy-rank">3rd</div>
-                    <h3>Nehtronix.online Cup</h3>
-                    <span>3rd place finish in the tournament hosted on <strong>nehtronix.online</strong> — the team's first big result on the way up.</span>
-                  </div>
-                  <div class="fz-trophy-card placeholder">
-                    <div class="fz-trophy-rank">#?</div>
-                    <h3>Next up</h3>
-                    <p>More tournament results will appear here as the team keeps competing. This slot is ready for the next big finish.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.9%;
+  --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 96.1%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --accent: 0 0% 96.1%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+  --ring: 0 0% 3.9%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --radius: 0.625rem;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 0 0% 3.9%;
+  --sidebar-primary: 0 0% 9%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 0 0% 96.1%;
+  --sidebar-accent-foreground: 0 0% 9%;
+  --sidebar-border: 0 0% 89.8%;
+  --sidebar-ring: 0 0% 3.9%;
+}
 
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
+/* ============================================================
+   FREEZERS ESPORT — cryo design system
+   Light blue · white · violet on deep ice
+   ============================================================ */
 
-        <section class="fz-section fz-team-main" id="sestava">
-          <div class="fz-bloom b1" aria-hidden="true"></div>
-          <div class="fz-bloom b2" aria-hidden="true"></div>
-          <div class="fz-wrap">
-            <div class="fz-sec-head fz-reveal" data-num="02">
-              <div class="fz-sec-num">02 / ROSTER</div>
-              <h2 class="fz-display fz-sec-title">Our <span>players</span></h2>
-            </div>
-            <div class="fz-roster-tier">
-              <div class="fz-roster-tier-head main">
-                <span class="fz-roster-tier-label">Main Roster</span>
-                <span class="fz-roster-tier-line"></span>
-              </div>
-              <div class="fz-spotlight">
-                <button type="button" class="fz-spotlight-arrow" aria-label="Previous player">‹</button>
-                <div class="fz-spotlight-stage">
-                  <div class="fz-spotlight-card-inner spot-in-init">
-                    <div class="fz-spotlight-avatar-wrap">
-                      <div class="fz-spotlight-avatar">
-                        <img src="/images/player-avatar.png" alt="FILAS" class="loaded"/>
-                      </div>
-                      <img class="fz-spotlight-flag" src="https://flagcdn.com/24x18/cz.png" srcset="https://flagcdn.com/48x36/cz.png 2x" alt="Czechia" title="Czechia" loading="lazy"/>
-                    </div>
-                    <div class="fz-spotlight-role">IGL / Anchor</div>
-                    <div class="fz-spotlight-name">FILAS</div>
-                    <span class="fz-spotlight-tag" style="background:#ffd28c">Captain</span>
-                    <div class="fz-p-links">
-                      <a class="fz-p-link steam" href="https://steamcommunity.com/profiles/76561199714994891" target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.03 4.524 4.524s-2.03 4.524-4.524 4.524h-.105l-4.076 2.911c0 .052.004.104.004.157 0 1.874-1.524 3.399-3.399 3.399-1.644 0-3.02-1.172-3.334-2.727L.436 15.316C1.633 20.29 6.362 24 11.979 24c6.627 0 12-5.373 12-12S18.606 0 11.979 0z"></path></svg>Steam
-                      </a>
-                      <a class="fz-p-link faceit" href="https://www.faceit.com/en/players/5fii" target="_blank" rel="noopener">
-                        <span class="fz-faceit-chip"><img src="/images/faceit.png" alt="FACEIT"/></span>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="fz-spotlight-dots">
-                    <button type="button" class="fz-spotlight-dot active" aria-label="Show player FILAS"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player MICHI"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player Filuta"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player Krabik77"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player Nicolas &quot;AC&quot;"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player cloudyi"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player Mty"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player Reformed"></button>
-                  </div>
-                </div>
-                <button type="button" class="fz-spotlight-arrow" aria-label="Next player">›</button>
-              </div>
-            </div>
-          </div>
-        </section>
+:root {
+  --fz-bg: #050b18;
+  --fz-bg-2: #081426;
+  --fz-panel: rgba(13, 27, 51, 0.66);
+  --fz-panel-solid: #0b1930;
+  --fz-ice: #7dd3fc;
+  --fz-ice-bright: #bae6fd;
+  --fz-ice-pale: #e8f7ff;
+  --fz-violet: #8b5cf6;
+  --fz-violet-soft: #a78bfa;
+  --fz-violet-pale: #ddd6fe;
+  --fz-text: #f2f9ff;
+  --fz-muted: rgba(226, 242, 255, 0.66);
+  --fz-muted-2: rgba(226, 242, 255, 0.4);
+  --fz-line: rgba(125, 211, 252, 0.22);
+  --fz-line-violet: rgba(167, 139, 250, 0.3);
+  --fz-ink: #04101f;
+  --fz-glass: rgba(125, 211, 252, 0.06);
+  --fz-glass-border: rgba(186, 230, 253, 0.18);
+}
 
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
+.fz-root {
+  background: linear-gradient(180deg, #071223 0%, #050b18 40%, #0a0f24 75%, #0d0a1f 100%);
+  color: var(--fz-text);
+  font-family: 'Outfit', 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
-        <section class="fz-section fz-team-academy" id="akademie">
-          <div class="fz-bloom bv1" aria-hidden="true"></div>
-          <div class="fz-bloom bv2" aria-hidden="true"></div>
-          <div class="fz-wrap">
-            <div class="fz-sec-head violet fz-reveal" data-num="03">
-              <div class="fz-sec-num">03 / ACADEMY</div>
-              <h2 class="fz-display fz-sec-title">Freezers <span>Academy</span></h2>
-            </div>
-            <div class="fz-roster-tier">
-              <div class="fz-roster-tier-head academy">
-                <span class="fz-roster-tier-label">Academy</span>
-                <span class="fz-roster-tier-line"></span>
-              </div>
-              <div class="fz-spotlight violet">
-                <button type="button" class="fz-spotlight-arrow" aria-label="Previous player">‹</button>
-                <div class="fz-spotlight-stage">
-                  <div class="fz-spotlight-card-inner spot-in-init">
-                    <div class="fz-spotlight-avatar-wrap">
-                      <div class="fz-spotlight-avatar">
-                        <img src="/images/player-avatar.png" alt="SeinZ" class="loaded"/>
-                      </div>
-                      <img class="fz-spotlight-flag" src="https://flagcdn.com/24x18/cz.png" srcset="https://flagcdn.com/48x36/cz.png 2x" alt="Czechia" title="Czechia" loading="lazy"/>
-                    </div>
-                    <div class="fz-spotlight-role">Sniper</div>
-                    <div class="fz-spotlight-name">SeinZ</div>
-                    <span class="fz-spotlight-tag" style="background:#ffd28c">Captain</span>
-                    <div class="fz-p-links">
-                      <a class="fz-p-link steam" href="https://steamcommunity.com/profiles/76561199070224984" target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.03 4.524 4.524s-2.03 4.524-4.524 4.524h-.105l-4.076 2.911c0 .052.004.104.004.157 0 1.874-1.524 3.399-3.399 3.399-1.644 0-3.02-1.172-3.334-2.727L.436 15.316C1.633 20.29 6.362 24 11.979 24c6.627 0 12-5.373 12-12S18.606 0 11.979 0z"></path></svg>Steam
-                      </a>
-                      <a class="fz-p-link faceit" href="https://www.faceit.com/en/players/Nekowawa" target="_blank" rel="noopener">
-                        <span class="fz-faceit-chip"><img src="/images/faceit.png" alt="FACEIT"/></span>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="fz-spotlight-dots">
-                    <button type="button" class="fz-spotlight-dot active" aria-label="Show player SeinZ"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player veny1232"></button>
-                    <button type="button" class="fz-spotlight-dot" aria-label="Show player cloudyi"></button>
-                  </div>
-                </div>
-                <button type="button" class="fz-spotlight-arrow" aria-label="Next player">›</button>
-              </div>
-            </div>
-          </div>
-        </section>
+/* abstract cryo fog layers */
+.fz-root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 12% 8%, rgba(125, 211, 252, 0.09), transparent 60%),
+    radial-gradient(ellipse 50% 45% at 88% 30%, rgba(139, 92, 246, 0.07), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 85%, rgba(125, 211, 252, 0.06), transparent 65%);
+  animation: fz-fog-drift 26s ease-in-out infinite alternate;
+}
+@keyframes fz-fog-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate3d(-2.5%, 1.5%, 0) scale(1.06); opacity: 1; }
+  to { transform: translate3d(2%, -1.5%, 0) scale(1.02); opacity: 0.85; }
+}
 
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
+.fz-root ::selection {
+  background: var(--fz-ice);
+  color: var(--fz-ink);
+}
 
-        <section class="fz-section" id="klipy">
-          <div class="fz-wrap">
-            <div class="fz-sec-head fz-reveal" data-num="04">
-              <div class="fz-sec-num">03 / CLIP HALL</div>
-              <h2 class="fz-display fz-sec-title">Freezers <span>clip hall</span></h2>
-            </div>
-            <p class="fz-slots-intro fz-reveal">A rundown of player clips. Anyone with a clip uploaded can be played right here on the page.</p>
-            <div class="fz-clips-grid fz-reveal fz-reveal-stagger">
-              <article class="fz-clip-card has-clip">
-                <div class="fz-clip-head">
-                  <div>
-                    <div class="fz-clip-name">FILAS</div>
-                    <div class="fz-clip-role">Captain</div>
-                  </div>
-                </div>
-                <div class="fz-clip-media">
-                  <iframe src="https://allstar.gg/iframe?clip=6a57e8000fee664948e1c3dd" title="Clip by FILAS" allowfullscreen loading="lazy"></iframe>
-                </div>
-              </article>
-              <article class="fz-clip-card has-clip">
-                <div class="fz-clip-head">
-                  <div>
-                    <div class="fz-clip-name">Nicolas &quot;AC&quot;</div>
-                    <div class="fz-clip-role">Entry Fragger</div>
-                  </div>
-                </div>
-                <div class="fz-clip-media">
-                  <iframe src="https://allstar.gg/iframe?clip=6a6cd3c2f13a78728c2a1f92" title="Clip by Nicolas &quot;AC&quot;" allowfullscreen loading="lazy"></iframe>
-                </div>
-              </article>
-              <article class="fz-clip-card has-clip">
-                <div class="fz-clip-head">
-                  <div>
-                    <div class="fz-clip-name">Krabik77</div>
-                    <div class="fz-clip-role">Lurker</div>
-                  </div>
-                </div>
-                <div class="fz-clip-media">
-                  <iframe src="https://allstar.gg/iframe?clip=6a3563a614f0d7a31309bdf1" title="Clip by Krabik77" allowfullscreen loading="lazy"></iframe>
-                </div>
-              </article>
-              <article class="fz-clip-card has-clip">
-                <div class="fz-clip-head">
-                  <div>
-                    <div class="fz-clip-name">SeinZ</div>
-                    <div class="fz-clip-role">Sniper</div>
-                  </div>
-                </div>
-                <div class="fz-clip-media">
-                  <iframe src="https://allstar.gg/iframe?clip=69ab40643a05a8dac6fa62dc" title="Clip by SeinZ" allowfullscreen loading="lazy"></iframe>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
+.fz-root a {
+  color: inherit;
+  text-decoration: none;
+}
 
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
+.fz-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
 
-        <section class="fz-section fz-survey-section" id="dotaznik">
-          <div class="fz-bloom b3" aria-hidden="true"></div>
-          <div class="fz-wrap fz-survey-inner">
-            <div class="fz-sec-head fz-reveal" data-num="05">
-              <div class="fz-sec-num">05 / QUICK SURVEY</div>
-              <h2 class="fz-display fz-sec-title">Want to <span>play</span>?</h2>
-            </div>
-            <p class="fz-slots-intro fz-reveal">Answer one question, leave your email, and we will get back to you. The message lands directly in our Discord.</p>
-            <div class="fz-survey-card fz-reveal">
-              <form class="fz-survey-form" data-state="ready">
-                <p class="fz-survey-q">What would you like to do with us?</p>
-                <div class="fz-survey-opts" role="radiogroup" aria-label="What would you like to do with us?">
-                  <label class="fz-survey-opt"><input type="radio" name="fz-survey-choice" value="play"/><span>Play matches / scrims with the team</span></label>
-                  <label class="fz-survey-opt"><input type="radio" name="fz-survey-choice" value="trial"/><span>Join as a trial player</span></label>
-                  <label class="fz-survey-opt"><input type="radio" name="fz-survey-choice" value="coach"/><span>Coach or manage</span></label>
-                  <label class="fz-survey-opt"><input type="radio" name="fz-survey-choice" value="other"/><span>Something else (clips, streaming, collab)</span></label>
-                </div>
-                <div class="fz-survey-fields">
-                  <label class="fz-survey-field"><span>Your email</span><input type="email" placeholder="you@example.com" required value=""/></label>
-                  <label class="fz-survey-field"><span>Message (optional)</span><textarea placeholder="Anything you want to tell us - rank, availability, questions..." rows="3"></textarea></label>
-                </div>
-                <button type="submit" class="fz-btn fz-btn-primary fz-survey-submit">Send to our Discord</button>
-              </form>
-            </div>
-          </div>
-        </section>
+.fz-display {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
 
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
+.fz-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+@media (max-width: 640px) {
+  .fz-wrap { padding: 0 20px; }
+}
 
-        <section class="fz-section fz-server-section" id="server">
-          <div class="fz-wrap fz-server-inner">
-            <div class="fz-sec-head fz-reveal" data-num="06">
-              <div class="fz-sec-num">04 / COMMUNITY SERVER</div>
-              <h2 class="fz-display fz-sec-title">Freezers <span>community server</span></h2>
-            </div>
-            <p class="fz-slots-intro fz-reveal">Play with us outside of matches. Click connect and the server address is copied — paste it into your CS2 console and you are in.</p>
-            <div class="fz-server-panel fz-reveal">
-              <div class="fz-server-info">
-                <span class="fz-server-label">Server address</span>
-                <code class="fz-server-ip fz-mono">185.180.2.39:27512</code>
-                <button type="button" class="fz-ticket-copy">Copy connect command</button>
-              </div>
-              <div class="fz-server-rules">
-                <h3>Server rules</h3>
-                <p>The same fair-play rules as the team apply on the community server — no cheats, no toxicity, no griefing. Break them and you are out.</p>
-              </div>
-            </div>
-          </div>
-        </section>
+/* ---------- particle canvas ---------- */
+.fz-ice-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
 
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
+/* ---------- collab banner ---------- */
+.fz-collab-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  padding: 16px 20px;
+  background: linear-gradient(90deg, #c4b5fd, #e9d5ff 50%, #bae6fd);
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Sora', sans-serif;
+  z-index: 2;
+  color: var(--fz-ink);
+}
+.fz-collab-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: fz-banner-sheen 4.5s ease-in-out infinite;
+}
+@keyframes fz-banner-sheen {
+  0% { left: -60%; }
+  60%, 100% { left: 120%; }
+}
+.fz-collab-banner:hover { filter: brightness(1.06); }
+.fz-collab-banner-mark {
+  font-size: 24px;
+  color: var(--fz-ink);
+  line-height: 1;
+  flex-shrink: 0;
+  animation: fz-collab-spin 3.2s linear infinite;
+}
+@keyframes fz-collab-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+.fz-collab-banner-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+.fz-collab-banner-text > span:first-child {
+  font-size: clamp(18px, 3.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.fz-collab-banner-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 640px) {
+  .fz-collab-banner { gap: 10px; padding: 12px; }
+  .fz-collab-banner-mark { font-size: 16px; }
+}
 
-        <section class="fz-section" id="nabor">
-          <div class="fz-wrap">
-            <div class="fz-sec-head fz-reveal" data-num="07">
-              <div class="fz-sec-num">05 / RECRUITMENT</div>
-              <h2 class="fz-display fz-sec-title">We're <span>recruiting</span></h2>
-            </div>
-            <p class="fz-slots-intro fz-reveal">We're expanding the team and we'll gladly take players others call &quot;bad&quot; — if we see effort and a will to grow, your current rank isn't the point. Want to move up? Click a slot — before we let you onto our Discord, you'll just need to accept a few rules.</p>
-            <div class="fz-coach-banner fz-reveal">
-              <div class="fz-coach-banner-text fz-display">We're recruiting a coach!</div>
-            </div>
-            <div class="fz-slots-grid fz-reveal fz-reveal-stagger">
-              <article class="fz-slot-card closed">
-                <span class="fz-seat-badge muted"><span class="dot"></span>Full</span>
-                <span class="fz-slot-tag closed">Full</span>
-                <h3>Rifler</h3>
-                <p>Looking for a reliable rifler for standard and entry positions. An active attitude and willingness to train roles matter more than your current rank.</p>
-                <span class="fz-tooltip-wrap">
-                  <span class="fz-tooltip-text">This position is fully booked</span>
-                  <button type="button" class="fz-slot-fill closed" disabled></button>
-                </span>
-              </article>
-              <article class="fz-slot-card">
-                <span class="fz-seat-badge"><span class="dot"></span></span>
-                <span class="fz-slot-tag">Open slot</span>
-                <h3>Coach</h3>
-                <p>We're looking for a coach who can review demos, sharpen decision-making, and help shape our strategy. Experience coaching or IGL-ing a team is a strong plus.</p>
-                <button type="button" class="fz-slot-fill">Apply</button>
-              </article>
-              <article class="fz-slot-card closed">
-                <span class="fz-seat-badge muted"><span class="dot"></span>Full</span>
-                <span class="fz-slot-tag closed">Full</span>
-                <h3>IGL</h3>
-                <p>A player who can read the game and call under pressure. This role is currently filled by Nicolas &quot;AC&quot; — no openings right now.</p>
-                <span class="fz-tooltip-wrap">
-                  <span class="fz-tooltip-text">This position is fully booked</span>
-                  <button type="button" class="fz-slot-fill closed" disabled></button>
-                </span>
-              </article>
-              <article class="fz-slot-card">
-                <span class="fz-seat-badge"><span class="dot"></span></span>
-                <span class="fz-slot-tag">Open slot</span>
-                <h3>Trial</h3>
-                <p>General open tryouts — a flexible way in if you don't fit a listed role yet. Show us what you've got over a 2-week trial period.</p>
-                <button type="button" class="fz-slot-fill">Apply</button>
-              </article>
-              <article class="fz-slot-card pink">
-                <span class="fz-seat-badge pink"><span class="dot"></span></span>
-                <span class="fz-slot-tag pink">Open slot</span>
-                <h3>Manager</h3>
-                <p>Looking for someone to help run the business side — partnerships, scheduling, organization. Only one spot is open between Manager and Streamer.</p>
-                <button type="button" class="fz-slot-fill pink">Apply via email</button>
-              </article>
-              <article class="fz-slot-card pink">
-                <span class="fz-seat-badge pink"><span class="dot"></span></span>
-                <span class="fz-slot-tag pink">Open slot</span>
-                <h3>Twitch Streamer</h3>
-                <p>Represent Freezers on Twitch as our streamer. Only one spot is open between Streamer and Manager.</p>
-                <button type="button" class="fz-slot-fill pink">Apply via email</button>
-              </article>
-            </div>
-            <div class="fz-coach-card fz-reveal">
-              <div class="fz-coach-icon" aria-hidden="true">✎</div>
-              <div>
-                <h4>Individual tutoring &amp; coaching</h4>
-                <p>Besides recruiting for the roster, we also offer individual coaching — we'll go through your demos, fix decision-making and in-game habits, and help you reach your dream rank. Open to players outside the team too.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
-
-        <section class="fz-section" id="spoluprace">
-          <div class="fz-wrap">
-            <div class="fz-sec-head fz-reveal" data-num="08">
-              <div class="fz-sec-num">06 / PARTNERSHIPS</div>
-              <h2 class="fz-display fz-sec-title">Open <span>partnerships</span></h2>
-            </div>
-            <div class="fz-partner-banner fz-reveal">
-              <div class="fz-partner-text">
-                <h3>We have open partnerships</h3>
-                <p>Sponsorship, gear, stream support, or anything else — we're open and we'll consider pretty much <strong>anything</strong>. Reach out and let's talk details.</p>
-              </div>
-              <a class="fz-partner-cta" href="mailto:freezersesport@yahoo.com">Email us</a>
-            </div>
-          </div>
-        </section>
-
-        <div class="fz-ice-divider" aria-hidden="true">
-          <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
-            <path d="M0 14 L48 9 L96 17 L150 6 L210 19 L268 10 L330 22 L392 8 L450 16 L512 5 L570 20 L640 11 L700 23 L760 7 L820 18 L880 9 L940 21 L1000 10 L1060 19 L1120 6 L1200 14 L1200 28 L0 28 Z"></path>
-          </svg>
-        </div>
-
-        <section class="fz-section" id="kontakt">
-          <div class="fz-wrap">
-            <div class="fz-sec-head fz-reveal" data-num="09">
-              <div class="fz-sec-num">07 / CONTACT</div>
-              <h2 class="fz-display fz-sec-title">Get in <span>touch</span></h2>
-            </div>
-            <div class="fz-contact-grid fz-reveal fz-reveal-stagger">
-              <a class="fz-contact-card" href="https://discord.gg/ejC5YhPRbG" target="_blank" rel="noopener">
-                <div class="c-label">Discord server</div>
-                <div class="c-value">Open invite ↗</div>
-              </a>
-              <a class="fz-contact-card" href="mailto:akafilas@discord.example">
-                <div class="c-label">Captain — Discord</div>
-                <div class="c-value">akafilas</div>
-              </a>
-              <button type="button" class="fz-contact-card" style="cursor:pointer;text-align:left;font:inherit">
-                <div class="c-label">Ticket</div>
-                <div class="c-value" style="font-size:15px;font-weight:600">Open a ticket on our Discord server</div>
-              </button>
-              <a class="fz-contact-card" href="mailto:freezersesport@yahoo.com">
-                <div class="c-label">Email</div>
-                <div class="c-value" style="font-size:15px">freezersesport@yahoo.com</div>
-              </a>
-            </div>
-            <p class="fz-contact-note fz-reveal">We reply within 48 hours on weekdays.</p>
-          </div>
-        </section>
-      </main>
-      <footer class="fz-footer">
-        <div class="fz-wrap fz-foot-row">
-          <div class="fz-foot-brand">Freezers Esport — Czechoslovak CS2 team</div>
-          <div class="fz-muted fz-mono">Captain: FILAS</div>
-        </div>
-      </footer>
-    </div>
-  </body>
-</html>
+/* ---------- header (glass) ---------- */
+.fz-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(5, 11, 24, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--fz-line);
+  transition: box-shadow 0.3s ease;
+}
+.fz-header.scrolled {
+  box-shadow: 0 8px 30px rgba(3, 8, 18, 0.55), 0 1px 0 rgba(125, 211, 252, 0.25);
+}
+.fz-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+.fz-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fz-brand img {
+  height: 38px;
+  width: auto;
+  filter: drop-shadow(0 0 12px rgba(125, 211, 252, 0.35));
+}
+.fz-brand-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+}
+.fz-brand-name .fz-brand-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fz-ice);
+  margin-top: 5px;
+}
+.fz-nav {
+  display: flex;
+  gap: 2px;
+}
+.fz-nav a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fz-muted);
+  font-weight: 600;
+  position: relative;
+  padding: 9px 12px;
+  transition: color 0.15s ease;
+}
+.fz-nav a::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 1px;
+  background:
