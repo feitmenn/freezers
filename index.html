@@ -103,12 +103,9 @@
     <nav class="fixed w-full top-0 z-40 bg-darkBg/90 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- LOGO PLACEHOLDER -->
+                <!-- LOGO TÝMU -->
                 <div class="flex-shrink-0 flex items-center gap-3">
-                    <!-- 💡 ZDE VLOŽ LOGO: Nahraď tento div <img> tagem s tvým logem (např. src="logo.png") -->
-                    <div class="w-12 h-12 bg-gradient-to-br from-icyBlue to-neonPurple rounded-full flex items-center justify-center font-esport font-bold text-xl shadow-neon-blue">
-                        FE
-                    </div>
+                    <img src="discord-profile-picture.png" alt="Freezers Logo" class="h-12 w-auto object-contain drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]">
                     <span class="font-esport font-bold text-2xl tracking-wider text-white">
                         FREEZERS <span class="text-icyBlue">ESPORTS</span>
                     </span>
@@ -135,22 +132,26 @@
         </div>
     </nav>
 
-    <!-- Hero Sekce -->
-    <section class="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 text-center relative">
-        <div class="absolute inset-0 bg-gradient-to-b from-icyBlue/5 to-darkBg z-0 pointer-events-none"></div>
+    <!-- Hero Sekce s obrázkem ledového pozadí -->
+    <section class="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 text-center relative bg-cover bg-center bg-no-repeat border-b border-white/5" style="background-image: url('ariel-view-of-ice-formations-along-the-water.jpg');">
+        <!-- Tmavý překryv pro zaručení čitelnosti textu -->
+        <div class="absolute inset-0 bg-darkBg/80 z-0 pointer-events-none"></div>
+        <!-- Plynulý přechod do barvy zbytku stránky vespod -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-darkBg/50 to-darkBg z-0 pointer-events-none"></div>
+        
         <div class="relative z-10 fade-in">
-            <p class="text-neonPurple font-bold font-esport tracking-widest uppercase mb-4">Založeno 2025</p>
-            <h1 class="text-5xl md:text-7xl font-esport font-bold text-white mb-6 uppercase tracking-tighter">
-                We are <span class="text-transparent bg-clip-text bg-gradient-to-r from-icyBlue to-neonPurple">Freezers</span>
+            <p class="text-neonPurple font-bold font-esport tracking-widest uppercase mb-4 drop-shadow-md">Založeno 2025</p>
+            <h1 class="text-5xl md:text-7xl font-esport font-bold text-white mb-6 uppercase tracking-tighter drop-shadow-lg">
+                We are <span class="text-transparent bg-clip-text bg-gradient-to-r from-icyBlue to-neonPurple filter drop-shadow-[0_0_10px_rgba(0,240,255,0.3)]">Freezers</span>
             </h1>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-10 text-lg md:text-xl">
+            <p class="text-gray-300 max-w-2xl mx-auto mb-10 text-lg md:text-xl drop-shadow-md">
                 Nová krev na scéně. Ledově klidný aim, nekompromisní hra a vášeň pro esport.
             </p>
             <div class="flex justify-center gap-4 flex-wrap">
-                <a href="#recruitment" class="border-2 border-icyBlue text-icyBlue hover:bg-icyBlue hover:text-darkBg px-8 py-3 rounded font-esport font-bold text-lg transition shadow-neon-blue">
+                <a href="#recruitment" class="border-2 border-icyBlue text-icyBlue hover:bg-icyBlue hover:text-darkBg px-8 py-3 rounded font-esport font-bold text-lg transition shadow-neon-blue bg-darkBg/50 backdrop-blur-sm">
                     PŘIDAT SE K TÝMU
                 </a>
-                <a href="#server" class="bg-white/5 hover:bg-white/10 text-white px-8 py-3 rounded font-esport font-bold text-lg transition border border-white/10">
+                <a href="#server" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded font-esport font-bold text-lg transition border border-white/20 backdrop-blur-sm">
                     HRÁT NA SERVERU
                 </a>
             </div>
@@ -158,7 +159,7 @@
     </section>
 
     <!-- Soupisky Sekce -->
-    <section id="rosters" class="py-20 bg-cardBg/50 relative border-y border-white/5">
+    <section id="rosters" class="py-20 bg-cardBg/50 relative border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl font-esport font-bold text-center mb-16 uppercase tracking-wider fade-in">
                 Naše <span class="text-icyBlue">Soupisky</span>
@@ -315,15 +316,6 @@
 
             <!-- Formulář -->
             <div class="bg-cardBg p-6 sm:p-8 rounded-xl border border-white/5 relative">
-                <!-- VYSVĚTLENÍ PRO ADMINA K WEBHOOKU (Zobrazeno jen v kódu jako komentář) -->
-                <!-- 
-                    NÁVOD NA ZPROVOZNĚNÍ DISCORD WEBHOOKU:
-                    1. Jdi na svůj Discord server (musíš mít práva spravovat server).
-                    2. Klikni pravým na textový kanál, kam chceš dostávat přihlášky (např. #nabory).
-                    3. Vyber Upravit kanál (Edit Channel) -> Integrace (Integrations) -> Vytvořit Webhook.
-                    4. Pojmenuj ho (např. "Náborový Bot") a zkopíruj URL Webhooku (Copy Webhook URL).
-                    5. Vlož zkopírovanou URL do proměnné DISCORD_WEBHOOK_URL úplně dole v <script> sekci tohoto souboru!
-                -->
                 <form id="recruitment-form" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -429,11 +421,9 @@
             const cmd = "connect 185.180.2.39:27512";
             navigator.clipboard.writeText(cmd).then(() => {
                 const toast = document.getElementById('toast');
-                // Zobraz toast
                 toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
                 toast.classList.add('opacity-100', 'translate-y-0');
                 
-                // Skryj po 3s
                 setTimeout(() => {
                     toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
                     toast.classList.remove('opacity-100', 'translate-y-0');
@@ -447,11 +437,6 @@
         // ==========================================
         // 3. SÍŇ KLIPŮ (Dynamické načítání)
         // ==========================================
-        /* 
-           NÁVOD: Zde přidávej nová videa.
-           Podporujeme YouTube Embed odkazy. (Klikni na YT videu na Sdílet -> Vložit a zkopíruj odkaz z parametru src="...")
-           Pokud chceš přidat Twitch nebo Medal.tv, prostě vlož iframe embed link dané platformy.
-        */
         const clipsData = [
             // { title: "Insane 1v5 Clutch by FILAS", url: "https://www.youtube.com/embed/tgbNymZ7vqY" }, // Příklad
         ];
@@ -489,14 +474,12 @@
             const btn = document.getElementById('form-btn');
             const statusText = document.getElementById('form-status');
             
-            // Kontrola jestli je webhook nastaven
             if(!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL === "") {
                 statusText.innerHTML = "❌ Chyba systému: Webhook URL není nastavena administrátorem. Napište nám na Discord!";
                 statusText.className = "text-sm text-center text-red-500 block";
                 return;
             }
 
-            // Získání dat z formuláře
             const nick = document.getElementById('form-nick').value;
             const age = document.getElementById('form-age').value;
             const role = document.getElementById('form-role').value;
@@ -504,18 +487,16 @@
             const link = document.getElementById('form-link').value;
             const msg = document.getElementById('form-msg').value || "*Bez zprávy*";
 
-            // Změna tlačítka při odesílání
             btn.innerText = "Odesílám...";
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
 
-            // Formátování zprávy pro Discord (Embed JSON)
             const payload = {
                 content: "📩 **Nová přihláška do týmu Freezers!** @here",
                 embeds: [
                     {
                         title: `Přihláška: ${nick}`,
-                        color: 9055202, // Fialová barva (HEX 8A2BE2)
+                        color: 9055202,
                         fields: [
                             { name: "👤 Nick", value: nick, inline: true },
                             { name: "🎂 Věk", value: age, inline: true },
@@ -549,7 +530,6 @@
                 statusText.innerHTML = "❌ Odeslání selhalo. Prosím zkus to znovu nebo se připoj rovnou na Discord.";
                 statusText.className = "text-sm text-center text-red-500 block";
             } finally {
-                // Obnovení tlačítka
                 btn.innerText = "ODESLAT PŘIHLÁŠKU";
                 btn.disabled = false;
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
