@@ -9,7 +9,7 @@
 $DB_HOST = '185.180.2.39';
 $DB_NAME = '436119_mysql_db';
 $DB_USER = '436119_mysql_db';
-$DB_PASS = 'SEM_VLOŽ_HESLO_Z_PHPMYADMIN'; // <-- DOPLNIT: heslo k databázi (nastavíš/najdeš v administraci hostingu)
+$DB_PASS = 'Baaa5as7S'; // <-- DOPLNIT: heslo k databázi (nastavíš/najdeš v administraci hostingu)
 
 // ---- 2) HESLO PRO ADMIN PANEL NA WEBU ----
 $ADMIN_PASSWORD = 'BjjshYU4564';
