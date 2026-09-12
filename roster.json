@@ -68,6 +68,13 @@
       "type": "trial",
       "steam": "",
       "faceit": "https://www.faceit.com/cs/players/rope_flp2"
+    },
+    {
+      "name": "SeinZZZ",
+      "role": "Kapitán",
+      "type": "captain",
+      "steam": "",
+      "faceit": "https://www.faceit.com/cs/players/Nekowawa"
     }
   ],
   "academy-reserve": [
