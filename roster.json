@@ -44,6 +44,13 @@
     },
     {
       "type": "empty"
+    },
+    {
+      "name": "m-ty",
+      "role": "Reserve",
+      "type": "player",
+      "steam": "",
+      "faceit": "https://www.faceit.com/cs/players/M-ty"
     }
   ],
   "academy": [
