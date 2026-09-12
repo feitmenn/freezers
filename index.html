@@ -202,6 +202,16 @@
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
 
   .news-item{padding:18px 0;border-bottom:1px solid var(--line);}
+  .rsvp-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center;}
+  .rsvp-btn{
+    padding:9px 18px;border-radius:20px;font-size:13px;font-family:'Chakra Petch',sans-serif;
+    border:1px solid var(--line);background:transparent;color:var(--ice-dim);cursor:pointer;
+    transition:all .2s;
+  }
+  .rsvp-btn:hover{border-color:var(--turquoise);color:var(--turquoise);}
+  .rsvp-btn.active-yes{background:rgba(47,224,201,0.15);border-color:var(--turquoise);color:var(--turquoise);}
+  .rsvp-btn.active-no{background:rgba(255,95,95,0.12);border-color:rgba(255,95,95,0.5);color:#ff8080;}
+  .rsvp-counts{font-size:12px;color:var(--ice-dim);margin-left:auto;}
   .news-item:last-child{border-bottom:none;}
   .news-item .n-date{font-size:11px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;letter-spacing:.05em;}
   .news-item h4{font-size:16px;margin-top:6px;font-weight:600;}
@@ -417,12 +427,14 @@
       <a href="#hub">Novinky</a>
       <a href="#roster">Roster</a>
       <a href="#staff">Staff</a>
+      <a href="#kalendar">Kalendář</a>
       <a href="#dotaznik">Dotazník</a>
       <a href="#kontakt">Kontakt</a>
       <span class="nav-legal">
         <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener">Terms Of Service</a>
       </span>
     </nav>
+    <a href="#" id="openMemberLoginNav" class="nav-cta" style="background:transparent;border:1px solid var(--line);color:var(--ice-dim);margin-right:8px;">Přihlásit se</a>
     <a class="nav-cta" href="https://discord.gg/Ntcz76sXkP" target="_blank" rel="noopener">Discord</a>
   </div>
 </header>
@@ -560,6 +572,26 @@
   </div>
 </section>
 
+<section class="section" id="kalendar">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-kicker">ROZVRH</div>
+      <h2 class="section-title">Kalendář</h2>
+      <p class="section-sub">Po přihlášení uvidíš nadcházející zápasy a tréninky a můžeš potvrdit účast.</p>
+    </div>
+
+    <div id="calendarLoggedOut" class="hub-card" style="max-width:440px;">
+      <div class="hc-label">PŘIHLÁŠENÍ ČLENA</div>
+      <div class="hc-title">Nejdřív se přihlas</div>
+      <div class="hc-desc">Přihlašovací údaje ti dá staff. <a href="#" id="openMemberLoginLink" style="color:var(--turquoise);">Přihlásit se</a></div>
+    </div>
+
+    <div id="calendarLoggedIn" style="display:none;">
+      <div id="calendarEvents"></div>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="dotaznik">
   <div class="wrap">
     <div class="section-head">
@@ -692,7 +724,7 @@
     <div id="adminNewsList"></div>
 
     <div class="admin-divider"></div>
-    <h3>Přidat hráče do rosteru</h3>
+    <h3 id="playerFormTitle">Přidat hráče do rosteru</h3>
     <form id="adminPlayerForm">
       <div class="field">
         <label for="ap-team">Tým</label>
@@ -732,11 +764,79 @@
           <input type="url" id="ap-faceit" placeholder="https://www.faceit.com/en/players/...">
         </div>
       </div>
-      <button type="submit" class="submit-btn">Přidat hráče</button>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button type="submit" class="submit-btn" id="playerFormSubmitBtn">Přidat hráče</button>
+        <button type="button" class="btn-ghost" id="cancelPlayerEditBtn" style="display:none;padding:10px 18px;">Zrušit úpravu</button>
+      </div>
     </form>
     <div class="admin-divider"></div>
-    <h3>Aktuální roster</h3>
-    <div id="adminRosterList"></div>
+    <h3>Přidat účet člena (přihlášení do kalendáře)</h3>
+    <form id="adminUserForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="au-username">Uživatelské jméno</label>
+          <input type="text" id="au-username" placeholder="např. filas" required>
+        </div>
+        <div class="field">
+          <label for="au-display">Zobrazované jméno (nepovinné)</label>
+          <input type="text" id="au-display" placeholder="např. FILAS">
+        </div>
+      </div>
+      <div class="field">
+        <label for="au-password">Heslo</label>
+        <input type="text" id="au-password" placeholder="vygeneruj/zadej heslo" required>
+      </div>
+      <button type="submit" class="submit-btn">Vytvořit / upravit účet</button>
+    </form>
+    <div class="admin-divider"></div>
+    <h3>Existující účty</h3>
+    <div id="adminUserList"></div>
+
+    <div class="admin-divider"></div>
+    <h3>Přidat akci do kalendáře</h3>
+    <form id="adminEventForm">
+      <div class="field">
+        <label for="ae-title">Název akce</label>
+        <input type="text" id="ae-title" placeholder="např. Scrim vs. Nordic" required>
+      </div>
+      <div class="field">
+        <label for="ae-date">Datum a čas</label>
+        <input type="datetime-local" id="ae-date" required>
+      </div>
+      <div class="field">
+        <label for="ae-desc">Popis (nepovinné)</label>
+        <textarea id="ae-desc" placeholder="Detaily k akci..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Přidat akci</button>
+    </form>
+    <div class="admin-divider"></div>
+    <h3>Existující akce</h3>
+    <div id="adminEventList"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="memberLoginOverlay">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="closeMemberLoginBtn">✕</button>
+    <div class="modal-kicker">PŘIHLÁŠENÍ ČLENA</div>
+    <h3>Přihlásit se</h3>
+    <form id="memberLoginForm">
+      <div class="field">
+        <label for="member-username">Uživatelské jméno</label>
+        <input type="text" id="member-username" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="member-password">Heslo</label>
+        <input type="password" id="member-password" autocomplete="current-password" required>
+      </div>
+      <div class="field">
+        <label for="member-access-code">Přístupový kód týmu</label>
+        <input type="password" id="member-access-code" autocomplete="off" required>
+        <div style="font-size:11px;color:var(--ice-dim);margin-top:6px;">Tenhle kód ti spolu s heslem dá staff — je stejný pro celý tým.</div>
+      </div>
+      <div class="admin-error" id="memberLoginError">Špatné jméno nebo heslo.</div>
+      <button type="submit" class="submit-btn" style="width:100%;">Přihlásit se</button>
+    </form>
   </div>
 </div>
 
@@ -953,6 +1053,8 @@
   function openAdminPanel(){
     renderAdminList();
     renderAdminRosterList();
+    renderAdminUserList();
+    renderAdminEventList();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
   function closeAdminPanel(){
@@ -1130,6 +1232,8 @@
     container.innerHTML = Object.keys(TEAM_META).map(teamId => teamBlockHtml(teamId, roster[teamId])).join('');
   }
 
+  let editingPlayer = null; // { teamId, idx } | null
+
   async function renderAdminRosterList(){
     const list = document.getElementById('adminRosterList');
     try{
@@ -1143,7 +1247,10 @@
               <strong>${p.type === 'empty' ? 'Volné místo' : escapeHtml(p.name)}</strong>
               <span>${p.type === 'empty' ? '' : escapeHtml(p.role || '')}</span>
             </div>
-            <button type="button" class="admin-delete-btn" data-team="${teamId}" data-idx="${idx}">Smazat</button>
+            <div style="display:flex;gap:8px;">
+              <button type="button" class="admin-edit-btn" data-team="${teamId}" data-idx="${idx}">Upravit</button>
+              <button type="button" class="admin-delete-btn" data-team="${teamId}" data-idx="${idx}">Smazat</button>
+            </div>
           </div>
         `).join('') || '<div class="admin-empty">Žádní hráči.</div>';
         return `<div style="margin-bottom:18px;">
@@ -1151,6 +1258,33 @@
           ${rows}
         </div>`;
       }).join('');
+
+      list.querySelectorAll('.admin-edit-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          try{
+            const { roster } = await fetchRosterWithSha();
+            const data = roster || DEFAULT_ROSTER;
+            const teamId = btn.dataset.team;
+            const idx = parseInt(btn.dataset.idx, 10);
+            const p = data[teamId][idx];
+
+            editingPlayer = { teamId, idx };
+            document.getElementById('ap-team').value = teamId;
+            document.getElementById('ap-type').value = p.type || 'player';
+            document.getElementById('ap-name').value = p.name || '';
+            document.getElementById('ap-role').value = p.role || '';
+            document.getElementById('ap-steam').value = p.steam || '';
+            document.getElementById('ap-faceit').value = p.faceit || '';
+
+            document.getElementById('playerFormTitle').textContent = 'Upravit hráče';
+            document.getElementById('playerFormSubmitBtn').textContent = 'Uložit změny';
+            document.getElementById('cancelPlayerEditBtn').style.display = 'inline-block';
+            document.getElementById('adminPlayerForm').scrollIntoView({ behavior:'smooth', block:'center' });
+          }catch(e){
+            alert('Nepodařilo se načíst hráče k úpravě: ' + e.message);
+          }
+        });
+      });
 
       list.querySelectorAll('.admin-delete-btn').forEach(btn => {
         btn.addEventListener('click', async function(){
@@ -1162,6 +1296,9 @@
             const teamId = btn.dataset.team;
             data[teamId].splice(parseInt(btn.dataset.idx, 10), 1);
             await saveRosterToGithub(data, sha, 'Odebrání hráče přes admin panel');
+            if(editingPlayer && editingPlayer.teamId === teamId){
+              resetPlayerForm();
+            }
             renderRoster();
             renderAdminRosterList();
           }catch(e){
@@ -1175,6 +1312,16 @@
       list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst roster: ${escapeHtml(e.message)}</div>`;
     }
   }
+
+  function resetPlayerForm(){
+    editingPlayer = null;
+    document.getElementById('adminPlayerForm').reset();
+    document.getElementById('playerFormTitle').textContent = 'Přidat hráče do rosteru';
+    document.getElementById('playerFormSubmitBtn').textContent = 'Přidat hráče';
+    document.getElementById('cancelPlayerEditBtn').style.display = 'none';
+  }
+
+  document.getElementById('cancelPlayerEditBtn').addEventListener('click', resetPlayerForm);
 
   document.getElementById('adminPlayerForm').addEventListener('submit', async function(e){
     e.preventDefault();
@@ -1191,27 +1338,364 @@
       return;
     }
 
+    const isEditing = !!editingPlayer;
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Přidávám...';
+    submitBtn.textContent = isEditing ? 'Ukládám...' : 'Přidávám...';
 
     try{
       const { roster, sha } = await fetchRosterWithSha();
       const data = roster || JSON.parse(JSON.stringify(DEFAULT_ROSTER));
-      if(!data[teamId]) data[teamId] = [];
-      data[teamId].push(type === 'empty' ? { type:'empty' } : { name, role, type, steam, faceit });
-      await saveRosterToGithub(data, sha, `Přidání hráče: ${name || 'volné místo'} (${teamId})`);
-      e.target.reset();
+      const newPlayer = type === 'empty' ? { type:'empty' } : { name, role, type, steam, faceit };
+
+      if(isEditing){
+        // Pokud se tým v editaci změnil, hráče přesuneme do nového týmu
+        if(editingPlayer.teamId === teamId){
+          data[teamId][editingPlayer.idx] = newPlayer;
+        } else {
+          data[editingPlayer.teamId].splice(editingPlayer.idx, 1);
+          if(!data[teamId]) data[teamId] = [];
+          data[teamId].push(newPlayer);
+        }
+        await saveRosterToGithub(data, sha, `Úprava hráče: ${name || 'volné místo'} (${teamId})`);
+      } else {
+        if(!data[teamId]) data[teamId] = [];
+        data[teamId].push(newPlayer);
+        await saveRosterToGithub(data, sha, `Přidání hráče: ${name || 'volné místo'} (${teamId})`);
+      }
+
+      resetPlayerForm();
       renderRoster();
       renderAdminRosterList();
     }catch(err){
-      alert('Nepodařilo se přidat hráče: ' + err.message);
+      alert((isEditing ? 'Nepodařilo se uložit změny: ' : 'Nepodařilo se přidat hráče: ') + err.message);
     }finally{
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Přidat hráče';
+      submitBtn.textContent = editingPlayer ? 'Uložit změny' : 'Přidat hráče';
     }
   });
 
   renderRoster();
+
+  /* ============ KALENDÁŘ + ÚČTY ČLENŮ (vše uložené v GitHub repu) ============ */
+  const USERS_FILE = 'users.json';
+  const CALENDAR_FILE = 'calendar.json';
+  const RSVPS_FILE = 'rsvps.json';
+
+  let memberUsername = '';
+  let memberAccessCode = ''; // sdílený zápisový token, drží se jen v paměti
+
+  async function sha256Hex(str){
+    const enc = new TextEncoder().encode(str);
+    const buf = await crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function ghFetchPublic(path){
+    try{
+      const url = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}?cachebust=${Date.now()}`;
+      const res = await fetch(url, { cache:'no-store' });
+      if(res.status === 404) return null;
+      if(!res.ok) throw new Error('status ' + res.status);
+      return await res.json();
+    }catch(e){
+      console.error(`Nepodařilo se načíst ${path}:`, e);
+      return null;
+    }
+  }
+
+  // Obecné čtení+zápis přes GitHub Contents API, funguje s libovolným tokenem (admin GH token nebo sdílený přístupový kód)
+  async function ghFetchWithSha(path, token){
+    const headers = token ? { Authorization: `token ${token}` } : {};
+    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`;
+    const res = await fetch(url, { headers, cache:'no-store' });
+    if(res.status === 404) return { data: null, sha: null };
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('GitHub API chyba ' + res.status));
+    }
+    const json = await res.json();
+    const data = JSON.parse(b64DecodeUnicode(json.content) || 'null');
+    return { data, sha: json.sha };
+  }
+  async function ghSave(path, data, sha, message, token){
+    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`;
+    const body = { message, content: b64EncodeUnicode(JSON.stringify(data, null, 2)), branch: GH_BRANCH };
+    if(sha) body.sha = sha;
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('GitHub API chyba ' + res.status));
+    }
+    return res.json();
+  }
+
+  function formatEventDate(iso){
+    try{
+      const d = new Date(iso);
+      return d.toLocaleString('cs-CZ', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    }catch(e){ return iso; }
+  }
+
+  /* ---- Přihlášení člena ---- */
+  document.getElementById('openMemberLoginNav')?.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
+  document.getElementById('openMemberLoginLink')?.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
+  function openMemberLogin(){
+    document.getElementById('memberLoginError').classList.remove('show');
+    document.getElementById('memberLoginOverlay').classList.add('show');
+  }
+  function closeMemberLogin(){
+    document.getElementById('memberLoginOverlay').classList.remove('show');
+  }
+  document.getElementById('closeMemberLoginBtn').addEventListener('click', closeMemberLogin);
+
+  document.getElementById('memberLoginForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const username = document.getElementById('member-username').value.trim();
+    const password = document.getElementById('member-password').value;
+    const accessCode = document.getElementById('member-access-code').value.trim();
+    const btn = e.target.querySelector('.submit-btn');
+    const errBox = document.getElementById('memberLoginError');
+    errBox.classList.remove('show');
+
+    btn.disabled = true;
+    btn.textContent = 'Přihlašuji...';
+    try{
+      const users = await ghFetchPublic(USERS_FILE) || [];
+      const user = users.find(u => u.username === username);
+      if(!user){
+        errBox.textContent = 'Špatné jméno nebo heslo.';
+        errBox.classList.add('show');
+        return;
+      }
+      const hash = await sha256Hex(password);
+      if(hash !== user.passwordHash){
+        errBox.textContent = 'Špatné jméno nebo heslo.';
+        errBox.classList.add('show');
+        return;
+      }
+      // Ověříme, že přístupový kód umí zapisovat do repa (jednoduchá kontrola přes GitHub API)
+      const testRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`, {
+        headers: { Authorization: `token ${accessCode}` }
+      });
+      if(!testRes.ok){
+        errBox.textContent = 'Přístupový kód nefunguje, over ho se staffem.';
+        errBox.classList.add('show');
+        return;
+      }
+
+      memberUsername = username;
+      memberAccessCode = accessCode;
+      closeMemberLogin();
+      document.getElementById('calendarLoggedOut').style.display = 'none';
+      document.getElementById('calendarLoggedIn').style.display = 'block';
+      document.getElementById('openMemberLoginNav').textContent = user.displayName || username;
+      loadCalendar();
+    }catch(err){
+      errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
+      errBox.classList.add('show');
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Přihlásit se';
+    }
+  });
+
+  /* ---- Kalendář (čtení pro přihlášené členy) ---- */
+  function eventCardHtml(ev, myStatus, counts){
+    const yesActive = myStatus === 'yes' ? 'active-yes' : '';
+    const noActive = myStatus === 'no' ? 'active-no' : '';
+    return `
+      <div class="news-item">
+        <div class="n-date">${formatEventDate(ev.date)}</div>
+        <h4>${escapeHtml(ev.title)}</h4>
+        <p>${escapeHtml(ev.description || '')}</p>
+        <div class="rsvp-row">
+          <button type="button" class="rsvp-btn ${yesActive}" data-id="${ev.id}" data-status="yes">✔ Přijdu</button>
+          <button type="button" class="rsvp-btn ${noActive}" data-id="${ev.id}" data-status="no">✖ Nepřijdu</button>
+          <span class="rsvp-counts">✔ ${counts.yes || 0} · ✖ ${counts.no || 0}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  async function loadCalendar(){
+    const container = document.getElementById('calendarEvents');
+    container.innerHTML = '<div class="news-empty"><p>Načítám...</p></div>';
+    try{
+      const events = await ghFetchPublic(CALENDAR_FILE) || [];
+      const rsvps = await ghFetchPublic(RSVPS_FILE) || {};
+
+      if(!events.length){
+        container.innerHTML = `<div class="news-empty"><div class="ne-icon">📅</div><h4>Zatím žádné akce</h4><p>Jakmile staff přidá první akci, objeví se tady.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = events.map(ev => {
+        const evRsvps = rsvps[ev.id] || {};
+        const myStatus = evRsvps[memberUsername] || null;
+        const counts = { yes:0, no:0 };
+        Object.values(evRsvps).forEach(s => { if(s === 'yes') counts.yes++; if(s === 'no') counts.no++; });
+        return eventCardHtml(ev, myStatus, counts);
+      }).join('');
+
+      container.querySelectorAll('.rsvp-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          const id = btn.dataset.id;
+          const status = btn.dataset.status;
+          btn.disabled = true;
+          try{
+            const { data, sha } = await ghFetchWithSha(RSVPS_FILE, memberAccessCode);
+            const rsvps = data || {};
+            if(!rsvps[id]) rsvps[id] = {};
+            rsvps[id][memberUsername] = status;
+            await ghSave(RSVPS_FILE, rsvps, sha, `RSVP: ${memberUsername} -> ${status} (${id})`, memberAccessCode);
+            loadCalendar();
+          }catch(e){
+            alert('Nepodařilo se uložit odpověď: ' + e.message);
+          }finally{
+            btn.disabled = false;
+          }
+        });
+      });
+    }catch(e){
+      container.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
+    }
+  }
+
+  /* ---- Admin: správa uživatelských účtů ---- */
+  async function renderAdminUserList(){
+    const list = document.getElementById('adminUserList');
+    try{
+      const users = await ghFetchPublic(USERS_FILE) || [];
+      if(!users.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádné účty.</div>';
+        return;
+      }
+      list.innerHTML = users.map((u, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(u.displayName || u.username)}</strong>
+            <span>@${escapeHtml(u.username)}</span>
+          </div>
+          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          btn.disabled = true;
+          btn.textContent = 'Mažu...';
+          try{
+            const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+            const users = data || [];
+            users.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(USERS_FILE, users, sha, 'Odebrání účtu člena přes admin panel', ghToken);
+            renderAdminUserList();
+          }catch(e){
+            alert('Nepodařilo se smazat účet: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Smazat';
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst účty: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('adminUserForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const username = document.getElementById('au-username').value.trim();
+    const displayName = document.getElementById('au-display').value.trim();
+    const password = document.getElementById('au-password').value;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Ukládám...';
+    try{
+      const passwordHash = await sha256Hex(password);
+      const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+      const users = data || [];
+      const existingIdx = users.findIndex(u => u.username === username);
+      const entry = { username, displayName, passwordHash };
+      if(existingIdx >= 0) users[existingIdx] = entry; else users.push(entry);
+      await ghSave(USERS_FILE, users, sha, `Přidání/úprava účtu: ${username}`, ghToken);
+      e.target.reset();
+      renderAdminUserList();
+    }catch(err){
+      alert('Nepodařilo se vytvořit účet: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Vytvořit / upravit účet';
+    }
+  });
+
+  /* ---- Admin: správa akcí v kalendáři ---- */
+  async function renderAdminEventList(){
+    const list = document.getElementById('adminEventList');
+    try{
+      const events = await ghFetchPublic(CALENDAR_FILE) || [];
+      if(!events.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádné akce.</div>';
+        return;
+      }
+      list.innerHTML = events.map((ev, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(ev.title)}</strong>
+            <span>${formatEventDate(ev.date)}</span>
+          </div>
+          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          btn.disabled = true;
+          btn.textContent = 'Mažu...';
+          try{
+            const { data, sha } = await ghFetchWithSha(CALENDAR_FILE, ghToken);
+            const events = data || [];
+            events.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(CALENDAR_FILE, events, sha, 'Odebrání akce z kalendáře', ghToken);
+            renderAdminEventList();
+          }catch(e){
+            alert('Nepodařilo se smazat akci: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Smazat';
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst akce: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('adminEventForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const title = document.getElementById('ae-title').value.trim();
+    const date = document.getElementById('ae-date').value;
+    const description = document.getElementById('ae-desc').value.trim();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Přidávám...';
+    try{
+      const { data, sha } = await ghFetchWithSha(CALENDAR_FILE, ghToken);
+      const events = data || [];
+      const id = 'ev_' + Date.now();
+      events.push({ id, title, date: new Date(date).toISOString(), description });
+      await ghSave(CALENDAR_FILE, events, sha, `Přidání akce: ${title}`, ghToken);
+      e.target.reset();
+      renderAdminEventList();
+    }catch(err){
+      alert('Nepodařilo se přidat akci: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Přidat akci';
+    }
+  });
 
   /* ============ DOTAZNÍK -> DISCORD WEBHOOK ============ */
   const WEBHOOK_URL = 'https://discord.com/api/webhooks/1547953283656581120/s2sVfd34zuChdIWCv3nGJ4KZvom_Epphj1PzwUIRRY3TS103Zj3ut6K4ngRMfPSP5Agm';
