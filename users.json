@@ -23,5 +23,10 @@
     "username": "nicolasAC",
     "displayName": "[ADMIN] AC",
     "passwordHash": "7f98ef57ee694ba741bb174c88c3744937f701d5462e7b605cf62157a325b3f5"
+  },
+  {
+    "username": "rope_flp",
+    "displayName": "ROPE",
+    "passwordHash": "20729cec7c1d9739730b8246c44b337d31907e95032244a6b47268d3cb58d989"
   }
 ]
