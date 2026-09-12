@@ -221,6 +221,15 @@
   @media (max-width:600px){
     .attendee-lists{grid-template-columns:1fr;}
   }
+  .excuse-box{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);}
+  .excuse-label{display:block;font-size:12px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;margin-bottom:8px;}
+  .excuse-textarea{
+    width:100%;min-height:70px;background:rgba(255,255,255,0.03);border:1px solid var(--line);
+    border-radius:2px;padding:10px 12px;color:var(--ice);font-family:'Inter',sans-serif;font-size:13.5px;
+    resize:vertical;margin-bottom:10px;
+  }
+  .excuse-textarea:focus{outline:none;border-color:var(--turquoise);}
+  .excuse-sent-note{font-size:11.5px;color:var(--turquoise);margin-top:8px;}
 
   .week-nav{display:flex;align-items:center;gap:18px;margin-bottom:14px;}
   .week-nav-btn{
@@ -284,6 +293,34 @@
   .attendance-select.status-present{border-color:var(--turquoise);color:var(--turquoise);}
   .attendance-select.status-excused{border-color:var(--violet);color:var(--violet);}
   .attendance-select.status-unexcused{border-color:rgba(255,95,95,0.5);color:#ff8080;}
+
+  .excuse-approve-btn, .excuse-reject-btn{
+    font-family:'Inter',sans-serif;font-size:12px;padding:6px 12px;border-radius:2px;cursor:pointer;
+    transition:background .2s;
+  }
+  .excuse-approve-btn{background:none;border:1px solid rgba(47,224,201,0.4);color:var(--turquoise);}
+  .excuse-approve-btn:hover{background:rgba(47,224,201,0.12);}
+  .excuse-reject-btn{background:none;border:1px solid rgba(255,95,95,0.4);color:#ff8080;}
+  .excuse-reject-btn:hover{background:rgba(255,95,95,0.12);}
+
+  .cookie-banner{
+    position:fixed;left:0;right:0;bottom:0;z-index:300;
+    display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
+    background:rgba(7,10,18,0.96);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    padding:16px 24px;
+    transform:translateY(0);transition:transform .3s ease;
+  }
+  .cookie-banner.hidden{transform:translateY(120%);}
+  .cookie-text{font-size:13px;color:var(--ice-dim);max-width:640px;}
+  .cookie-text a{color:var(--turquoise);}
+  .cookie-accept-btn{
+    background:linear-gradient(120deg,var(--turquoise),var(--violet));
+    color:#080b14;border:none;padding:10px 24px;border-radius:2px;
+    font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:13px;
+    cursor:pointer;white-space:nowrap;transition:filter .2s;
+  }
+  .cookie-accept-btn:hover{filter:brightness(1.1);}
   .news-item:last-child{border-bottom:none;}
   .news-item .n-date{font-size:11px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;letter-spacing:.05em;}
   .news-item h4{font-size:16px;margin-top:6px;font-weight:600;}
@@ -484,6 +521,15 @@
 </style>
 </head>
 <body>
+
+<div id="cookieBanner" class="cookie-banner">
+  <div class="cookie-text">
+    Tento web používá lokální úložiště prohlížeče (ne sledovací cookies) k zapamatování tvého přihlášení a preferencí. Pokračováním souhlasíš s našimi
+    <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener">Terms Of Service</a>.
+  </div>
+  <button type="button" id="cookieAcceptBtn" class="cookie-accept-btn">Rozumím</button>
+</div>
+
 
 <div class="bloom bloom-a"></div>
 <div class="bloom bloom-b"></div>
@@ -915,6 +961,10 @@
       </select>
     </div>
     <div id="attendanceTable"></div>
+
+    <div class="admin-divider"></div>
+    <h3>Omluvenky</h3>
+    <div id="adminExcusesList"></div>
   </div>
 </div>
 
@@ -1158,6 +1208,7 @@
     renderAdminRosterList();
     renderAdminUserList();
     renderAdminEventList();
+    renderAdminExcusesList();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
   function closeAdminPanel(){
@@ -1484,6 +1535,7 @@
   const CALENDAR_FILE = 'calendar.json';
   const RSVPS_FILE = 'rsvps.json';
   const ATTENDANCE_FILE = 'attendance.json';
+  const EXCUSES_FILE = 'excuses.json';
 
   let memberUsername = '';
   let memberAccessCode = ''; // sdílený zápisový token, drží se jen v paměti
@@ -1618,6 +1670,7 @@
   let calendarEventsCache = [];
   let calendarRsvpsCache = {};
   let calendarUsersCache = [];
+  let calendarExcusesCache = {};
 
   function getWeekStart(offset){
     const now = new Date();
@@ -1634,7 +1687,7 @@
     return (u && u.displayName) ? u.displayName : username;
   }
 
-  function eventCardHtml(ev, myStatus, evRsvps){
+  function eventCardHtml(ev, myStatus, evRsvps, myExcuse){
     const yesActive = myStatus === 'yes' ? 'active-yes' : '';
     const noActive = myStatus === 'no' ? 'active-no' : '';
     const yesNames = Object.entries(evRsvps).filter(([,s]) => s === 'yes').map(([u]) => displayNameFor(u));
@@ -1657,6 +1710,12 @@
             <div class="attendee-col-title no">✖ Nepřijdou (${noNames.length})</div>
             <div class="attendee-names">${noNames.length ? noNames.map(n => escapeHtml(n)).join(', ') : '<span class="attendee-empty">zatím nikdo</span>'}</div>
           </div>
+        </div>
+        <div class="excuse-box">
+          <label class="excuse-label">Omluvenka k této akci</label>
+          <textarea class="excuse-textarea" placeholder="Napiš důvod, proč nemůžeš dorazit...">${escapeHtml(myExcuse ? myExcuse.reason : '')}</textarea>
+          <button type="button" class="btn-ghost excuse-submit-btn" data-id="${ev.id}">Odeslat omluvenku</button>
+          ${myExcuse ? `<div class="excuse-sent-note">Odesláno ${formatEventDate(myExcuse.submittedAt)} — staff to uvidí v docházce.</div>` : ''}
         </div>
       </div>
     `;
@@ -1686,6 +1745,34 @@
         }
       });
     });
+
+    container.querySelectorAll('.excuse-submit-btn').forEach(btn => {
+      btn.addEventListener('click', async function(){
+        const id = btn.dataset.id;
+        const box = btn.closest('.excuse-box');
+        const reason = box.querySelector('.excuse-textarea').value.trim();
+        if(!reason){
+          alert('Napiš prosím důvod omluvy.');
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Odesílám...';
+        try{
+          const { data, sha } = await ghFetchWithSha(EXCUSES_FILE, memberAccessCode);
+          const excuses = data || {};
+          if(!excuses[id]) excuses[id] = {};
+          excuses[id][memberUsername] = { reason, submittedAt: new Date().toISOString() };
+          await ghSave(EXCUSES_FILE, excuses, sha, `Omluvenka: ${memberUsername} (${id})`, memberAccessCode);
+          calendarExcusesCache = excuses;
+          showEventDetail(id);
+        }catch(e){
+          alert('Nepodařilo se odeslat omluvenku: ' + e.message);
+        }finally{
+          btn.disabled = false;
+          btn.textContent = 'Odeslat omluvenku';
+        }
+      });
+    });
   }
 
   function showEventDetail(id){
@@ -1694,8 +1781,9 @@
     if(!ev){ detail.style.display = 'none'; return; }
     const evRsvps = calendarRsvpsCache[ev.id] || {};
     const myStatus = evRsvps[memberUsername] || null;
+    const myExcuse = (calendarExcusesCache[ev.id] || {})[memberUsername] || null;
     detail.style.display = 'block';
-    detail.innerHTML = eventCardHtml(ev, myStatus, evRsvps);
+    detail.innerHTML = eventCardHtml(ev, myStatus, evRsvps, myExcuse);
     attachRsvpHandlers(detail);
     detail.scrollIntoView({ behavior:'smooth', block:'nearest' });
   }
@@ -1752,6 +1840,7 @@
       calendarEventsCache = await ghFetchPublic(CALENDAR_FILE) || [];
       calendarRsvpsCache = await ghFetchPublic(RSVPS_FILE) || {};
       calendarUsersCache = await ghFetchPublic(USERS_FILE) || [];
+      calendarExcusesCache = await ghFetchPublic(EXCUSES_FILE) || {};
       renderCalendarGrid();
     }catch(e){
       gridEl.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
@@ -1988,6 +2077,82 @@
     renderAttendanceTable(this.value);
   });
 
+  /* ---- Admin: omluvenky (schválit -> omluveno, zamítnout -> neomluveno) ---- */
+  async function renderAdminExcusesList(){
+    const list = document.getElementById('adminExcusesList');
+    list.innerHTML = '<div class="admin-empty">Načítám...</div>';
+    try{
+      const excuses = await ghFetchPublic(EXCUSES_FILE) || {};
+      const events = await ghFetchPublic(CALENDAR_FILE) || [];
+      const users = await ghFetchPublic(USERS_FILE) || [];
+
+      const rows = [];
+      Object.entries(excuses).forEach(([eventId, byUser]) => {
+        Object.entries(byUser).forEach(([username, info]) => {
+          rows.push({ eventId, username, ...info });
+        });
+      });
+      rows.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+      if(!rows.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádné omluvenky.</div>';
+        return;
+      }
+
+      list.innerHTML = rows.map(r => {
+        const ev = events.find(e => e.id === r.eventId);
+        const u = users.find(u => u.username === r.username);
+        const displayName = u ? (u.displayName || u.username) : r.username;
+        return `
+          <div class="admin-news-row" style="align-items:flex-start;">
+            <div class="admin-news-row-text">
+              <strong>${escapeHtml(displayName)}</strong>
+              <span>${ev ? escapeHtml(ev.title) + ' — ' + formatEventDate(ev.date) : '(akce už neexistuje)'}</span>
+              <span style="margin-top:6px;display:block;color:var(--ice);">${escapeHtml(r.reason)}</span>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;">
+              <button type="button" class="excuse-approve-btn" data-event="${r.eventId}" data-user="${escapeHtml(r.username)}">Schválit</button>
+              <button type="button" class="excuse-reject-btn" data-event="${r.eventId}" data-user="${escapeHtml(r.username)}">Zamítnout</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      list.querySelectorAll('.excuse-approve-btn, .excuse-reject-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          const eventId = btn.dataset.event;
+          const username = btn.dataset.user;
+          const approve = btn.classList.contains('excuse-approve-btn');
+          const row = btn.closest('.admin-news-row');
+          row.querySelectorAll('button').forEach(b => b.disabled = true);
+          try{
+            const { data: att, sha: attSha } = await ghFetchWithSha(ATTENDANCE_FILE, ghToken);
+            const attendance = att || {};
+            if(!attendance[eventId]) attendance[eventId] = {};
+            attendance[eventId][username] = approve ? 'excused' : 'unexcused';
+            await ghSave(ATTENDANCE_FILE, attendance, attSha, `Omluvenka ${approve ? 'schválena' : 'zamítnuta'}: ${username}`, ghToken);
+
+            const { data: exc, sha: excSha } = await ghFetchWithSha(EXCUSES_FILE, ghToken);
+            const excuses = exc || {};
+            if(excuses[eventId]){
+              delete excuses[eventId][username];
+              if(Object.keys(excuses[eventId]).length === 0) delete excuses[eventId];
+            }
+            await ghSave(EXCUSES_FILE, excuses, excSha, `Vyřízení omluvenky: ${username}`, ghToken);
+
+            renderAdminExcusesList();
+            renderAttendanceTable(document.getElementById('att-event-select').value);
+          }catch(e){
+            alert('Nepodařilo se zpracovat omluvenku: ' + e.message);
+            row.querySelectorAll('button').forEach(b => b.disabled = false);
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst omluvenky: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
   /* ============ DOTAZNÍK -> DISCORD WEBHOOK ============ */
   const WEBHOOK_URL = 'https://discord.com/api/webhooks/1547953283656581120/s2sVfd34zuChdIWCv3nGJ4KZvom_Epphj1PzwUIRRY3TS103Zj3ut6K4ngRMfPSP5Agm';
   const TEAM_LABELS = { main:'Main', reserve:'Reserve Main', academy:'Academy', 'academy-reserve':'Academy Reserve' };
@@ -2058,6 +2223,22 @@
       submitBtn.textContent = 'Odeslat přihlášku';
     }
   });
+
+  /* ============ COOKIE LIŠTA ============ */
+  (function(){
+    const COOKIE_KEY = 'freezers_cookie_consent';
+    const banner = document.getElementById('cookieBanner');
+    try{
+      if(localStorage.getItem(COOKIE_KEY) === 'accepted'){
+        banner.classList.add('hidden');
+      }
+    }catch(e){ /* localStorage nedostupné, lišta zůstane viditelná */ }
+
+    document.getElementById('cookieAcceptBtn').addEventListener('click', function(){
+      banner.classList.add('hidden');
+      try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
+    });
+  })();
 </script>
 
 </body>
