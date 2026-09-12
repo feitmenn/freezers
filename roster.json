@@ -1,9 +1,5 @@
 {
-  "main": [
-    {
-      "type": "empty"
-    }
-  ],
+  "main": [],
   "reserve": [
     {
       "name": "Filuta",
