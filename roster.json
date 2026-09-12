@@ -24,6 +24,9 @@
       "name": "Reformed",
       "role": "Main roster",
       "type": "player"
+    },
+    {
+      "type": "empty"
     }
   ],
   "reserve": [
