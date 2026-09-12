@@ -1,0 +1,77 @@
+{
+  "main": [
+    {
+      "name": "FILAS",
+      "role": "CEO & Kapitán",
+      "type": "captain"
+    },
+    {
+      "name": "Krabík77",
+      "role": "Main roster",
+      "type": "player"
+    },
+    {
+      "name": "MichimjmFrnda",
+      "role": "Main roster",
+      "type": "player"
+    },
+    {
+      "name": "AC",
+      "role": "Sub kapitán",
+      "type": "captain"
+    },
+    {
+      "name": "Reformed",
+      "role": "Main roster",
+      "type": "player"
+    }
+  ],
+  "reserve": [
+    {
+      "name": "Filuta",
+      "role": "Reserve",
+      "type": "player"
+    },
+    {
+      "name": "m-ty",
+      "role": "Reserve",
+      "type": "player"
+    },
+    {
+      "type": "empty"
+    }
+  ],
+  "academy": [
+    {
+      "name": "SeinZZZ",
+      "role": "Kapitán",
+      "type": "captain"
+    },
+    {
+      "name": "Clodyi",
+      "role": "Sub kapitán",
+      "type": "captain"
+    },
+    {
+      "name": "Rope_flp",
+      "role": "Zkušební období",
+      "type": "trial"
+    },
+    {
+      "name": "Talatak",
+      "role": "Zkušební období",
+      "type": "trial"
+    }
+  ],
+  "academy-reserve": [
+    {
+      "type": "empty"
+    },
+    {
+      "type": "empty"
+    },
+    {
+      "type": "empty"
+    }
+  ]
+}
