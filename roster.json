@@ -27,6 +27,13 @@
     },
     {
       "type": "empty"
+    },
+    {
+      "name": "FILAS",
+      "role": "CEO & Kapitán",
+      "type": "captain",
+      "steam": "https://steamcommunity.com/id/csfila/",
+      "faceit": "https://www.faceit.com/en/players/FILAS/cs2"
     }
   ],
   "reserve": [
