@@ -217,30 +217,39 @@
   .week-label{font-family:'Chakra Petch',sans-serif;font-size:15px;color:var(--ice-dim);min-width:140px;text-align:center;}
   .calendar-legend{display:flex;gap:20px;margin-bottom:18px;font-size:12px;color:var(--ice-dim);flex-wrap:wrap;}
   .legend-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:middle;}
-  .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+  .calendar-grid{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:3px;overflow:hidden;}
   .calendar-day{
-    background:var(--card);border:1px solid var(--line);border-radius:3px;
-    padding:10px 8px;min-height:120px;display:flex;flex-direction:column;gap:6px;
+    background:var(--card);display:grid;grid-template-columns:100px 1fr;
+    border-bottom:1px solid var(--line);min-height:64px;
   }
-  .calendar-day.today{border-color:var(--turquoise);}
+  .calendar-day:last-child{border-bottom:none;}
+  .calendar-day.today{background:rgba(47,224,201,0.05);}
+  .calendar-day.today .calendar-day-head{color:var(--turquoise);}
   .calendar-day-head{
-    font-size:11px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;
-    letter-spacing:.03em;text-align:center;padding-bottom:8px;margin-bottom:2px;
-    border-bottom:1px solid var(--line);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    font-size:12px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;
+    letter-spacing:.03em;text-align:center;border-right:1px solid var(--line);
+    padding:8px 4px;
   }
+  .calendar-day-head .day-date{font-size:10px;opacity:0.7;margin-top:2px;}
+  .calendar-day-events{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;}
   .event-square{
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:11px;
-    border-radius:4px;padding:8px 4px;cursor:pointer;color:#080b14;
-    transition:transform .15s;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'Chakra Petch',sans-serif;font-weight:700;
+    border-radius:4px;padding:6px 12px;cursor:pointer;color:#080b14;
+    transition:transform .15s;min-width:56px;
   }
+  .event-square .es-label{font-size:12px;}
+  .event-square .es-time{font-size:9px;font-weight:500;opacity:0.75;margin-top:2px;}
   .event-square:hover{transform:scale(1.05);}
+  .calendar-day-empty{color:var(--ice-dim);font-size:12px;opacity:0.4;padding:0 4px;}
   .event-detail{margin-top:24px;}
   @media (max-width:700px){
-    .calendar-grid{grid-template-columns:repeat(7,minmax(38px,1fr));}
-    .calendar-day{padding:6px 3px;min-height:80px;}
-    .calendar-day-head{font-size:9px;}
-    .event-square{font-size:9px;padding:5px 2px;}
+    .calendar-day{grid-template-columns:70px 1fr;}
+    .calendar-day-head{font-size:10px;padding:6px 2px;}
+    .event-square{padding:5px 8px;min-width:44px;}
+    .event-square .es-label{font-size:10px;}
+    .event-square .es-time{font-size:8px;}
   }
 
   .attendance-table{width:100%;border-collapse:collapse;font-size:13.5px;}
@@ -1675,19 +1684,27 @@
       }
 
       gridEl.innerHTML = days.map((d, idx) => {
-        const dayEvents = calendarEventsCache.filter(ev => {
-          const evDate = new Date(ev.date);
-          return evDate.getFullYear() === d.getFullYear() && evDate.getMonth() === d.getMonth() && evDate.getDate() === d.getDate();
-        });
+        const dayEvents = calendarEventsCache
+          .filter(ev => {
+            const evDate = new Date(ev.date);
+            return evDate.getFullYear() === d.getFullYear() && evDate.getMonth() === d.getMonth() && evDate.getDate() === d.getDate();
+          })
+          .sort((a, b) => new Date(a.date) - new Date(b.date));
         const isToday = new Date().toDateString() === d.toDateString();
         const squares = dayEvents.map(ev => {
           const meta = TYPE_META[ev.type] || { label:'EV', color:'#888' };
-          return `<div class="event-square" style="background:${meta.color};" data-id="${ev.id}" title="${escapeHtml(ev.title)}">${meta.label}</div>`;
-        }).join('');
+          const time = new Date(ev.date).toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' });
+          return `
+            <div class="event-square" style="background:${meta.color};" data-id="${ev.id}" title="${escapeHtml(ev.title)}">
+              <div class="es-label">${meta.label}</div>
+              <div class="es-time">${time}</div>
+            </div>
+          `;
+        }).join('') || '<span class="calendar-day-empty">—</span>';
         return `
           <div class="calendar-day ${isToday ? 'today' : ''}">
-            <div class="calendar-day-head">${DAY_NAMES[idx]}<br>${formatShortDate(d)}</div>
-            ${squares}
+            <div class="calendar-day-head">${DAY_NAMES[idx]}<span class="day-date">${formatShortDate(d)}</span></div>
+            <div class="calendar-day-events">${squares}</div>
           </div>
         `;
       }).join('');
