@@ -1,5 +1,13 @@
 {
-  "main": [],
+  "main": [
+    {
+      "name": "Cloudyi_",
+      "role": "Sub Captain",
+      "type": "captain",
+      "steam": "",
+      "faceit": ""
+    }
+  ],
   "reserve": [
     {
       "name": "Filuta",
