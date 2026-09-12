@@ -1,5 +1,13 @@
 {
-  "main": [],
+  "main": [
+    {
+      "name": "FILAS",
+      "role": "CEO & Captain",
+      "type": "captain",
+      "steam": "",
+      "faceit": "https://www.faceit.com/en/players/FILAS"
+    }
+  ],
   "reserve": [
     {
       "name": "Filuta",
