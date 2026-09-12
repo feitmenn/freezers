@@ -64,9 +64,13 @@
   .nav-brand{display:flex;align-items:center;gap:10px;}
   .nav-brand img{height:30px;width:auto;}
   .nav-brand span{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:17px;letter-spacing:0.03em;}
-  nav.links{display:flex;gap:28px;}
+  nav.links{display:flex;gap:28px;align-items:center;}
   nav.links a{font-size:14px;color:var(--ice-dim);transition:color .2s;}
   nav.links a:hover{color:var(--turquoise);}
+  .nav-legal{display:flex;align-items:center;gap:6px;margin-left:6px;padding-left:16px;border-left:1px solid var(--line);}
+  .nav-legal a{font-size:10px;color:rgba(170,184,204,0.55);letter-spacing:.03em;transition:color .2s;}
+  .nav-legal a:hover{color:var(--turquoise);}
+  .nav-legal-sep{font-size:10px;color:rgba(170,184,204,0.3);}
   .nav-cta{
     font-size:13px;font-weight:600;padding:9px 18px;
     background:linear-gradient(120deg,var(--turquoise),var(--violet));
@@ -407,6 +411,11 @@
       <a href="#staff">Staff</a>
       <a href="#dotaznik">Dotazník</a>
       <a href="#kontakt">Kontakt</a>
+      <span class="nav-legal">
+        <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener">TOS</a>
+        <span class="nav-legal-sep">·</span>
+        <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener">Ochrana práv</a>
+      </span>
     </nav>
     <a class="nav-cta" href="https://discord.gg/Ntcz76sXkP" target="_blank" rel="noopener">Discord</a>
   </div>
@@ -642,14 +651,25 @@
           <input type="number" id="f-age" min="10" max="99" placeholder="16">
         </div>
         <div class="field">
-          <label for="f-rank">Aktuální rank / úroveň</label>
-          <input type="text" id="f-rank" placeholder="např. Diamond 2">
+          <label for="f-rank">CS2 Rank / Premier Rating</label>
+          <input type="text" id="f-rank" placeholder="např. Global Elite / 25 000">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-steam">Odkaz na Steam profil</label>
+          <input type="url" id="f-steam" placeholder="https://steamcommunity.com/id/...">
+        </div>
+        <div class="field">
+          <label for="f-faceit">Odkaz na Faceit profil</label>
+          <input type="url" id="f-faceit" placeholder="https://www.faceit.com/en/players/...">
         </div>
       </div>
 
       <div class="field">
         <label for="f-exp">Zkušenosti a dosavadní týmy</label>
-        <textarea id="f-exp" placeholder="Krátce popiš svou herní historii, turnaje, předchozí týmy..."></textarea>
+        <textarea id="f-exp" placeholder="Krátce popiš svou CS2 historii, turnaje, předchozí týmy..."></textarea>
       </div>
 
       <button type="submit" class="submit-btn">Odeslat přihlášku</button>
@@ -681,6 +701,7 @@
       <a href="#roster">Roster</a>
       <a href="#staff">Staff</a>
       <a href="https://discord.gg/Ntcz76sXkP" target="_blank" rel="noopener">Discord</a>
+      <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener" style="font-size:11px;opacity:0.7;">TOS / Ochrana práv</a>
     </div>
   </div>
 </footer>
@@ -1007,6 +1028,8 @@
     const team = teamChecked ? TEAM_LABELS[teamChecked.value] : 'Neuvedeno';
     const age = document.getElementById('f-age').value || 'Neuvedeno';
     const rank = document.getElementById('f-rank').value.trim() || 'Neuvedeno';
+    const steam = document.getElementById('f-steam').value.trim();
+    const faceit = document.getElementById('f-faceit').value.trim();
     const exp = document.getElementById('f-exp').value.trim() || 'Neuvedeno';
 
     submitBtn.disabled = true;
@@ -1021,7 +1044,9 @@
           { name: 'Discord', value: discord || 'Neuvedeno', inline: true },
           { name: 'Zájem o tým', value: team, inline: true },
           { name: 'Věk', value: String(age), inline: true },
-          { name: 'Rank / úroveň', value: rank, inline: true },
+          { name: 'CS2 Rank / Rating', value: rank, inline: true },
+          { name: 'Steam', value: steam ? `[Profil](${steam})` : 'Neuvedeno', inline: true },
+          { name: 'Faceit', value: faceit ? `[Profil](${faceit})` : 'Neuvedeno', inline: true },
           { name: 'Zkušenosti', value: exp }
         ],
         timestamp: new Date().toISOString()
@@ -1029,18 +1054,26 @@
     };
 
     try{
+      // FormData + payload_json obchází CORS preflight problém, který blokuje čisté application/json z prohlížeče
+      const form = new FormData();
+      form.append('payload_json', JSON.stringify(payload));
+
       const res = await fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: form
       });
-      if(!res.ok) throw new Error('Webhook responded with ' + res.status);
+      if(!res.ok){
+        const errText = await res.text().catch(() => '');
+        console.error('Discord webhook error:', res.status, errText);
+        throw new Error('Webhook responded with ' + res.status);
+      }
       toast.textContent = 'Díky! Přihláška byla odeslána, staff se ti brzy ozve na Discordu.';
       toast.style.borderColor = '';
       toast.style.background = '';
       toast.classList.add('show');
       e.target.reset();
     } catch(err){
+      console.error('Chyba při odesílání dotazníku:', err);
       toast.textContent = 'Něco se pokazilo při odesílání. Zkus to prosím znovu, nebo napiš rovnou na Discord.';
       toast.style.borderColor = 'rgba(255,95,95,0.4)';
       toast.style.background = 'rgba(255,95,95,0.1)';
