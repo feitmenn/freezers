@@ -212,6 +212,51 @@
   .rsvp-btn.active-yes{background:rgba(47,224,201,0.15);border-color:var(--turquoise);color:var(--turquoise);}
   .rsvp-btn.active-no{background:rgba(255,95,95,0.12);border-color:rgba(255,95,95,0.5);color:#ff8080;}
   .rsvp-counts{font-size:12px;color:var(--ice-dim);margin-left:auto;}
+
+  .week-nav{display:flex;align-items:center;gap:18px;margin-bottom:14px;}
+  .week-label{font-family:'Chakra Petch',sans-serif;font-size:15px;color:var(--ice-dim);min-width:140px;text-align:center;}
+  .calendar-legend{display:flex;gap:20px;margin-bottom:18px;font-size:12px;color:var(--ice-dim);flex-wrap:wrap;}
+  .legend-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:middle;}
+  .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+  .calendar-day{
+    background:var(--card);border:1px solid var(--line);border-radius:3px;
+    padding:10px 8px;min-height:120px;display:flex;flex-direction:column;gap:6px;
+  }
+  .calendar-day.today{border-color:var(--turquoise);}
+  .calendar-day-head{
+    font-size:11px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;
+    letter-spacing:.03em;text-align:center;padding-bottom:8px;margin-bottom:2px;
+    border-bottom:1px solid var(--line);
+  }
+  .event-square{
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:11px;
+    border-radius:4px;padding:8px 4px;cursor:pointer;color:#080b14;
+    transition:transform .15s;
+  }
+  .event-square:hover{transform:scale(1.05);}
+  .event-detail{margin-top:24px;}
+  @media (max-width:700px){
+    .calendar-grid{grid-template-columns:repeat(7,minmax(38px,1fr));}
+    .calendar-day{padding:6px 3px;min-height:80px;}
+    .calendar-day-head{font-size:9px;}
+    .event-square{font-size:9px;padding:5px 2px;}
+  }
+
+  .attendance-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  .attendance-table th, .attendance-table td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--line);}
+  .attendance-table th{color:var(--turquoise);font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.04em;font-weight:600;}
+  .attendance-rsvp{font-size:12px;}
+  .attendance-rsvp.yes{color:var(--turquoise);}
+  .attendance-rsvp.no{color:#ff8080;}
+  .attendance-rsvp.none{color:var(--ice-dim);}
+  .attendance-select{
+    background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:2px;
+    color:var(--ice);padding:5px 8px;font-size:12.5px;font-family:'Inter',sans-serif;
+  }
+  .attendance-select.status-present{border-color:var(--turquoise);color:var(--turquoise);}
+  .attendance-select.status-excused{border-color:var(--violet);color:var(--violet);}
+  .attendance-select.status-unexcused{border-color:rgba(255,95,95,0.5);color:#ff8080;}
   .news-item:last-child{border-bottom:none;}
   .news-item .n-date{font-size:11px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;letter-spacing:.05em;}
   .news-item h4{font-size:16px;margin-top:6px;font-weight:600;}
@@ -587,7 +632,18 @@
     </div>
 
     <div id="calendarLoggedIn" style="display:none;">
-      <div id="calendarEvents"></div>
+      <div class="week-nav">
+        <button type="button" class="btn-ghost" id="prevWeekBtn">←</button>
+        <div class="week-label" id="weekLabel"></div>
+        <button type="button" class="btn-ghost" id="nextWeekBtn">→</button>
+      </div>
+      <div class="calendar-legend">
+        <span><span class="legend-dot" style="background:#2fe0c9;"></span>Scrim (SC)</span>
+        <span><span class="legend-dot" style="background:#ff5fb0;"></span>CUP</span>
+        <span><span class="legend-dot" style="background:#9a5cff;"></span>Trénink (TRN)</span>
+      </div>
+      <div id="calendarGrid" class="calendar-grid"></div>
+      <div id="eventDetail" class="event-detail" style="display:none;"></div>
     </div>
   </div>
 </section>
@@ -795,9 +851,19 @@
     <div class="admin-divider"></div>
     <h3>Přidat akci do kalendáře</h3>
     <form id="adminEventForm">
-      <div class="field">
-        <label for="ae-title">Název akce</label>
-        <input type="text" id="ae-title" placeholder="např. Scrim vs. Nordic" required>
+      <div class="field-row">
+        <div class="field">
+          <label for="ae-title">Název akce</label>
+          <input type="text" id="ae-title" placeholder="např. Scrim vs. Nordic" required>
+        </div>
+        <div class="field">
+          <label for="ae-type">Typ</label>
+          <select id="ae-type">
+            <option value="scrim">Scrim (SC)</option>
+            <option value="cup">CUP</option>
+            <option value="training">Trénink (TRN)</option>
+          </select>
+        </div>
       </div>
       <div class="field">
         <label for="ae-date">Datum a čas</label>
@@ -812,6 +878,16 @@
     <div class="admin-divider"></div>
     <h3>Existující akce</h3>
     <div id="adminEventList"></div>
+
+    <div class="admin-divider"></div>
+    <h3>Docházka</h3>
+    <div class="field">
+      <label for="att-event-select">Vyber akci</label>
+      <select id="att-event-select">
+        <option value="">— vyber akci —</option>
+      </select>
+    </div>
+    <div id="attendanceTable"></div>
   </div>
 </div>
 
@@ -1380,6 +1456,7 @@
   const USERS_FILE = 'users.json';
   const CALENDAR_FILE = 'calendar.json';
   const RSVPS_FILE = 'rsvps.json';
+  const ATTENDANCE_FILE = 'attendance.json';
 
   let memberUsername = '';
   let memberAccessCode = ''; // sdílený zápisový token, drží se jen v paměti
@@ -1503,7 +1580,28 @@
     }
   });
 
-  /* ---- Kalendář (čtení pro přihlášené členy) ---- */
+  /* ---- Kalendář (týdenní mřížka pro přihlášené členy) ---- */
+  const TYPE_META = {
+    scrim: { label:'SC', color:'#2fe0c9' },
+    cup: { label:'CUP', color:'#ff5fb0' },
+    training: { label:'TRN', color:'#9a5cff' }
+  };
+  const DAY_NAMES = ['Po','Út','St','Čt','Pá','So','Ne'];
+  let weekOffset = 0;
+  let calendarEventsCache = [];
+  let calendarRsvpsCache = {};
+
+  function getWeekStart(offset){
+    const now = new Date();
+    const dayIdx = (now.getDay() + 6) % 7; // 0 = pondělí
+    const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayIdx + offset * 7);
+    monday.setHours(0, 0, 0, 0);
+    return monday;
+  }
+  function formatShortDate(d){
+    return d.toLocaleDateString('cs-CZ', { day:'numeric', month:'numeric' });
+  }
+
   function eventCardHtml(ev, myStatus, counts){
     const yesActive = myStatus === 'yes' ? 'active-yes' : '';
     const noActive = myStatus === 'no' ? 'active-no' : '';
@@ -1521,49 +1619,89 @@
     `;
   }
 
-  async function loadCalendar(){
-    const container = document.getElementById('calendarEvents');
-    container.innerHTML = '<div class="news-empty"><p>Načítám...</p></div>';
-    try{
-      const events = await ghFetchPublic(CALENDAR_FILE) || [];
-      const rsvps = await ghFetchPublic(RSVPS_FILE) || {};
+  function attachRsvpHandlers(container){
+    container.querySelectorAll('.rsvp-btn').forEach(btn => {
+      btn.addEventListener('click', async function(){
+        const id = btn.dataset.id;
+        const status = btn.dataset.status;
+        btn.disabled = true;
+        try{
+          const { data, sha } = await ghFetchWithSha(RSVPS_FILE, memberAccessCode);
+          const rsvps = data || {};
+          if(!rsvps[id]) rsvps[id] = {};
+          rsvps[id][memberUsername] = status;
+          await ghSave(RSVPS_FILE, rsvps, sha, `RSVP: ${memberUsername} -> ${status} (${id})`, memberAccessCode);
+          await loadCalendar();
+          showEventDetail(id);
+        }catch(e){
+          alert('Nepodařilo se uložit odpověď: ' + e.message);
+        }finally{
+          btn.disabled = false;
+        }
+      });
+    });
+  }
 
-      if(!events.length){
-        container.innerHTML = `<div class="news-empty"><div class="ne-icon">📅</div><h4>Zatím žádné akce</h4><p>Jakmile staff přidá první akci, objeví se tady.</p></div>`;
-        return;
+  function showEventDetail(id){
+    const ev = calendarEventsCache.find(e => e.id === id);
+    const detail = document.getElementById('eventDetail');
+    if(!ev){ detail.style.display = 'none'; return; }
+    const evRsvps = calendarRsvpsCache[ev.id] || {};
+    const myStatus = evRsvps[memberUsername] || null;
+    const counts = { yes:0, no:0 };
+    Object.values(evRsvps).forEach(s => { if(s === 'yes') counts.yes++; if(s === 'no') counts.no++; });
+    detail.style.display = 'block';
+    detail.innerHTML = eventCardHtml(ev, myStatus, counts);
+    attachRsvpHandlers(detail);
+    detail.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  async function loadCalendar(){
+    const gridEl = document.getElementById('calendarGrid');
+    const weekLabelEl = document.getElementById('weekLabel');
+    gridEl.innerHTML = '<div class="news-empty"><p>Načítám...</p></div>';
+    try{
+      calendarEventsCache = await ghFetchPublic(CALENDAR_FILE) || [];
+      calendarRsvpsCache = await ghFetchPublic(RSVPS_FILE) || {};
+
+      const monday = getWeekStart(weekOffset);
+      const sunday = new Date(monday); sunday.setDate(sunday.getDate() + 6);
+      weekLabelEl.textContent = `${formatShortDate(monday)} – ${formatShortDate(sunday)}`;
+
+      const days = [];
+      for(let i = 0; i < 7; i++){
+        const d = new Date(monday); d.setDate(d.getDate() + i);
+        days.push(d);
       }
 
-      container.innerHTML = events.map(ev => {
-        const evRsvps = rsvps[ev.id] || {};
-        const myStatus = evRsvps[memberUsername] || null;
-        const counts = { yes:0, no:0 };
-        Object.values(evRsvps).forEach(s => { if(s === 'yes') counts.yes++; if(s === 'no') counts.no++; });
-        return eventCardHtml(ev, myStatus, counts);
+      gridEl.innerHTML = days.map((d, idx) => {
+        const dayEvents = calendarEventsCache.filter(ev => {
+          const evDate = new Date(ev.date);
+          return evDate.getFullYear() === d.getFullYear() && evDate.getMonth() === d.getMonth() && evDate.getDate() === d.getDate();
+        });
+        const isToday = new Date().toDateString() === d.toDateString();
+        const squares = dayEvents.map(ev => {
+          const meta = TYPE_META[ev.type] || { label:'EV', color:'#888' };
+          return `<div class="event-square" style="background:${meta.color};" data-id="${ev.id}" title="${escapeHtml(ev.title)}">${meta.label}</div>`;
+        }).join('');
+        return `
+          <div class="calendar-day ${isToday ? 'today' : ''}">
+            <div class="calendar-day-head">${DAY_NAMES[idx]}<br>${formatShortDate(d)}</div>
+            ${squares}
+          </div>
+        `;
       }).join('');
 
-      container.querySelectorAll('.rsvp-btn').forEach(btn => {
-        btn.addEventListener('click', async function(){
-          const id = btn.dataset.id;
-          const status = btn.dataset.status;
-          btn.disabled = true;
-          try{
-            const { data, sha } = await ghFetchWithSha(RSVPS_FILE, memberAccessCode);
-            const rsvps = data || {};
-            if(!rsvps[id]) rsvps[id] = {};
-            rsvps[id][memberUsername] = status;
-            await ghSave(RSVPS_FILE, rsvps, sha, `RSVP: ${memberUsername} -> ${status} (${id})`, memberAccessCode);
-            loadCalendar();
-          }catch(e){
-            alert('Nepodařilo se uložit odpověď: ' + e.message);
-          }finally{
-            btn.disabled = false;
-          }
-        });
+      gridEl.querySelectorAll('.event-square').forEach(sq => {
+        sq.addEventListener('click', () => showEventDetail(sq.dataset.id));
       });
     }catch(e){
-      container.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
+      gridEl.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
     }
   }
+
+  document.getElementById('prevWeekBtn').addEventListener('click', () => { weekOffset--; loadCalendar(); });
+  document.getElementById('nextWeekBtn').addEventListener('click', () => { weekOffset++; loadCalendar(); });
 
   /* ---- Admin: správa uživatelských účtů ---- */
   async function renderAdminUserList(){
@@ -1637,6 +1775,14 @@
     const list = document.getElementById('adminEventList');
     try{
       const events = await ghFetchPublic(CALENDAR_FILE) || [];
+
+      // Naplní i výběr akce v sekci Docházka
+      const select = document.getElementById('att-event-select');
+      const prevValue = select.value;
+      select.innerHTML = '<option value="">— vyber akci —</option>' +
+        events.map(ev => `<option value="${ev.id}">${escapeHtml(ev.title)} — ${formatEventDate(ev.date)}</option>`).join('');
+      if(events.some(ev => ev.id === prevValue)) select.value = prevValue;
+
       if(!events.length){
         list.innerHTML = '<div class="admin-empty">Zatím žádné akce.</div>';
         return;
@@ -1676,6 +1822,7 @@
     e.preventDefault();
     const submitBtn = e.target.querySelector('.submit-btn');
     const title = document.getElementById('ae-title').value.trim();
+    const type = document.getElementById('ae-type').value;
     const date = document.getElementById('ae-date').value;
     const description = document.getElementById('ae-desc').value.trim();
 
@@ -1685,7 +1832,7 @@
       const { data, sha } = await ghFetchWithSha(CALENDAR_FILE, ghToken);
       const events = data || [];
       const id = 'ev_' + Date.now();
-      events.push({ id, title, date: new Date(date).toISOString(), description });
+      events.push({ id, title, type, date: new Date(date).toISOString(), description });
       await ghSave(CALENDAR_FILE, events, sha, `Přidání akce: ${title}`, ghToken);
       e.target.reset();
       renderAdminEventList();
@@ -1695,6 +1842,92 @@
       submitBtn.disabled = false;
       submitBtn.textContent = 'Přidat akci';
     }
+  });
+
+  /* ---- Admin: docházka (přítomen / omluveno / neomluveno) ---- */
+  const ATTENDANCE_LABELS = {
+    '': 'Nezadáno',
+    present: 'Přítomen',
+    excused: 'Omluveno',
+    unexcused: 'Neomluveno'
+  };
+
+  async function renderAttendanceTable(eventId){
+    const box = document.getElementById('attendanceTable');
+    if(!eventId){
+      box.innerHTML = '';
+      return;
+    }
+    box.innerHTML = '<div class="admin-empty">Načítám...</div>';
+    try{
+      const users = await ghFetchPublic(USERS_FILE) || [];
+      const rsvps = await ghFetchPublic(RSVPS_FILE) || {};
+      const attendance = await ghFetchPublic(ATTENDANCE_FILE) || {};
+      const evRsvps = rsvps[eventId] || {};
+      const evAttendance = attendance[eventId] || {};
+
+      if(!users.length){
+        box.innerHTML = '<div class="admin-empty">Zatím nemáš žádné účty členů.</div>';
+        return;
+      }
+
+      box.innerHTML = `
+        <table class="attendance-table">
+          <thead>
+            <tr><th>Jméno</th><th>RSVP</th><th>Docházka</th></tr>
+          </thead>
+          <tbody>
+            ${users.map(u => {
+              const rsvpStatus = evRsvps[u.username];
+              const rsvpLabel = rsvpStatus === 'yes' ? '✔ Přijde' : (rsvpStatus === 'no' ? '✖ Nepřijde' : '— nezadáno');
+              const rsvpClass = rsvpStatus === 'yes' ? 'yes' : (rsvpStatus === 'no' ? 'no' : 'none');
+              const currentStatus = evAttendance[u.username] || '';
+              return `
+                <tr>
+                  <td>${escapeHtml(u.displayName || u.username)}</td>
+                  <td class="attendance-rsvp ${rsvpClass}">${rsvpLabel}</td>
+                  <td>
+                    <select class="attendance-select status-${currentStatus}" data-username="${escapeHtml(u.username)}">
+                      ${Object.entries(ATTENDANCE_LABELS).map(([val, label]) =>
+                        `<option value="${val}" ${val === currentStatus ? 'selected' : ''}>${label}</option>`
+                      ).join('')}
+                    </select>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+
+      box.querySelectorAll('.attendance-select').forEach(sel => {
+        sel.addEventListener('change', async function(){
+          sel.disabled = true;
+          try{
+            const { data, sha } = await ghFetchWithSha(ATTENDANCE_FILE, ghToken);
+            const attendance = data || {};
+            if(!attendance[eventId]) attendance[eventId] = {};
+            if(sel.value === ''){
+              delete attendance[eventId][sel.dataset.username];
+            } else {
+              attendance[eventId][sel.dataset.username] = sel.value;
+            }
+            await ghSave(ATTENDANCE_FILE, attendance, sha, `Docházka: ${sel.dataset.username} -> ${sel.value || 'nezadáno'}`, ghToken);
+            sel.className = `attendance-select status-${sel.value}`;
+          }catch(e){
+            alert('Nepodařilo se uložit docházku: ' + e.message);
+          }finally{
+            sel.disabled = false;
+          }
+        });
+      });
+    }catch(e){
+      box.innerHTML = `<div class="admin-empty">Nepodařilo se načíst docházku: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('att-event-select').addEventListener('change', function(){
+    renderAttendanceTable(this.value);
   });
 
   /* ============ DOTAZNÍK -> DISCORD WEBHOOK ============ */
