@@ -50,6 +50,9 @@
       "type": "player",
       "steam": "",
       "faceit": "https://www.faceit.com/en/players/martin1str"
+    },
+    {
+      "type": "empty"
     }
   ],
   "academy": [
