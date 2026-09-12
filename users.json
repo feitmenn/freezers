@@ -43,5 +43,10 @@
     "username": "akka",
     "displayName": "AKKA (Reformed)",
     "passwordHash": "a4254238ea3053f0103a6726f8ab200e2a2ab11471b686e2c4533bdb54ba2f90"
+  },
+  {
+    "username": "m-ty",
+    "displayName": "",
+    "passwordHash": "93b41d7bda6426e01093067a9bc39bc9fe22e5964a99da3dfb55350a545b71df"
   }
 ]
