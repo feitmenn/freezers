@@ -1,11 +1,6 @@
 {
   "main": [
     {
-      "name": "MichimjmFrnda",
-      "role": "Main roster",
-      "type": "player"
-    },
-    {
       "type": "empty"
     }
   ],
