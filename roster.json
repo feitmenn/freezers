@@ -74,6 +74,13 @@
       "type": "trial",
       "steam": "",
       "faceit": "https://www.faceit.com/cs/players/Foliovnik"
+    },
+    {
+      "name": "Rohlikos",
+      "role": "Anchor",
+      "type": "player",
+      "steam": "",
+      "faceit": ""
     }
   ],
   "academy-reserve": [
