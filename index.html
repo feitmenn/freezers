@@ -1667,19 +1667,22 @@
       btn.addEventListener('click', async function(){
         const id = btn.dataset.id;
         const status = btn.dataset.status;
-        btn.disabled = true;
+        const row = btn.closest('.rsvp-row');
+        row.querySelectorAll('.rsvp-btn').forEach(b => b.disabled = true);
         try{
           const { data, sha } = await ghFetchWithSha(RSVPS_FILE, memberAccessCode);
           const rsvps = data || {};
           if(!rsvps[id]) rsvps[id] = {};
           rsvps[id][memberUsername] = status;
           await ghSave(RSVPS_FILE, rsvps, sha, `RSVP: ${memberUsername} -> ${status} (${id})`, memberAccessCode);
-          await loadCalendar();
+          // Máme už čerstvá data z uložení – není potřeba nic znovu stahovat
+          calendarRsvpsCache = rsvps;
+          renderCalendarGrid();
           showEventDetail(id);
         }catch(e){
           alert('Nepodařilo se uložit odpověď: ' + e.message);
         }finally{
-          btn.disabled = false;
+          row.querySelectorAll('.rsvp-btn').forEach(b => b.disabled = false);
         }
       });
     });
@@ -1697,54 +1700,59 @@
     detail.scrollIntoView({ behavior:'smooth', block:'nearest' });
   }
 
-  async function loadCalendar(){
+  function renderCalendarGrid(){
     const gridEl = document.getElementById('calendarGrid');
     const weekLabelEl = document.getElementById('weekLabel');
+
+    const monday = getWeekStart(weekOffset);
+    const sunday = new Date(monday); sunday.setDate(sunday.getDate() + 6);
+    weekLabelEl.textContent = `${formatShortDate(monday)} – ${formatShortDate(sunday)}`;
+
+    const days = [];
+    for(let i = 0; i < 7; i++){
+      const d = new Date(monday); d.setDate(d.getDate() + i);
+      days.push(d);
+    }
+
+    gridEl.innerHTML = days.map((d, idx) => {
+      const dayEvents = calendarEventsCache
+        .filter(ev => {
+          const evDate = new Date(ev.date);
+          return evDate.getFullYear() === d.getFullYear() && evDate.getMonth() === d.getMonth() && evDate.getDate() === d.getDate();
+        })
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+      const isToday = new Date().toDateString() === d.toDateString();
+      const squares = dayEvents.map(ev => {
+        const meta = TYPE_META[ev.type] || { label:'EV', color:'#888' };
+        const time = new Date(ev.date).toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' });
+        return `
+          <div class="event-square" style="background:${meta.color};" data-id="${ev.id}" title="${escapeHtml(ev.title)}">
+            <div class="es-label">${meta.label}</div>
+            <div class="es-time">${time}</div>
+          </div>
+        `;
+      }).join('') || '<span class="calendar-day-empty">—</span>';
+      return `
+        <div class="calendar-day ${isToday ? 'today' : ''}">
+          <div class="calendar-day-head">${DAY_NAMES[idx]}<span class="day-date">${formatShortDate(d)}</span></div>
+          <div class="calendar-day-events">${squares}</div>
+        </div>
+      `;
+    }).join('');
+
+    gridEl.querySelectorAll('.event-square').forEach(sq => {
+      sq.addEventListener('click', () => showEventDetail(sq.dataset.id));
+    });
+  }
+
+  async function loadCalendar(){
+    const gridEl = document.getElementById('calendarGrid');
     gridEl.innerHTML = '<div class="news-empty"><p>Načítám...</p></div>';
     try{
       calendarEventsCache = await ghFetchPublic(CALENDAR_FILE) || [];
       calendarRsvpsCache = await ghFetchPublic(RSVPS_FILE) || {};
       calendarUsersCache = await ghFetchPublic(USERS_FILE) || [];
-
-      const monday = getWeekStart(weekOffset);
-      const sunday = new Date(monday); sunday.setDate(sunday.getDate() + 6);
-      weekLabelEl.textContent = `${formatShortDate(monday)} – ${formatShortDate(sunday)}`;
-
-      const days = [];
-      for(let i = 0; i < 7; i++){
-        const d = new Date(monday); d.setDate(d.getDate() + i);
-        days.push(d);
-      }
-
-      gridEl.innerHTML = days.map((d, idx) => {
-        const dayEvents = calendarEventsCache
-          .filter(ev => {
-            const evDate = new Date(ev.date);
-            return evDate.getFullYear() === d.getFullYear() && evDate.getMonth() === d.getMonth() && evDate.getDate() === d.getDate();
-          })
-          .sort((a, b) => new Date(a.date) - new Date(b.date));
-        const isToday = new Date().toDateString() === d.toDateString();
-        const squares = dayEvents.map(ev => {
-          const meta = TYPE_META[ev.type] || { label:'EV', color:'#888' };
-          const time = new Date(ev.date).toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' });
-          return `
-            <div class="event-square" style="background:${meta.color};" data-id="${ev.id}" title="${escapeHtml(ev.title)}">
-              <div class="es-label">${meta.label}</div>
-              <div class="es-time">${time}</div>
-            </div>
-          `;
-        }).join('') || '<span class="calendar-day-empty">—</span>';
-        return `
-          <div class="calendar-day ${isToday ? 'today' : ''}">
-            <div class="calendar-day-head">${DAY_NAMES[idx]}<span class="day-date">${formatShortDate(d)}</span></div>
-            <div class="calendar-day-events">${squares}</div>
-          </div>
-        `;
-      }).join('');
-
-      gridEl.querySelectorAll('.event-square').forEach(sq => {
-        sq.addEventListener('click', () => showEventDetail(sq.dataset.id));
-      });
+      renderCalendarGrid();
     }catch(e){
       gridEl.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
     }
