@@ -27,6 +27,13 @@
       "type": "player",
       "steam": "",
       "faceit": "https://www.faceit.com/en/players/Dittoslavko"
+    },
+    {
+      "name": "MICHI",
+      "role": "Hráč Glossglockner sestavy",
+      "type": "player",
+      "steam": "",
+      "faceit": "https://www.faceit.com/en/players/michi33"
     }
   ],
   "reserve": [
