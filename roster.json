@@ -70,6 +70,13 @@
       "type": "captain",
       "steam": "",
       "faceit": "https://www.faceit.com/cs/players/Nekowawa"
+    },
+    {
+      "name": "Talatak",
+      "role": "Zkušební období",
+      "type": "trial",
+      "steam": "",
+      "faceit": "https://www.faceit.com/cs/players/Foliovnik"
     }
   ],
   "academy-reserve": [
