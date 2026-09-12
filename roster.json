@@ -20,6 +20,13 @@
       "type": "player",
       "steam": "",
       "faceit": "https://www.faceit.com/en/players/Krabik77"
+    },
+    {
+      "name": "Akka",
+      "role": "Hráč glossglockner sestavy",
+      "type": "player",
+      "steam": "",
+      "faceit": "https://www.faceit.com/en/players/Dittoslavko"
     }
   ],
   "reserve": [
