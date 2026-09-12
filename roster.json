@@ -38,11 +38,6 @@
   ],
   "reserve": [
     {
-      "name": "Filuta",
-      "role": "Reserve",
-      "type": "player"
-    },
-    {
       "type": "empty"
     },
     {
