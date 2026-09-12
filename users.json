@@ -43,5 +43,10 @@
     "username": "cloudyi",
     "displayName": "DANIEL",
     "passwordHash": "a17bde0146b3ae6680faf5ef1ebfe7f0f7211fc60f447e5d8aa6d322cb8998a5"
+  },
+  {
+    "username": "akka",
+    "displayName": "AKKA (Reformed)",
+    "passwordHash": "a4254238ea3053f0103a6726f8ab200e2a2ab11471b686e2c4533bdb54ba2f90"
   }
 ]
