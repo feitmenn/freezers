@@ -692,10 +692,10 @@
     <h3>Přihlášení do administrace</h3>
     <form id="adminLoginForm">
       <div class="field">
-        <label for="adminPassword">Heslo</label>
-        <input type="password" id="adminPassword" autocomplete="off" required>
+        <label for="adminPassword">GitHub token</label>
+        <input type="password" id="adminPassword" autocomplete="off" placeholder="ghp_... nebo github_pat_..." required>
       </div>
-      <div class="admin-error" id="adminLoginError">Špatné heslo, zkus to znovu.</div>
+      <div class="admin-error" id="adminLoginError">Token nefunguje, zkus to znovu.</div>
       <button type="submit" class="submit-btn" style="width:100%;">Vstoupit</button>
     </form>
   </div>
@@ -728,42 +728,90 @@
 </div>
 
 <script>
-  /* ============ NOVINKY (přes news_api.php -> MySQL) ============ */
-  const API_URL = 'https://api.freezers-esport.cloud/news_api.php'; // web na GitHub Pages, API na VestaCP subdoméně
-  let adminPassword = ''; // drží se jen v paměti, nikam se neukládá
+  /* ============ NOVINKY (uložené jako news.json přímo v GitHub repu) ============ */
+  const GH_OWNER = 'feitmenn';        // <-- uprav, pokud je tvůj GitHub username jiný
+  const GH_REPO = 'freezers';         // <-- uprav, pokud se repo jmenuje jinak
+  const GH_BRANCH = 'main';
+  const GH_FILE_PATH = 'news.json';
+  const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_FILE_PATH}`;
+  const CONTENTS_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE_PATH}`;
+
+  let ghToken = ''; // GitHub token drží se jen v paměti prohlížeče po dobu session, nikam se neukládá
 
   function escapeHtml(str){
     const div = document.createElement('div');
     div.textContent = str || '';
     return div.innerHTML;
   }
-  function formatDate(mysqlDate){
+  function formatDate(iso){
     try{
-      const d = new Date(mysqlDate.replace(' ', 'T'));
+      const d = new Date(iso);
       return d.toLocaleDateString('cs-CZ', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
-    }catch(e){ return mysqlDate; }
+    }catch(e){ return iso; }
+  }
+  function b64EncodeUnicode(str){
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function b64DecodeUnicode(str){
+    return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))));
   }
 
-  async function fetchNews(){
+  // Veřejné čtení — bez tokenu, funguje pro kohokoli (repo je public)
+  async function fetchNewsPublic(){
     try{
-      const res = await fetch(API_URL, { cache:'no-store' });
-      if(!res.ok) throw new Error('API error ' + res.status);
-      return await res.json();
+      const res = await fetch(`${RAW_URL}?cachebust=${Date.now()}`, { cache:'no-store' });
+      if(res.status === 404) return []; // news.json ještě neexistuje
+      if(!res.ok) throw new Error('status ' + res.status);
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
     }catch(e){
       console.error('Nepodařilo se načíst novinky:', e);
-      return null; // null = chyba připojení, [] = prázdný seznam
+      return null;
     }
+  }
+
+  // Čtení se sha (potřeba pro zápis přes GitHub API)
+  async function fetchNewsWithSha(){
+    const headers = ghToken ? { Authorization: `token ${ghToken}` } : {};
+    const res = await fetch(CONTENTS_URL, { headers, cache:'no-store' });
+    if(res.status === 404) return { items: [], sha: null };
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('GitHub API chyba ' + res.status));
+    }
+    const data = await res.json();
+    const items = JSON.parse(b64DecodeUnicode(data.content) || '[]');
+    return { items, sha: data.sha };
+  }
+
+  async function saveNewsToGithub(items, sha, message){
+    const body = {
+      message,
+      content: b64EncodeUnicode(JSON.stringify(items, null, 2)),
+      branch: GH_BRANCH
+    };
+    if(sha) body.sha = sha;
+    const res = await fetch(CONTENTS_URL, {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${ghToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('GitHub API chyba ' + res.status));
+    }
+    return res.json();
   }
 
   async function renderNews(){
     const feed = document.getElementById('newsFeed');
-    const items = await fetchNews();
+    const items = await fetchNewsPublic();
 
     if(items === null){
       feed.innerHTML = `<div class="news-empty">
         <div class="ne-icon">⚠</div>
         <h4>Novinky se nepodařilo načíst</h4>
-        <p>Zkontroluj, že je nahraný soubor news_api.php a databáze je dostupná.</p>
+        <p>Zkontroluj připojení k internetu, nebo že soubor news.json existuje v repu.</p>
       </div>`;
       return;
     }
@@ -775,10 +823,10 @@
       </div>`;
       return;
     }
-    feed.innerHTML = items.map(item => `
+    feed.innerHTML = items.slice().reverse().map(item => `
       <div class="news-item">
         ${item.image ? `<img class="n-image" src="${item.image}" alt="">` : ''}
-        <div class="n-date">${formatDate(item.created_at)}</div>
+        <div class="n-date">${formatDate(item.date)}</div>
         <h4>${escapeHtml(item.title)}</h4>
         <p>${escapeHtml(item.description)}</p>
       </div>
@@ -787,37 +835,45 @@
 
   async function renderAdminList(){
     const list = document.getElementById('adminNewsList');
-    const items = await fetchNews();
-    if(!items || !items.length){
-      list.innerHTML = '<div class="admin-empty">Zatím žádné novinky.</div>';
-      return;
-    }
-    list.innerHTML = items.map(item => `
-      <div class="admin-news-row">
-        <div class="admin-news-row-text">
-          <strong>${escapeHtml(item.title)}</strong>
-          <span>${formatDate(item.created_at)}</span>
+    try{
+      const { items } = await fetchNewsWithSha();
+      if(!items.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádné novinky.</div>';
+        return;
+      }
+      list.innerHTML = items.map((item, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(item.title)}</strong>
+            <span>${formatDate(item.date)}</span>
+          </div>
+          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
         </div>
-        <button type="button" class="admin-delete-btn" data-id="${item.id}">Smazat</button>
-      </div>
-    `).join('');
-    list.querySelectorAll('.admin-delete-btn').forEach(btn => {
-      btn.addEventListener('click', async function(){
-        btn.disabled = true;
-        btn.textContent = 'Mažu...';
-        await fetch(API_URL, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ action:'delete', password: adminPassword, id: btn.dataset.id })
+      `).join('');
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          btn.disabled = true;
+          btn.textContent = 'Mažu...';
+          try{
+            const { items, sha } = await fetchNewsWithSha();
+            items.splice(parseInt(btn.dataset.idx, 10), 1);
+            await saveNewsToGithub(items, sha, 'Smazání novinky přes admin panel');
+            renderNews();
+            renderAdminList();
+          }catch(e){
+            alert('Nepodařilo se smazat novinku: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Smazat';
+          }
         });
-        renderNews();
-        renderAdminList();
       });
-    });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst novinky: ${escapeHtml(e.message)}</div>`;
+    }
   }
 
-  // Zmenší a zkomprimuje fotku v prohlížeči před odesláním, ať nezaplňuje rychle limit 3 GB na disku
-  function readAndCompressImage(file, maxWidth = 900, quality = 0.75){
+  // Zmenší a zkomprimuje fotku v prohlížeči, ať news.json zůstane malý
+  function readAndCompressImage(file, maxWidth = 700, quality = 0.6){
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = function(e){
@@ -852,17 +908,14 @@
 
     let image = null;
     if(file){
-      image = await readAndCompressImage(file);
+      try{ image = await readAndCompressImage(file); }
+      catch(e){ /* pokud se fotka nepodaří zpracovat, přidá se novinka bez ní */ }
     }
 
     try{
-      const res = await fetch(API_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'add', password: adminPassword, title, description, image })
-      });
-      const data = await res.json();
-      if(!res.ok || data.error) throw new Error(data.error || 'Chyba serveru');
+      const { items, sha } = await fetchNewsWithSha();
+      items.push({ title, description, image, date: new Date().toISOString() });
+      await saveNewsToGithub(items, sha, `Přidání novinky: ${title}`);
       document.getElementById('adminNewsForm').reset();
       renderNews();
       renderAdminList();
@@ -906,26 +959,22 @@
 
   document.getElementById('adminLoginForm').addEventListener('submit', async function(e){
     e.preventDefault();
-    const val = document.getElementById('adminPassword').value;
+    const val = document.getElementById('adminPassword').value.trim();
     const btn = e.target.querySelector('.submit-btn');
     btn.disabled = true;
     btn.textContent = 'Ověřuji...';
     try{
-      const res = await fetch(API_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'login', password: val })
-      });
-      const data = await res.json();
-      if(res.ok && data.success){
-        adminPassword = val;
+      const res = await fetch(CONTENTS_URL, { headers: { Authorization: `token ${val}` } });
+      if(res.ok || res.status === 404){
+        ghToken = val;
         closeAdminLogin();
         openAdminPanel();
       } else {
+        document.getElementById('adminLoginError').textContent = 'Token nefunguje nebo nemá práva k zápisu do repa.';
         document.getElementById('adminLoginError').classList.add('show');
       }
     }catch(err){
-      document.getElementById('adminLoginError').textContent = 'Nepodařilo se spojit se serverem.';
+      document.getElementById('adminLoginError').textContent = 'Nepodařilo se spojit s GitHubem.';
       document.getElementById('adminLoginError').classList.add('show');
     }finally{
       btn.disabled = false;
