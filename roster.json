@@ -55,11 +55,6 @@
   ],
   "academy": [
     {
-      "name": "Rohlikos",
-      "role": "Anchor",
-      "type": "player"
-    },
-    {
       "name": "Rope_flp",
       "role": "Zkušební období",
       "type": "trial",
