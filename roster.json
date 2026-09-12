@@ -38,9 +38,6 @@
   ],
   "reserve": [
     {
-      "type": "empty"
-    },
-    {
       "name": "m-ty",
       "role": "Reserve",
       "type": "player",
