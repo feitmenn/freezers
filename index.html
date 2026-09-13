@@ -924,6 +924,7 @@
 <div class="modal-overlay" id="adminPanelOverlay">
   <div class="modal-card modal-card-fullscreen">
     <button type="button" class="modal-close" id="closeAdminPanelBtn">✕</button>
+    <button type="button" class="btn-ghost" id="adminLogoutBtn" style="position:absolute;top:16px;right:56px;padding:6px 14px;font-size:12px;">Odhlásit správce</button>
     <div class="modal-kicker">ADMIN PANEL</div>
     <h3>Přidat novinku</h3>
     <form id="adminNewsForm">
@@ -1342,6 +1343,21 @@
 
   /* ============ ADMIN MODALY (Ctrl+F) ============ */
   let adminUsername = '';
+  const ADMIN_SESSION_KEY = 'freezers_admin_session';
+
+  function saveAdminSession(username, token){
+    try{ localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({ username, token })); }
+    catch(e){ console.error('Nepodařilo se uložit admin session:', e); }
+  }
+  function loadAdminSession(){
+    try{
+      const raw = localStorage.getItem(ADMIN_SESSION_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+  function clearAdminSession(){
+    try{ localStorage.removeItem(ADMIN_SESSION_KEY); }catch(e){}
+  }
 
   function openAdminLogin(){
     document.getElementById('adminLoginError').classList.remove('show');
@@ -1372,7 +1388,11 @@
     const key = e.key.toLowerCase();
     if((e.ctrlKey || e.metaKey) && key === 'f'){
       e.preventDefault();
-      openAdminLogin();
+      if(adminUsername && ghToken){
+        openAdminPanel();
+      } else {
+        openAdminLogin();
+      }
     }
     if(e.key === 'Escape'){
       closeAdminLogin();
@@ -1408,6 +1428,7 @@
       if(res.ok || res.status === 404){
         ghToken = tokenVal;
         adminUsername = username;
+        saveAdminSession(username, tokenVal);
         closeAdminLogin();
         openAdminPanel();
       } else {
@@ -1425,6 +1446,13 @@
 
   document.getElementById('closeAdminLoginBtn').addEventListener('click', closeAdminLogin);
   document.getElementById('closeAdminPanelBtn').addEventListener('click', closeAdminPanel);
+  document.getElementById('adminLogoutBtn').addEventListener('click', function(){
+    if(!confirm('Odhlásit správce z tohoto zařízení?')) return;
+    adminUsername = '';
+    ghToken = '';
+    clearAdminSession();
+    closeAdminPanel();
+  });
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', function(e){
       if(e.target === overlay) overlay.classList.remove('show');
@@ -2480,6 +2508,14 @@
     checkAndShowNotifications();
   }
   restoreMemberSession();
+
+  function restoreAdminSession(){
+    const session = loadAdminSession();
+    if(!session) return;
+    adminUsername = session.username;
+    ghToken = session.token;
+  }
+  restoreAdminSession();
 
   /* ---- Admin: Scrim Server nastavení ---- */
   async function loadAdminScrimForm(){
