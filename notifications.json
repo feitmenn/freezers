@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "notif_1789295778549",
+    "username": "filas",
+    "type": "excuse_rejected",
+    "message": "Tvoje omluvenka na akci „Test pro všechny co toto vidíte.“ byla zamítnuta.",
+    "createdAt": "2026-09-13T10:36:18.549Z"
+  }
+]
