@@ -160,6 +160,40 @@
   .section-title{font-size:clamp(28px,4vw,40px);}
   .section-sub{color:var(--ice-dim);margin-top:14px;font-size:15px;max-width:560px;}
 
+  /* SCRIM SERVER BANNER */
+  .scrim-banner{
+    background:linear-gradient(100deg, rgba(255,95,176,0.1), rgba(154,92,255,0.08));
+    border-top:1px solid rgba(255,95,176,0.35);
+    border-bottom:1px solid rgba(255,95,176,0.35);
+    padding:24px 0;
+  }
+  .scrim-banner-inner{
+    max-width:1180px;margin:0 auto;padding:0 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  }
+  .scrim-live-dot{
+    display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;
+    color:var(--pink);font-family:'Chakra Petch',sans-serif;font-weight:600;margin-bottom:6px;
+  }
+  .scrim-live-dot::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink);animation:pulse 2s infinite;}
+  .scrim-matchup{font-family:'Chakra Petch',sans-serif;font-size:20px;font-weight:600;}
+  .scrim-note{font-size:13px;color:var(--ice-dim);margin-top:4px;}
+  .scrim-connect{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .scrim-ip-box{
+    background:rgba(0,0,0,0.3);border:1px solid var(--line);border-radius:2px;
+    padding:10px 16px;font-family:'Chakra Petch',sans-serif;font-size:15px;letter-spacing:.02em;
+  }
+  .scrim-copy-btn{
+    background:linear-gradient(120deg,var(--turquoise),var(--pink));
+    color:#080b14;border:none;padding:10px 18px;border-radius:2px;
+    font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:13px;cursor:pointer;
+    transition:filter .2s;
+  }
+  .scrim-copy-btn:hover{filter:brightness(1.1);}
+  @media (max-width:700px){
+    .scrim-banner-inner{flex-direction:column;align-items:flex-start;}
+  }
+
   /* HUB */
   .hub{
     display:grid;
@@ -615,6 +649,8 @@
   <div class="hero-scroll"><span class="line"></span>SCROLL</div>
 </section>
 
+<div id="scrimServerBanner"></div>
+
 <section class="section" id="hub">
   <div class="wrap">
     <div class="section-head">
@@ -1008,6 +1044,36 @@
     <div class="admin-divider"></div>
     <h3>Omluvenky</h3>
     <div id="adminExcusesList"></div>
+
+    <div class="admin-divider"></div>
+    <h3>Scrim Server</h3>
+    <form id="adminScrimForm">
+      <div class="field">
+        <label class="radio-pill" style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;">
+          <input type="checkbox" id="scrim-active" style="width:auto;">
+          Server je aktivní (zobrazit banner na webu)
+        </label>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="scrim-ip">IP adresa serveru (s portem)</label>
+          <input type="text" id="scrim-ip" placeholder="např. 185.180.2.39:27015">
+        </div>
+        <div class="field">
+          <label for="scrim-password">Heslo serveru (nepovinné)</label>
+          <input type="text" id="scrim-password" placeholder="např. freezers123">
+        </div>
+      </div>
+      <div class="field">
+        <label for="scrim-matchup">Kdo proti komu hraje</label>
+        <input type="text" id="scrim-matchup" placeholder="např. Freezers vs. Nordic Esports">
+      </div>
+      <div class="field">
+        <label for="scrim-note">Poznámka (nepovinné)</label>
+        <input type="text" id="scrim-note" placeholder="např. BO3, mapa 1: Mirage">
+      </div>
+      <button type="submit" class="submit-btn">Uložit Scrim Server</button>
+    </form>
   </div>
 </div>
 
@@ -1252,6 +1318,7 @@
     renderAdminUserList();
     renderAdminEventList();
     renderAdminExcusesList();
+    loadAdminScrimForm();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
   function closeAdminPanel(){
@@ -1304,6 +1371,48 @@
   });
 
   renderNews();
+
+  /* ============ SCRIM SERVER BANNER ============ */
+  async function renderScrimBanner(){
+    const el = document.getElementById('scrimServerBanner');
+    try{
+      const config = await ghFetchPublic(SCRIM_FILE);
+      if(!config || !config.active){
+        el.innerHTML = '';
+        return;
+      }
+      el.innerHTML = `
+        <div class="scrim-banner">
+          <div class="scrim-banner-inner">
+            <div>
+              <div class="scrim-live-dot">SCRIM SERVER ŽIJE</div>
+              <div class="scrim-matchup">${escapeHtml(config.matchup || 'Probíhá scrim')}</div>
+              ${config.note ? `<div class="scrim-note">${escapeHtml(config.note)}</div>` : ''}
+            </div>
+            <div class="scrim-connect">
+              <div class="scrim-ip-box">${escapeHtml(config.ip || '—')}</div>
+              <button type="button" class="scrim-copy-btn" id="scrimCopyBtn">Zkopírovat connect</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('scrimCopyBtn')?.addEventListener('click', function(){
+        const cmd = config.password
+          ? `connect ${config.ip}; password ${config.password}`
+          : `connect ${config.ip}`;
+        navigator.clipboard.writeText(cmd).then(() => {
+          this.textContent = 'Zkopírováno!';
+          setTimeout(() => { this.textContent = 'Zkopírovat connect'; }, 2000);
+        }).catch(() => {
+          alert('Nepodařilo se zkopírovat, zkus to ručně: ' + cmd);
+        });
+      });
+    }catch(e){
+      el.innerHTML = '';
+      console.error('Nepodařilo se načíst scrim server:', e);
+    }
+  }
+  renderScrimBanner();
 
   /* ============ ROSTER (uložený jako roster.json přímo v GitHub repu) ============ */
   const ROSTER_FILE = 'roster.json';
@@ -1580,9 +1689,26 @@
   const ATTENDANCE_FILE = 'attendance.json';
   const EXCUSES_FILE = 'excuses.json';
   const NOTIFICATIONS_FILE = 'notifications.json';
+  const SCRIM_FILE = 'scrimserver.json';
 
   let memberUsername = '';
-  let memberAccessCode = ''; // sdílený zápisový token, drží se jen v paměti
+  let memberAccessCode = ''; // sdílený zápisový token
+  const MEMBER_SESSION_KEY = 'freezers_member_session';
+
+  function saveMemberSession(username, accessCode, displayName){
+    try{
+      localStorage.setItem(MEMBER_SESSION_KEY, JSON.stringify({ username, accessCode, displayName }));
+    }catch(e){ console.error('Nepodařilo se uložit přihlášení:', e); }
+  }
+  function loadMemberSession(){
+    try{
+      const raw = localStorage.getItem(MEMBER_SESSION_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+  function clearMemberSession(){
+    try{ localStorage.removeItem(MEMBER_SESSION_KEY); }catch(e){}
+  }
 
   async function sha256Hex(str){
     const enc = new TextEncoder().encode(str);
@@ -1669,7 +1795,20 @@
   }
 
   /* ---- Přihlášení člena ---- */
-  document.getElementById('openMemberLoginNav')?.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
+  document.getElementById('openMemberLoginNav')?.addEventListener('click', function(e){
+    e.preventDefault();
+    if(memberUsername){
+      // Už přihlášen -> odhlásit
+      memberUsername = '';
+      memberAccessCode = '';
+      clearMemberSession();
+      this.textContent = 'Přihlásit se';
+      document.getElementById('calendarLoggedIn').style.display = 'none';
+      document.getElementById('calendarLoggedOut').style.display = 'block';
+    } else {
+      openMemberLogin();
+    }
+  });
   document.getElementById('openMemberLoginLink')?.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
   function openMemberLogin(){
     document.getElementById('memberLoginError').classList.remove('show');
@@ -1717,6 +1856,7 @@
 
       memberUsername = username;
       memberAccessCode = accessCode;
+      saveMemberSession(username, accessCode, user.displayName || username);
       closeMemberLogin();
       document.getElementById('calendarLoggedOut').style.display = 'none';
       document.getElementById('calendarLoggedIn').style.display = 'block';
@@ -2253,6 +2393,58 @@
       list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst omluvenky: ${escapeHtml(e.message)}</div>`;
     }
   }
+
+  function restoreMemberSession(){
+    const session = loadMemberSession();
+    if(!session) return;
+    memberUsername = session.username;
+    memberAccessCode = session.accessCode;
+    document.getElementById('calendarLoggedOut').style.display = 'none';
+    document.getElementById('calendarLoggedIn').style.display = 'block';
+    document.getElementById('openMemberLoginNav').textContent = session.displayName || session.username;
+    loadCalendar();
+    checkAndShowNotifications();
+  }
+  restoreMemberSession();
+
+  /* ---- Admin: Scrim Server nastavení ---- */
+  async function loadAdminScrimForm(){
+    try{
+      const config = await ghFetchPublic(SCRIM_FILE) || {};
+      document.getElementById('scrim-active').checked = !!config.active;
+      document.getElementById('scrim-ip').value = config.ip || '';
+      document.getElementById('scrim-password').value = config.password || '';
+      document.getElementById('scrim-matchup').value = config.matchup || '';
+      document.getElementById('scrim-note').value = config.note || '';
+    }catch(e){
+      console.error('Nepodařilo se načíst scrim server config:', e);
+    }
+  }
+
+  document.getElementById('adminScrimForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const config = {
+      active: document.getElementById('scrim-active').checked,
+      ip: document.getElementById('scrim-ip').value.trim(),
+      password: document.getElementById('scrim-password').value.trim(),
+      matchup: document.getElementById('scrim-matchup').value.trim(),
+      note: document.getElementById('scrim-note').value.trim()
+    };
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Ukládám...';
+    try{
+      const { sha } = await ghFetchWithSha(SCRIM_FILE, ghToken);
+      await ghSave(SCRIM_FILE, config, sha, `Scrim server: ${config.active ? 'aktivní' : 'vypnutý'}`, ghToken);
+      renderScrimBanner();
+      submitBtn.textContent = 'Uloženo!';
+      setTimeout(() => { submitBtn.textContent = 'Uložit Scrim Server'; }, 1800);
+    }catch(err){
+      alert('Nepodařilo se uložit Scrim Server: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+    }
+  });
 
   /* ============ DOTAZNÍK -> DISCORD WEBHOOK ============ */
   const WEBHOOK_URL = 'https://discord.com/api/webhooks/1547953283656581120/s2sVfd34zuChdIWCv3nGJ4KZvom_Epphj1PzwUIRRY3TS103Zj3ut6K4ngRMfPSP5Agm';
