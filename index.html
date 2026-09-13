@@ -904,10 +904,18 @@
     <h3>Přihlášení do administrace</h3>
     <form id="adminLoginForm">
       <div class="field">
+        <label for="adminUsername">Uživatelské jméno správce</label>
+        <input type="text" id="adminUsername" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="adminPasswordField">Heslo</label>
+        <input type="password" id="adminPasswordField" autocomplete="current-password" required>
+      </div>
+      <div class="field">
         <label for="adminPassword">GitHub token</label>
         <input type="password" id="adminPassword" autocomplete="off" placeholder="ghp_... nebo github_pat_..." required>
       </div>
-      <div class="admin-error" id="adminLoginError">Token nefunguje, zkus to znovu.</div>
+      <div class="admin-error" id="adminLoginError">Špatné přihlašovací údaje, zkus to znovu.</div>
       <button type="submit" class="submit-btn" style="width:100%;">Vstoupit</button>
     </form>
   </div>
@@ -1080,6 +1088,28 @@
       </div>
       <button type="submit" class="submit-btn">Uložit Scrim Server</button>
     </form>
+
+    <div class="admin-divider"></div>
+    <h3>Správci webu</h3>
+    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
+      Jen lidé v tomhle seznamu se dostanou do admin panelu (spolu se svým GitHub tokenem). Přidávej opatrně.
+    </p>
+    <form id="adminAdminsForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="aa-username">Uživatelské jméno</label>
+          <input type="text" id="aa-username" placeholder="např. filas" required>
+        </div>
+        <div class="field">
+          <label for="aa-password">Heslo</label>
+          <input type="text" id="aa-password" placeholder="vygeneruj/zadej heslo" required>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn">Přidat / upravit správce</button>
+    </form>
+    <div class="admin-divider"></div>
+    <h3>Existující správci</h3>
+    <div id="adminAdminsList"></div>
   </div>
 </div>
 
@@ -1117,6 +1147,7 @@
   const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_FILE_PATH}`;
   const CONTENTS_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE_PATH}`;
   const SCRIM_FILE = 'scrimserver.json';
+  const ADMINS_FILE = 'admins.json';
 
   let ghToken = ''; // GitHub token drží se jen v paměti prohlížeče po dobu session, nikam se neukládá
 
@@ -1310,11 +1341,15 @@
   });
 
   /* ============ ADMIN MODALY (Ctrl+F) ============ */
+  let adminUsername = '';
+
   function openAdminLogin(){
     document.getElementById('adminLoginError').classList.remove('show');
+    document.getElementById('adminUsername').value = '';
+    document.getElementById('adminPasswordField').value = '';
     document.getElementById('adminPassword').value = '';
     document.getElementById('adminLoginOverlay').classList.add('show');
-    setTimeout(() => document.getElementById('adminPassword').focus(), 50);
+    setTimeout(() => document.getElementById('adminUsername').focus(), 50);
   }
   function closeAdminLogin(){
     document.getElementById('adminLoginOverlay').classList.remove('show');
@@ -1325,6 +1360,7 @@
     renderAdminUserList();
     renderAdminEventList();
     renderAdminExcusesList();
+    renderAdminAdminsList();
     loadAdminScrimForm();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
@@ -1346,23 +1382,41 @@
 
   document.getElementById('adminLoginForm').addEventListener('submit', async function(e){
     e.preventDefault();
-    const val = document.getElementById('adminPassword').value.trim();
+    const username = document.getElementById('adminUsername').value.trim();
+    const password = document.getElementById('adminPasswordField').value;
+    const tokenVal = document.getElementById('adminPassword').value.trim();
+    const errBox = document.getElementById('adminLoginError');
+    errBox.classList.remove('show');
     const btn = e.target.querySelector('.submit-btn');
     btn.disabled = true;
     btn.textContent = 'Ověřuji...';
     try{
-      const res = await fetch(CONTENTS_URL, { headers: { Authorization: `token ${val}` } });
+      const admins = await ghFetchPublic(ADMINS_FILE) || [];
+      const admin = admins.find(a => a.username === username);
+      if(!admin){
+        errBox.textContent = 'Špatné jméno nebo heslo.';
+        errBox.classList.add('show');
+        return;
+      }
+      const hash = await sha256Hex(password);
+      if(hash !== admin.passwordHash){
+        errBox.textContent = 'Špatné jméno nebo heslo.';
+        errBox.classList.add('show');
+        return;
+      }
+      const res = await fetch(CONTENTS_URL, { headers: { Authorization: `token ${tokenVal}` } });
       if(res.ok || res.status === 404){
-        ghToken = val;
+        ghToken = tokenVal;
+        adminUsername = username;
         closeAdminLogin();
         openAdminPanel();
       } else {
-        document.getElementById('adminLoginError').textContent = 'Token nefunguje nebo nemá práva k zápisu do repa.';
-        document.getElementById('adminLoginError').classList.add('show');
+        errBox.textContent = 'GitHub token nefunguje nebo nemá práva k zápisu do repa.';
+        errBox.classList.add('show');
       }
     }catch(err){
-      document.getElementById('adminLoginError').textContent = 'Nepodařilo se spojit s GitHubem.';
-      document.getElementById('adminLoginError').classList.add('show');
+      errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
+      errBox.classList.add('show');
     }finally{
       btn.disabled = false;
       btn.textContent = 'Vstoupit';
@@ -2463,6 +2517,73 @@
       alert('Nepodařilo se uložit Scrim Server: ' + err.message);
     }finally{
       submitBtn.disabled = false;
+    }
+  });
+
+  /* ---- Admin: správa účtů správců webu ---- */
+  async function renderAdminAdminsList(){
+    const list = document.getElementById('adminAdminsList');
+    try{
+      const admins = await ghFetchPublic(ADMINS_FILE) || [];
+      if(!admins.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádní správci.</div>';
+        return;
+      }
+      list.innerHTML = admins.map((a, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(a.username)}</strong>
+            <span>${a.username === adminUsername ? 'to jsi ty' : ''}</span>
+          </div>
+          <button type="button" class="admin-delete-btn" data-idx="${idx}" ${admins.length <= 1 ? 'disabled title="Musí zůstat aspoň jeden správce"' : ''}>Smazat</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          if(!confirm('Opravdu odebrat tohoto správce? Ztratí přístup do admin panelu.')) return;
+          btn.disabled = true;
+          btn.textContent = 'Mažu...';
+          try{
+            const { data, sha } = await ghFetchWithSha(ADMINS_FILE, ghToken);
+            const admins = data || [];
+            admins.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(ADMINS_FILE, admins, sha, 'Odebrání správce webu', ghToken);
+            renderAdminAdminsList();
+          }catch(e){
+            alert('Nepodařilo se smazat správce: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Smazat';
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst správce: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('adminAdminsForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const username = document.getElementById('aa-username').value.trim();
+    const password = document.getElementById('aa-password').value;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Ukládám...';
+    try{
+      const passwordHash = await sha256Hex(password);
+      const { data, sha } = await ghFetchWithSha(ADMINS_FILE, ghToken);
+      const admins = data || [];
+      const existingIdx = admins.findIndex(a => a.username === username);
+      const entry = { username, passwordHash };
+      if(existingIdx >= 0) admins[existingIdx] = entry; else admins.push(entry);
+      await ghSave(ADMINS_FILE, admins, sha, `Přidání/úprava správce: ${username}`, ghToken);
+      e.target.reset();
+      renderAdminAdminsList();
+    }catch(err){
+      alert('Nepodařilo se uložit správce: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Přidat / upravit správce';
     }
   });
 
