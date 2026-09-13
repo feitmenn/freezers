@@ -1110,6 +1110,7 @@
   const GH_FILE_PATH = 'news.json';
   const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_FILE_PATH}`;
   const CONTENTS_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE_PATH}`;
+  const SCRIM_FILE = 'scrimserver.json';
 
   let ghToken = ''; // GitHub token drží se jen v paměti prohlížeče po dobu session, nikam se neukládá
 
@@ -1689,7 +1690,6 @@
   const ATTENDANCE_FILE = 'attendance.json';
   const EXCUSES_FILE = 'excuses.json';
   const NOTIFICATIONS_FILE = 'notifications.json';
-  const SCRIM_FILE = 'scrimserver.json';
 
   let memberUsername = '';
   let memberAccessCode = ''; // sdílený zápisový token
