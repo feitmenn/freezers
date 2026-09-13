@@ -162,13 +162,19 @@
 
   /* SCRIM SERVER BANNER */
   .scrim-banner{
+    position:relative;
     background:linear-gradient(100deg, rgba(255,95,176,0.1), rgba(154,92,255,0.08));
     border-top:1px solid rgba(255,95,176,0.35);
     border-bottom:1px solid rgba(255,95,176,0.35);
     padding:24px 0;
   }
+  .scrim-close-btn{
+    position:absolute;top:14px;right:20px;background:none;border:none;
+    color:var(--ice-dim);font-size:16px;cursor:pointer;opacity:0.6;transition:opacity .2s;
+  }
+  .scrim-close-btn:hover{opacity:1;color:var(--ice);}
   .scrim-banner-inner{
-    max-width:1180px;margin:0 auto;padding:0 28px;
+    max-width:1180px;margin:0 auto;padding:0 44px 0 28px;
     display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
   }
   .scrim-live-dot{
@@ -1382,6 +1388,15 @@
         el.innerHTML = '';
         return;
       }
+
+      const dismissKey = 'scrim_dismissed_' + btoa(unescape(encodeURIComponent(JSON.stringify({ m: config.matchup, ip: config.ip, n: config.note }))));
+      let dismissed = false;
+      try{ dismissed = sessionStorage.getItem(dismissKey) === '1'; }catch(e){}
+      if(dismissed){
+        el.innerHTML = '';
+        return;
+      }
+
       el.innerHTML = `
         <div class="scrim-banner">
           <div class="scrim-banner-inner">
@@ -1395,6 +1410,7 @@
               <button type="button" class="scrim-copy-btn" id="scrimCopyBtn">Zkopírovat connect</button>
             </div>
           </div>
+          <button type="button" class="scrim-close-btn" id="scrimCloseBtn" aria-label="Zavřít">✕</button>
         </div>
       `;
       document.getElementById('scrimCopyBtn')?.addEventListener('click', function(){
@@ -1407,6 +1423,10 @@
         }).catch(() => {
           alert('Nepodařilo se zkopírovat, zkus to ručně: ' + cmd);
         });
+      });
+      document.getElementById('scrimCloseBtn')?.addEventListener('click', function(){
+        try{ sessionStorage.setItem(dismissKey, '1'); }catch(e){}
+        el.innerHTML = '';
       });
     }catch(e){
       el.innerHTML = '';
