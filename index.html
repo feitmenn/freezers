@@ -244,10 +244,17 @@
   .week-label{font-family:'Chakra Petch',sans-serif;font-size:15px;color:var(--ice-dim);min-width:140px;text-align:center;}
   .calendar-legend{display:flex;gap:20px;margin-bottom:18px;font-size:12px;color:var(--ice-dim);flex-wrap:wrap;}
   .legend-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:middle;}
-  .calendar-grid{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+  .calendar-grid{border:1px solid var(--line);border-radius:3px;overflow-x:auto;overflow-y:hidden;}
+  .calendar-inner{min-width:900px;}
+  .calendar-hours-row{display:grid;grid-template-columns:100px repeat(24,1fr);border-bottom:1px solid var(--line);}
+  .calendar-hours-spacer{border-right:1px solid var(--line);}
+  .hour-label{
+    font-size:9.5px;color:var(--ice-dim);text-align:center;padding:6px 0;
+    font-family:'Chakra Petch',sans-serif;border-right:1px solid rgba(255,255,255,0.04);
+  }
   .calendar-day{
     background:var(--card);display:grid;grid-template-columns:100px 1fr;
-    border-bottom:1px solid var(--line);min-height:64px;
+    border-bottom:1px solid var(--line);min-height:56px;
   }
   .calendar-day:last-child{border-bottom:none;}
   .calendar-day.today{background:rgba(47,224,201,0.05);}
@@ -259,24 +266,29 @@
     padding:8px 4px;
   }
   .calendar-day-head .day-date{font-size:10px;opacity:0.7;margin-top:2px;}
-  .calendar-day-events{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;}
+  .calendar-day-track{
+    display:grid;grid-template-columns:repeat(24,1fr);grid-auto-rows:24px;gap:3px;
+    padding:6px 3px;position:relative;
+  }
+  .calendar-day-track::before{
+    content:'';position:absolute;inset:0;
+    background-image:repeating-linear-gradient(to right, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 1px, transparent 1px, transparent calc(100% / 24));
+    pointer-events:none;
+  }
   .event-square{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     font-family:'Chakra Petch',sans-serif;font-weight:700;
-    border-radius:4px;padding:6px 12px;cursor:pointer;color:#080b14;
-    transition:transform .15s;min-width:56px;
+    border-radius:3px;padding:2px 2px;cursor:pointer;color:#080b14;
+    transition:transform .15s;position:relative;z-index:1;overflow:hidden;
   }
-  .event-square .es-label{font-size:12px;}
-  .event-square .es-time{font-size:9px;font-weight:500;opacity:0.75;margin-top:2px;}
-  .event-square:hover{transform:scale(1.05);}
-  .calendar-day-empty{color:var(--ice-dim);font-size:12px;opacity:0.4;padding:0 4px;}
+  .event-square .es-label{font-size:10px;line-height:1.1;}
+  .event-square .es-time{font-size:7.5px;font-weight:500;opacity:0.8;}
+  .event-square:hover{transform:scale(1.08);z-index:2;}
   .event-detail{margin-top:24px;}
   @media (max-width:700px){
     .calendar-day{grid-template-columns:70px 1fr;}
+    .calendar-hours-row{grid-template-columns:70px repeat(24,1fr);}
     .calendar-day-head{font-size:10px;padding:6px 2px;}
-    .event-square{padding:5px 8px;min-width:44px;}
-    .event-square .es-label{font-size:10px;}
-    .event-square .es-time{font-size:8px;}
   }
 
   .attendance-table{width:100%;border-collapse:collapse;font-size:13.5px;}
@@ -321,6 +333,25 @@
     cursor:pointer;white-space:nowrap;transition:filter .2s;
   }
   .cookie-accept-btn:hover{filter:brightness(1.1);}
+
+  .notification-stack{
+    position:fixed;top:90px;right:20px;z-index:400;
+    display:flex;flex-direction:column;gap:10px;max-width:320px;
+  }
+  .notification-toast{
+    background:var(--bg-1);border:1px solid var(--line);border-left:4px solid var(--turquoise);
+    border-radius:3px;padding:14px 16px;font-size:13px;color:var(--ice-dim);
+    box-shadow:0 10px 30px rgba(0,0,0,0.45);animation:toastIn .3s ease;position:relative;
+  }
+  .notification-toast.rejected{border-left-color:#ff5f5f;}
+  .notification-toast.approved{border-left-color:var(--turquoise);}
+  .notification-toast .nt-title{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--ice);margin-bottom:4px;padding-right:18px;}
+  .notification-toast .nt-close{position:absolute;top:10px;right:12px;cursor:pointer;opacity:0.5;font-size:14px;}
+  .notification-toast .nt-close:hover{opacity:1;}
+  @keyframes toastIn{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:translateX(0);}}
+  @media (max-width:500px){
+    .notification-stack{right:10px;left:10px;max-width:none;top:80px;}
+  }
   .news-item:last-child{border-bottom:none;}
   .news-item .n-date{font-size:11px;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;letter-spacing:.05em;}
   .news-item h4{font-size:16px;margin-top:6px;font-weight:600;}
@@ -473,6 +504,10 @@
     max-height:86vh;overflow-y:auto;
   }
   .modal-card-wide{max-width:560px;}
+  .modal-card-fullscreen{
+    max-width:96vw;width:96vw;height:92vh;max-height:92vh;
+    resize:both;overflow:auto;
+  }
   .modal-close{
     position:absolute;top:16px;right:16px;background:none;border:none;
     color:var(--ice-dim);font-size:16px;cursor:pointer;
@@ -521,6 +556,8 @@
 </style>
 </head>
 <body>
+
+<div id="notificationStack" class="notification-stack"></div>
 
 <div id="cookieBanner" class="cookie-banner">
   <div class="cookie-text">
@@ -716,10 +753,16 @@
         <span><span class="legend-dot" style="background:#9a5cff;"></span>Trénink (TRN)</span>
       </div>
       <div id="calendarGrid" class="calendar-grid"></div>
-      <div id="eventDetail" class="event-detail" style="display:none;"></div>
     </div>
   </div>
 </section>
+
+<div class="modal-overlay" id="eventDetailOverlay">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="closeEventDetailBtn">✕</button>
+    <div id="eventDetailContent"></div>
+  </div>
+</div>
 
 <section class="section" id="dotaznik">
   <div class="wrap">
@@ -829,7 +872,7 @@
 </div>
 
 <div class="modal-overlay" id="adminPanelOverlay">
-  <div class="modal-card modal-card-wide">
+  <div class="modal-card modal-card-fullscreen">
     <button type="button" class="modal-close" id="closeAdminPanelBtn">✕</button>
     <div class="modal-kicker">ADMIN PANEL</div>
     <h3>Přidat novinku</h3>
@@ -1536,6 +1579,7 @@
   const RSVPS_FILE = 'rsvps.json';
   const ATTENDANCE_FILE = 'attendance.json';
   const EXCUSES_FILE = 'excuses.json';
+  const NOTIFICATIONS_FILE = 'notifications.json';
 
   let memberUsername = '';
   let memberAccessCode = ''; // sdílený zápisový token, drží se jen v paměti
@@ -1544,6 +1588,34 @@
     const enc = new TextEncoder().encode(str);
     const buf = await crypto.subtle.digest('SHA-256', enc);
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function showNotificationToast(notif){
+    const stack = document.getElementById('notificationStack');
+    const el = document.createElement('div');
+    el.className = 'notification-toast ' + (notif.type === 'excuse_rejected' ? 'rejected' : 'approved');
+    el.innerHTML = `
+      <span class="nt-close">✕</span>
+      <div class="nt-title">${notif.type === 'excuse_rejected' ? 'Omluvenka zamítnuta' : 'Omluvenka schválena'}</div>
+      <div>${escapeHtml(notif.message || '')}</div>
+    `;
+    el.querySelector('.nt-close').addEventListener('click', () => el.remove());
+    stack.appendChild(el);
+    setTimeout(() => el.remove(), 12000);
+  }
+
+  async function checkAndShowNotifications(){
+    try{
+      const { data, sha } = await ghFetchWithSha(NOTIFICATIONS_FILE, memberAccessCode);
+      const all = data || [];
+      const mine = all.filter(n => n.username === memberUsername);
+      if(!mine.length) return;
+      mine.forEach(showNotificationToast);
+      const remaining = all.filter(n => n.username !== memberUsername);
+      await ghSave(NOTIFICATIONS_FILE, remaining, sha, `Přečtená oznámení: ${memberUsername}`, memberAccessCode);
+    }catch(e){
+      console.error('Nepodařilo se zkontrolovat oznámení:', e);
+    }
   }
 
   async function ghFetchPublic(path){
@@ -1650,6 +1722,7 @@
       document.getElementById('calendarLoggedIn').style.display = 'block';
       document.getElementById('openMemberLoginNav').textContent = user.displayName || username;
       loadCalendar();
+      checkAndShowNotifications();
     }catch(err){
       errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
       errBox.classList.add('show');
@@ -1777,16 +1850,18 @@
 
   function showEventDetail(id){
     const ev = calendarEventsCache.find(e => e.id === id);
-    const detail = document.getElementById('eventDetail');
-    if(!ev){ detail.style.display = 'none'; return; }
+    if(!ev) return;
     const evRsvps = calendarRsvpsCache[ev.id] || {};
     const myStatus = evRsvps[memberUsername] || null;
     const myExcuse = (calendarExcusesCache[ev.id] || {})[memberUsername] || null;
-    detail.style.display = 'block';
-    detail.innerHTML = eventCardHtml(ev, myStatus, evRsvps, myExcuse);
-    attachRsvpHandlers(detail);
-    detail.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    const content = document.getElementById('eventDetailContent');
+    content.innerHTML = eventCardHtml(ev, myStatus, evRsvps, myExcuse);
+    attachRsvpHandlers(content);
+    document.getElementById('eventDetailOverlay').classList.add('show');
   }
+  document.getElementById('closeEventDetailBtn').addEventListener('click', function(){
+    document.getElementById('eventDetailOverlay').classList.remove('show');
+  });
 
   function renderCalendarGrid(){
     const gridEl = document.getElementById('calendarGrid');
@@ -1802,7 +1877,9 @@
       days.push(d);
     }
 
-    gridEl.innerHTML = days.map((d, idx) => {
+    const hourHeader = Array.from({ length: 24 }, (_, i) => `<div class="hour-label">${i + 1}</div>`).join('');
+
+    const dayRows = days.map((d, idx) => {
       const dayEvents = calendarEventsCache
         .filter(ev => {
           const evDate = new Date(ev.date);
@@ -1812,21 +1889,33 @@
       const isToday = new Date().toDateString() === d.toDateString();
       const squares = dayEvents.map(ev => {
         const meta = TYPE_META[ev.type] || { label:'EV', color:'#888' };
-        const time = new Date(ev.date).toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' });
+        const evDate = new Date(ev.date);
+        const time = evDate.toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' });
+        const hourCol = evDate.getHours() + 1; // sloupec 1–24
         return `
-          <div class="event-square" style="background:${meta.color};" data-id="${ev.id}" title="${escapeHtml(ev.title)}">
+          <div class="event-square" style="background:${meta.color}; grid-column:${hourCol} / span 1;" data-id="${ev.id}" title="${escapeHtml(ev.title)} — ${time}">
             <div class="es-label">${meta.label}</div>
             <div class="es-time">${time}</div>
           </div>
         `;
-      }).join('') || '<span class="calendar-day-empty">—</span>';
+      }).join('');
       return `
         <div class="calendar-day ${isToday ? 'today' : ''}">
           <div class="calendar-day-head">${DAY_NAMES[idx]}<span class="day-date">${formatShortDate(d)}</span></div>
-          <div class="calendar-day-events">${squares}</div>
+          <div class="calendar-day-track">${squares}</div>
         </div>
       `;
     }).join('');
+
+    gridEl.innerHTML = `
+      <div class="calendar-inner">
+        <div class="calendar-hours-row">
+          <div class="calendar-hours-spacer"></div>
+          ${hourHeader}
+        </div>
+        ${dayRows}
+      </div>
+    `;
 
     gridEl.querySelectorAll('.event-square').forEach(sq => {
       sq.addEventListener('click', () => showEventDetail(sq.dataset.id));
@@ -2111,8 +2200,8 @@
               <span style="margin-top:6px;display:block;color:var(--ice);">${escapeHtml(r.reason)}</span>
             </div>
             <div style="display:flex;gap:8px;flex-shrink:0;">
-              <button type="button" class="excuse-approve-btn" data-event="${r.eventId}" data-user="${escapeHtml(r.username)}">Schválit</button>
-              <button type="button" class="excuse-reject-btn" data-event="${r.eventId}" data-user="${escapeHtml(r.username)}">Zamítnout</button>
+              <button type="button" class="excuse-approve-btn" data-event="${r.eventId}" data-user="${escapeHtml(r.username)}" data-title="${escapeHtml(ev ? ev.title : 'akce')}">Schválit</button>
+              <button type="button" class="excuse-reject-btn" data-event="${r.eventId}" data-user="${escapeHtml(r.username)}" data-title="${escapeHtml(ev ? ev.title : 'akce')}">Zamítnout</button>
             </div>
           </div>
         `;
@@ -2122,6 +2211,7 @@
         btn.addEventListener('click', async function(){
           const eventId = btn.dataset.event;
           const username = btn.dataset.user;
+          const eventTitle = btn.dataset.title;
           const approve = btn.classList.contains('excuse-approve-btn');
           const row = btn.closest('.admin-news-row');
           row.querySelectorAll('button').forEach(b => b.disabled = true);
@@ -2139,6 +2229,17 @@
               if(Object.keys(excuses[eventId]).length === 0) delete excuses[eventId];
             }
             await ghSave(EXCUSES_FILE, excuses, excSha, `Vyřízení omluvenky: ${username}`, ghToken);
+
+            const { data: notifData, sha: notifSha } = await ghFetchWithSha(NOTIFICATIONS_FILE, ghToken);
+            const notifications = notifData || [];
+            notifications.push({
+              id: 'notif_' + Date.now(),
+              username,
+              type: approve ? 'excuse_approved' : 'excuse_rejected',
+              message: `Tvoje omluvenka na akci „${eventTitle}“ byla ${approve ? 'schválena' : 'zamítnuta'}.`,
+              createdAt: new Date().toISOString()
+            });
+            await ghSave(NOTIFICATIONS_FILE, notifications, notifSha, `Oznámení: ${username}`, ghToken);
 
             renderAdminExcusesList();
             renderAttendanceTable(document.getElementById('att-event-select').value);
