@@ -53,6 +53,13 @@
     },
     {
       "type": "empty"
+    },
+    {
+      "name": "Sonder",
+      "role": "",
+      "type": "trial",
+      "steam": "",
+      "faceit": "https://www.faceit.com/en/players/mox"
     }
   ],
   "academy": [
