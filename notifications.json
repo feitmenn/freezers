@@ -5,19 +5,5 @@
     "type": "excuse_approved",
     "message": "Tvoje omluvenka na akci „Main Roster VS Academy“ byla schválena.",
     "createdAt": "2026-09-13T17:38:35.710Z"
-  },
-  {
-    "id": "notif_1789503482513",
-    "username": "filas",
-    "type": "excuse_rejected",
-    "message": "Tvoje omluvenka na akci „Test pro všechny co toto vidíte.“ byla zamítnuta.",
-    "createdAt": "2026-09-15T20:18:02.514Z"
-  },
-  {
-    "id": "notif_1789503487085",
-    "username": "filas",
-    "type": "excuse_rejected",
-    "message": "Tvoje omluvenka na akci „Test pro všechny co toto vidíte.“ byla zamítnuta.",
-    "createdAt": "2026-09-15T20:18:07.085Z"
   }
 ]
