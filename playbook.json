@@ -1,5 +1,11 @@
 {
   "roles": [],
   "lineups": [],
-  "entries": []
+  "entries": [],
+  "maps": [
+    {
+      "name": "Ancient",
+      "image": "https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/ancient-1789677696177.jpg"
+    }
+  ]
 }
