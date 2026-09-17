@@ -11,5 +11,12 @@
     "type": "scrim",
     "date": "2026-09-16T16:30:00.000Z",
     "description": "Main Roster VS Academy."
+  },
+  {
+    "id": "ev_1789677800654",
+    "title": "Main Trénink",
+    "type": "training",
+    "date": "2026-09-19T16:45:00.000Z",
+    "description": "Main trenink na Inferno mapě"
   }
 ]
