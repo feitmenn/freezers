@@ -18,5 +18,12 @@
     "type": "scrim",
     "date": "2026-09-19T17:15:00.000Z",
     "description": "povinne se pruhlasit na https://metastack.gg/"
+  },
+  {
+    "id": "ev_1789675210583",
+    "title": "Trenink MAIN",
+    "type": "training",
+    "date": "2026-09-19T16:00:00.000Z",
+    "description": "https://metastack.gg/ povinne se zaregistrovat"
   }
 ]
