@@ -1,7 +1,15 @@
 {
   "roles": [],
   "lineups": [],
-  "entries": [],
+  "entries": [
+    {
+      "title": "TYLOO Window to B Split Pistol",
+      "map": "Ancient",
+      "videoLink": "https://www.youtube.com/watch?v=sS26eXxQdOE",
+      "description": "First Spawn Nades\n\nNo nades attached\nSecond Spawn Nades\n\nNo nades attached\nThird Spawn Nades\nWindow from Mid\nFloater Player Nades\nDrops a Flash\nInstant Window Smoke Spawn 5\nDefault Mid T Flash\nB Lurk Player Nades\n\nNo nades attached",
+      "addedAt": "2026-09-17T20:50:48.932Z"
+    }
+  ],
   "maps": [
     {
       "name": "Ancient",
