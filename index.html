@@ -492,6 +492,30 @@
   }
   .clip-links a:hover{border-color:var(--turquoise);color:var(--turquoise);}
   .clips-empty{grid-column:1/-1;}
+
+  .playbook-block{margin-bottom:48px;}
+  .playbook-block:last-child{margin-bottom:0;}
+  .playbook-block-title{font-size:19px;margin-bottom:18px;}
+  .roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .role-card{
+    background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 18px;
+  }
+  .role-card .role-name{font-family:'Chakra Petch',sans-serif;font-size:12px;color:var(--violet);letter-spacing:.04em;margin-bottom:6px;}
+  .role-card .role-player{font-family:'Chakra Petch',sans-serif;font-size:17px;font-weight:600;}
+  .lineups-list{display:flex;flex-direction:column;gap:12px;}
+  .lineup-card{
+    background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 20px;
+    display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;
+  }
+  .lineup-card .lineup-map{font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:600;color:var(--turquoise);min-width:110px;}
+  .lineup-card .lineup-desc{font-size:13.5px;color:var(--ice-dim);}
+  .playbook-entries{display:flex;flex-direction:column;gap:28px;}
+  .playbook-entry-card{background:var(--card);border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+  .playbook-entry-embed{position:relative;width:100%;padding-top:56.25%;background:#000;}
+  .playbook-entry-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .playbook-entry-info{padding:18px 22px;}
+  .playbook-entry-title{font-family:'Chakra Petch',sans-serif;font-size:17px;font-weight:600;margin-bottom:8px;}
+  .playbook-entry-desc{font-size:13.5px;color:var(--ice-dim);margin-bottom:10px;}
   .staff-card{
     background:var(--card);border:1px solid var(--line);border-radius:3px;padding:24px;
     transition:border-color .2s, transform .2s;
@@ -704,6 +728,7 @@
       <a href="#staff">Staff</a>
       <a href="#kalendar">Kalendář</a>
       <a href="#klipy">Klipy</a>
+      <a href="#playbook">Playbook</a>
       <a href="#dotaznik">Dotazník</a>
       <a href="#kontakt">Kontakt</a>
       <span class="nav-legal">
@@ -898,6 +923,39 @@
   </div>
 </section>
 
+<section class="section" id="playbook">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-kicker">JEN PRO ČLENY</div>
+      <h2 class="section-title">Playbook</h2>
+      <p class="section-sub">Role, lineupy a týmové strategie s videem z Metastacku.</p>
+    </div>
+
+    <div id="playbookLoggedOut" class="hub-card" style="max-width:440px;">
+      <div class="hc-label">PŘIHLÁŠENÍ ČLENA</div>
+      <div class="hc-title">Nejdřív se přihlas</div>
+      <div class="hc-desc">Playbook je jen pro tým. Přihlašovací údaje ti dá staff. <a href="#" class="playbook-login-link" style="color:var(--turquoise);">Přihlásit se</a></div>
+    </div>
+
+    <div id="playbookLoggedIn" style="display:none;">
+      <div class="playbook-block">
+        <h3 class="playbook-block-title">Role v týmu</h3>
+        <div id="playbookRoles" class="roles-grid"></div>
+      </div>
+
+      <div class="playbook-block">
+        <h3 class="playbook-block-title">Lineupy</h3>
+        <div id="playbookLineups" class="lineups-list"></div>
+      </div>
+
+      <div class="playbook-block">
+        <h3 class="playbook-block-title">Playbook od týmu</h3>
+        <div id="playbookEntries" class="playbook-entries"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="dotaznik">
   <div class="wrap">
     <div class="section-head">
@@ -1030,6 +1088,7 @@
         <button type="button" class="admin-tab-btn" data-tab="excuses"><span class="att-icon">✉️</span>Omluvenky</button>
         <button type="button" class="admin-tab-btn" data-tab="scrim"><span class="att-icon">🖥️</span>Scrim Server</button>
         <button type="button" class="admin-tab-btn" data-tab="clips"><span class="att-icon">🎬</span>Klipy</button>
+        <button type="button" class="admin-tab-btn" data-tab="playbook"><span class="att-icon">📘</span>Playbook</button>
         <button type="button" class="admin-tab-btn" data-tab="admins"><span class="att-icon">🛡️</span>Správci</button>
       </div>
       <div class="admin-content">
@@ -1248,6 +1307,64 @@
 
         </div>
 
+        <div class="admin-tab-panel" data-tab-panel="playbook">
+    <h3>Role v týmu</h3>
+    <form id="adminRoleForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="role-name">Role</label>
+          <input type="text" id="role-name" placeholder="např. IGL, AWP, Entry, Support, Lurker" required>
+        </div>
+        <div class="field">
+          <label for="role-player">Hráč</label>
+          <input type="text" id="role-player" placeholder="např. FILAS" required>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn">Přidat roli</button>
+    </form>
+    <div class="admin-divider"></div>
+    <h3>Existující role</h3>
+    <div id="adminRolesList"></div>
+
+    <div class="admin-divider"></div>
+    <h3>Lineupy</h3>
+    <form id="adminLineupForm">
+      <div class="field">
+        <label for="lineup-map">Mapa</label>
+        <input type="text" id="lineup-map" placeholder="např. Mirage" required>
+      </div>
+      <div class="field">
+        <label for="lineup-desc">Popis lineupu</label>
+        <textarea id="lineup-desc" placeholder="Výchozí pozice, styl hry, kdo kde..." required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Přidat lineup</button>
+    </form>
+    <div class="admin-divider"></div>
+    <h3>Existující lineupy</h3>
+    <div id="adminLineupsList"></div>
+
+    <div class="admin-divider"></div>
+    <h3>Playbook od týmu</h3>
+    <form id="adminPlaybookEntryForm">
+      <div class="field">
+        <label for="pb-title">Název strategie</label>
+        <input type="text" id="pb-title" placeholder="např. A execute — Mirage" required>
+      </div>
+      <div class="field">
+        <label for="pb-video">Odkaz na video (Metastack)</label>
+        <input type="url" id="pb-video" placeholder="https://metastack.gg/...">
+      </div>
+      <div class="field">
+        <label for="pb-desc">Popis (nepovinné)</label>
+        <textarea id="pb-desc" placeholder="Detaily ke strategii..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Přidat do playbooku</button>
+    </form>
+    <div class="admin-divider"></div>
+    <h3>Existující playbook</h3>
+    <div id="adminPlaybookEntriesList"></div>
+        </div>
+
         <div class="admin-tab-panel" data-tab-panel="admins">
     <h3>Správci webu</h3>
     <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
@@ -1313,6 +1430,7 @@
   const SCRIM_FILE = 'scrimserver.json';
   const ADMINS_FILE = 'admins.json';
   const CLIPS_FILE = 'clips.json';
+  const PLAYBOOK_FILE = 'playbook.json';
 
   let ghToken = ''; // GitHub token drží se jen v paměti prohlížeče po dobu session, nikam se neukládá
 
@@ -1542,6 +1660,9 @@
     renderAdminExcusesList();
     renderAdminAdminsList();
     renderAdminClipsList();
+    renderAdminRolesList();
+    renderAdminLineupsList();
+    renderAdminPlaybookEntriesList();
     loadAdminScrimForm();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
@@ -1725,6 +1846,63 @@
     }
   }
   renderClips();
+
+  /* ============ PLAYBOOK (jen pro přihlášené členy) ============ */
+  function roleCardHtml(r){
+    return `
+      <div class="role-card">
+        <div class="role-name">${escapeHtml(r.role)}</div>
+        <div class="role-player">${escapeHtml(r.player)}</div>
+      </div>
+    `;
+  }
+  function lineupCardHtml(l){
+    return `
+      <div class="lineup-card">
+        <div class="lineup-map">${escapeHtml(l.map)}</div>
+        <div class="lineup-desc">${escapeHtml(l.description)}</div>
+      </div>
+    `;
+  }
+  function playbookEntryHtml(entry){
+    return `
+      <div class="playbook-entry-card">
+        ${entry.videoLink ? `
+          <div class="playbook-entry-embed">
+            <iframe src="${escapeHtml(entry.videoLink)}" allowfullscreen loading="lazy" title="${escapeHtml(entry.title)}"></iframe>
+          </div>
+        ` : ''}
+        <div class="playbook-entry-info">
+          <div class="playbook-entry-title">${escapeHtml(entry.title)}</div>
+          ${entry.description ? `<div class="playbook-entry-desc">${escapeHtml(entry.description)}</div>` : ''}
+          ${entry.videoLink ? `<a href="${escapeHtml(entry.videoLink)}" target="_blank" rel="noopener" style="font-size:12px;color:var(--turquoise);">Otevřít v Metastacku ↗</a>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  async function loadPlaybook(){
+    const rolesEl = document.getElementById('playbookRoles');
+    const lineupsEl = document.getElementById('playbookLineups');
+    const entriesEl = document.getElementById('playbookEntries');
+    try{
+      const data = await ghFetchPublic(PLAYBOOK_FILE) || { roles: [], lineups: [], entries: [] };
+
+      rolesEl.innerHTML = (data.roles && data.roles.length)
+        ? data.roles.map(roleCardHtml).join('')
+        : '<div class="admin-empty">Zatím žádné role.</div>';
+
+      lineupsEl.innerHTML = (data.lineups && data.lineups.length)
+        ? data.lineups.map(lineupCardHtml).join('')
+        : '<div class="admin-empty">Zatím žádné lineupy.</div>';
+
+      entriesEl.innerHTML = (data.entries && data.entries.length)
+        ? data.entries.slice().reverse().map(playbookEntryHtml).join('')
+        : '<div class="admin-empty">Zatím žádný playbook od týmu.</div>';
+    }catch(e){
+      console.error('Nepodařilo se načíst playbook:', e);
+    }
+  }
 
   /* ============ ROSTER (uložený jako roster.json přímo v GitHub repu) ============ */
   const ROSTER_FILE = 'roster.json';
@@ -2116,11 +2294,14 @@
       this.textContent = 'Přihlásit se';
       document.getElementById('calendarLoggedIn').style.display = 'none';
       document.getElementById('calendarLoggedOut').style.display = 'block';
+      document.getElementById('playbookLoggedIn').style.display = 'none';
+      document.getElementById('playbookLoggedOut').style.display = 'block';
     } else {
       openMemberLogin();
     }
   });
   document.getElementById('openMemberLoginLink')?.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
+  document.querySelectorAll('.playbook-login-link').forEach(a => a.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); }));
   function openMemberLogin(){
     document.getElementById('memberLoginError').classList.remove('show');
     document.getElementById('memberLoginOverlay').classList.add('show');
@@ -2171,8 +2352,11 @@
       closeMemberLogin();
       document.getElementById('calendarLoggedOut').style.display = 'none';
       document.getElementById('calendarLoggedIn').style.display = 'block';
+      document.getElementById('playbookLoggedOut').style.display = 'none';
+      document.getElementById('playbookLoggedIn').style.display = 'block';
       document.getElementById('openMemberLoginNav').textContent = user.displayName || username;
       loadCalendar();
+      loadPlaybook();
       checkAndShowNotifications();
     }catch(err){
       errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
@@ -2712,8 +2896,11 @@
     memberAccessCode = session.accessCode;
     document.getElementById('calendarLoggedOut').style.display = 'none';
     document.getElementById('calendarLoggedIn').style.display = 'block';
+    document.getElementById('playbookLoggedOut').style.display = 'none';
+    document.getElementById('playbookLoggedIn').style.display = 'block';
     document.getElementById('openMemberLoginNav').textContent = session.displayName || session.username;
     loadCalendar();
+    loadPlaybook();
     checkAndShowNotifications();
   }
   restoreMemberSession();
@@ -2895,6 +3082,203 @@
     }finally{
       submitBtn.disabled = false;
       submitBtn.textContent = 'Přidat klip';
+    }
+  });
+
+  /* ---- Admin: Playbook (role, lineupy, strategie) ---- */
+  async function fetchPlaybookWithSha(){
+    const { data, sha } = await ghFetchWithSha(PLAYBOOK_FILE, ghToken);
+    const pb = data || { roles: [], lineups: [], entries: [] };
+    if(!pb.roles) pb.roles = [];
+    if(!pb.lineups) pb.lineups = [];
+    if(!pb.entries) pb.entries = [];
+    return { pb, sha };
+  }
+
+  async function renderAdminRolesList(){
+    const list = document.getElementById('adminRolesList');
+    try{
+      const data = await ghFetchPublic(PLAYBOOK_FILE) || { roles: [] };
+      const roles = data.roles || [];
+      if(!roles.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádné role.</div>';
+        return;
+      }
+      list.innerHTML = roles.map((r, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(r.role)}</strong>
+            <span>${escapeHtml(r.player)}</span>
+          </div>
+          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          btn.disabled = true;
+          btn.textContent = 'Mažu...';
+          try{
+            const { pb, sha } = await fetchPlaybookWithSha();
+            pb.roles.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání role z playbooku', ghToken);
+            renderAdminRolesList();
+            loadPlaybook();
+          }catch(e){
+            alert('Nepodařilo se smazat roli: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Smazat';
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst role: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('adminRoleForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const role = document.getElementById('role-name').value.trim();
+    const player = document.getElementById('role-player').value.trim();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Přidávám...';
+    try{
+      const { pb, sha } = await fetchPlaybookWithSha();
+      pb.roles.push({ role, player });
+      await ghSave(PLAYBOOK_FILE, pb, sha, `Přidání role: ${role} -> ${player}`, ghToken);
+      e.target.reset();
+      renderAdminRolesList();
+      loadPlaybook();
+    }catch(err){
+      alert('Nepodařilo se přidat roli: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Přidat roli';
+    }
+  });
+
+  async function renderAdminLineupsList(){
+    const list = document.getElementById('adminLineupsList');
+    try{
+      const data = await ghFetchPublic(PLAYBOOK_FILE) || { lineups: [] };
+      const lineups = data.lineups || [];
+      if(!lineups.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádné lineupy.</div>';
+        return;
+      }
+      list.innerHTML = lineups.map((l, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(l.map)}</strong>
+            <span>${escapeHtml(l.description)}</span>
+          </div>
+          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          btn.disabled = true;
+          btn.textContent = 'Mažu...';
+          try{
+            const { pb, sha } = await fetchPlaybookWithSha();
+            pb.lineups.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání lineupu', ghToken);
+            renderAdminLineupsList();
+            loadPlaybook();
+          }catch(e){
+            alert('Nepodařilo se smazat lineup: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Smazat';
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst lineupy: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('adminLineupForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const map = document.getElementById('lineup-map').value.trim();
+    const description = document.getElementById('lineup-desc').value.trim();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Přidávám...';
+    try{
+      const { pb, sha } = await fetchPlaybookWithSha();
+      pb.lineups.push({ map, description });
+      await ghSave(PLAYBOOK_FILE, pb, sha, `Přidání lineupu: ${map}`, ghToken);
+      e.target.reset();
+      renderAdminLineupsList();
+      loadPlaybook();
+    }catch(err){
+      alert('Nepodařilo se přidat lineup: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Přidat lineup';
+    }
+  });
+
+  async function renderAdminPlaybookEntriesList(){
+    const list = document.getElementById('adminPlaybookEntriesList');
+    try{
+      const data = await ghFetchPublic(PLAYBOOK_FILE) || { entries: [] };
+      const entries = data.entries || [];
+      if(!entries.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádný playbook.</div>';
+        return;
+      }
+      list.innerHTML = entries.map((en, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(en.title)}</strong>
+            <span>${escapeHtml(en.videoLink || '')}</span>
+          </div>
+          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          btn.disabled = true;
+          btn.textContent = 'Mažu...';
+          try{
+            const { pb, sha } = await fetchPlaybookWithSha();
+            pb.entries.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání položky playbooku', ghToken);
+            renderAdminPlaybookEntriesList();
+            loadPlaybook();
+          }catch(e){
+            alert('Nepodařilo se smazat položku: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Smazat';
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst playbook: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('adminPlaybookEntryForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const title = document.getElementById('pb-title').value.trim();
+    const videoLink = document.getElementById('pb-video').value.trim();
+    const description = document.getElementById('pb-desc').value.trim();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Přidávám...';
+    try{
+      const { pb, sha } = await fetchPlaybookWithSha();
+      pb.entries.push({ title, videoLink, description, addedAt: new Date().toISOString() });
+      await ghSave(PLAYBOOK_FILE, pb, sha, `Přidání do playbooku: ${title}`, ghToken);
+      e.target.reset();
+      renderAdminPlaybookEntriesList();
+      loadPlaybook();
+    }catch(err){
+      alert('Nepodařilo se přidat do playbooku: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Přidat do playbooku';
     }
   });
 
