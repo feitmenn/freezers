@@ -68,5 +68,10 @@
     "username": "sonder",
     "displayName": "",
     "passwordHash": "06adf2ed1c1b9a657d13a26c153a2c6f9eb33a24fd85ea73a79b660e9a6236b2"
+  },
+  {
+    "username": "m1ra",
+    "displayName": "MIRA",
+    "passwordHash": "07e9f7409ea6b1a020ff956da34f75518fb5977e1c7fff0d834fb989919fd93d"
   }
 ]
