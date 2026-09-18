@@ -5,7 +5,20 @@
   },
   {
     "username": "michi33",
-    "passwordHash": "29ee22ee0a48fa2a36b5af51a83302da0ab17b3077086e848a5535500c599afb"
+    "passwordHash": "29ee22ee0a48fa2a36b5af51a83302da0ab17b3077086e848a5535500c599afb",
+    "perms": [
+      "news",
+      "roster",
+      "users",
+      "calendar",
+      "attendance",
+      "excuses",
+      "scrim",
+      "clips",
+      "soundcloud",
+      "playbook",
+      "staff"
+    ]
   },
   {
     "username": "AC",
