@@ -18,5 +18,12 @@
     "type": "training",
     "date": "2026-09-19T16:45:00.000Z",
     "description": "Main trenink na Inferno mapě"
+  },
+  {
+    "id": "ev_1789769080322",
+    "title": "academy trénink",
+    "type": "training",
+    "date": "2026-09-20T16:00:00.000Z",
+    "description": "dáme nějaké dryruns a pak třeba faceit jestli zbyde čas."
   }
 ]
