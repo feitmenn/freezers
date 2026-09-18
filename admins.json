@@ -22,7 +22,20 @@
   },
   {
     "username": "AC",
-    "passwordHash": "ec3a3a9f2095bb5099d89cbfd27c7b0177d710f21547471ab75aeb83c1bca557"
+    "passwordHash": "ec3a3a9f2095bb5099d89cbfd27c7b0177d710f21547471ab75aeb83c1bca557",
+    "perms": [
+      "news",
+      "roster",
+      "users",
+      "calendar",
+      "attendance",
+      "excuses",
+      "scrim",
+      "clips",
+      "soundcloud",
+      "playbook",
+      "staff"
+    ]
   },
   {
     "username": "SeinZZZ",
