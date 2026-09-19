@@ -4307,11 +4307,11 @@
   });
 
   /* ============ COOKIE LIŠTA ============ */
-  window.FREEZERS_COOKIE_BANNER = (function(){
+  (function(){
     const COOKIE_KEY = 'freezers_cookie_consent';
     const banner = document.getElementById('cookieBanner');
     const btn = document.getElementById('cookieAcceptBtn');
-    if(!banner || !btn) return null;
+    if(!banner || !btn) return;
 
     function hide(instant){
       banner.style.transition = instant ? 'none' : 'transform .3s ease, opacity .3s ease';
@@ -4321,37 +4321,14 @@
 
     let accepted = false;
     try{ accepted = localStorage.getItem(COOKIE_KEY) === 'accepted'; }catch(e){}
-    if(accepted){ hide(true); return null; }
+    if(accepted){ hide(true); return; }
 
     btn.addEventListener('click', function(){
       try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
       hide(false);
     });
-    return { hide: hide };
   })();
-
 </script>
 
-
-<script>
-/* Záchranný handler pro cookie lištu – běží nezávisle na hlavním skriptu */
-(function(){
-  function ready(fn){ if(document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
-  ready(function(){
-    var banner = document.getElementById('cookieBanner');
-    var btn = document.getElementById('cookieAcceptBtn');
-    if(!banner || !btn) return;
-    function hide(instant){
-      banner.style.transition = instant ? 'none' : 'transform .3s ease, opacity .3s ease';
-      banner.classList.add('hidden');
-      window.setTimeout(function(){ banner.style.display = 'none'; }, instant ? 0 : 420);
-    }
-    try{ if(localStorage.getItem('freezers_cookie_consent') === 'accepted'){ hide(true); return; } }catch(e){}
-    btn.addEventListener('click', function(){
-      try{ localStorage.setItem('freezers_cookie_consent', 'accepted'); }catch(e){}
-      hide(false);
-    });
-  });
-})();
-</script>
-</body>\r\n</html>\r\n
+</body>
+</html>
