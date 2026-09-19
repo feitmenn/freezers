@@ -516,6 +516,18 @@
   .playbook-entry-info{padding:18px 22px;}
   .playbook-entry-title{font-family:'Chakra Petch',sans-serif;font-size:17px;font-weight:600;margin-bottom:8px;}
   .playbook-entry-desc{font-size:13.5px;color:var(--ice-dim);margin-bottom:10px;}
+
+  .maps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;}
+  .map-tile{
+    aspect-ratio:1/1;background:var(--card);border:1px solid var(--line);border-radius:3px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;
+    cursor:pointer;font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:15px;
+    transition:border-color .2s, transform .2s, background .2s;
+  }
+  .map-tile:hover{border-color:var(--turquoise);transform:translateY(-3px);background:rgba(47,224,201,0.06);}
+  .map-tile.active{border-color:var(--violet);background:rgba(154,92,255,0.08);}
+  .map-tile .map-tile-count{display:block;font-size:11px;color:var(--ice-dim);font-weight:500;margin-top:6px;letter-spacing:.02em;}
+  .map-tile .map-tile-icon{font-size:22px;margin-bottom:8px;}
   .staff-card{
     background:var(--card);border:1px solid var(--line);border-radius:3px;padding:24px;
     transition:border-color .2s, transform .2s;
@@ -950,11 +962,19 @@
 
       <div class="playbook-block">
         <h3 class="playbook-block-title">Playbook od týmu</h3>
-        <div id="playbookEntries" class="playbook-entries"></div>
+        <p style="font-size:13px;color:var(--ice-dim);margin-bottom:16px;">Klikni na mapu a uvidíš strategie k ní.</p>
+        <div id="playbookMapsGrid" class="maps-grid"></div>
       </div>
     </div>
   </div>
 </section>
+
+<div class="modal-overlay" id="mapDetailOverlay">
+  <div class="modal-card modal-card-wide">
+    <button type="button" class="modal-close" id="closeMapDetailBtn">✕</button>
+    <div id="mapDetailContent"></div>
+  </div>
+</div>
 
 <section class="section" id="dotaznik">
   <div class="wrap">
@@ -1344,25 +1364,43 @@
     <div id="adminLineupsList"></div>
 
     <div class="admin-divider"></div>
-    <h3>Playbook od týmu</h3>
-    <form id="adminPlaybookEntryForm">
+    <h3>Mapy (playbook)</h3>
+    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
+      Vytvoř mapu, pak na ni klikni a nahraj do ní playbooky (YouTube nebo Metastack odkaz).
+    </p>
+    <form id="adminMapForm">
       <div class="field">
-        <label for="pb-title">Název strategie</label>
-        <input type="text" id="pb-title" placeholder="např. A execute — Mirage" required>
+        <label for="map-name">Název mapy</label>
+        <input type="text" id="map-name" placeholder="např. Mirage" required>
       </div>
-      <div class="field">
-        <label for="pb-video">Odkaz na video (Metastack)</label>
-        <input type="url" id="pb-video" placeholder="https://metastack.gg/...">
-      </div>
-      <div class="field">
-        <label for="pb-desc">Popis (nepovinné)</label>
-        <textarea id="pb-desc" placeholder="Detaily ke strategii..."></textarea>
-      </div>
-      <button type="submit" class="submit-btn">Přidat do playbooku</button>
+      <button type="submit" class="submit-btn">Vytvořit mapu</button>
     </form>
-    <div class="admin-divider"></div>
-    <h3>Existující playbook</h3>
-    <div id="adminPlaybookEntriesList"></div>
+    <div id="adminMapsGrid" class="maps-grid" style="margin-top:18px;"></div>
+
+    <div id="adminMapEntryPanel" style="display:none;">
+      <div class="admin-divider"></div>
+      <h3 id="adminMapEntryTitle">Playbooky pro mapu</h3>
+      <form id="adminMapEntryForm">
+        <div class="field">
+          <label for="pb-title">Název strategie</label>
+          <input type="text" id="pb-title" placeholder="např. A execute" required>
+        </div>
+        <div class="field">
+          <label for="pb-video">Odkaz na video (YouTube nebo Metastack)</label>
+          <input type="url" id="pb-video" placeholder="https://youtube.com/watch?v=... nebo https://metastack.gg/...">
+        </div>
+        <div class="field">
+          <label for="pb-desc">Popis (nepovinné)</label>
+          <textarea id="pb-desc" placeholder="Detaily ke strategii..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Nahrát playbook</button>
+      </form>
+      <div class="admin-divider"></div>
+      <h3>Playbooky v této mapě</h3>
+      <div id="adminMapEntriesList"></div>
+      <div class="admin-divider"></div>
+      <button type="button" class="excuse-reject-btn" id="deleteMapBtn" style="padding:9px 16px;">Smazat celou mapu</button>
+    </div>
         </div>
 
         <div class="admin-tab-panel" data-tab-panel="admins">
@@ -1438,6 +1476,27 @@
     const div = document.createElement('div');
     div.textContent = str || '';
     return div.innerHTML;
+  }
+  function toEmbedUrl(link){
+    if(!link) return link;
+    try{
+      const url = new URL(link);
+      const host = url.hostname.replace('www.', '');
+      if(host === 'youtube.com' || host === 'm.youtube.com'){
+        if(url.pathname === '/watch'){
+          const id = url.searchParams.get('v');
+          if(id) return `https://www.youtube.com/embed/${id}`;
+        }
+        if(url.pathname.startsWith('/shorts/')){
+          return `https://www.youtube.com/embed/${url.pathname.split('/shorts/')[1]}`;
+        }
+        return link; // už je embed nebo jiný formát
+      }
+      if(host === 'youtu.be'){
+        return `https://www.youtube.com/embed/${url.pathname.slice(1)}`;
+      }
+    }catch(e){ /* neplatná URL, použij beze změny */ }
+    return link;
   }
   function formatDate(iso){
     try{
@@ -1662,7 +1721,7 @@
     renderAdminClipsList();
     renderAdminRolesList();
     renderAdminLineupsList();
-    renderAdminPlaybookEntriesList();
+    renderAdminMapsGrid();
     loadAdminScrimForm();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
@@ -1818,7 +1877,7 @@
     return `
       <div class="clip-card">
         <div class="clip-embed-wrap">
-          <iframe src="${escapeHtml(clip.allstarLink)}" allowfullscreen loading="lazy" title="Klip — ${escapeHtml(clip.player)}"></iframe>
+          <iframe src="${escapeHtml(toEmbedUrl(clip.allstarLink))}" allowfullscreen loading="lazy" title="Klip — ${escapeHtml(clip.player)}"></iframe>
         </div>
         <div class="clip-info">
           <div class="clip-player-name">${escapeHtml(clip.player)}</div>
@@ -1869,24 +1928,58 @@
       <div class="playbook-entry-card">
         ${entry.videoLink ? `
           <div class="playbook-entry-embed">
-            <iframe src="${escapeHtml(entry.videoLink)}" allowfullscreen loading="lazy" title="${escapeHtml(entry.title)}"></iframe>
+            <iframe src="${escapeHtml(toEmbedUrl(entry.videoLink))}" allowfullscreen loading="lazy" title="${escapeHtml(entry.title)}"></iframe>
           </div>
         ` : ''}
         <div class="playbook-entry-info">
           <div class="playbook-entry-title">${escapeHtml(entry.title)}</div>
           ${entry.description ? `<div class="playbook-entry-desc">${escapeHtml(entry.description)}</div>` : ''}
-          ${entry.videoLink ? `<a href="${escapeHtml(entry.videoLink)}" target="_blank" rel="noopener" style="font-size:12px;color:var(--turquoise);">Otevřít v Metastacku ↗</a>` : ''}
+          ${entry.videoLink ? `<a href="${escapeHtml(entry.videoLink)}" target="_blank" rel="noopener" style="font-size:12px;color:var(--turquoise);">Otevřít video ↗</a>` : ''}
         </div>
       </div>
     `;
   }
 
+  function mapTileHtml(map){
+    const count = (map.entries || []).length;
+    return `
+      <div class="map-tile" data-map-id="${escapeHtml(map.id)}">
+        <div class="map-tile-icon">🗺️</div>
+        <div>${escapeHtml(map.name)}</div>
+        <span class="map-tile-count">${count} ${count === 1 ? 'playbook' : 'playbooků'}</span>
+      </div>
+    `;
+  }
+
+  let playbookDataCache = { roles: [], lineups: [], maps: [] };
+
+  function showMapDetail(mapId){
+    const map = (playbookDataCache.maps || []).find(m => m.id === mapId);
+    if(!map) return;
+    const content = document.getElementById('mapDetailContent');
+    const entries = map.entries || [];
+    content.innerHTML = `
+      <div class="modal-kicker">MAPA</div>
+      <h3>${escapeHtml(map.name)}</h3>
+      <div class="playbook-entries" style="margin-top:20px;">
+        ${entries.length
+          ? entries.slice().reverse().map(playbookEntryHtml).join('')
+          : '<div class="admin-empty">Zatím žádné playbooky pro tuhle mapu.</div>'}
+      </div>
+    `;
+    document.getElementById('mapDetailOverlay').classList.add('show');
+  }
+  document.getElementById('closeMapDetailBtn').addEventListener('click', function(){
+    document.getElementById('mapDetailOverlay').classList.remove('show');
+  });
+
   async function loadPlaybook(){
     const rolesEl = document.getElementById('playbookRoles');
     const lineupsEl = document.getElementById('playbookLineups');
-    const entriesEl = document.getElementById('playbookEntries');
+    const mapsEl = document.getElementById('playbookMapsGrid');
     try{
-      const data = await ghFetchPublic(PLAYBOOK_FILE) || { roles: [], lineups: [], entries: [] };
+      const data = await ghFetchPublic(PLAYBOOK_FILE) || { roles: [], lineups: [], maps: [] };
+      playbookDataCache = data;
 
       rolesEl.innerHTML = (data.roles && data.roles.length)
         ? data.roles.map(roleCardHtml).join('')
@@ -1896,9 +1989,13 @@
         ? data.lineups.map(lineupCardHtml).join('')
         : '<div class="admin-empty">Zatím žádné lineupy.</div>';
 
-      entriesEl.innerHTML = (data.entries && data.entries.length)
-        ? data.entries.slice().reverse().map(playbookEntryHtml).join('')
-        : '<div class="admin-empty">Zatím žádný playbook od týmu.</div>';
+      const maps = data.maps || [];
+      mapsEl.innerHTML = maps.length
+        ? maps.map(mapTileHtml).join('')
+        : '<div class="admin-empty">Zatím žádné mapy.</div>';
+      mapsEl.querySelectorAll('.map-tile').forEach(tile => {
+        tile.addEventListener('click', () => showMapDetail(tile.dataset.mapId));
+      });
     }catch(e){
       console.error('Nepodařilo se načíst playbook:', e);
     }
@@ -3088,10 +3185,10 @@
   /* ---- Admin: Playbook (role, lineupy, strategie) ---- */
   async function fetchPlaybookWithSha(){
     const { data, sha } = await ghFetchWithSha(PLAYBOOK_FILE, ghToken);
-    const pb = data || { roles: [], lineups: [], entries: [] };
+    const pb = data || { roles: [], lineups: [], maps: [] };
     if(!pb.roles) pb.roles = [];
     if(!pb.lineups) pb.lineups = [];
-    if(!pb.entries) pb.entries = [];
+    if(!pb.maps) pb.maps = [];
     return { pb, sha };
   }
 
@@ -3219,13 +3316,75 @@
     }
   });
 
-  async function renderAdminPlaybookEntriesList(){
-    const list = document.getElementById('adminPlaybookEntriesList');
+  let selectedAdminMapId = null;
+
+  async function renderAdminMapsGrid(){
+    const grid = document.getElementById('adminMapsGrid');
     try{
-      const data = await ghFetchPublic(PLAYBOOK_FILE) || { entries: [] };
-      const entries = data.entries || [];
+      const data = await ghFetchPublic(PLAYBOOK_FILE) || { maps: [] };
+      const maps = data.maps || [];
+      if(!maps.length){
+        grid.innerHTML = '<div class="admin-empty">Zatím žádné mapy.</div>';
+      } else {
+        grid.innerHTML = maps.map(m => `
+          <div class="map-tile ${m.id === selectedAdminMapId ? 'active' : ''}" data-map-id="${escapeHtml(m.id)}">
+            <div class="map-tile-icon">🗺️</div>
+            <div>${escapeHtml(m.name)}</div>
+            <span class="map-tile-count">${(m.entries || []).length} playbooků</span>
+          </div>
+        `).join('');
+      }
+      grid.querySelectorAll('.map-tile').forEach(tile => {
+        tile.addEventListener('click', () => selectAdminMap(tile.dataset.mapId));
+      });
+    }catch(e){
+      grid.innerHTML = `<div class="admin-empty">Nepodařilo se načíst mapy: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  document.getElementById('adminMapForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const name = document.getElementById('map-name').value.trim();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Vytvářím...';
+    try{
+      const { pb, sha } = await fetchPlaybookWithSha();
+      pb.maps.push({ id: 'map_' + Date.now(), name, entries: [] });
+      await ghSave(PLAYBOOK_FILE, pb, sha, `Vytvoření mapy: ${name}`, ghToken);
+      e.target.reset();
+      renderAdminMapsGrid();
+      loadPlaybook();
+    }catch(err){
+      alert('Nepodařilo se vytvořit mapu: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Vytvořit mapu';
+    }
+  });
+
+  function selectAdminMap(mapId){
+    selectedAdminMapId = mapId;
+    document.getElementById('adminMapEntryPanel').style.display = 'block';
+    renderAdminMapsGrid();
+    renderAdminMapEntriesList();
+  }
+
+  async function renderAdminMapEntriesList(){
+    const list = document.getElementById('adminMapEntriesList');
+    const titleEl = document.getElementById('adminMapEntryTitle');
+    if(!selectedAdminMapId) return;
+    try{
+      const { pb } = await fetchPlaybookWithSha();
+      const map = pb.maps.find(m => m.id === selectedAdminMapId);
+      if(!map){
+        document.getElementById('adminMapEntryPanel').style.display = 'none';
+        return;
+      }
+      titleEl.textContent = `Playbooky pro mapu: ${map.name}`;
+      const entries = map.entries || [];
       if(!entries.length){
-        list.innerHTML = '<div class="admin-empty">Zatím žádný playbook.</div>';
+        list.innerHTML = '<div class="admin-empty">Zatím žádné playbooky pro tuhle mapu.</div>';
         return;
       }
       list.innerHTML = entries.map((en, idx) => `
@@ -3243,42 +3402,68 @@
           btn.textContent = 'Mažu...';
           try{
             const { pb, sha } = await fetchPlaybookWithSha();
-            pb.entries.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání položky playbooku', ghToken);
-            renderAdminPlaybookEntriesList();
+            const map = pb.maps.find(m => m.id === selectedAdminMapId);
+            map.entries.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání playbooku z mapy', ghToken);
+            renderAdminMapEntriesList();
+            renderAdminMapsGrid();
             loadPlaybook();
           }catch(e){
-            alert('Nepodařilo se smazat položku: ' + e.message);
+            alert('Nepodařilo se smazat playbook: ' + e.message);
             btn.disabled = false;
             btn.textContent = 'Smazat';
           }
         });
       });
     }catch(e){
-      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst playbook: ${escapeHtml(e.message)}</div>`;
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst playbooky: ${escapeHtml(e.message)}</div>`;
     }
   }
 
-  document.getElementById('adminPlaybookEntryForm').addEventListener('submit', async function(e){
+  document.getElementById('adminMapEntryForm').addEventListener('submit', async function(e){
     e.preventDefault();
+    if(!selectedAdminMapId) return;
     const submitBtn = e.target.querySelector('.submit-btn');
     const title = document.getElementById('pb-title').value.trim();
     const videoLink = document.getElementById('pb-video').value.trim();
     const description = document.getElementById('pb-desc').value.trim();
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Přidávám...';
+    submitBtn.textContent = 'Nahrávám...';
     try{
       const { pb, sha } = await fetchPlaybookWithSha();
-      pb.entries.push({ title, videoLink, description, addedAt: new Date().toISOString() });
-      await ghSave(PLAYBOOK_FILE, pb, sha, `Přidání do playbooku: ${title}`, ghToken);
+      const map = pb.maps.find(m => m.id === selectedAdminMapId);
+      if(!map) throw new Error('Mapa už neexistuje, zkus stránku obnovit.');
+      map.entries.push({ title, videoLink, description, addedAt: new Date().toISOString() });
+      await ghSave(PLAYBOOK_FILE, pb, sha, `Playbook do mapy ${map.name}: ${title}`, ghToken);
       e.target.reset();
-      renderAdminPlaybookEntriesList();
+      renderAdminMapEntriesList();
+      renderAdminMapsGrid();
       loadPlaybook();
     }catch(err){
-      alert('Nepodařilo se přidat do playbooku: ' + err.message);
+      alert('Nepodařilo se nahrát playbook: ' + err.message);
     }finally{
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Přidat do playbooku';
+      submitBtn.textContent = 'Nahrát playbook';
+    }
+  });
+
+  document.getElementById('deleteMapBtn').addEventListener('click', async function(){
+    if(!selectedAdminMapId) return;
+    if(!confirm('Opravdu smazat celou mapu i se všemi playbooky v ní?')) return;
+    const btn = this;
+    btn.disabled = true;
+    try{
+      const { pb, sha } = await fetchPlaybookWithSha();
+      pb.maps = pb.maps.filter(m => m.id !== selectedAdminMapId);
+      await ghSave(PLAYBOOK_FILE, pb, sha, 'Smazání mapy z playbooku', ghToken);
+      selectedAdminMapId = null;
+      document.getElementById('adminMapEntryPanel').style.display = 'none';
+      renderAdminMapsGrid();
+      loadPlaybook();
+    }catch(e){
+      alert('Nepodařilo se smazat mapu: ' + e.message);
+    }finally{
+      btn.disabled = false;
     }
   });
 
