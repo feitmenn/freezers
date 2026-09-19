@@ -1,7 +1,21 @@
 [
   {
     "username": "filas",
-    "passwordHash": "204864719722d354a59a50e47e00ec79937299e6ba9c60c75c21bfe38dcaf6a1"
+    "passwordHash": "204864719722d354a59a50e47e00ec79937299e6ba9c60c75c21bfe38dcaf6a1",
+    "perms": [
+      "news",
+      "roster",
+      "users",
+      "calendar",
+      "attendance",
+      "excuses",
+      "scrim",
+      "clips",
+      "soundcloud",
+      "playbook",
+      "staff",
+      "admins"
+    ]
   },
   {
     "username": "michi33",
