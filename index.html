@@ -363,7 +363,7 @@
     padding:16px 24px;
     transform:translateY(0);transition:transform .3s ease;
   }
-  .cookie-banner.hidden{transform:translateY(120%);}
+  .cookie-banner.hidden{transform:translateY(120%);opacity:0;pointer-events:none;}
   .cookie-text{font-size:13px;color:var(--ice-dim);max-width:640px;}
   .cookie-text a{color:var(--turquoise);}
   .cookie-accept-btn{
@@ -4307,41 +4307,51 @@
   });
 
   /* ============ COOKIE LIŠTA ============ */
-  (function(){
+  window.FREEZERS_COOKIE_BANNER = (function(){
     const COOKIE_KEY = 'freezers_cookie_consent';
     const banner = document.getElementById('cookieBanner');
     const btn = document.getElementById('cookieAcceptBtn');
-    if(!banner || !btn) return;
+    if(!banner || !btn) return null;
 
-    function hideBanner(instant){
+    function hide(instant){
+      banner.style.transition = instant ? 'none' : 'transform .3s ease, opacity .3s ease';
       banner.classList.add('hidden');
-      if(instant){
-        banner.style.display = 'none';
-        return;
-      }
-      banner.addEventListener('transitionend', function onEnd(ev){
-        if(ev.propertyName !== 'transform') return;
-        banner.style.display = 'none';
-        banner.removeEventListener('transitionend', onEnd);
-      });
+      window.setTimeout(function(){ banner.style.display = 'none'; }, instant ? 0 : 420);
     }
 
-    let alreadyAccepted = false;
-    try{
-      alreadyAccepted = localStorage.getItem(COOKIE_KEY) === 'accepted';
-    }catch(e){ /* localStorage nedostupné */ }
-
-    if(alreadyAccepted){
-      hideBanner(true);
-      return;
-    }
+    let accepted = false;
+    try{ accepted = localStorage.getItem(COOKIE_KEY) === 'accepted'; }catch(e){}
+    if(accepted){ hide(true); return null; }
 
     btn.addEventListener('click', function(){
       try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
-      hideBanner(false);
+      hide(false);
     });
+    return { hide: hide };
   })();
+
 </script>
 
-</body>
-</html>
+
+<script>
+/* Záchranný handler pro cookie lištu – běží nezávisle na hlavním skriptu */
+(function(){
+  function ready(fn){ if(document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function(){
+    var banner = document.getElementById('cookieBanner');
+    var btn = document.getElementById('cookieAcceptBtn');
+    if(!banner || !btn) return;
+    function hide(instant){
+      banner.style.transition = instant ? 'none' : 'transform .3s ease, opacity .3s ease';
+      banner.classList.add('hidden');
+      window.setTimeout(function(){ banner.style.display = 'none'; }, instant ? 0 : 420);
+    }
+    try{ if(localStorage.getItem('freezers_cookie_consent') === 'accepted'){ hide(true); return; } }catch(e){}
+    btn.addEventListener('click', function(){
+      try{ localStorage.setItem('freezers_cookie_consent', 'accepted'); }catch(e){}
+      hide(false);
+    });
+  });
+})();
+</script>
+</body>\r\n</html>\r\n
