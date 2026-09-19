@@ -15,10 +15,7 @@ const sb = window.supabase.createClient('https://fsknacijftflqymiyip.supabase.co
 sb.from('app_data').select('key').then(r => {
   const el = document.getElementById('db');
   if(r.error){ el.textContent = 'DB CHYBA: ' + r.error.message; return; }
-  el.textContent = 'DB OK (' + r.data.length + ' sekcí). Zkus přihlášení:';
-  sb.auth.signInWithPassword({ email: 'filas@freezers.local', password: prompt('Heslo pro filas:') || '' })
-    .then(a => sb.from('profiles').select('username,role,perms').eq('id', a.data.user.id).maybeSingle())
-    .then(p => el.textContent += ' ' + JSON.stringify(p.data));
+  el.textContent = 'DB OK (' + r.data.length + ' sekci). Bez chyby.';
 });
 </script>
 </body>
