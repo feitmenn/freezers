@@ -55,5 +55,13 @@
   {
     "username": "SeinZZZ",
     "passwordHash": "5c261e965336f5313ae218a45ad33eddbcf86ed4aa00f8d76b0559697d8183f9"
+  },
+  {
+    "username": "krabik77",
+    "passwordHash": "d0a9a218837ad1e42e024e5a6accc0206f14c197145e5e97d4696e41b7850e84",
+    "perms": [
+      "calendar",
+      "clips"
+    ]
   }
 ]
