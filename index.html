@@ -4310,16 +4310,35 @@
   (function(){
     const COOKIE_KEY = 'freezers_cookie_consent';
     const banner = document.getElementById('cookieBanner');
-    try{
-      if(localStorage.getItem(COOKIE_KEY) === 'accepted'){
-        banner.classList.add('hidden');
-      }
-    }catch(e){ /* localStorage nedostupné, lišta zůstane viditelná */ }
+    const btn = document.getElementById('cookieAcceptBtn');
+    if(!banner || !btn) return;
 
-    document.getElementById('cookieAcceptBtn').addEventListener('click', function(){
-      banner.style.display = 'none';
+    function hideBanner(instant){
       banner.classList.add('hidden');
+      if(instant){
+        banner.style.display = 'none';
+        return;
+      }
+      banner.addEventListener('transitionend', function onEnd(ev){
+        if(ev.propertyName !== 'transform') return;
+        banner.style.display = 'none';
+        banner.removeEventListener('transitionend', onEnd);
+      });
+    }
+
+    let alreadyAccepted = false;
+    try{
+      alreadyAccepted = localStorage.getItem(COOKIE_KEY) === 'accepted';
+    }catch(e){ /* localStorage nedostupné */ }
+
+    if(alreadyAccepted){
+      hideBanner(true);
+      return;
+    }
+
+    btn.addEventListener('click', function(){
       try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
+      hideBanner(false);
     });
   })();
 </script>
