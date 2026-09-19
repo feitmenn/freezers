@@ -40,5 +40,22 @@
   {
     "username": "SeinZZZ",
     "passwordHash": "5c261e965336f5313ae218a45ad33eddbcf86ed4aa00f8d76b0559697d8183f9"
+  },
+  {
+    "username": "admin",
+    "passwordHash": "8390f7f9c156966f9d4a849b4da7cbca302ed2df91f8f44828f8a4fc14d64d27",
+    "perms": [
+      "news",
+      "roster",
+      "users",
+      "calendar",
+      "attendance",
+      "excuses",
+      "scrim",
+      "clips",
+      "soundcloud",
+      "playbook",
+      "staff"
+    ]
   }
 ]
