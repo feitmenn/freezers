@@ -402,7 +402,19 @@
     display:flex;flex-direction:column;gap:10px;max-width:320px;
   }
 
+  .anthem-toggle{
+    position:fixed;bottom:24px;left:24px;z-index:350;
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(7,10,18,0.85);border:1px solid rgba(255,95,176,0.4);
+    display:flex;align-items:center;justify-content:center;font-size:19px;
+    cursor:pointer;backdrop-filter:blur(8px);transition:transform .2s, border-color .2s;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  }
+  .anthem-toggle:hover{transform:scale(1.08);border-color:var(--pink);}
+  .anthem-toggle.playing{border-color:var(--turquoise);animation:anthemPulse 2s infinite;}
+  @keyframes anthemPulse{0%,100%{box-shadow:0 6px 20px rgba(0,0,0,0.4), 0 0 0 0 rgba(47,224,201,0.4);}50%{box-shadow:0 6px 20px rgba(0,0,0,0.4), 0 0 0 8px rgba(47,224,201,0);}}
   @media (max-width:500px){
+    .anthem-toggle{bottom:16px;left:16px;width:42px;height:42px;font-size:16px;}
   }
   .notification-toast{
     background:var(--bg-1);border:1px solid var(--line);border-left:4px solid var(--turquoise);
@@ -779,9 +791,13 @@
   @keyframes tabFadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
   @media (max-width:900px){
     .modal-card-fullscreen{width:98vw;height:95vh;max-height:95vh;}
-    .admin-sidebar{width:160px;padding:52px 8px 10px;}
+    .admin-panel-layout{flex-direction:column;}
+    .admin-sidebar{
+      width:100%;flex-direction:row;overflow-x:auto;overflow-y:hidden;
+      padding:52px 10px 10px;border-right:none;border-bottom:1px solid var(--line);
+    }
     .admin-sidebar-header{display:none;}
-    .admin-tab-btn{font-size:12px;padding:9px 8px;}
+    .admin-tab-btn{flex-shrink:0;white-space:nowrap;}
     .admin-content{padding:20px;}
   }
   .modal-close{
@@ -835,9 +851,13 @@
 
 <div id="notificationStack" class="notification-stack"></div>
 
-<!-- SoundCloud hymna odstraněna -->
+<iframe id="anthemPlayer" style="display:none;"
+  src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fxxxtraktor%2Fbrezno&color=%232fe0c9&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+  allow="autoplay"></iframe>
 
-<!-- SoundCloud přepínač odstraněn -->
+<button type="button" id="anthemToggleBtn" class="anthem-toggle" style="display:none;" aria-label="Hymna Freezers">
+  <span id="anthemIcon">🔇</span>
+</button>
 
 
 <div id="cookieBanner" class="cookie-banner">
@@ -1229,6 +1249,9 @@
         <button type="button" class="admin-tab-btn" data-tab="excuses"><span class="att-icon">✉️</span>Omluvenky</button>
         <button type="button" class="admin-tab-btn" data-tab="scrim"><span class="att-icon">🖥️</span>Scrim Server</button>
         <button type="button" class="admin-tab-btn" data-tab="clips"><span class="att-icon">🎬</span>Klipy</button>
+        <button type="button" class="admin-tab-btn" data-tab="soundcloud" style="display:none;">
+          <span class="att-icon">♪</span> SoundCloud
+        </button>
 
         <button type="button" class="admin-tab-btn" data-tab="playbook"><span class="att-icon">📘</span>Playbook</button>
         <button type="button" class="admin-tab-btn" data-tab="staff"><span class="att-icon">🎖️</span>Staff</button>
@@ -1450,6 +1473,30 @@
 
         </div>
 
+        <div class="admin-tab-panel" data-tab-panel="soundcloud">
+    <h3>Hymna webu (SoundCloud)</h3>
+    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
+      Skladba, která zní na pozadí pro všechny návštěvníky. Vlož odkaz ze SoundCloudu
+      (třeba <code>https://soundcloud.com/xxxtraktor/brezno</code>) a ulož.
+    </p>
+    <form id="adminAnthemForm">
+      <div class="field">
+        <label for="anthem-url">Odkaz na skladbu (SoundCloud)</label>
+        <input type="url" id="anthem-url" placeholder="https://soundcloud.com/...">
+      </div>
+      <button type="submit" class="submit-btn">Uložit skladbu</button>
+    </form>
+
+    <div class="admin-divider"></div>
+    <h3>Přehrávání pro všechny</h3>
+    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:14px;">
+      Když je hudba vypnutá, skladba se sice načte, ale nikomu se automaticky nepřehraje.
+      Ikona v rohu stránky zůstane funkční.
+    </p>
+    <button type="button" id="anthemGlobalToggle" class="submit-btn">Načítám…</button>
+    <div id="anthemStatusLine" style="font-size:12.5px;color:var(--ice-dim);margin-top:14px;"></div>
+        </div>
+
         <div class="admin-tab-panel" data-tab-panel="playbook">
     <h3>Role v týmu</h3>
     <form id="adminRoleForm">
@@ -1635,8 +1682,8 @@
   </div>
 </div>
 
-<!-- SoundCloud API odstraněno -->
-<!-- Data se ukládají do GitHub repa (JSON soubory) přes GitHub API -->
+<script src="https://w.soundcloud.com/player/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   /* ============ NOVINKY (uložené jako news.json přímo v GitHub repu) ============ */
   const GH_OWNER = 'feitmenn';        // <-- uprav, pokud je tvůj GitHub username jiný
@@ -1651,8 +1698,8 @@
   const PLAYBOOK_FILE = 'playbook.json';
   const STAFF_FILE = 'staff.json';
   const OWNER_USERNAME = 'filas'; // jediný, kdo smí rozdávat práva
-  const ALL_PERMS = ['news','roster','users','calendar','attendance','excuses','scrim','clips','playbook','staff','admins'];
-  const PERM_LABELS = { news:'Novinky', roster:'Roster', users:'Členové', calendar:'Kalendář', attendance:'Účast', excuses:'Omluvenky', scrim:'Scrim server', clips:'Klipy',  playbook:'Playbook', staff:'Staff', admins:'Správci' };
+  const ALL_PERMS = ['news','roster','users','calendar','attendance','excuses','scrim','clips','soundcloud','playbook','staff','admins'];
+  const PERM_LABELS = { news:'Novinky', roster:'Roster', users:'Členové', calendar:'Kalendář', attendance:'Účast', excuses:'Omluvenky', scrim:'Scrim server', clips:'Klipy', soundcloud:'SoundCloud', playbook:'Playbook', staff:'Staff', admins:'Správci' };
   const DEFAULT_STAFF = [
     { name:'FILAS', role:'CEO', discord:'f1las3', order:1 },
     { name:'SeinZZZ', role:'MANAGER', discord:'neko_wawa', order:2 },
@@ -1661,23 +1708,38 @@
   ];
   let editStaffIndex = -1;
 
-  /* ====== GITHUB — data se ukládají do JSON souborů v repu ====== */
-  // Token se získá při přihlášení do adminu a drží se jen v tomto prohlížeči.
-  let ghToken = '';
-  let adminProfile = null;   // { username, role, perms }
+  /* ====== SUPABASE — sem vlož údaje z Settings → API ====== */
+  const SUPABASE_URL = 'https://fsknacijftflqymiyip.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZza25hY2lqZnRmbHF5em1peWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTM0NjksImV4cCI6MjEwNTM4OTQ2OX0.v-UpHYS3dfTdSFuKDWT9us1Ymubj_u8TFHVcfYkad9Y';
+  const LOGIN_EMAIL_DOMAIN = 'freezers.local'; // přihlašuje se jménem, email se doplní sám
 
-  // Poslední známé hodnoty práv správců (fallback, když admins.json nejde přečíst)
-  let adminPermsCache = {};
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true }
+  });
 
-  function rebuildAdminCache(){
-    const map = {};
-    Object.keys(adminPermsCache).forEach(function(u){
-      map[String(u).toLowerCase()] = adminPermsCache[u];
-    });
-    return map;
+  let myProfile = null;   // { id, username, display_name, role, perms }
+  let ghToken = 'supabase'; // zůstává jen kvůli starším kontrolám, už se nikam neposílá
+
+  // 'news.json' -> 'news'
+  function dataKey(path){
+    return String(path || '').replace(/\.json$/i, '').replace(/[^a-z0-9_-]/gi, '');
   }
-
-  function loginEmail(name){ return String(name || '').trim().toLowerCase(); }
+  function loginEmail(name){
+    const v = String(name || '').trim();
+    return v.indexOf('@') >= 0 ? v : v.toLowerCase() + '@' + LOGIN_EMAIL_DOMAIN;
+  }
+  async function loadMyProfile(){
+    const { data: sess } = await sb.auth.getSession();
+    if(!sess || !sess.session){ myProfile = null; return null; }
+    const { data, error } = await sb
+      .from('profiles')
+      .select('id, username, display_name, role, perms')
+      .eq('id', sess.session.user.id)
+      .maybeSingle();
+    if(error){ console.error('Profil se nepodařilo načíst:', error.message); myProfile = null; return null; }
+    myProfile = data || null;
+    return myProfile;
+  }
 
   function escapeHtml(str){
     const div = document.createElement('div');
@@ -1935,66 +1997,30 @@
     e.preventDefault();
     const username = document.getElementById('adminUsername').value.trim();
     const password = document.getElementById('adminPasswordField').value;
-    const token = document.getElementById('adminPassword').value.trim();
     const errBox = document.getElementById('adminLoginError');
     errBox.classList.remove('show');
     const btn = e.target.querySelector('.submit-btn');
     btn.disabled = true;
     btn.textContent = 'Ověřuji...';
     try{
-      if(!username || !password || !token){
-        errBox.textContent = 'Vyplň jméno, heslo i GitHub token.';
-        errBox.classList.add('show');
-        return;
-      }
-      if(!/^(ghp_|github_pat_)/.test(token)){
-        errBox.textContent = 'Tohle nevypadá na GitHub token (měl by začínat ghp_ nebo github_pat_).';
-        errBox.classList.add('show');
-        return;
-      }
-      ghToken = token;
-
-      // Ověřit, že token má zápis do repa
-      const testRes = await fetch(fileContentsUrl(GH_FILE_PATH), {
-        headers: { Authorization: 'token ' + ghToken }, cache:'no-store'
+      const { error } = await sb.auth.signInWithPassword({
+        email: loginEmail(username),
+        password: password
       });
-      if(testRes.status === 401){
-        ghToken = '';
-        errBox.textContent = 'GitHub token je neplatný.';
-        errBox.classList.add('show');
-        return;
-      }
-      if(testRes.status === 404){
-        ghToken = '';
-        errBox.textContent = 'Repo ' + GH_OWNER + '/' + GH_REPO + ' nebylo nalezeno (nebo k němu token nemá přístup).';
-        errBox.classList.add('show');
-        return;
-      }
-
-      // Načíst seznam správců (jméno + hash hesla + role + práva)
-      const adm = await ghFetchPublic(ADMINS_FILE);
-      const list = Array.isArray(adm) ? adm : [];
-      const uname = username.toLowerCase();
-      const hash = await sha256Hex(password);
-      const found = list.find(function(u){
-        return String(u.username || '').toLowerCase() === uname && String(u.passwordHash || '') === hash;
-      });
-      if(!found){
-        ghToken = '';
+      if(error){
         errBox.textContent = 'Špatné jméno nebo heslo.';
         errBox.classList.add('show');
         return;
       }
-      // role: pokud není určena, první položka v seznamu je owner, ostatní admin
-      let role = found.role;
-      if(role !== 'owner' && role !== 'admin'){
-        role = (list.indexOf(found) === 0) ? 'owner' : 'admin';
+      const prof = await loadMyProfile();
+      if(!prof || (prof.role !== 'owner' && prof.role !== 'admin')){
+        await sb.auth.signOut();
+        myProfile = null;
+        errBox.textContent = 'Tenhle účet nemá přístup do admin panelu.';
+        errBox.classList.add('show');
+        return;
       }
-      adminProfile = { username: found.username, role: role, perms: Array.isArray(found.perms) ? found.perms : [] };
-      adminPermsCache = {};
-      list.forEach(function(u){ if(u.role !== 'owner') adminPermsCache[String(u.username||'').toLowerCase()] = Array.isArray(u.perms) ? u.perms : []; });
-      adminUsername = found.username;
-      saveAdminSession(adminUsername, ghToken);
+      adminUsername = prof.username;
       closeAdminLogin();
       openAdminPanel();
       applyAdminPermissions();
@@ -2012,8 +2038,8 @@
   document.getElementById('adminLogoutBtn').addEventListener('click', function(){
     if(!confirm('Odhlásit správce z tohoto zařízení?')) return;
     adminUsername = '';
-    adminProfile = null;
-    ghToken = '';
+    myProfile = null;
+    sb.auth.signOut();
     clearAdminSession();
     closeAdminPanel();
   });
@@ -2694,111 +2720,54 @@
     }
   }
 
-  // URL souboru v repu (veřejné čtení bez tokenu)
-  function fileContentsUrl(path){
-    return 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + path;
-  }
-  function fileRawUrl(path){
-    return 'https://raw.githubusercontent.com/' + GH_OWNER + '/' + GH_REPO + '/' + GH_BRANCH + '/' + path;
-  }
-
-  // Čtení JSON souboru z repa.
-  // - S tokenem se čte přes GitHub API (?ref=větev) → žádná raw cache, změny hned.
-  // - Bez tokenu (veřejný návštěvník) se čte z raw, kde je cache jen krátká.
+  // Čtení sekce (RLS rozhodne, kdo co uvidí)
   async function ghFetchPublic(path){
-    // 1) Rychlá cesta s tokenem — GitHub API vrací vždy aktuální obsah větve
-    if(ghToken){
-      try{
-        const res = await fetch(fileContentsUrl(path) + '?ref=' + GH_BRANCH, {
-          headers: { Authorization: 'token ' + ghToken },
-          cache: 'no-store'
-        });
-        if(res.status === 404) return null;
-        if(res.ok){
-          const meta = await res.json();
-          return JSON.parse(b64DecodeUnicode(meta.content) || 'null');
-        }
-        // 401/403 (token bez práv) → zkusíme veřejné čtení níže
-      }catch(e){
-        console.error('Nepodařilo se načíst ' + path + ' přes API:', e.message || e);
-      }
-    }
-    // 2) Veřejná cesta bez tokenu
+    const key = dataKey(path);
     try{
-      const res = await fetch(fileRawUrl(path) + '?cachebust=' + Date.now(), { cache:'no-store' });
-      if(res.status === 404) return null;
-      if(!res.ok) throw new Error('status ' + res.status);
-      return await res.json();
+      const { data, error } = await sb.from('app_data').select('data').eq('key', key).maybeSingle();
+      if(error) throw error;
+      return data ? data.data : null;
     }catch(e){
-      console.error('Nepodařilo se načíst ' + path + ':', e.message || e);
+      console.error('Nepodařilo se načíst ' + key + ':', e.message || e);
       return null;
     }
   }
 
-  // Čtení se sha (potřeba pro zápis přes GitHub API)
+  // Zachováno kvůli staršímu kódu — sha už není potřeba, Supabase řeší souběh sám
   async function ghFetchWithSha(path){
-    const headers = ghToken ? { Authorization: 'token ' + ghToken } : {};
-    const res = await fetch(fileContentsUrl(path), { headers, cache:'no-store' });
-    if(res.status === 404) return { data: null, sha: null };
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
-    }
-    const meta = await res.json();
-    const data = JSON.parse(b64DecodeUnicode(meta.content) || 'null');
-    return { data, sha: meta.sha };
+    const key = dataKey(path);
+    const { data, error } = await sb.from('app_data').select('data').eq('key', key).maybeSingle();
+    if(error) throw new Error(error.message);
+    return { data: data ? data.data : null, sha: null };
   }
 
-  // Zápis JSON souboru do repa (vyžaduje GitHub token s právem zápisu)
-  async function ghSave(path, payload, sha){
-    if(!ghToken){
-      throw new Error('Chybí GitHub token. Přihlas se znovu do administrace.');
-    }
-    const body = {
-      message: 'Aktualizace ' + path + ' přes admin panel',
-      content: b64EncodeUnicode(JSON.stringify(payload, null, 2)),
-      branch: GH_BRANCH
-    };
-    if(sha) body.sha = sha;
-    const res = await fetch(fileContentsUrl(path), {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + ghToken, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      if(res.status === 401 || res.status === 403){
-        throw new Error('GitHub token je neplatný nebo nemá právo zápisu.');
+  // Zápis sekce — práva vynucuje databáze (RLS), ne prohlížeč
+  async function ghSave(path, payload){
+    const key = dataKey(path);
+    const { error } = await sb.from('app_data').upsert({ key: key, data: payload }, { onConflict: 'key' });
+    if(error){
+      if(/row-level security|permission/i.test(error.message)){
+        throw new Error('Na tuhle sekci nemáš oprávnění.');
       }
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
+      throw new Error(error.message);
     }
-    return res.json();
+    return true;
   }
 
-  // Nahrání obrázku do repa (pozadí map) a vrácení veřejné URL
+  // Nahrání obrázku do úložiště (pozadí map)
   async function ghUploadBinary(path, base64){
-    if(!ghToken) throw new Error('Chybí GitHub token. Přihlas se znovu do administrace.');
     const clean = String(base64 || '').replace(/^data:[^;]+;base64,/, '');
-    const body = {
-      message: 'Nahrání obrázku: ' + path,
-      content: clean,
-      branch: GH_BRANCH
-    };
-    // pokud už soubor existuje, potřebujeme sha
-    const head = await fetch(fileContentsUrl(path), {
-      headers: { Authorization: 'token ' + ghToken }, cache:'no-store'
+    const bin = atob(clean);
+    const bytes = new Uint8Array(bin.length);
+    for(let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const name = String(path || '').split('/').pop();
+    const { error } = await sb.storage.from('playbook-maps').upload(name, bytes, {
+      contentType: 'image/' + (name.split('.').pop() || 'jpeg'),
+      upsert: true
     });
-    if(head.ok){ const meta = await head.json(); body.sha = meta.sha; }
-    const res = await fetch(fileContentsUrl(path), {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + ghToken, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
-    }
-    return fileRawUrl(path);
+    if(error) throw new Error(error.message);
+    const { data } = sb.storage.from('playbook-maps').getPublicUrl(name);
+    return data.publicUrl;
   }
 
   function formatEventDate(iso){
@@ -2847,21 +2816,17 @@
     btn.disabled = true;
     btn.textContent = 'Přihlašuji...';
     try{
-      const users = await ghFetchPublic(USERS_FILE) || [];
-      const uname = username.toLowerCase();
-      const hash = await sha256Hex(password);
-      const found = users.find(function(u){
-        return String(u.username || '').toLowerCase() === uname && String(u.passwordHash || '') === hash;
+      const { error } = await sb.auth.signInWithPassword({
+        email: loginEmail(username),
+        password: password
       });
-      if(!found){
+      if(error){
         errBox.textContent = 'Špatné jméno nebo heslo.';
         errBox.classList.add('show');
         return;
       }
-      const prof = { username: found.username, display_name: found.displayName || found.display_name || found.username, role: 'member' };
-      memberUsername = prof.username;
-      memberAccessCode = '';
-      saveMemberSession(memberUsername, memberAccessCode, prof.display_name);
+      const prof = await loadMyProfile();
+      memberUsername = (prof && prof.username) || username;
       unlockMemberSections(prof);
     }catch(err){
       errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
@@ -3478,15 +3443,15 @@
   /* ---- Admin: správa účtů správců webu ---- */
   /* ============ PRÁVA UŽIVATELŮ ============ */
   function isOwner(){
-    return !!(adminProfile && adminProfile.role === 'owner');
+    return !!(myProfile && myProfile.role === 'owner');
   }
   function currentPerms(){
     if(isOwner()) return ALL_PERMS.slice();
-    if(adminProfile && Array.isArray(adminProfile.perms)) return adminProfile.perms.slice();
+    if(myProfile && Array.isArray(myProfile.perms)) return myProfile.perms.slice();
     return [];
   }
   function hasPerm(section){
-    if(isOwner()) return true;               // owner vidí vždy všechno
+    if(isOwner()) return true;   // owner vidí vždy všechno
     return currentPerms().indexOf(section) >= 0;
   }
   function requirePerm(section){
@@ -3502,6 +3467,7 @@
     const notice = document.getElementById('ownerOnlyNotice');
     if(notice) notice.style.display = owner ? 'none' : 'block';
     document.querySelectorAll('.admin-tab-btn[data-tab]').forEach(function(btn){
+      if(btn.dataset.tab === 'soundcloud'){ btn.style.display = 'none'; return; }
       var show = owner || hasPerm(btn.dataset.tab);
       btn.style.display = show ? '' : 'none';
     });
@@ -3542,19 +3508,17 @@
 
   async function renderAdminAdminsList(){
     const list = document.getElementById('adminAdminsList');
+    await loadMyProfile();
     applyAdminPermissions();
     if(!list) return;
     try{
-      const raw = await ghFetchPublic(ADMINS_FILE) || [];
-      const users = (Array.isArray(raw) ? raw : []).map(function(u, i){
-        return {
-          id: String(u.id != null ? u.id : (u.username || ('u' + i))),
-          username: u.username,
-          display_name: u.display_name || u.displayName || '',
-          role: u.role,
-          perms: Array.isArray(u.perms) ? u.perms : []
-        };
-      });
+      const { data, error } = await sb
+        .from('profiles')
+        .select('id, username, display_name, role, perms')
+        .order('role', { ascending: true })
+        .order('username', { ascending: true });
+      if(error) throw new Error(error.message);
+      const users = data || [];
       adminsCache = users;
       if(!users.length){
         list.innerHTML = '<div class="admin-empty">Zatím žádní uživatelé.</div>';
@@ -3572,7 +3536,7 @@
         return '<div class="admin-news-row">'
           + '<div class="admin-news-row-text">'
           +   '<strong>' + escapeHtml(u.username) + (isU_owner ? ' ★' : '') + '</strong>'
-          +   '<span>' + escapeHtml(u.display_name || u.displayName || '') + (adminProfile && String(u.username||'').toLowerCase() === String(adminProfile.username).toLowerCase() ? ' · to jsi ty' : '') + '</span>'
+          +   '<span>' + escapeHtml(u.display_name || '') + (myProfile && u.id === myProfile.id ? ' · to jsi ty' : '') + '</span>'
           +   '<div style="margin-top:6px;">' + chips + '</div>'
           + '</div>'
           + '<div class="admin-row-actions">'
@@ -3602,10 +3566,8 @@
           btn.textContent = 'Odebírám...';
           const el = playbookToast('Odebírám uživatele…');
           try{
-            const raw = await ghFetchPublic(ADMINS_FILE) || [];
-            const next = (Array.isArray(raw) ? raw : []).filter(function(u){ return String(u.id) !== String(btn.dataset.uid); });
-            const { sha } = await ghFetchWithSha(ADMINS_FILE);
-            await ghSave(ADMINS_FILE, next, sha);
+            const { error } = await sb.from('profiles').delete().eq('id', btn.dataset.uid);
+            if(error) throw new Error(error.message);
             playbookToastDone(el, 'Odebráno ✓');
             renderAdminAdminsList();
           }catch(e){
@@ -3640,18 +3602,14 @@
       const target = adminsCache.find(u => u.id === editUserId)
         || adminsCache.find(u => (u.username || '').toLowerCase() === username.toLowerCase());
       if(!target){
-        throw new Error('Uživatel nenalezen. Nejdřív ho přidej do admins.json.');
+        throw new Error('Uživatel nenalezen. Nejdřív ho vytvoř v Supabase (Authentication → Add user).');
       }
       if(target.role === 'owner') throw new Error('Ownerovi se práva nemění, má vždy vše.');
-      const raw = await ghFetchPublic(ADMINS_FILE) || [];
-      const next = (Array.isArray(raw) ? raw : []).map(function(u){
-        if(String(u.username || '').toLowerCase() === String(target.username || '').toLowerCase()){
-          return Object.assign({}, u, { perms: perms, role: perms.length ? 'admin' : 'member' });
-        }
-        return u;
-      });
-      const { sha } = await ghFetchWithSha(ADMINS_FILE);
-      await ghSave(ADMINS_FILE, next, sha);
+      const { error } = await sb
+        .from('profiles')
+        .update({ perms: perms, role: perms.length ? 'admin' : 'member' })
+        .eq('id', target.id);
+      if(error) throw new Error(error.message);
       playbookToastDone(el, 'Práva uložena ✓');
       editUserId = null;
       e.target.reset();
@@ -4076,11 +4034,254 @@
     }
   });
 
-  /* Admin sekce SoundCloud odstraněna */
+  /* ============ SOUNDCLOUD: hymna pro všechny ============ */
+  async function saveAnthemSettings(message){
+    try{
+      const { data, sha } = await ghFetchWithSha('anthem.json', ghToken);
+      const next = { enabled: anthemSettings.enabled, url: anthemSettings.url };
+      if(anthemSettingsSha === null && sha) anthemSettingsSha = sha;
+      await ghSave('anthem.json', next, anthemSettingsSha || (data ? sha : null), message, ghToken);
+      anthemSettingsSha = null;
+      await loadAnthemSettings();
+      playbookToastDone(playbookToast('Ukládám hymnu…'), 'Uloženo ✓');
+    }catch(err){
+      playbookToastFail(playbookToast('Ukládám hymnu…'), 'Nepodařilo se uložit: ' + err.message);
+    }
+  }
+  document.getElementById('anthemGlobalToggle')?.addEventListener('click', function(){
+    const btn = this;
+    btn.disabled = true;
+    anthemSettings.enabled = !anthemSettings.enabled;
+    applyAnthemSettings();
+    renderAnthemAdminState();
+    saveAnthemSettings(anthemSettings.enabled ? 'Zapnutí hudby pro všechny' : 'Vypnutí hudby pro všechny')
+      .finally(() => { btn.disabled = false; });
+  });
+  document.getElementById('adminAnthemForm')?.addEventListener('submit', function(e){
+    e.preventDefault();
+    const input = document.getElementById('anthem-url');
+    const url = input.value.trim();
+    if(!url || url.toLowerCase().indexOf("soundcloud") === -1){
+      playbookToastFail(playbookToast('Zkontroluj odkaz'), 'Vlož platný odkaz ze SoundCloudu');
+      return;
+    }
+    anthemSettings.url = url;
+    applyAnthemSettings();
+    renderAnthemAdminState();
+    saveAnthemSettings('Změna hymny webu');
+  });
 
-  /* ============ OBNOVENÍ PŘIHLÁŠENÍ PO NAČTENÍ STRÁNKY (z localStorage) ============ */
+  /* ============ DOTAZNÍK -> DISCORD WEBHOOK ============ */
+  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1547953283656581120/s2sVfd34zuChdIWCv3nGJ4KZvom_Epphj1PzwUIRRY3TS103Zj3ut6K4ngRMfPSP5Agm';
+  const TEAM_LABELS = { main:'Main', reserve:'Reserve Main', academy:'Academy', 'academy-reserve':'Academy Reserve' };
+
+  document.getElementById('applyForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const toast = document.getElementById('formToast');
+
+    const nick = document.getElementById('f-nick').value.trim();
+    const discord = document.getElementById('f-discord').value.trim();
+    const teamChecked = document.querySelector('input[name="team"]:checked');
+    const team = teamChecked ? TEAM_LABELS[teamChecked.value] : 'Neuvedeno';
+    const age = document.getElementById('f-age').value || 'Neuvedeno';
+    const rank = document.getElementById('f-rank').value.trim() || 'Neuvedeno';
+    const steam = document.getElementById('f-steam').value.trim();
+    const faceit = document.getElementById('f-faceit').value.trim();
+    const exp = document.getElementById('f-exp').value.trim() || 'Neuvedeno';
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Odesílám...';
+
+    const payload = {
+      embeds: [{
+        title: 'Nová přihláška do Freezers Esports',
+        color: 0x2fe0c9,
+        fields: [
+          { name: 'Přezdívka', value: nick || 'Neuvedeno', inline: true },
+          { name: 'Discord', value: discord || 'Neuvedeno', inline: true },
+          { name: 'Zájem o tým', value: team, inline: true },
+          { name: 'Věk', value: String(age), inline: true },
+          { name: 'CS2 Rank / Rating', value: rank, inline: true },
+          { name: 'Steam', value: steam ? `[Profil](${steam})` : 'Neuvedeno', inline: true },
+          { name: 'Faceit', value: faceit ? `[Profil](${faceit})` : 'Neuvedeno', inline: true },
+          { name: 'Zkušenosti', value: exp }
+        ],
+        timestamp: new Date().toISOString()
+      }]
+    };
+
+    try{
+      // FormData + payload_json obchází CORS preflight problém, který blokuje čisté application/json z prohlížeče
+      const form = new FormData();
+      form.append('payload_json', JSON.stringify(payload));
+
+      const res = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        body: form
+      });
+      if(!res.ok){
+        const errText = await res.text().catch(() => '');
+        console.error('Discord webhook error:', res.status, errText);
+        throw new Error('Webhook responded with ' + res.status);
+      }
+      toast.textContent = 'Díky! Přihláška byla odeslána, staff se ti brzy ozve na Discordu.';
+      toast.style.borderColor = '';
+      toast.style.background = '';
+      toast.classList.add('show');
+      e.target.reset();
+    } catch(err){
+      console.error('Chyba při odesílání dotazníku:', err);
+      toast.textContent = 'Něco se pokazilo při odesílání. Zkus to prosím znovu, nebo napiš rovnou na Discord.';
+      toast.style.borderColor = 'rgba(255,95,95,0.4)';
+      toast.style.background = 'rgba(255,95,95,0.1)';
+      toast.classList.add('show');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Odeslat přihlášku';
+    }
+  });
+
+  /* ============ HYMNA FREEZERS (SoundCloud na pozadí) ============ */
+  let anthemWidget = null;
+  let anthemPlaying = false;
+  let anthemAutoplayDone = false;
+  let anthemSettings = { enabled: true, url: '' };
+  let anthemSettingsSha = null;
+  let anthemUrlApplied = '';
+
+  function anthemTrackFrom(setting){
+    if(setting) return String(setting).trim();
+    const frame = document.getElementById('anthemPlayer');
+    const src = (frame && frame.src) || '';
+    const m = src.match(/[?&]url=([^&]+)/);
+    if(!m) return '';
+    try{ return decodeURIComponent(m[1]); }catch(e){ return ''; }
+  }
+
+  function anthemEmbedSrc(track){
+    return 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(track) +
+      '&color=%232fe0c9&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false';
+  }
+
+  function applyAnthemSettings(){
+    const frame = document.getElementById('anthemPlayer');
+    if(!frame) return;
+    const track = anthemTrackFrom(anthemSettings.url);
+    if(track && track !== anthemUrlApplied){
+      anthemUrlApplied = track;
+      frame.src = anthemEmbedSrc(track);
+      const toggle = document.getElementById('anthemToggleBtn');
+      if(toggle) toggle.style.display = '';
+      anthemWidget = null;
+      anthemAutoplayDone = false;
+      if(typeof SC !== 'undefined') initAnthemWidget();
+      setTimeout(() => { if(anthemWidget) anthemWidget.setVolume(ANTHEM_VOLUME); }, 1200);
+      return;
+    }
+    const toggle = document.getElementById('anthemToggleBtn');
+    if(toggle) toggle.style.display = anthemSettings.enabled ? '' : 'none';
+    if(!anthemSettings.enabled){
+      anthemAutoplayDone = true;
+      if(anthemWidget) anthemWidget.pause();
+    }else if(anthemWidget){
+      tryAnthemAutoplay();
+    }
+  }
+
+  async function loadAnthemSettings(){
+    try{
+      const cfg = await ghFetchWithSha('anthem.json', ghToken);
+      if(cfg && cfg.data){
+        anthemSettings = { enabled: cfg.data.enabled !== false, url: cfg.data.url || '' };
+        anthemSettingsSha = cfg.sha || null;
+      }
+    }catch(e){
+      console.error('Nepodařilo se načíst hymnu:', e);
+    }
+    applyAnthemSettings();
+    renderAnthemAdminState();
+  }
+
+  function renderAnthemAdminState(){
+    const toggle = document.getElementById('anthemGlobalToggle');
+    const line = document.getElementById('anthemStatusLine');
+    const input = document.getElementById('anthem-url');
+    if(input && !input.value) input.value = anthemSettings.url || '';
+    if(toggle){
+      toggle.textContent = anthemSettings.enabled ? 'Vypnout hudbu pro všechny' : 'Zapnout hudbu pro všechny';
+      toggle.style.borderColor = anthemSettings.enabled ? '' : 'rgba(255,95,176,0.5)';
+    }
+    if(line){
+      const track = anthemTrackFrom(anthemSettings.url);
+      line.textContent = (anthemSettings.enabled ? 'Stav: hudba hraje pro všechny.' : 'Stav: hudba je pro všechny vypnutá.')
+        + (track ? ' Skladba: ' + track : ' Skladba: výchozí (Brezno).');
+    }
+  }
+
+  const ANTHEM_VOLUME = 25; // tichý poslech pro všechny (v procentech)
+
+  function initAnthemWidget(){
+    if(typeof SC === 'undefined' || anthemWidget) return;
+    const iframe = document.getElementById('anthemPlayer');
+    if(!iframe) return;
+    anthemWidget = SC.Widget(iframe);
+    anthemWidget.bind(SC.Widget.Events.READY, function(){
+      anthemWidget.setVolume(ANTHEM_VOLUME);
+      if(anthemSettings.enabled) setTimeout(tryAnthemAutoplay, 600);
+    });
+    anthemWidget.bind(SC.Widget.Events.PLAY, function(){
+      anthemPlaying = true;
+      updateAnthemUI();
+    });
+    anthemWidget.bind(SC.Widget.Events.PAUSE, function(){
+      anthemPlaying = false;
+      updateAnthemUI();
+    });
+    anthemWidget.bind(SC.Widget.Events.FINISH, function(){
+      anthemWidget.seekTo(0);
+      anthemWidget.play();
+    });
+  }
+
+  function updateAnthemUI(){
+    const btn = document.getElementById('anthemToggleBtn');
+    const icon = document.getElementById('anthemIcon');
+    if(anthemPlaying){
+      btn.classList.add('playing');
+      icon.textContent = '🔊';
+    } else {
+      btn.classList.remove('playing');
+      icon.textContent = '🔇';
+    }
+  }
+
+  function tryAnthemAutoplay(){
+    if(anthemAutoplayDone || !anthemWidget) return;
+    anthemAutoplayDone = true;
+    anthemWidget.setVolume(ANTHEM_VOLUME);
+    anthemWidget.play();
+    document.removeEventListener('click', tryAnthemAutoplay);
+  }
+
+  initAnthemWidget();
+  /* autoplay hymny vypnut */
+  /* hymna vypnuta */
+  loadStaff();
+
+  document.getElementById('anthemToggleBtn').addEventListener('click', function(){
+    if(!anthemWidget) return;
+    if(anthemPlaying){
+      anthemWidget.pause();
+    } else {
+      anthemWidget.setVolume(ANTHEM_VOLUME);
+      anthemWidget.play();
+    }
+  });
+
+  /* ============ SUPABASE: obnovení přihlášení po načtení stránky ============ */
   (function(){
-    // starší pole (GitHub token v přihlášení člena) už netřeba
+    // GitHub token ani přístupový kód už web nepotřebuje
     function hideLegacyField(id){
       const el = document.getElementById(id);
       if(!el) return;
@@ -4088,14 +4289,17 @@
       const wrap = el.closest ? el.closest('.field') : null;
       if(wrap) wrap.style.display = 'none';
     }
+    hideLegacyField('adminPassword');
     hideLegacyField('member-access-code');
 
     (async function restore(){
       try{
-        // Admin relace (jméno + token) se obnovuje funkcí restoreAdminSession()
-        if(adminUsername && ghToken){
-          adminUsername = adminUsername;
-          await loadAdminAdminsPerms();
+        const prof = await loadMyProfile();
+        if(!prof) return;
+        memberUsername = prof.username;
+        if(typeof unlockMemberSections === 'function') unlockMemberSections(prof);
+        if(prof.role === 'owner' || prof.role === 'admin'){
+          adminUsername = prof.username;
           applyAdminPermissions();
         }
       }catch(e){ console.error('Obnovení přihlášení:', e.message || e); }
@@ -4114,15 +4318,13 @@
       banner.classList.remove('show');
       banner.classList.add('dismissed');
       try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
-      // po animaci banner úplně zmizí z DOM
       setTimeout(function(){ if(banner.parentNode) banner.parentNode.removeChild(banner); }, 500);
     }
 
     if(accepted){
-      banner.parentNode && banner.parentNode.removeChild(banner);
+      if(banner.parentNode) banner.parentNode.removeChild(banner);
       return;
     }
-    // plynulý nájezd
     window.setTimeout(function(){ banner.classList.add('show'); }, 350);
     document.getElementById('cookieAcceptBtn').addEventListener('click', dismissCookieBanner);
   })();
