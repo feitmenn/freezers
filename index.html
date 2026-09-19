@@ -8,11 +8,17 @@
 </head>
 <body style="background:#070a12;color:#eef6fb;font-family:sans-serif;padding:40px">
 <h1>Freezers Esports</h1>
-<p>Nasazování nové verze probíhá. Obnov stránku za chvíli (Ctrl+Shift+R).</p>
+<p>Nasazení nové verze probíhá. Obnov stránku za chvíli (Ctrl+Shift+R).</p>
+<p id="db">Testuji databázi…</p>
 <script>
 const sb = window.supabase.createClient('https://fsknacijftflqymiyip.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZza25hY2lqZnRmbHF5em1peWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTM0NjksImV4cCI6MjEwNTM4OTQ2OX0.v-UpHYS3dfTdSFuKDWT9us1Ymubj_u8TFHVcfYkad9Y');
 sb.from('app_data').select('key').then(r => {
-  document.body.insertAdjacentHTML('beforeend', '<p>Připojení k databázi: ' + (r.error ? 'CHYBA — ' + r.error.message : 'OK, sekcí: ' + r.data.length) + '</p>');
+  const el = document.getElementById('db');
+  if(r.error){ el.textContent = 'DB CHYBA: ' + r.error.message; return; }
+  el.textContent = 'DB OK (' + r.data.length + ' sekcí). Zkus přihlášení:';
+  sb.auth.signInWithPassword({ email: 'filas@freezers.local', password: prompt('Heslo pro filas:') || '' })
+    .then(a => sb.from('profiles').select('username,role,perms').eq('id', a.data.user.id).maybeSingle())
+    .then(p => el.textContent += ' ' + JSON.stringify(p.data));
 });
 </script>
 </body>
