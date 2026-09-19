@@ -3486,6 +3486,7 @@
     return [];
   }
   function hasPerm(section){
+    if(isOwner()) return true;               // owner vidí vždy všechno
     return currentPerms().indexOf(section) >= 0;
   }
   function requirePerm(section){
@@ -3501,7 +3502,8 @@
     const notice = document.getElementById('ownerOnlyNotice');
     if(notice) notice.style.display = owner ? 'none' : 'block';
     document.querySelectorAll('.admin-tab-btn[data-tab]').forEach(function(btn){
-      btn.style.display = hasPerm(btn.dataset.tab) ? '' : 'none';
+      var show = owner || hasPerm(btn.dataset.tab);
+      btn.style.display = show ? '' : 'none';
     });
     const activeBtn = document.querySelector('.admin-tab-btn.active');
     if(activeBtn && activeBtn.style.display === 'none'){
