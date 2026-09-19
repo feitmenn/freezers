@@ -2715,8 +2715,28 @@
     return 'https://raw.githubusercontent.com/' + GH_OWNER + '/' + GH_REPO + '/' + GH_BRANCH + '/' + path;
   }
 
-  // Veřejné čtení JSON souboru z repa (bez tokenu — repo je public)
+  // Čtení JSON souboru z repa.
+  // - S tokenem se čte přes GitHub API (?ref=větev) → žádná raw cache, změny hned.
+  // - Bez tokenu (veřejný návštěvník) se čte z raw, kde je cache jen krátká.
   async function ghFetchPublic(path){
+    // 1) Rychlá cesta s tokenem — GitHub API vrací vždy aktuální obsah větve
+    if(ghToken){
+      try{
+        const res = await fetch(fileContentsUrl(path) + '?ref=' + GH_BRANCH, {
+          headers: { Authorization: 'token ' + ghToken },
+          cache: 'no-store'
+        });
+        if(res.status === 404) return null;
+        if(res.ok){
+          const meta = await res.json();
+          return JSON.parse(b64DecodeUnicode(meta.content) || 'null');
+        }
+        // 401/403 (token bez práv) → zkusíme veřejné čtení níže
+      }catch(e){
+        console.error('Nepodařilo se načíst ' + path + ' přes API:', e.message || e);
+      }
+    }
+    // 2) Veřejná cesta bez tokenu
     try{
       const res = await fetch(fileRawUrl(path) + '?cachebust=' + Date.now(), { cache:'no-store' });
       if(res.status === 404) return null;
