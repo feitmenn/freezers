@@ -5,12 +5,5 @@
     "type": "excuse_approved",
     "message": "Tvoje omluvenka na akci „Main Roster VS Academy“ byla schválena.",
     "createdAt": "2026-09-13T17:38:35.710Z"
-  },
-  {
-    "id": "notif_1789749282564",
-    "username": "krabik_77",
-    "type": "excuse_rejected",
-    "message": "Tvoje omluvenka na akci „Main Trénink“ byla zamítnuta.",
-    "createdAt": "2026-09-18T16:34:42.564Z"
   }
 ]
