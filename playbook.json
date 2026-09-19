@@ -85,6 +85,10 @@
     {
       "name": "Inferno",
       "image": "https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/inferno-1789678627972.jpg"
+    },
+    {
+      "name": "Nuke",
+      "image": "https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/nuke-1789847901611.webp"
     }
   ]
 }
