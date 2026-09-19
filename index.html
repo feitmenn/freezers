@@ -2343,6 +2343,18 @@
   }
 
   async function ghFetchPublic(path){
+    // Pokud je admin přihlášený (má token), čteme přímo z GitHub API (žádná CDN cache,
+    // takže admin vidí svoje změny okamžitě). Bez tokenu (běžní návštěvníci) čteme
+    // přes rychlejší veřejnou cestu, která ale má pár minut zpoždění na propsání změn.
+    if(ghToken){
+      try{
+        const { data } = await ghFetchWithSha(path, ghToken);
+        return data;
+      }catch(e){
+        console.error(`Nepodařilo se načíst ${path} (ověřeně):`, e);
+        return null;
+      }
+    }
     try{
       const url = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}?cachebust=${Date.now()}`;
       const res = await fetch(url, { cache:'no-store' });
