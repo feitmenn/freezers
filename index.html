@@ -1984,12 +1984,13 @@
         return;
       }
 
-      // Načíst seznam správců (jméno + heslo + role + práva)
+      // Načíst seznam správců (jméno + hash hesla + role + práva)
       const adm = await ghFetchPublic(ADMINS_FILE);
       const list = Array.isArray(adm) ? adm : [];
       const uname = username.toLowerCase();
+      const hash = await sha256Hex(password);
       const found = list.find(function(u){
-        return String(u.username || '').toLowerCase() === uname && String(u.password || '') === password;
+        return String(u.username || '').toLowerCase() === uname && String(u.passwordHash || '') === hash;
       });
       if(!found){
         ghToken = '';
@@ -1997,12 +1998,10 @@
         errBox.classList.add('show');
         return;
       }
-      const role = (found.role === 'owner') ? 'owner' : 'admin';
+      // role: pokud není určena, první položka v seznamu je owner, ostatní admin
+      let role = found.role;
       if(role !== 'owner' && role !== 'admin'){
-        ghToken = '';
-        errBox.textContent = 'Tenhle účet nemá přístup do admin panelu.';
-        errBox.classList.add('show');
-        return;
+        role = (list.indexOf(found) === 0) ? 'owner' : 'admin';
       }
       adminProfile = { username: found.username, role: role, perms: Array.isArray(found.perms) ? found.perms : [] };
       adminPermsCache = {};
@@ -2843,8 +2842,9 @@
     try{
       const users = await ghFetchPublic(USERS_FILE) || [];
       const uname = username.toLowerCase();
+      const hash = await sha256Hex(password);
       const found = users.find(function(u){
-        return String(u.username || '').toLowerCase() === uname && String(u.password || '') === password;
+        return String(u.username || '').toLowerCase() === uname && String(u.passwordHash || '') === hash;
       });
       if(!found){
         errBox.textContent = 'Špatné jméno nebo heslo.';
