@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Freezers Esports</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body style="background:#070a12;color:#eef6fb;font-family:sans-serif;padding:40px">
 <h1>Freezers Esports</h1>
-<p>Web se právě aktualizuje. Obnov stránku za chvíli (Ctrl+Shift+R).</p>
+<p>Nasazování nové verze probíhá. Obnov stránku za chvíli (Ctrl+Shift+R).</p>
+<script>
+const sb = window.supabase.createClient('https://fsknacijftflqymiyip.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZza25hY2lqZnRmbHF5em1peWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTM0NjksImV4cCI6MjEwNTM4OTQ2OX0.v-UpHYS3dfTdSFuKDWT9us1Ymubj_u8TFHVcfYkad9Y');
+sb.from('app_data').select('key').then(r => {
+  document.body.insertAdjacentHTML('beforeend', '<p>Připojení k databázi: ' + (r.error ? 'CHYBA — ' + r.error.message : 'OK, sekcí: ' + r.data.length) + '</p>');
+});
+</script>
 </body>
 </html>
