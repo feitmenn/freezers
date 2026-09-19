@@ -356,42 +356,53 @@
   .excuse-reject-btn:hover{background:rgba(255,95,95,0.12);}
 
   .cookie-banner{
-    position:fixed;left:0;right:0;bottom:0;z-index:300;
-    display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
-    background:rgba(7,10,18,0.96);backdrop-filter:blur(10px);
-    border-top:1px solid var(--line);
-    padding:16px 24px;
-    transform:translateY(0);transition:transform .3s ease;
+    position:fixed;top:20px;right:20px;z-index:300;
+    width:min(340px,calc(100vw - 32px));
+    display:flex;flex-direction:column;gap:14px;
+    background:rgba(10,14,24,0.62);
+    backdrop-filter:blur(16px) saturate(140%);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+    border:1px solid rgba(47,224,201,0.28);
+    border-radius:18px;
+    padding:20px 20px 18px;
+    box-shadow:0 18px 50px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    opacity:0;transform:translateY(-16px) scale(0.96);
+    transition:opacity .45s cubic-bezier(.2,.8,.2,1), transform .45s cubic-bezier(.2,.8,.2,1);
+    pointer-events:none;
   }
-  .cookie-banner.hidden{transform:translateY(120%);}
-  .cookie-text{font-size:13px;color:var(--ice-dim);max-width:640px;}
-  .cookie-text a{color:var(--turquoise);}
+  .cookie-banner.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+  .cookie-banner.dismissed{opacity:0;transform:translateY(-22px) scale(0.94);pointer-events:none;}
+  .cookie-logo{
+    width:46px;height:46px;border-radius:12px;object-fit:cover;flex-shrink:0;
+    border:1px solid rgba(47,224,201,0.35);
+    box-shadow:0 0 18px rgba(47,224,201,0.25);
+  }
+  .cookie-head{display:flex;align-items:center;gap:12px;}
+  .cookie-title{
+    font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:14px;
+    letter-spacing:.04em;color:var(--ice);margin:0;
+  }
+  .cookie-sub{font-size:11px;color:var(--ice-dim);letter-spacing:.06em;text-transform:uppercase;}
+  .cookie-text{font-size:12.5px;line-height:1.55;color:var(--ice-dim);}
+  .cookie-text a{color:var(--turquoise);font-weight:600;}
   .cookie-accept-btn{
     background:linear-gradient(120deg,var(--turquoise),var(--violet));
-    color:#080b14;border:none;padding:10px 24px;border-radius:2px;
+    color:#080b14;border:none;padding:11px 22px;border-radius:12px;
     font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:13px;
-    cursor:pointer;white-space:nowrap;transition:filter .2s;
+    cursor:pointer;transition:filter .2s, transform .15s;width:100%;
   }
   .cookie-accept-btn:hover{filter:brightness(1.1);}
+  .cookie-accept-btn:active{transform:scale(0.97);}
+  @media (max-width:520px){
+    .cookie-banner{top:14px;right:14px;left:14px;width:auto;}
+  }
 
   .notification-stack{
     position:fixed;top:90px;right:20px;z-index:400;
     display:flex;flex-direction:column;gap:10px;max-width:320px;
   }
 
-  .anthem-toggle{
-    position:fixed;bottom:24px;left:24px;z-index:350;
-    width:48px;height:48px;border-radius:50%;
-    background:rgba(7,10,18,0.85);border:1px solid rgba(255,95,176,0.4);
-    display:flex;align-items:center;justify-content:center;font-size:19px;
-    cursor:pointer;backdrop-filter:blur(8px);transition:transform .2s, border-color .2s;
-    box-shadow:0 6px 20px rgba(0,0,0,0.4);
-  }
-  .anthem-toggle:hover{transform:scale(1.08);border-color:var(--pink);}
-  .anthem-toggle.playing{border-color:var(--turquoise);animation:anthemPulse 2s infinite;}
-  @keyframes anthemPulse{0%,100%{box-shadow:0 6px 20px rgba(0,0,0,0.4), 0 0 0 0 rgba(47,224,201,0.4);}50%{box-shadow:0 6px 20px rgba(0,0,0,0.4), 0 0 0 8px rgba(47,224,201,0);}}
   @media (max-width:500px){
-    .anthem-toggle{bottom:16px;left:16px;width:42px;height:42px;font-size:16px;}
   }
   .notification-toast{
     background:var(--bg-1);border:1px solid var(--line);border-left:4px solid var(--turquoise);
@@ -824,21 +835,24 @@
 
 <div id="notificationStack" class="notification-stack"></div>
 
-<iframe id="anthemPlayer" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;"
-  src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fxxxtraktor%2Fbrezno&color=%232fe0c9&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-  allow="autoplay"></iframe>
+<!-- SoundCloud hymna odstraněna -->
 
-<button type="button" id="anthemToggleBtn" class="anthem-toggle" aria-label="Hymna Freezers">
-  <span id="anthemIcon">🔇</span>
-</button>
+<!-- SoundCloud přepínač odstraněn -->
 
 
 <div id="cookieBanner" class="cookie-banner">
+  <div class="cookie-head">
+    <img class="cookie-logo" src="images/logo.png" alt="Freezers Esports">
+    <div>
+      <p class="cookie-title">FREEZERS ESPORTS</p>
+      <div class="cookie-sub">Soukromí &amp; cookies</div>
+    </div>
+  </div>
   <div class="cookie-text">
-    Tento web používá lokální úložiště prohlížeče (ne sledovací cookies) k zapamatování tvého přihlášení a preferencí. Pokračováním souhlasíš s našimi
+    Používáme lokální úložiště prohlížeče (ne sledovací cookies) k zapamatování tvého přihlášení a preferencí. Pokračováním souhlasíš s našimi
     <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener">Terms Of Service</a>.
   </div>
-  <button type="button" id="cookieAcceptBtn" class="cookie-accept-btn">Rozumím</button>
+  <button type="button" id="cookieAcceptBtn" class="cookie-accept-btn">Rozumím, skrýt</button>
 </div>
 
 
@@ -1215,9 +1229,6 @@
         <button type="button" class="admin-tab-btn" data-tab="excuses"><span class="att-icon">✉️</span>Omluvenky</button>
         <button type="button" class="admin-tab-btn" data-tab="scrim"><span class="att-icon">🖥️</span>Scrim Server</button>
         <button type="button" class="admin-tab-btn" data-tab="clips"><span class="att-icon">🎬</span>Klipy</button>
-        <button type="button" class="admin-tab-btn" data-tab="soundcloud">
-          <span class="att-icon">♪</span> SoundCloud
-        </button>
 
         <button type="button" class="admin-tab-btn" data-tab="playbook"><span class="att-icon">📘</span>Playbook</button>
         <button type="button" class="admin-tab-btn" data-tab="staff"><span class="att-icon">🎖️</span>Staff</button>
@@ -1439,30 +1450,6 @@
 
         </div>
 
-        <div class="admin-tab-panel" data-tab-panel="soundcloud">
-    <h3>Hymna webu (SoundCloud)</h3>
-    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
-      Skladba, která zní na pozadí pro všechny návštěvníky. Vlož odkaz ze SoundCloudu
-      (třeba <code>https://soundcloud.com/xxxtraktor/brezno</code>) a ulož.
-    </p>
-    <form id="adminAnthemForm">
-      <div class="field">
-        <label for="anthem-url">Odkaz na skladbu (SoundCloud)</label>
-        <input type="url" id="anthem-url" placeholder="https://soundcloud.com/...">
-      </div>
-      <button type="submit" class="submit-btn">Uložit skladbu</button>
-    </form>
-
-    <div class="admin-divider"></div>
-    <h3>Přehrávání pro všechny</h3>
-    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:14px;">
-      Když je hudba vypnutá, skladba se sice načte, ale nikomu se automaticky nepřehraje.
-      Ikona v rohu stránky zůstane funkční.
-    </p>
-    <button type="button" id="anthemGlobalToggle" class="submit-btn">Načítám…</button>
-    <div id="anthemStatusLine" style="font-size:12.5px;color:var(--ice-dim);margin-top:14px;"></div>
-        </div>
-
         <div class="admin-tab-panel" data-tab-panel="playbook">
     <h3>Role v týmu</h3>
     <form id="adminRoleForm">
@@ -1648,7 +1635,7 @@
   </div>
 </div>
 
-<script src="https://w.soundcloud.com/player/api.js"></script>
+<!-- SoundCloud API odstraněno -->
 <!-- Data se ukládají do GitHub repa (JSON soubory) přes GitHub API -->
 <script>
   /* ============ NOVINKY (uložené jako news.json přímo v GitHub repu) ============ */
@@ -1664,8 +1651,8 @@
   const PLAYBOOK_FILE = 'playbook.json';
   const STAFF_FILE = 'staff.json';
   const OWNER_USERNAME = 'filas'; // jediný, kdo smí rozdávat práva
-  const ALL_PERMS = ['news','roster','users','calendar','attendance','excuses','scrim','clips','soundcloud','playbook','staff','admins'];
-  const PERM_LABELS = { news:'Novinky', roster:'Roster', users:'Členové', calendar:'Kalendář', attendance:'Účast', excuses:'Omluvenky', scrim:'Scrim server', clips:'Klipy', soundcloud:'SoundCloud', playbook:'Playbook', staff:'Staff', admins:'Správci' };
+  const ALL_PERMS = ['news','roster','users','calendar','attendance','excuses','scrim','clips','playbook','staff','admins'];
+  const PERM_LABELS = { news:'Novinky', roster:'Roster', users:'Členové', calendar:'Kalendář', attendance:'Účast', excuses:'Omluvenky', scrim:'Scrim server', clips:'Klipy',  playbook:'Playbook', staff:'Staff', admins:'Správci' };
   const DEFAULT_STAFF = [
     { name:'FILAS', role:'CEO', discord:'f1las3', order:1 },
     { name:'SeinZZZ', role:'MANAGER', discord:'neko_wawa', order:2 },
@@ -3499,6 +3486,7 @@
     return [];
   }
   function hasPerm(section){
+    if(isOwner()) return true;               // owner vidí vždy všechno
     return currentPerms().indexOf(section) >= 0;
   }
   function requirePerm(section){
@@ -3514,7 +3502,8 @@
     const notice = document.getElementById('ownerOnlyNotice');
     if(notice) notice.style.display = owner ? 'none' : 'block';
     document.querySelectorAll('.admin-tab-btn[data-tab]').forEach(function(btn){
-      btn.style.display = hasPerm(btn.dataset.tab) ? '' : 'none';
+      var show = owner || hasPerm(btn.dataset.tab);
+      btn.style.display = show ? '' : 'none';
     });
     const activeBtn = document.querySelector('.admin-tab-btn.active');
     if(activeBtn && activeBtn.style.display === 'none'){
@@ -4087,250 +4076,7 @@
     }
   });
 
-  /* ============ SOUNDCLOUD: hymna pro všechny ============ */
-  async function saveAnthemSettings(message){
-    try{
-      const { data, sha } = await ghFetchWithSha('anthem.json', ghToken);
-      const next = { enabled: anthemSettings.enabled, url: anthemSettings.url };
-      if(anthemSettingsSha === null && sha) anthemSettingsSha = sha;
-      await ghSave('anthem.json', next, anthemSettingsSha || (data ? sha : null), message, ghToken);
-      anthemSettingsSha = null;
-      await loadAnthemSettings();
-      playbookToastDone(playbookToast('Ukládám hymnu…'), 'Uloženo ✓');
-    }catch(err){
-      playbookToastFail(playbookToast('Ukládám hymnu…'), 'Nepodařilo se uložit: ' + err.message);
-    }
-  }
-  document.getElementById('anthemGlobalToggle')?.addEventListener('click', function(){
-    const btn = this;
-    btn.disabled = true;
-    anthemSettings.enabled = !anthemSettings.enabled;
-    applyAnthemSettings();
-    renderAnthemAdminState();
-    saveAnthemSettings(anthemSettings.enabled ? 'Zapnutí hudby pro všechny' : 'Vypnutí hudby pro všechny')
-      .finally(() => { btn.disabled = false; });
-  });
-  document.getElementById('adminAnthemForm')?.addEventListener('submit', function(e){
-    e.preventDefault();
-    const input = document.getElementById('anthem-url');
-    const url = input.value.trim();
-    if(!url || url.toLowerCase().indexOf("soundcloud") === -1){
-      playbookToastFail(playbookToast('Zkontroluj odkaz'), 'Vlož platný odkaz ze SoundCloudu');
-      return;
-    }
-    anthemSettings.url = url;
-    applyAnthemSettings();
-    renderAnthemAdminState();
-    saveAnthemSettings('Změna hymny webu');
-  });
-
-  /* ============ DOTAZNÍK -> DISCORD WEBHOOK ============ */
-  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1547953283656581120/s2sVfd34zuChdIWCv3nGJ4KZvom_Epphj1PzwUIRRY3TS103Zj3ut6K4ngRMfPSP5Agm';
-  const TEAM_LABELS = { main:'Main', reserve:'Reserve Main', academy:'Academy', 'academy-reserve':'Academy Reserve' };
-
-  document.getElementById('applyForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const toast = document.getElementById('formToast');
-
-    const nick = document.getElementById('f-nick').value.trim();
-    const discord = document.getElementById('f-discord').value.trim();
-    const teamChecked = document.querySelector('input[name="team"]:checked');
-    const team = teamChecked ? TEAM_LABELS[teamChecked.value] : 'Neuvedeno';
-    const age = document.getElementById('f-age').value || 'Neuvedeno';
-    const rank = document.getElementById('f-rank').value.trim() || 'Neuvedeno';
-    const steam = document.getElementById('f-steam').value.trim();
-    const faceit = document.getElementById('f-faceit').value.trim();
-    const exp = document.getElementById('f-exp').value.trim() || 'Neuvedeno';
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Odesílám...';
-
-    const payload = {
-      embeds: [{
-        title: 'Nová přihláška do Freezers Esports',
-        color: 0x2fe0c9,
-        fields: [
-          { name: 'Přezdívka', value: nick || 'Neuvedeno', inline: true },
-          { name: 'Discord', value: discord || 'Neuvedeno', inline: true },
-          { name: 'Zájem o tým', value: team, inline: true },
-          { name: 'Věk', value: String(age), inline: true },
-          { name: 'CS2 Rank / Rating', value: rank, inline: true },
-          { name: 'Steam', value: steam ? `[Profil](${steam})` : 'Neuvedeno', inline: true },
-          { name: 'Faceit', value: faceit ? `[Profil](${faceit})` : 'Neuvedeno', inline: true },
-          { name: 'Zkušenosti', value: exp }
-        ],
-        timestamp: new Date().toISOString()
-      }]
-    };
-
-    try{
-      // FormData + payload_json obchází CORS preflight problém, který blokuje čisté application/json z prohlížeče
-      const form = new FormData();
-      form.append('payload_json', JSON.stringify(payload));
-
-      const res = await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        body: form
-      });
-      if(!res.ok){
-        const errText = await res.text().catch(() => '');
-        console.error('Discord webhook error:', res.status, errText);
-        throw new Error('Webhook responded with ' + res.status);
-      }
-      toast.textContent = 'Díky! Přihláška byla odeslána, staff se ti brzy ozve na Discordu.';
-      toast.style.borderColor = '';
-      toast.style.background = '';
-      toast.classList.add('show');
-      e.target.reset();
-    } catch(err){
-      console.error('Chyba při odesílání dotazníku:', err);
-      toast.textContent = 'Něco se pokazilo při odesílání. Zkus to prosím znovu, nebo napiš rovnou na Discord.';
-      toast.style.borderColor = 'rgba(255,95,95,0.4)';
-      toast.style.background = 'rgba(255,95,95,0.1)';
-      toast.classList.add('show');
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Odeslat přihlášku';
-    }
-  });
-
-  /* ============ HYMNA FREEZERS (SoundCloud na pozadí) ============ */
-  let anthemWidget = null;
-  let anthemPlaying = false;
-  let anthemAutoplayDone = false;
-  let anthemSettings = { enabled: true, url: '' };
-  let anthemSettingsSha = null;
-  let anthemUrlApplied = '';
-
-  function anthemTrackFrom(setting){
-    if(setting) return String(setting).trim();
-    const frame = document.getElementById('anthemPlayer');
-    const src = (frame && frame.src) || '';
-    const m = src.match(/[?&]url=([^&]+)/);
-    if(!m) return '';
-    try{ return decodeURIComponent(m[1]); }catch(e){ return ''; }
-  }
-
-  function anthemEmbedSrc(track){
-    return 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(track) +
-      '&color=%232fe0c9&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false';
-  }
-
-  function applyAnthemSettings(){
-    const frame = document.getElementById('anthemPlayer');
-    if(!frame) return;
-    const track = anthemTrackFrom(anthemSettings.url);
-    if(track && track !== anthemUrlApplied){
-      anthemUrlApplied = track;
-      frame.src = anthemEmbedSrc(track);
-      const toggle = document.getElementById('anthemToggleBtn');
-      if(toggle) toggle.style.display = '';
-      anthemWidget = null;
-      anthemAutoplayDone = false;
-      if(typeof SC !== 'undefined') initAnthemWidget();
-      setTimeout(() => { if(anthemWidget) anthemWidget.setVolume(ANTHEM_VOLUME); }, 1200);
-      return;
-    }
-    const toggle = document.getElementById('anthemToggleBtn');
-    if(toggle) toggle.style.display = anthemSettings.enabled ? '' : 'none';
-    if(!anthemSettings.enabled){
-      anthemAutoplayDone = true;
-      if(anthemWidget) anthemWidget.pause();
-    }else if(anthemWidget){
-      tryAnthemAutoplay();
-    }
-  }
-
-  async function loadAnthemSettings(){
-    try{
-      const cfg = await ghFetchWithSha('anthem.json', ghToken);
-      if(cfg && cfg.data){
-        anthemSettings = { enabled: cfg.data.enabled !== false, url: cfg.data.url || '' };
-        anthemSettingsSha = cfg.sha || null;
-      }
-    }catch(e){
-      console.error('Nepodařilo se načíst hymnu:', e);
-    }
-    applyAnthemSettings();
-    renderAnthemAdminState();
-  }
-
-  function renderAnthemAdminState(){
-    const toggle = document.getElementById('anthemGlobalToggle');
-    const line = document.getElementById('anthemStatusLine');
-    const input = document.getElementById('anthem-url');
-    if(input && !input.value) input.value = anthemSettings.url || '';
-    if(toggle){
-      toggle.textContent = anthemSettings.enabled ? 'Vypnout hudbu pro všechny' : 'Zapnout hudbu pro všechny';
-      toggle.style.borderColor = anthemSettings.enabled ? '' : 'rgba(255,95,176,0.5)';
-    }
-    if(line){
-      const track = anthemTrackFrom(anthemSettings.url);
-      line.textContent = (anthemSettings.enabled ? 'Stav: hudba hraje pro všechny.' : 'Stav: hudba je pro všechny vypnutá.')
-        + (track ? ' Skladba: ' + track : ' Skladba: výchozí (Brezno).');
-    }
-  }
-
-  const ANTHEM_VOLUME = 25; // tichý poslech pro všechny (v procentech)
-
-  function initAnthemWidget(){
-    if(typeof SC === 'undefined' || anthemWidget) return;
-    const iframe = document.getElementById('anthemPlayer');
-    if(!iframe) return;
-    anthemWidget = SC.Widget(iframe);
-    anthemWidget.bind(SC.Widget.Events.READY, function(){
-      anthemWidget.setVolume(ANTHEM_VOLUME);
-      if(anthemSettings.enabled) setTimeout(tryAnthemAutoplay, 600);
-    });
-    anthemWidget.bind(SC.Widget.Events.PLAY, function(){
-      anthemPlaying = true;
-      updateAnthemUI();
-    });
-    anthemWidget.bind(SC.Widget.Events.PAUSE, function(){
-      anthemPlaying = false;
-      updateAnthemUI();
-    });
-    anthemWidget.bind(SC.Widget.Events.FINISH, function(){
-      anthemWidget.seekTo(0);
-      anthemWidget.play();
-    });
-  }
-
-  function updateAnthemUI(){
-    const btn = document.getElementById('anthemToggleBtn');
-    const icon = document.getElementById('anthemIcon');
-    if(anthemPlaying){
-      btn.classList.add('playing');
-      icon.textContent = '🔊';
-    } else {
-      btn.classList.remove('playing');
-      icon.textContent = '🔇';
-    }
-  }
-
-  function tryAnthemAutoplay(){
-    if(anthemAutoplayDone || !anthemWidget) return;
-    anthemAutoplayDone = true;
-    anthemWidget.setVolume(ANTHEM_VOLUME);
-    anthemWidget.play();
-    document.removeEventListener('click', tryAnthemAutoplay);
-  }
-
-  initAnthemWidget();
-  document.addEventListener('click', tryAnthemAutoplay);
-  setTimeout(loadAnthemSettings, 400);
-  loadStaff();
-
-  document.getElementById('anthemToggleBtn').addEventListener('click', function(){
-    if(!anthemWidget) return;
-    if(anthemPlaying){
-      anthemWidget.pause();
-    } else {
-      anthemWidget.setVolume(ANTHEM_VOLUME);
-      anthemWidget.play();
-    }
-  });
+  /* Admin sekce SoundCloud odstraněna */
 
   /* ============ OBNOVENÍ PŘIHLÁŠENÍ PO NAČTENÍ STRÁNKY (z localStorage) ============ */
   (function(){
@@ -4360,17 +4106,25 @@
   (function(){
     const COOKIE_KEY = 'freezers_cookie_consent';
     const banner = document.getElementById('cookieBanner');
-    try{
-      if(localStorage.getItem(COOKIE_KEY) === 'accepted'){
-        banner.classList.add('hidden');
-      }
-    }catch(e){ /* localStorage nedostupné, lišta zůstane viditelná */ }
+    if(!banner) return;
+    let accepted = false;
+    try{ accepted = localStorage.getItem(COOKIE_KEY) === 'accepted'; }catch(e){}
 
-    document.getElementById('cookieAcceptBtn').addEventListener('click', function(){
-      banner.style.display = 'none';
-      banner.classList.add('hidden');
+    function dismissCookieBanner(){
+      banner.classList.remove('show');
+      banner.classList.add('dismissed');
       try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
-    });
+      // po animaci banner úplně zmizí z DOM
+      setTimeout(function(){ if(banner.parentNode) banner.parentNode.removeChild(banner); }, 500);
+    }
+
+    if(accepted){
+      banner.parentNode && banner.parentNode.removeChild(banner);
+      return;
+    }
+    // plynulý nájezd
+    window.setTimeout(function(){ banner.classList.add('show'); }, 350);
+    document.getElementById('cookieAcceptBtn').addEventListener('click', dismissCookieBanner);
   })();
 </script>
 
