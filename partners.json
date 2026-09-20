@@ -1,11 +1,5 @@
 [
   {
-    "kind": "ASOCIACE",
-    "name": "Česká asociace esportu",
-    "url": "https://www.esport.cz/",
-    "logo": "https://raw.githubusercontent.com/feitmenn/freezers/main/partner-logos/ceska-asociace-esportu-1789898582762.png"
-  },
-  {
     "kind": "SPONZOR",
     "name": "FionShop",
     "url": "https://www.fionshop.cz/",
