@@ -4577,52 +4577,37 @@
   });
 
   /* ============ COOKIE LIŠTA ============ */
-  (function(){
-    const COOKIE_KEY = 'freezers_cookie_consent';
-    const banner = document.getElementById('cookieBanner');
-    const btn = document.getElementById('cookieAcceptBtn');
-    const closeBtn = document.getElementById('cookieCloseBtn');
-    if(!banner) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    const cookieBanner = document.getElementById('cookieBanner');
+    const cookieAcceptBtn = document.getElementById('cookieAcceptBtn');
+    const cookieCloseBtn = document.getElementById('cookieCloseBtn');
+    if (!cookieBanner) return;
 
-    let closing = false;
-    function hide(){
-      if(closing) return;
-      closing = true;
-      banner.classList.add('hidden');
-      banner.setAttribute('aria-hidden', 'true');
-      // po dobehnuti animace ji uplne odstranime z dokumentu
-      window.setTimeout(function(){ banner.style.display = 'none'; }, 460);
+    // Kontrola, zda už uživatel cookies v minulosti potvrdil
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+      cookieBanner.classList.add('hidden');
+      cookieBanner.style.display = 'none';
     }
 
-    function readConsent(){
-      try{ return localStorage.getItem(COOKIE_KEY); }catch(e){ return null; }
-    }
-    function saveConsent(value){
-      try{ localStorage.setItem(COOKIE_KEY, value); }catch(e){}
-    }
-
-    // uz potvrzeno -> listu vubec neukazuj
-    if(readConsent() === 'accepted'){ hide(); return; }
-
-    banner.style.display = 'flex';
-
-    function accept(){
-      saveConsent('accepted');
-      hide();
+    // Funkce pro schování banneru a uložení souhlasu
+    function hideCookieBanner() {
+      cookieBanner.classList.add('hidden');
+      cookieBanner.setAttribute('aria-hidden', 'true');
+      localStorage.setItem('cookiesAccepted', 'true');
+      // po dobehnuti animace (vyjezd doprava) ji uplne odstranime
+      window.setTimeout(function(){ cookieBanner.style.display = 'none'; }, 460);
     }
 
-    // capture phase -> klik se zachyti driv nez cokoliv jineho na strance
-    document.addEventListener('click', function(e){
-      const t = e.target;
-      if(btn && (t === btn || (t.closest && t.closest('#cookieAcceptBtn')))){ accept(); return; }
-      if(closeBtn && (t === closeBtn || (t.closest && t.closest('#cookieCloseBtn')))){ accept(); }
-    }, true);
+    // Přidání akce na tlačítko "Confirm"
+    if (cookieAcceptBtn) {
+      cookieAcceptBtn.addEventListener('click', hideCookieBanner);
+    }
 
-    // fallback: Enter na tlacitku
-    banner.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' && document.activeElement === btn){ accept(); }
-    });
-  })();
+    // Přidání akce na křížek "Zavřít"
+    if (cookieCloseBtn) {
+      cookieCloseBtn.addEventListener('click', hideCookieBanner);
+    }
+  });
 </script>
 
 </body>
