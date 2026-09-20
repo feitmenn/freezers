@@ -363,9 +363,14 @@
     border:1px solid var(--line);border-radius:8px;
     padding:14px 16px;
     box-shadow:0 18px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(47,224,201,0.06) inset;
-    transform:translateY(0);transition:transform .3s ease, opacity .3s ease;
+    transform:translateX(0);transition:transform .45s cubic-bezier(.4,0,.2,1), opacity .45s ease;
   }
-  .cookie-banner.hidden{transform:translateY(140%);opacity:0;pointer-events:none;}
+  .cookie-banner.hidden{
+    transform:translateX(calc(100% + 40px));
+    opacity:0;
+    pointer-events:none;
+    visibility:hidden;
+  }
   .cookie-head{display:flex;align-items:center;justify-content:space-between;width:100%;}
   .cookie-title{
     font-family:'Chakra Petch',sans-serif;font-size:12px;font-weight:700;
@@ -4579,10 +4584,14 @@
     const closeBtn = document.getElementById('cookieCloseBtn');
     if(!banner) return;
 
+    let closing = false;
     function hide(){
+      if(closing) return;
+      closing = true;
       banner.classList.add('hidden');
       banner.setAttribute('aria-hidden', 'true');
-      window.setTimeout(function(){ banner.style.display = 'none'; }, 320);
+      // po dobehnuti animace ji uplne odstranime z dokumentu
+      window.setTimeout(function(){ banner.style.display = 'none'; }, 460);
     }
 
     function readConsent(){
@@ -4602,8 +4611,12 @@
       hide();
     }
 
-    if(btn) btn.addEventListener('click', accept);
-    if(closeBtn) closeBtn.addEventListener('click', accept);
+    // capture phase -> klik se zachyti driv nez cokoliv jineho na strance
+    document.addEventListener('click', function(e){
+      const t = e.target;
+      if(btn && (t === btn || (t.closest && t.closest('#cookieAcceptBtn')))){ accept(); return; }
+      if(closeBtn && (t === closeBtn || (t.closest && t.closest('#cookieCloseBtn')))){ accept(); }
+    }, true);
 
     // fallback: Enter na tlacitku
     banner.addEventListener('keydown', function(e){
