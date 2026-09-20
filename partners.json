@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "kind": "ASOCIACE",
+    "name": "Česká asociace Esportu",
+    "url": "https://www.esport.cz/",
+    "logo": "https://raw.githubusercontent.com/feitmenn/freezers/main/partner-logos/ceska-asociace-esportu-1789901106615.png"
+  }
+]
