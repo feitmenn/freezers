@@ -356,20 +356,34 @@
   .excuse-reject-btn:hover{background:rgba(255,95,95,0.12);}
 
   .cookie-banner{
-    position:fixed;left:0;right:0;bottom:0;z-index:300;
-    display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
-    background:rgba(7,10,18,0.96);backdrop-filter:blur(10px);
-    border-top:1px solid var(--line);
-    padding:16px 24px;
-    transform:translateY(0);transition:transform .3s ease;
+    position:fixed;right:20px;bottom:20px;z-index:300;
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+    width:300px;max-width:calc(100vw - 32px);
+    background:rgba(9,12,20,0.97);backdrop-filter:blur(12px);
+    border:1px solid var(--line);border-radius:8px;
+    padding:14px 16px;
+    box-shadow:0 18px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(47,224,201,0.06) inset;
+    transform:translateY(0);transition:transform .3s ease, opacity .3s ease;
   }
-  .cookie-banner.hidden{transform:translateY(120%);opacity:0;pointer-events:none;}
-  .cookie-text{font-size:13px;color:var(--ice-dim);max-width:640px;}
-  .cookie-text a{color:var(--turquoise);}
+  .cookie-banner.hidden{transform:translateY(140%);opacity:0;pointer-events:none;}
+  .cookie-head{display:flex;align-items:center;justify-content:space-between;width:100%;}
+  .cookie-title{
+    font-family:'Chakra Petch',sans-serif;font-size:12px;font-weight:700;
+    letter-spacing:.16em;color:var(--turquoise);text-transform:uppercase;
+  }
+  .cookie-close{
+    background:none;border:none;color:var(--ice-dim);font-size:16px;line-height:1;
+    cursor:pointer;padding:0 2px;transition:color .2s;
+  }
+  .cookie-close:hover{color:var(--ice);}
+  .cookie-text{font-size:11.5px;line-height:1.5;color:var(--ice-dim);}
+  .cookie-text a{color:var(--turquoise);text-decoration:none;}
+  .cookie-text a:hover{text-decoration:underline;}
   .cookie-accept-btn{
     background:linear-gradient(120deg,var(--turquoise),var(--violet));
-    color:#080b14;border:none;padding:10px 24px;border-radius:2px;
-    font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:13px;
+    color:#080b14;border:none;padding:8px 20px;border-radius:2px;
+    font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:11.5px;
+    letter-spacing:.1em;text-transform:uppercase;
     cursor:pointer;white-space:nowrap;transition:filter .2s;
   }
   .cookie-accept-btn:hover{filter:brightness(1.1);}
@@ -668,13 +682,28 @@
     display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;
   }
   .partner-card{
-    background:var(--card);border:1px solid var(--line);border-radius:3px;
-    padding:30px 24px;display:flex;flex-direction:column;align-items:center;gap:16px;
-    text-align:center;transition:border-color .2s, transform .2s, background .2s;
+    position:relative;overflow:hidden;isolation:isolate;
+    border:1px solid var(--line);border-radius:3px;
+    min-height:170px;padding:30px 24px;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;
+    text-align:center;background:var(--card);
+    transition:border-color .2s, transform .2s;
   }
-  .partner-card:hover{border-color:rgba(47,224,201,0.4);transform:translateY(-2px);background:rgba(255,255,255,0.05);}
-  .partner-card img{max-height:56px;width:auto;max-width:180px;object-fit:contain;filter:grayscale(0.15);}
-  .partner-card .partner-kind{font-size:11px;letter-spacing:.08em;color:var(--turquoise);font-family:'Chakra Petch',sans-serif;}
+  /* logo jako pozadi cele karty */
+  .partner-logo-bg{
+    position:absolute;inset:0;z-index:-2;
+    background-repeat:no-repeat;background-position:center 42%;background-size:60% auto;
+    opacity:0.16;filter:grayscale(1) brightness(1.3);
+    transform:scale(1);transition:opacity .3s, transform .4s, filter .3s;
+  }
+  /* jemny gradient dolu, aby byl text vzdy citelny */
+  .partner-card::before{
+    content:'';position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(180deg, rgba(8,11,18,0.25) 0%, rgba(8,11,18,0.55) 55%, rgba(8,11,18,0.94) 100%);
+  }
+  .partner-card:hover{border-color:rgba(47,224,201,0.45);transform:translateY(-2px);}
+  .partner-card:hover .partner-logo-bg{opacity:0.4;transform:scale(1.08);filter:grayscale(0.2) brightness(1.1);}
+  .partner-card .partner-kind{font-size:11px;letter-spacing:.1em;color:var(--turquoise);font-family:'Chakra Petch',sans-serif;}
   .partner-card .partner-name{font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:600;}
   .partner-card .partner-link{font-size:12px;color:var(--ice-dim);transition:color .2s;}
   .partner-card:hover .partner-link{color:var(--turquoise);}
@@ -853,12 +882,16 @@
 </button>
 
 
-<div id="cookieBanner" class="cookie-banner">
+<div id="cookieBanner" class="cookie-banner" role="dialog" aria-label="Cookies">
+  <div class="cookie-head">
+    <div class="cookie-title">Cookies</div>
+    <button type="button" class="cookie-close" id="cookieCloseBtn" aria-label="Zavřít">✕</button>
+  </div>
   <div class="cookie-text">
-    Tento web používá lokální úložiště prohlížeče (ne sledovací cookies) k zapamatování tvého přihlášení a preferencí. Pokračováním souhlasíš s našimi
+    Používáme lokální úložiště prohlížeče pro přihlášení a preference. Pokračováním souhlasíš s
     <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener">Terms Of Service</a>.
   </div>
-  <button type="button" id="cookieAcceptBtn" class="cookie-accept-btn">Rozumím</button>
+  <button type="button" id="cookieAcceptBtn" class="cookie-accept-btn">Confirm</button>
 </div>
 
 
@@ -1113,13 +1146,13 @@
     </div>
     <div class="partners-grid">
       <a class="partner-card" href="https://www.esport.cz/" target="_blank" rel="noopener">
-        <img src="images/asociace-esport-cz.png" alt="Česká asociace esportu">
+        <div class="partner-logo-bg" style="background-image:url('images/asociace-esport-cz.png');" aria-hidden="true"></div>
         <div class="partner-kind">ASOCIACE</div>
         <div class="partner-name">Česká asociace esportu</div>
         <div class="partner-link">esport.cz ↗</div>
       </a>
       <a class="partner-card" href="https://www.fionshop.cz/" target="_blank" rel="noopener">
-        <img src="images/sponsor-fionshop.png" alt="FionShop.cz">
+        <div class="partner-logo-bg" style="background-image:url('images/sponsor-fionshop.png');" aria-hidden="true"></div>
         <div class="partner-kind">SPONZOR</div>
         <div class="partner-name">FionShop</div>
         <div class="partner-link">fionshop.cz ↗</div>
@@ -2419,7 +2452,7 @@
     grid.innerHTML = list.length
       ? list.map(p => `
         <a class="partner-card" href="${escapeHtml(p.url || '#')}" target="_blank" rel="noopener">
-          ${p.logo ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name || '')}">` : ''}
+          ${p.logo ? `<div class="partner-logo-bg" style="background-image:url('${escapeHtml(p.logo)}');" aria-hidden="true"></div>` : ''}
           <div class="partner-kind">${escapeHtml(p.kind || '')}</div>
           <div class="partner-name">${escapeHtml(p.name || '')}</div>
           <div class="partner-link">${escapeHtml((p.url || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))} ↗</div>
@@ -4543,26 +4576,38 @@
     const COOKIE_KEY = 'freezers_cookie_consent';
     const banner = document.getElementById('cookieBanner');
     const btn = document.getElementById('cookieAcceptBtn');
-    if(!banner || !btn) return;
+    const closeBtn = document.getElementById('cookieCloseBtn');
+    if(!banner) return;
 
-    function hide(instant){
-      banner.style.transition = 'none';
-      banner.style.transform = 'translateY(120%)';
-      banner.style.opacity = '0';
-      banner.style.pointerEvents = 'none';
+    function hide(){
+      banner.classList.add('hidden');
       banner.setAttribute('aria-hidden', 'true');
-      window.setTimeout(function(){ banner.style.display = 'none'; }, instant ? 0 : 50);
+      window.setTimeout(function(){ banner.style.display = 'none'; }, 320);
     }
 
-    let accepted = false;
-    try{ accepted = localStorage.getItem(COOKIE_KEY) === 'accepted'; }catch(e){}
-    if(accepted){ hide(true); return; }
+    function readConsent(){
+      try{ return localStorage.getItem(COOKIE_KEY); }catch(e){ return null; }
+    }
+    function saveConsent(value){
+      try{ localStorage.setItem(COOKIE_KEY, value); }catch(e){}
+    }
+
+    // uz potvrzeno -> listu vubec neukazuj
+    if(readConsent() === 'accepted'){ hide(); return; }
 
     banner.style.display = 'flex';
 
-    btn.addEventListener('click', function(){
-      try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
-      hide(false);
+    function accept(){
+      saveConsent('accepted');
+      hide();
+    }
+
+    if(btn) btn.addEventListener('click', accept);
+    if(closeBtn) closeBtn.addEventListener('click', accept);
+
+    // fallback: Enter na tlacitku
+    banner.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && document.activeElement === btn){ accept(); }
     });
   })();
 </script>
