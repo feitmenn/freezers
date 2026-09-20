@@ -1152,20 +1152,7 @@
       <h2 class="section-title">Sponzoři &amp; Asociace</h2>
       <p class="section-sub">Organizace a partneři, kteří stojí za Freezers Esports.</p>
     </div>
-    <div class="partners-grid">
-      <a class="partner-card" href="https://www.esport.cz/" target="_blank" rel="noopener">
-        <div class="partner-logo-bg" style="background-image:url('images/asociace-esport-cz.png');" aria-hidden="true"></div>
-        <div class="partner-kind">ASOCIACE</div>
-        <div class="partner-name">Česká asociace esportu</div>
-        <div class="partner-link">esport.cz ↗</div>
-      </a>
-      <a class="partner-card" href="https://www.fionshop.cz/" target="_blank" rel="noopener">
-        <div class="partner-logo-bg" style="background-image:url('images/sponsor-fionshop.png');" aria-hidden="true"></div>
-        <div class="partner-kind">SPONZOR</div>
-        <div class="partner-name">FionShop</div>
-        <div class="partner-link">fionshop.cz ↗</div>
-      </a>
-    </div>
+    <div class="partners-grid" id="partnersGrid"></div>
   </div>
 </section>
 
@@ -1796,10 +1783,7 @@
     { name:'AC', role:'ADMIN', discord:'donutello__', order:3 },
     { name:'M I C H I', role:'MODERATOR', discord:'majkloo', order:4 }
   ];
-  const DEFAULT_PARTNERS = [
-    { kind:'ASOCIACE', name:'Česká asociace esportu', url:'https://www.esport.cz/', logo:'images/asociace-esport-cz.png' },
-    { kind:'SPONZOR', name:'FionShop', url:'https://www.fionshop.cz/', logo:'images/sponsor-fionshop.png' }
-  ];
+  // Žádná vestavěná data — partneři se načítají výhradně z partners.json
   let editStaffIndex = -1;
   let editPartnerIndex = -1;
 
@@ -2447,16 +2431,16 @@
     const grid = document.getElementById('partnersGrid') || document.querySelector('.partners-grid');
     try{
       const data = await ghFetchPublic(PARTNERS_FILE);
-      partnersCache = (Array.isArray(data) && data.length) ? data : DEFAULT_PARTNERS.slice();
+      partnersCache = Array.isArray(data) ? data : [];
     }catch(e){
-      partnersCache = DEFAULT_PARTNERS.slice();
+      partnersCache = [];
     }
     renderPartners();
   }
   function renderPartners(){
     const grid = document.querySelector('.partners-grid');
     if(!grid) return;
-    const list = (partnersCache && partnersCache.length ? partnersCache : DEFAULT_PARTNERS);
+    const list = (partnersCache || []);
     grid.innerHTML = list.length
       ? list.map(p => `
         <a class="partner-card" href="${escapeHtml(p.url || '#')}" target="_blank" rel="noopener">
@@ -3720,7 +3704,7 @@
     if(!list) return;
     try{
       const data = await ghFetchPublic(PARTNERS_FILE);
-      const partners = Array.isArray(data) && data.length ? data : DEFAULT_PARTNERS.slice();
+      const partners = Array.isArray(data) ? data : [];
       partnersCache = partners;
       if(!partners.length){
         list.innerHTML = '<div class="admin-empty">Zatím žádní partneři.</div>';
@@ -3758,7 +3742,7 @@
           btn.textContent = 'Odebírám...';
           try{
             const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
-            const arr = Array.isArray(data) && data.length ? data : DEFAULT_PARTNERS.slice();
+            const arr = Array.isArray(data) ? data : [];
             arr.splice(parseInt(btn.dataset.idx, 10), 1);
             await ghSave(PARTNERS_FILE, arr, sha, 'Odebrání partnera', ghToken);
             resetPartnerForm();
@@ -3813,7 +3797,7 @@
 
       const isEdit = editPartnerIndex >= 0;
       const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
-      const current = Array.isArray(data) && data.length ? data : DEFAULT_PARTNERS.slice();
+      const current = Array.isArray(data) ? data : [];
       const entry = { kind, name, url, logo: logo || (isEdit ? current[editPartnerIndex].logo : '') };
       if(isEdit) current[editPartnerIndex] = entry; else current.push(entry);
       await ghSave(PARTNERS_FILE, current, sha, isEdit ? ('Úprava partnera: ' + name) : ('Přidání partnera: ' + name), ghToken);
