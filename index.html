@@ -663,6 +663,22 @@
   }
   .staff-discord .dot{width:6px;height:6px;border-radius:50%;background:var(--violet);}
 
+  /* SPONZOŘI & ASOCIACE */
+  .partners-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;
+  }
+  .partner-card{
+    background:var(--card);border:1px solid var(--line);border-radius:3px;
+    padding:30px 24px;display:flex;flex-direction:column;align-items:center;gap:16px;
+    text-align:center;transition:border-color .2s, transform .2s, background .2s;
+  }
+  .partner-card:hover{border-color:rgba(47,224,201,0.4);transform:translateY(-2px);background:rgba(255,255,255,0.05);}
+  .partner-card img{max-height:56px;width:auto;max-width:180px;object-fit:contain;filter:grayscale(0.15);}
+  .partner-card .partner-kind{font-size:11px;letter-spacing:.08em;color:var(--turquoise);font-family:'Chakra Petch',sans-serif;}
+  .partner-card .partner-name{font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:600;}
+  .partner-card .partner-link{font-size:12px;color:var(--ice-dim);transition:color .2s;}
+  .partner-card:hover .partner-link{color:var(--turquoise);}
+
   /* SURVEY */
   .survey-wrap{
     background:var(--card);border:1px solid var(--line);border-radius:3px;
@@ -863,6 +879,7 @@
       <a href="#kalendar">Kalendář</a>
       <a href="#klipy">Klipy</a>
       <a href="#playbook">Playbook</a>
+      <a href="#partneri">Partneři</a>
       <a href="#dotaznik">Dotazník</a>
       <a href="#kontakt">Kontakt</a>
       <span class="nav-legal">
@@ -1087,6 +1104,30 @@
 
 <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
+<section class="section" id="partneri">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-kicker">DĚKUJEME ZA PODPORU</div>
+      <h2 class="section-title">Sponzoři &amp; Asociace</h2>
+      <p class="section-sub">Organizace a partneři, kteří stojí za Freezers Esports.</p>
+    </div>
+    <div class="partners-grid">
+      <a class="partner-card" href="https://www.esport.cz/" target="_blank" rel="noopener">
+        <img src="images/asociace-esport-cz.png" alt="Česká asociace esportu">
+        <div class="partner-kind">ASOCIACE</div>
+        <div class="partner-name">Česká asociace esportu</div>
+        <div class="partner-link">esport.cz ↗</div>
+      </a>
+      <a class="partner-card" href="https://www.fionshop.cz/" target="_blank" rel="noopener">
+        <img src="images/sponsor-fionshop.png" alt="FionShop.cz">
+        <div class="partner-kind">SPONZOR</div>
+        <div class="partner-name">FionShop</div>
+        <div class="partner-link">fionshop.cz ↗</div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="dotaznik">
   <div class="wrap">
     <div class="section-head">
@@ -1172,6 +1213,7 @@
     <div class="footer-links">
       <a href="#roster">Roster</a>
       <a href="#staff">Staff</a>
+      <a href="#partneri">Partneři</a>
       <a href="https://discord.gg/Ntcz76sXkP" target="_blank" rel="noopener">Discord</a>
       <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener" style="font-size:11px;opacity:0.7;">Terms Of Service</a>
     </div>
@@ -1225,6 +1267,7 @@
 
         <button type="button" class="admin-tab-btn" data-tab="playbook"><span class="att-icon">📘</span>Playbook</button>
         <button type="button" class="admin-tab-btn" data-tab="staff"><span class="att-icon">🎖️</span>Staff</button>
+        <button type="button" class="admin-tab-btn" data-tab="partners"><span class="att-icon">🤝</span>Partneři</button>
         <button type="button" class="admin-tab-btn admin-owner-only" data-tab="admins" style="display:none;"><span class="att-icon">🛡️</span>Správci &amp; práva</button>
       </div>
       <div class="admin-content">
@@ -1588,6 +1631,42 @@
 
         </div>
 
+        <div class="admin-tab-panel" data-tab-panel="partners">
+    <h3>Přidat partnera</h3>
+    <form id="adminPartnerForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="pn-kind">Typ</label>
+          <select id="pn-kind">
+            <option value="ASOCIACE">Asociace</option>
+            <option value="SPONZOR">Sponzor</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pn-name">Název</label>
+          <input type="text" id="pn-name" placeholder="např. Česká asociace esportu" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="pn-url">Odkaz na web</label>
+        <input type="url" id="pn-url" placeholder="https://..." required>
+      </div>
+      <div class="field">
+        <label for="pn-logo-file">Logo — nahrát obrázek</label>
+        <input type="file" id="pn-logo-file" accept="image/*">
+      </div>
+      <div class="field">
+        <label for="pn-logo-url">…nebo odkaz na logo</label>
+        <input type="url" id="pn-logo-url" placeholder="https://...">
+      </div>
+      <button type="submit" class="submit-btn">Uložit partnera</button>
+    </form>
+    <div class="admin-divider"></div>
+    <h3>Existující partneři</h3>
+    <div id="adminPartnersList"></div>
+
+        </div>
+
         <div class="admin-tab-panel" data-tab-panel="admins">
     <h3>Uživatelé a jejich práva</h3>
     <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
@@ -1666,16 +1745,22 @@
   const CLIPS_FILE = 'clips.json';
   const PLAYBOOK_FILE = 'playbook.json';
   const STAFF_FILE = 'staff.json';
+  const PARTNERS_FILE = 'partners.json';
   const OWNER_USERNAME = 'filas'; // jediný, kdo smí rozdávat práva
-  const ALL_PERMS = ['news','roster','users','calendar','attendance','excuses','scrim','clips','soundcloud','playbook','staff','admins'];
-  const PERM_LABELS = { news:'Novinky', roster:'Roster', users:'Členové', calendar:'Kalendář', attendance:'Účast', excuses:'Omluvenky', scrim:'Scrim server', clips:'Klipy', soundcloud:'SoundCloud', playbook:'Playbook', staff:'Staff', admins:'Správci' };
+  const ALL_PERMS = ['news','roster','users','calendar','attendance','excuses','scrim','clips','soundcloud','playbook','staff','partners','admins'];
+  const PERM_LABELS = { news:'Novinky', roster:'Roster', users:'Členové', calendar:'Kalendář', attendance:'Účast', excuses:'Omluvenky', scrim:'Scrim server', clips:'Klipy', soundcloud:'SoundCloud', playbook:'Playbook', staff:'Staff', partners:'Partneři', admins:'Správci' };
   const DEFAULT_STAFF = [
     { name:'FILAS', role:'CEO', discord:'f1las3', order:1 },
     { name:'SeinZZZ', role:'MANAGER', discord:'neko_wawa', order:2 },
     { name:'AC', role:'ADMIN', discord:'donutello__', order:3 },
     { name:'M I C H I', role:'MODERATOR', discord:'majkloo', order:4 }
   ];
+  const DEFAULT_PARTNERS = [
+    { kind:'ASOCIACE', name:'Česká asociace esportu', url:'https://www.esport.cz/', logo:'images/asociace-esport-cz.png' },
+    { kind:'SPONZOR', name:'FionShop', url:'https://www.fionshop.cz/', logo:'images/sponsor-fionshop.png' }
+  ];
   let editStaffIndex = -1;
+  let editPartnerIndex = -1;
 
   let ghToken = ''; // GitHub token drží se jen v paměti prohlížeče po dobu session, nikam se neukládá
 
@@ -1908,6 +1993,9 @@
     renderAdminRolesList();
     renderAdminLineupsList();
     renderAdminPlaybookEntriesList();
+    renderAdminMapsList();
+    renderAdminStaffList();
+    renderAdminPartnersList();
     loadAdminScrimForm();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
@@ -2310,6 +2398,33 @@
           ${s.discord ? `<div class="staff-discord"><span class="dot"></span>${escapeHtml(s.discord)}</div>` : ''}
         </div>`).join('')
       : '<div class="admin-empty">Zatím žádný staff.</div>';
+  }
+
+  /* ============ PARTNEŘI (partners.json) ============ */
+  let partnersCache = [];
+  async function loadPartners(){
+    const grid = document.getElementById('partnersGrid') || document.querySelector('.partners-grid');
+    try{
+      const data = await ghFetchPublic(PARTNERS_FILE);
+      partnersCache = (Array.isArray(data) && data.length) ? data : DEFAULT_PARTNERS.slice();
+    }catch(e){
+      partnersCache = DEFAULT_PARTNERS.slice();
+    }
+    renderPartners();
+  }
+  function renderPartners(){
+    const grid = document.querySelector('.partners-grid');
+    if(!grid) return;
+    const list = (partnersCache && partnersCache.length ? partnersCache : DEFAULT_PARTNERS);
+    grid.innerHTML = list.length
+      ? list.map(p => `
+        <a class="partner-card" href="${escapeHtml(p.url || '#')}" target="_blank" rel="noopener">
+          ${p.logo ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name || '')}">` : ''}
+          <div class="partner-kind">${escapeHtml(p.kind || '')}</div>
+          <div class="partner-name">${escapeHtml(p.name || '')}</div>
+          <div class="partner-link">${escapeHtml((p.url || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))} ↗</div>
+        </a>`).join('')
+      : '<div class="admin-empty">Zatím žádní partneři.</div>';
   }
 
     const rolesEl = document.getElementById('playbookRoles');
@@ -3558,6 +3673,122 @@
     })();
   });
 
+  /* ============ ADMIN: PARTNEŘI ============ */
+  async function renderAdminPartnersList(){
+    const list = document.getElementById('adminPartnersList');
+    if(!list) return;
+    try{
+      const data = await ghFetchPublic(PARTNERS_FILE);
+      const partners = Array.isArray(data) && data.length ? data : DEFAULT_PARTNERS.slice();
+      partnersCache = partners;
+      if(!partners.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádní partneři.</div>';
+        return;
+      }
+      list.innerHTML = partners.map((p, idx) => `
+        <div class="admin-news-row">
+          <div class="admin-news-row-text">
+            <strong>${escapeHtml(p.name || '')}</strong>
+            <span>${escapeHtml([p.kind, p.url].filter(Boolean).join(' · '))}</span>
+          </div>
+          <div class="admin-row-actions">
+            <button type="button" class="admin-edit-btn" data-edit-idx="${idx}">Upravit</button>
+            <button type="button" class="admin-delete-btn" data-idx="${idx}">Odebrat</button>
+          </div>
+        </div>
+      `).join('');
+      list.querySelectorAll('.admin-edit-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          editPartnerIndex = parseInt(btn.dataset.editIdx, 10);
+          const p = partners[editPartnerIndex] || {};
+          document.getElementById('pn-kind').value = p.kind || 'SPONZOR';
+          document.getElementById('pn-name').value = p.name || '';
+          document.getElementById('pn-url').value = p.url || '';
+          document.getElementById('pn-logo-url').value = p.logo || '';
+          document.querySelector('#adminPartnerForm .submit-btn').textContent = 'Uložit změny';
+          document.getElementById('pn-name').focus();
+          playbookToast('Uprav údaje partnera a ulož');
+        });
+      });
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          if(!confirm('Opravdu odebrat tohoto partnera?')) return;
+          btn.disabled = true;
+          btn.textContent = 'Odebírám...';
+          try{
+            const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
+            const arr = Array.isArray(data) && data.length ? data : DEFAULT_PARTNERS.slice();
+            arr.splice(parseInt(btn.dataset.idx, 10), 1);
+            await ghSave(PARTNERS_FILE, arr, sha, 'Odebrání partnera', ghToken);
+            resetPartnerForm();
+            renderAdminPartnersList();
+            loadPartners();
+            playbookToastDone(playbookToast('Ukládám…'), 'Uloženo ✓');
+          }catch(e){
+            playbookToastFail(playbookToast('Ukládám…'), 'Nepodařilo se odebrat: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Odebrat';
+          }
+        });
+      });
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst partnery: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+  function resetPartnerForm(){
+    editPartnerIndex = -1;
+    const form = document.getElementById('adminPartnerForm');
+    if(form) form.reset();
+    const btn = document.querySelector('#adminPartnerForm .submit-btn');
+    if(btn) btn.textContent = 'Uložit partnera';
+  }
+  document.getElementById('adminPartnerForm')?.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const kind = document.getElementById('pn-kind').value;
+    const name = document.getElementById('pn-name').value.trim();
+    const url = document.getElementById('pn-url').value.trim();
+    const fileInput = document.getElementById('pn-logo-file');
+    const file = fileInput && fileInput.files && fileInput.files[0];
+    const logoUrlInput = document.getElementById('pn-logo-url').value.trim();
+
+    if(!requirePerm('partners')) return;
+    if(!name || !url){
+      playbookToastFail(playbookToast('Chybí údaje'), 'Vyplň název i odkaz na web');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Ukládám...';
+    try{
+      let logo = logoUrlInput;
+      if(file){
+        if(file.size > 4 * 1024 * 1024) throw new Error('Logo je moc velké, max 4 MB');
+        const base64 = await readFileAsBase64(file);
+        const ext = (file.name.split('.').pop() || 'png').toLowerCase().replace(/[^a-z0-9]/g, '') || 'png';
+        const path = `partner-logos/${mapSlugify(name)}-${Date.now()}.${ext}`;
+        logo = await ghUploadBinary(path, base64, `Logo partnera: ${name}`, ghToken);
+      }
+
+      const isEdit = editPartnerIndex >= 0;
+      const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
+      const current = Array.isArray(data) && data.length ? data : DEFAULT_PARTNERS.slice();
+      const entry = { kind, name, url, logo: logo || (isEdit ? current[editPartnerIndex].logo : '') };
+      if(isEdit) current[editPartnerIndex] = entry; else current.push(entry);
+      await ghSave(PARTNERS_FILE, current, sha, isEdit ? ('Úprava partnera: ' + name) : ('Přidání partnera: ' + name), ghToken);
+
+      resetPartnerForm();
+      renderAdminPartnersList();
+      loadPartners();
+      playbookToastDone(playbookToast('Ukládám…'), 'Uloženo ✓');
+    }catch(err){
+      playbookToastFail(playbookToast('Ukládám…'), 'Nepodařilo se uložit: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = editPartnerIndex >= 0 ? 'Uložit změny' : 'Uložit partnera';
+    }
+  });
+
   /* ============ PRÁVA UŽIVATELŮ ============ */
   function isOwner(){ return (adminUsername || '').trim().toLowerCase() === OWNER_USERNAME; }
 
@@ -4295,6 +4526,7 @@
   document.addEventListener('click', tryAnthemAutoplay);
   setTimeout(loadAnthemSettings, 400);
   loadStaff();
+  loadPartners();
 
   document.getElementById('anthemToggleBtn').addEventListener('click', function(){
     if(!anthemWidget) return;
@@ -4314,14 +4546,19 @@
     if(!banner || !btn) return;
 
     function hide(instant){
-      banner.style.transition = instant ? 'none' : 'transform .3s ease, opacity .3s ease';
-      banner.classList.add('hidden');
-      window.setTimeout(function(){ banner.style.display = 'none'; }, instant ? 0 : 420);
+      banner.style.transition = 'none';
+      banner.style.transform = 'translateY(120%)';
+      banner.style.opacity = '0';
+      banner.style.pointerEvents = 'none';
+      banner.setAttribute('aria-hidden', 'true');
+      window.setTimeout(function(){ banner.style.display = 'none'; }, instant ? 0 : 50);
     }
 
     let accepted = false;
     try{ accepted = localStorage.getItem(COOKIE_KEY) === 'accepted'; }catch(e){}
     if(accepted){ hide(true); return; }
+
+    banner.style.display = 'flex';
 
     btn.addEventListener('click', function(){
       try{ localStorage.setItem(COOKIE_KEY, 'accepted'); }catch(e){}
