@@ -4576,39 +4576,46 @@
     }
   });
 
-  /* ============ COOKIE LIŠTA ============ */
-  document.addEventListener('DOMContentLoaded', function() {
-    const cookieBanner = document.getElementById('cookieBanner');
-    const cookieAcceptBtn = document.getElementById('cookieAcceptBtn');
-    const cookieCloseBtn = document.getElementById('cookieCloseBtn');
+  /* ============ COOKIE LIŠTA (presunuto do samostatneho scriptu nize) ============ */
+</script>
+
+
+<!-- ===== COOKIE LIŠTA (samostatný skript, nezávislý na zbytku stránky) ===== -->
+<script>
+(function () {
+  function initCookieBanner() {
+    var cookieBanner = document.getElementById('cookieBanner');
+    var cookieAcceptBtn = document.getElementById('cookieAcceptBtn');
+    var cookieCloseBtn = document.getElementById('cookieCloseBtn');
     if (!cookieBanner) return;
 
     // Kontrola, zda už uživatel cookies v minulosti potvrdil
-    if (localStorage.getItem('cookiesAccepted') === 'true') {
-      cookieBanner.classList.add('hidden');
-      cookieBanner.style.display = 'none';
-    }
+    try {
+      if (localStorage.getItem('cookiesAccepted') === 'true') {
+        cookieBanner.classList.add('hidden');
+        cookieBanner.style.display = 'none';
+      }
+    } catch (e) {}
 
     // Funkce pro schování banneru a uložení souhlasu
     function hideCookieBanner() {
       cookieBanner.classList.add('hidden');
       cookieBanner.setAttribute('aria-hidden', 'true');
-      localStorage.setItem('cookiesAccepted', 'true');
+      try { localStorage.setItem('cookiesAccepted', 'true'); } catch (e) {}
       // po dobehnuti animace (vyjezd doprava) ji uplne odstranime
-      window.setTimeout(function(){ cookieBanner.style.display = 'none'; }, 460);
+      window.setTimeout(function () { cookieBanner.style.display = 'none'; }, 460);
     }
 
-    // Přidání akce na tlačítko "Confirm"
-    if (cookieAcceptBtn) {
-      cookieAcceptBtn.addEventListener('click', hideCookieBanner);
-    }
+    if (cookieAcceptBtn) cookieAcceptBtn.addEventListener('click', hideCookieBanner);
+    if (cookieCloseBtn) cookieCloseBtn.addEventListener('click', hideCookieBanner);
+  }
 
-    // Přidání akce na křížek "Zavřít"
-    if (cookieCloseBtn) {
-      cookieCloseBtn.addEventListener('click', hideCookieBanner);
-    }
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCookieBanner);
+  } else {
+    initCookieBanner();
+  }
+})();
 </script>
-
 </body>
 </html>
