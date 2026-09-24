@@ -1,0 +1,9 @@
+[
+  {
+    "username": "FILAS",
+    "role": "owner",
+    "salt": "ecce5ef208da3dd7efaa0642cfed994b",
+    "passwordHash": "64f5817095186e9dd018711ce1157a8c52ea94bb3b611bc802005122347a8d7b",
+    "iterations": 600000
+  }
+]

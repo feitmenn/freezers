@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b12"><meta name="description" content="Freezers ESPORT — týmový hub pro tréninky, zápasy a taktiky.">
+  <title>Freezers ESPORT — Team Hub</title><link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section class="login-screen" id="loginScreen" aria-labelledby="loginTitle" hidden>
+    <div class="login-backdrop"></div><div class="login-card"><button type="button" class="login-close" id="loginClose" aria-label="Zavřít">×</button><a class="brand login-brand" href="#"><img src="assets/logo.png" alt=""><span><b>FREEZERS</b><small>ESPORT</small></span></a>
+      <span class="eyebrow">TEAM ACCESS · SECURE SIGN IN</span><h1 id="loginTitle">Vítej zpět.</h1><p class="login-subtitle">Přihlas se do týmového hubu Freezers ESPORT.</p>
+      <form id="loginForm"><div class="field"><label for="loginUsername">USERNAME</label><input id="loginUsername" name="username" required autocomplete="username" placeholder="Tvé týmové jméno"></div><div class="field"><label for="loginPassword">HESLO</label><input id="loginPassword" name="password" required type="password" autocomplete="current-password" placeholder="••••••••••"></div><div class="field"><label for="loginToken">GITHUB TOKEN / PŘÍSTUPOVÝ KÓD</label><input id="loginToken" name="token" required type="password" autocomplete="off" placeholder="github_pat_…"><small class="field-hint">Token se uchovává jen po dobu otevření této karty.</small></div><button class="btn btn-primary login-submit" type="submit">Přihlásit se <span>→</span></button></form>
+      <div class="login-note"><span class="live-dot"></span> Připojení k Freezers team hub</div>
+    </div><div class="login-footer">FREEZERS ESPORT · TEAM PORTAL</div>
+  </section>
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="Freezers ESPORT domů"><img src="assets/logo.png" alt=""><span><b>FREEZERS</b><small>ESPORT</small></span></a>
+      <div class="team-switch"><span class="team-mark">F</span><span><b>Freezers ESPORT</b><small>Counter-Strike 2</small></span><span class="online-dot"></span></div>
+      <p class="nav-label">TÝMOVÝ HUB</p>
+      <nav class="main-nav" aria-label="Hlavní navigace">
+        <a href="#dashboard" data-page="dashboard"><i>⌂</i> Přehled</a>
+        <a href="#calendar" data-page="calendar"><i>▦</i> Kalendář <span class="nav-count" id="upcomingCount"></span></a>
+        <a href="#member" data-page="member"><i>♙</i> Členská sekce</a>
+        <a href="#playbook" data-page="playbook"><i>◈</i> Playbook</a>
+        <a href="#roster" data-page="roster"><i>♟</i> Soupiska</a>
+        <a href="#hazard" data-page="hazard"><i>♧</i> Tipovačka <span class="nav-tag">BETA</span></a>
+      </nav>
+      <p class="nav-label admin-label">SPRÁVA TÝMU</p>
+      <nav class="main-nav"><a href="#admin" data-page="admin"><i>⚙</i> Administrace</a></nav>
+      <div class="sidebar-bottom"><div class="sync-state"><span class="sync-light" id="syncLight"></span><span><b id="syncLabel">Lokální režim</b><small id="syncHint">Změny zůstávají v tomto prohlížeči</small></span></div><button class="profile" id="profileButton"><span class="avatar">F</span><span><b id="sideUsername">Přihlásit se</b><small id="sideRole">Členský přístup</small></span><span class="profile-more">↗</span></button></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><button class="mobile-menu" id="mobileMenu" aria-label="Menu">☰</button><div class="crumb"><span>FREEZERS ESPORT</span><b>/</b><strong id="breadcrumb">PŘEHLED</strong></div><div class="top-actions"><div class="live-clock"><span class="live-dot"></span> TÝMOVÝ PŘEHLED</div><button class="icon-button" id="logToggle" title="Aktivita">☷<span class="unread-dot"></span></button><button class="user-chip" id="topProfile" title="Přihlášení / odhlášení"><span class="avatar">F</span><span id="topUsername">Přihlásit se</span><span class="chevron">⌄</span></button></div></header>
+      <section class="page" id="page"></section>
+      <footer class="footer"><span>© 2026 FREEZERS ESPORT</span><span><i class="live-dot"></i> VŠECHNY SYSTÉMY ONLINE</span></footer>
+    </main>
+    <aside class="activity-panel" id="activityPanel"><div class="activity-head"><div><span class="eyebrow">TÝMOVÝ FEED</span><h3>Aktivita <span class="live-pill">LIVE</span></h3></div><button class="icon-button" id="closeLogs">×</button></div><div class="activity-list" id="activityList"></div><div class="activity-foot">Události se zobrazují průběžně</div></aside>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <dialog id="modal" class="modal"><button class="modal-close" type="button" aria-label="Zavřít">×</button><div id="modalBody"></div></dialog>
+  <script src="app.js"></script>
+</body></html>
