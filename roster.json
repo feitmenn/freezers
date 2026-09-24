@@ -9,28 +9,28 @@
     },
     {
       "name": "AC",
-      "role": "Hráč Freezers ESPORT sestavy",
+      "role": "Hráč Glossglockner sestavy",
       "type": "player",
       "steam": "",
       "faceit": "https://www.faceit.com/en/players/69Nicolas69"
     },
     {
       "name": "Krabík77",
-      "role": "Hráč Freezers ESPORT sestavy",
+      "role": "Hráč Glossglockner sestavy",
       "type": "player",
       "steam": "",
       "faceit": "https://www.faceit.com/en/players/Krabik77"
     },
     {
       "name": "Akka",
-      "role": "Hráč Freezers ESPORT sestavy",
+      "role": "Hráč glossglockner sestavy",
       "type": "player",
       "steam": "",
       "faceit": "https://www.faceit.com/en/players/Dittoslavko"
     },
     {
       "name": "MICHI",
-      "role": "Hráč Freezers ESPORT sestavy",
+      "role": "Hráč Glossglockner sestavy",
       "type": "player",
       "steam": "",
       "faceit": "https://www.faceit.com/en/players/michi33"
@@ -52,11 +52,7 @@
       "faceit": "https://www.faceit.com/en/players/martin1str"
     },
     {
-      "name": "Sonder",
-      "role": "",
-      "type": "trial",
-      "steam": "",
-      "faceit": "https://www.faceit.com/en/players/mox"
+      "type": "empty"
     }
   ],
   "academy": [
@@ -82,11 +78,7 @@
       "faceit": "https://www.faceit.com/cs/players/rope_flp2"
     },
     {
-      "name": "ITACHI_420",
-      "role": "",
-      "type": "trial",
-      "steam": "",
-      "faceit": "https://www.faceit.com/en/players/ITACHI4200"
+      "type": "empty"
     }
   ],
   "academy-reserve": [

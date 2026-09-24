@@ -1,16 +1,9 @@
 [
   {
-    "id": "notif_1789321115710",
-    "username": "filuta",
-    "type": "excuse_approved",
-    "message": "Tvoje omluvenka na akci „Main Roster VS Academy“ byla schválena.",
-    "createdAt": "2026-09-13T17:38:35.710Z"
-  },
-  {
-    "id": "notif_1790079730418",
-    "username": "cloudyi",
-    "type": "excuse_approved",
-    "message": "Tvoje omluvenka na akci „faceit pro main“ byla schválena.",
-    "createdAt": "2026-09-22T12:22:10.418Z"
+    "id": "notif_1789295778549",
+    "username": "filas",
+    "type": "excuse_rejected",
+    "message": "Tvoje omluvenka na akci „Test pro všechny co toto vidíte.“ byla zamítnuta.",
+    "createdAt": "2026-09-13T10:36:18.549Z"
   }
 ]
