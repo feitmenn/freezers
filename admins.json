@@ -1,72 +1,9 @@
 [
   {
-    "username": "filas",
-    "passwordHash": "204864719722d354a59a50e47e00ec79937299e6ba9c60c75c21bfe38dcaf6a1",
-    "perms": [
-      "news",
-      "roster",
-      "users",
-      "calendar",
-      "attendance",
-      "excuses",
-      "scrim",
-      "clips",
-      "soundcloud",
-      "playbook",
-      "staff",
-      "admins"
-    ]
-  },
-  {
-    "username": "michi33",
-    "passwordHash": "29ee22ee0a48fa2a36b5af51a83302da0ab17b3077086e848a5535500c599afb",
-    "perms": [
-      "news",
-      "roster",
-      "users",
-      "calendar",
-      "attendance",
-      "excuses",
-      "scrim",
-      "clips",
-      "soundcloud",
-      "playbook",
-      "staff",
-      "admins"
-    ]
-  },
-  {
-    "username": "AC",
-    "passwordHash": "ec3a3a9f2095bb5099d89cbfd27c7b0177d710f21547471ab75aeb83c1bca557",
-    "perms": [
-      "news",
-      "roster",
-      "users",
-      "calendar",
-      "attendance",
-      "excuses",
-      "scrim",
-      "clips",
-      "soundcloud",
-      "playbook",
-      "staff"
-    ]
-  },
-  {
-    "username": "SeinZZZ",
-    "passwordHash": "5c261e965336f5313ae218a45ad33eddbcf86ed4aa00f8d76b0559697d8183f9"
-  },
-  {
-    "username": "krabik77",
-    "passwordHash": "d0a9a218837ad1e42e024e5a6accc0206f14c197145e5e97d4696e41b7850e84",
-    "perms": [
-      "calendar",
-      "clips"
-    ]
-  },
-  {
-    "username": "seinZZZ",
-    "passwordHash": "663f6c4a14ac52c52bc024e6f0c631fb3d8ef30c4abd1bc24bb374fad63712e0",
-    "perms": []
+    "username": "FILAS",
+    "role": "owner",
+    "salt": "ecce5ef208da3dd7efaa0642cfed994b",
+    "passwordHash": "64f5817095186e9dd018711ce1157a8c52ea94bb3b611bc802005122347a8d7b",
+    "iterations": 600000
   }
 ]
