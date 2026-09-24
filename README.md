@@ -4,7 +4,7 @@ Responzivní webová aplikace pro CS2 tým Freezers ESPORT. Vanilla HTML, CSS a 
 
 ## Spuštění
 
-Otevřete složku `outputs` ve webovém serveru, například pomocí VS Code Live Server nebo příkazem `python -m http.server 8000`, a přejděte na `http://localhost:8000`. Nepoužívejte `file://`: načítání JSON přes `fetch` prohlížeč blokuje.
+Veřejný web publikujte pouze ze složky `site/`. Datové JSON soubory ani Worker nikdy nekopírujte do veřejného statického webu. Pro lokální náhled spusťte webový server v `site/`; přihlášení a synchronizace začnou fungovat po nasazení Workeru a nastavení `site/config.js`.
 
 ## Moduly
 
@@ -14,22 +14,25 @@ Otevřete složku `outputs` ve webovém serveru, například pomocí VS Code Liv
 - Upozornění oranžovým zvýrazněním po pěti neomluvených absencích
 - Playbook rozdělený podle map včetně videí a místních mapových obrázků
 - Interní tipovačka s body bez sázek o peníze
-- Veřejný přehled a roster; chráněný kalendář, playbook a členská sekce po přihlášení username, heslem a GitHub tokenem
-- Owner může zakládat členy a další adminy
+- Veřejný přehled a roster; členové se přihlásí pouze username a heslem, bez GitHub tokenu
+- Administrace umí přidávat a upravovat hráče v rosteru, měnit jméno, roli, sestavu i profily a hráče odebrat
+- Owner může zakládat členy a další adminy a nastavovat adminům práva pro roster, kalendář, docházku, playbook, synchronizaci, účty a zálohy
 - Změna hesla a odhlášení
-- Automatické ukládání do Local Storage, export a import JSON zálohy, cookies pro drobné preference a synchronizace souborů přes GitHub Contents API
+- Serverové ukládání přes GitHub JSON soubory, AES-GCM šifrované zálohy a cookies jen pro drobné preference
 
 ## GitHub synchronizace
 
-Tlačítko **Přihlásit se** je vpravo nahoře. Veřejný přehled a soupiska jsou dostupné bez účtu; kalendář, playbook a členský portál zobrazí přihlášení. Po úspěšném přihlášení se aplikace připojí k GitHubu. Výchozí repozitář je `feitmenn/freezers` podle odkazů na mapy v dodaném playbooku; případné nastavení lze změnit v **Administrace → GitHub Sync**. Token potřebuje `Contents: read and write` pouze na cílovém repozitáři. Změny v kalendáři, playbooku, RSVP, docházce, omluvenkách, účtech a logu se zapisují jako Git commity.
+Přihlašovací obrazovka žádá jen username a heslo. GitHub token zůstává jako Cloudflare Worker secret na serverové straně; do HTML/JavaScriptu ani do prohlížeče se neposílá. Data se mezi webem a Workerem přenášejí přes HTTPS a po jednorázové migraci se v privátním GitHub úložišti ukládají šifrovaná pomocí AES-GCM. Hash hesla používá PBKDF2-SHA256.
 
-Token se drží pouze v paměti aktuální karty; při obnovení stránky ho znovu vložte. Ostatní nastavení synchronizace je uloženo lokálně v prohlížeči. Přímé volání GitHub API z prohlížeče znamená, že token může být během použití viditelný uživateli prohlížeče. Tato architektura se proto hodí pro soukromý týmový dashboard na důvěryhodných zařízeních. Pro veřejně dostupnou aplikaci s více uživateli použijte serverless proxy nebo vlastní backend, který ověří identitu a token uloží jako serverový secret.
+**Nasazení zabezpečené služby:** použij privátní GitHub repozitář pro JSON soubory a statický web nasazuj zvlášť pouze ze `site/`. Ve `worker/wrangler.toml` nastav `REPO_OWNER`, `REPO_NAME`, `REPO_BRANCH`, `DATA_PATH` a přesnou adresu webu v `ALLOWED_ORIGIN`. Ve složce `worker/` proveď `npx wrangler login`; pak nastav secrets příkazy `npx wrangler secret put GITHUB_TOKEN`, `npx wrangler secret put SESSION_SECRET` a `npx wrangler secret put DATA_ENCRYPTION_KEY`. Poslední dvě hodnoty vygeneruj jako náhodné, tajné hodnoty; encryption key musí mít 64 hex znaků (32 bajtů). Potom spusť `npx wrangler deploy` a jeho URL vlož do `site/config.js` jako `window.FREEZERS_API_URL`. Přihlas se jako FILAS a v **Administrace → Služba** jednou spusť **Zašifrovat týmová data**. Nastav také rate limit pro `/api/login` v Cloudflare.
+
+Worker nepoužívá externí databázi; soubory v privátním GitHub repozitáři jsou úložištěm. Cloudflare Worker drží token a šifrovací klíč jako server secrets. Nikdy nedávej privátní data repozitář do veřejného Pages adresáře.
 
 ## Přihlášení a oprávnění
 
-Výchozí účet je **FILAS** s rolí **owner**; z bezpečnostních důvodů po prvním přihlášení změň výchozí heslo v **Administrace → Účty / admini**. Owner zde může zakládat členy i další adminy. Nové účty se zapisují do `admins.json` s náhodnou solí a PBKDF2 hashem; hesla se neukládají jako prostý text. `users.json` byl z aplikace odstraněn.
+Výchozí účet je **FILAS** s rolí **owner**; z bezpečnostních důvodů po prvním přihlášení změň výchozí heslo v **Administrace → Účty / admini**. Owner zde může zakládat členy i další adminy. Nové účty se zapisují do `admins.json` s náhodnou solí a PBKDF2 hashem; hesla se neukládají jako prostý text. `users.json` aplikace nepoužívá; účty jsou ve spravovaném `admins.json`.
 
-Přihlašovací obrazovka a kontrola rolí běží v prohlížeči. Protože aplikace nemá server, nejde tímto způsobem bezpečně vynutit identitu ani oprávnění: hash účtu je dostupný v nasazeném JSON souboru a uživatel může upravit klientský kód. GitHub token je skutečná hranice přístupu k repozitáři; zadávej ho jen lidem, kterým smíš povolit zápis. Pro veřejný web nebo skutečné zabezpečení použij serverless autentizační proxy.
+Přihlašování, kontrola oprávnění a GitHub zápisy se ověřují ve Workeru. Účetní hashe jsou v zašifrovaném JSON souboru. Oprávnění UI jsou kontrolována také API při zápisu.
 
 ## Datové soubory
 
@@ -38,4 +41,4 @@ Zachovány jsou poskytnuté formáty `calendar.json`, `roster.json`, `playbook.j
 
 ## Místní úložiště a soubory
 
-V **Administrace → Data & zálohy** stáhněte kompletní JSON zálohu nebo nahrajte existující zálohu. Změny se automaticky drží v Local Storage daného prohlížeče. Tlačítko **Obnovit původní data** odstraní jen místní změny a znovu načte přiložené JSON soubory. Cookies si pamatují pouze jméno a vybraný pohled kalendáře; neukládají týmová data ani tokeny.
+V **Administrace → Data & zálohy** stáhni nebo obnov AES-GCM šifrovanou zálohu. Po připojení Workeru se týmová data neukládají do Local Storage.

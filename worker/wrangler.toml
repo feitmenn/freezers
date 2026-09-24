@@ -1,0 +1,10 @@
+name = "freezers-esport-api"
+main = "index.js"
+compatibility_date = "2026-09-24"
+
+[vars]
+REPO_OWNER = "SET_IN_CLOUDFLARE"
+REPO_NAME = "SET_IN_CLOUDFLARE"
+REPO_BRANCH = "main"
+DATA_PATH = ""
+ALLOWED_ORIGIN = "https://YOUR-SITE.example"
