@@ -160,21 +160,40 @@
   .section-title{font-size:clamp(28px,4vw,40px);}
   .section-sub{color:var(--ice-dim);margin-top:14px;font-size:15px;max-width:560px;}
 
+  /* PARTNERS */
+  .partners-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+  .partner-card{
+    position:relative;overflow:hidden;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;display:flex;flex-direction:column;gap:4px;
+    transition:border-color .2s,transform .2s;
+  }
+  .partner-logo-bg{
+    height:56px;background-repeat:no-repeat;background-position:left center;background-size:contain;
+    opacity:0.85;margin-bottom:8px;transition:opacity .2s,transform .2s;filter:grayscale(0.15);
+  }
+  .partner-card:hover{border-color:rgba(47,224,201,0.45);transform:translateY(-2px);}
+  .partner-card:hover .partner-logo-bg{opacity:1;transform:scale(1.04);}
+  .partner-card .partner-kind{font-size:11px;letter-spacing:.1em;color:var(--turquoise);font-family:'Chakra Petch',sans-serif;}
+  .partner-card .partner-name{font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:600;}
+  .partner-card .partner-link{font-size:12px;color:var(--ice-dim);transition:color .2s;}
+  .partner-card:hover .partner-link{color:var(--turquoise);}
+  .admin-partner-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);}
+  .admin-partner-row img{width:40px;height:40px;object-fit:contain;background:rgba(255,255,255,0.04);border-radius:4px;flex-shrink:0;}
+  .admin-partner-row-text{flex:1;display:flex;flex-direction:column;gap:2px;}
+  .admin-partner-row-text strong{font-size:14px;}
+  .admin-partner-row-text span{font-size:12px;color:var(--ice-dim);}
+  .admin-partner-row-actions{display:flex;gap:8px;}
+
   /* SCRIM SERVER BANNER */
   .scrim-banner{
-    position:relative;
     background:linear-gradient(100deg, rgba(255,95,176,0.1), rgba(154,92,255,0.08));
     border-top:1px solid rgba(255,95,176,0.35);
     border-bottom:1px solid rgba(255,95,176,0.35);
     padding:24px 0;
   }
-  .scrim-close-btn{
-    position:absolute;top:14px;right:20px;background:none;border:none;
-    color:var(--ice-dim);font-size:16px;cursor:pointer;opacity:0.6;transition:opacity .2s;
-  }
-  .scrim-close-btn:hover{opacity:1;color:var(--ice);}
   .scrim-banner-inner{
-    max-width:1180px;margin:0 auto;padding:0 44px 0 28px;
+    max-width:1180px;margin:0 auto;padding:0 28px;
     display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
   }
   .scrim-live-dot{
@@ -378,21 +397,6 @@
     position:fixed;top:90px;right:20px;z-index:400;
     display:flex;flex-direction:column;gap:10px;max-width:320px;
   }
-
-  .anthem-toggle{
-    position:fixed;bottom:24px;left:24px;z-index:350;
-    width:48px;height:48px;border-radius:50%;
-    background:rgba(7,10,18,0.85);border:1px solid rgba(255,95,176,0.4);
-    display:flex;align-items:center;justify-content:center;font-size:19px;
-    cursor:pointer;backdrop-filter:blur(8px);transition:transform .2s, border-color .2s;
-    box-shadow:0 6px 20px rgba(0,0,0,0.4);
-  }
-  .anthem-toggle:hover{transform:scale(1.08);border-color:var(--pink);}
-  .anthem-toggle.playing{border-color:var(--turquoise);animation:anthemPulse 2s infinite;}
-  @keyframes anthemPulse{0%,100%{box-shadow:0 6px 20px rgba(0,0,0,0.4), 0 0 0 0 rgba(47,224,201,0.4);}50%{box-shadow:0 6px 20px rgba(0,0,0,0.4), 0 0 0 8px rgba(47,224,201,0);}}
-  @media (max-width:500px){
-    .anthem-toggle{bottom:16px;left:16px;width:42px;height:42px;font-size:16px;}
-  }
   .notification-toast{
     background:var(--bg-1);border:1px solid var(--line);border-left:4px solid var(--turquoise);
     border-radius:3px;padding:14px 16px;font-size:13px;color:var(--ice-dim);
@@ -470,71 +474,6 @@
 
   /* STAFF */
   .staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
-
-  .clips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px;}
-  .clip-card{
-    background:var(--card);border:1px solid var(--line);border-radius:3px;overflow:hidden;
-    transition:border-color .2s, transform .2s;
-  }
-  .clip-card:hover{border-color:rgba(154,92,255,0.4);transform:translateY(-2px);}
-  .clip-embed-wrap{position:relative;width:100%;padding-top:56.25%;background:#000;}
-  .clip-embed-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
-  .clip-embed-fallback{
-    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:10px;color:var(--ice-dim);font-size:13px;text-align:center;padding:20px;
-  }
-  .clip-info{padding:16px 18px;}
-  .clip-player-name{font-family:'Chakra Petch',sans-serif;font-size:16px;font-weight:600;margin-bottom:8px;}
-  .clip-links{display:flex;gap:10px;flex-wrap:wrap;}
-  .clip-links a{
-    font-size:12px;color:var(--ice-dim);border:1px solid var(--line);padding:5px 10px;
-    border-radius:20px;transition:border-color .2s, color .2s;
-  }
-  .clip-links a:hover{border-color:var(--turquoise);color:var(--turquoise);}
-  .clips-empty{grid-column:1/-1;}
-
-  .playbook-block{margin-bottom:48px;}
-  .playbook-block:last-child{margin-bottom:0;}
-  .playbook-block-title{font-size:19px;margin-bottom:18px;}
-  .roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
-  .role-card{
-    background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 18px;
-  }
-  .role-card .role-name{font-family:'Chakra Petch',sans-serif;font-size:12px;color:var(--violet);letter-spacing:.04em;margin-bottom:6px;}
-  .role-card .role-player{font-family:'Chakra Petch',sans-serif;font-size:17px;font-weight:600;}
-  .lineups-list{display:flex;flex-direction:column;gap:12px;}
-  .lineup-card{
-    background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 20px;
-    display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;
-  }
-  .lineup-card .lineup-map{font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:600;color:var(--turquoise);min-width:110px;}
-  .lineup-card .lineup-desc{font-size:13.5px;color:var(--ice-dim);}
-  .playbook-entries{display:flex;flex-direction:column;gap:28px;}
-  .playbook-entry-card{background:var(--card);border:1px solid var(--line);border-radius:3px;overflow:hidden;}
-  .playbook-entry-embed{position:relative;width:100%;padding-top:56.25%;background:#000;}
-  .playbook-entry-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
-  .playbook-entry-info{padding:18px 22px;}
-  .playbook-entry-title{font-family:'Chakra Petch',sans-serif;font-size:17px;font-weight:600;margin-bottom:8px;}
-  .playbook-entry-desc{font-size:13.5px;color:var(--ice-dim);margin-bottom:10px;}
-
-  .maps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;}
-  .map-tile{
-    aspect-ratio:1/1;background:var(--card);border:1px solid var(--line);border-radius:3px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;
-    cursor:pointer;font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:15px;
-    transition:border-color .2s, transform .2s, background .2s;
-    position:relative;overflow:hidden;background-size:cover;background-position:center;
-  }
-  .map-tile.has-image::before{
-    content:'';position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(7,10,18,0.35) 0%, rgba(7,10,18,0.85) 100%);
-  }
-  .map-tile.has-image > *{position:relative;z-index:1;}
-  .map-tile.has-image{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.6);}
-  .map-tile:hover{border-color:var(--turquoise);transform:translateY(-3px);background:rgba(47,224,201,0.06);}
-  .map-tile.active{border-color:var(--violet);background:rgba(154,92,255,0.08);}
-  .map-tile .map-tile-count{display:block;font-size:11px;color:var(--ice-dim);font-weight:500;margin-top:6px;letter-spacing:.02em;}
-  .map-tile .map-tile-icon{font-size:22px;margin-bottom:8px;}
   .staff-card{
     background:var(--card);border:1px solid var(--line);border-radius:3px;padding:24px;
     transition:border-color .2s, transform .2s;
@@ -626,41 +565,7 @@
   .modal-card-wide{max-width:560px;}
   .modal-card-fullscreen{
     max-width:96vw;width:96vw;height:92vh;max-height:92vh;
-    resize:both;overflow:hidden;padding:0;
-    display:flex;flex-direction:column;
-  }
-  .admin-panel-layout{display:flex;height:100%;overflow:hidden;}
-  .admin-sidebar{
-    width:220px;flex-shrink:0;border-right:1px solid var(--line);
-    padding:56px 12px 20px;overflow-y:auto;
-    display:flex;flex-direction:column;gap:2px;
-    background:rgba(255,255,255,0.015);
-  }
-  .admin-sidebar-header{padding:0 10px 20px;}
-  .admin-tab-btn{
-    display:flex;align-items:center;gap:10px;
-    background:none;border:none;text-align:left;
-    padding:11px 12px;border-radius:3px;cursor:pointer;
-    color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;font-size:13px;letter-spacing:.02em;
-    transition:background .2s, color .2s;
-  }
-  .admin-tab-btn:hover{background:rgba(255,255,255,0.04);color:var(--ice);}
-  .admin-tab-btn.active{background:rgba(47,224,201,0.1);color:var(--turquoise);}
-  .admin-tab-btn .att-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
-  .admin-content{flex:1;overflow-y:auto;padding:56px 40px 40px;min-width:0;}
-  .admin-tab-panel{display:none;max-width:640px;}
-  .admin-tab-panel.active{display:block;animation:tabFadeIn .2s ease;}
-  @keyframes tabFadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-  @media (max-width:900px){
-    .modal-card-fullscreen{width:98vw;height:95vh;max-height:95vh;}
-    .admin-panel-layout{flex-direction:column;}
-    .admin-sidebar{
-      width:100%;flex-direction:row;overflow-x:auto;overflow-y:hidden;
-      padding:52px 10px 10px;border-right:none;border-bottom:1px solid var(--line);
-    }
-    .admin-sidebar-header{display:none;}
-    .admin-tab-btn{flex-shrink:0;white-space:nowrap;}
-    .admin-content{padding:20px;}
+    resize:both;overflow:auto;
   }
   .modal-close{
     position:absolute;top:16px;right:16px;background:none;border:none;
@@ -713,15 +618,6 @@
 
 <div id="notificationStack" class="notification-stack"></div>
 
-<iframe id="anthemPlayer" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;"
-  src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fxxxtraktor%2Fbrezno&color=%232fe0c9&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-  allow="autoplay"></iframe>
-
-<button type="button" id="anthemToggleBtn" class="anthem-toggle" aria-label="Hymna Freezers">
-  <span id="anthemIcon">🔇</span>
-</button>
-
-
 <div id="cookieBanner" class="cookie-banner">
   <div class="cookie-text">
     Tento web používá lokální úložiště prohlížeče (ne sledovací cookies) k zapamatování tvého přihlášení a preferencí. Pokračováním souhlasíš s našimi
@@ -746,8 +642,7 @@
       <a href="#roster">Roster</a>
       <a href="#staff">Staff</a>
       <a href="#kalendar">Kalendář</a>
-      <a href="#klipy">Klipy</a>
-      <a href="#playbook">Playbook</a>
+      <a href="#partneri">Partneři</a>
       <a href="#dotaznik">Dotazník</a>
       <a href="#kontakt">Kontakt</a>
       <span class="nav-legal">
@@ -931,57 +826,18 @@
   </div>
 </div>
 
-<section class="section" id="klipy">
+<section class="section" id="partneri">
   <div class="wrap">
     <div class="section-head">
-      <div class="section-kicker">HIGHLIGHTY</div>
-      <h2 class="section-title">Klipy</h2>
-      <p class="section-sub">Nejlepší momenty od hráčů — přímo přehratelné.</p>
+      <div class="section-kicker">SPOLUPRÁCE</div>
+      <h2 class="section-title">Partneři</h2>
+      <p class="section-sub">Organizace a sponzoři, kteří nás podporují.</p>
     </div>
-    <div id="clipsGrid" class="clips-grid"></div>
-  </div>
-</section>
-
-<section class="section" id="playbook">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="section-kicker">JEN PRO ČLENY</div>
-      <h2 class="section-title">Playbook</h2>
-      <p class="section-sub">Role, lineupy a týmové strategie s videem z Metastacku.</p>
-    </div>
-
-    <div id="playbookLoggedOut" class="hub-card" style="max-width:440px;">
-      <div class="hc-label">PŘIHLÁŠENÍ ČLENA</div>
-      <div class="hc-title">Nejdřív se přihlas</div>
-      <div class="hc-desc">Playbook je jen pro tým. Přihlašovací údaje ti dá staff. <a href="#" class="playbook-login-link" style="color:var(--turquoise);">Přihlásit se</a></div>
-    </div>
-
-    <div id="playbookLoggedIn" style="display:none;">
-      <div class="playbook-block">
-        <h3 class="playbook-block-title">Role v týmu</h3>
-        <div id="playbookRoles" class="roles-grid"></div>
-      </div>
-
-      <div class="playbook-block">
-        <h3 class="playbook-block-title">Lineupy</h3>
-        <div id="playbookLineups" class="lineups-list"></div>
-      </div>
-
-      <div class="playbook-block">
-        <h3 class="playbook-block-title">Playbook od týmu</h3>
-        <p style="font-size:13px;color:var(--ice-dim);margin-bottom:16px;">Klikni na mapu a uvidíš strategie k ní.</p>
-        <div id="playbookMapsGrid" class="maps-grid"></div>
-      </div>
+    <div class="partners-grid" id="partnersGrid">
+      <!-- Partneři se generují z partners.json přes JS níže -->
     </div>
   </div>
 </section>
-
-<div class="modal-overlay" id="mapDetailOverlay">
-  <div class="modal-card modal-card-wide">
-    <button type="button" class="modal-close" id="closeMapDetailBtn">✕</button>
-    <div id="mapDetailContent"></div>
-  </div>
-</div>
 
 <section class="section" id="dotaznik">
   <div class="wrap">
@@ -1081,18 +937,10 @@
     <h3>Přihlášení do administrace</h3>
     <form id="adminLoginForm">
       <div class="field">
-        <label for="adminUsername">Uživatelské jméno správce</label>
-        <input type="text" id="adminUsername" autocomplete="username" required>
-      </div>
-      <div class="field">
-        <label for="adminPasswordField">Heslo</label>
-        <input type="password" id="adminPasswordField" autocomplete="current-password" required>
-      </div>
-      <div class="field">
         <label for="adminPassword">GitHub token</label>
         <input type="password" id="adminPassword" autocomplete="off" placeholder="ghp_... nebo github_pat_..." required>
       </div>
-      <div class="admin-error" id="adminLoginError">Špatné přihlašovací údaje, zkus to znovu.</div>
+      <div class="admin-error" id="adminLoginError">Token nefunguje, zkus to znovu.</div>
       <button type="submit" class="submit-btn" style="width:100%;">Vstoupit</button>
     </form>
   </div>
@@ -1101,25 +949,7 @@
 <div class="modal-overlay" id="adminPanelOverlay">
   <div class="modal-card modal-card-fullscreen">
     <button type="button" class="modal-close" id="closeAdminPanelBtn">✕</button>
-    <button type="button" class="btn-ghost" id="adminLogoutBtn" style="position:absolute;top:16px;right:56px;padding:6px 14px;font-size:12px;">Odhlásit správce</button>
-    <div class="admin-panel-layout">
-      <div class="admin-sidebar">
-        <div class="admin-sidebar-header">
-          <div class="modal-kicker" style="margin:0;">ADMIN PANEL</div>
-        </div>
-        <button type="button" class="admin-tab-btn active" data-tab="news"><span class="att-icon">📰</span>Novinky</button>
-        <button type="button" class="admin-tab-btn" data-tab="roster"><span class="att-icon">👥</span>Roster</button>
-        <button type="button" class="admin-tab-btn" data-tab="users"><span class="att-icon">🔑</span>Účty členů</button>
-        <button type="button" class="admin-tab-btn" data-tab="calendar"><span class="att-icon">📅</span>Kalendář</button>
-        <button type="button" class="admin-tab-btn" data-tab="attendance"><span class="att-icon">✅</span>Docházka</button>
-        <button type="button" class="admin-tab-btn" data-tab="excuses"><span class="att-icon">✉️</span>Omluvenky</button>
-        <button type="button" class="admin-tab-btn" data-tab="scrim"><span class="att-icon">🖥️</span>Scrim Server</button>
-        <button type="button" class="admin-tab-btn" data-tab="clips"><span class="att-icon">🎬</span>Klipy</button>
-        <button type="button" class="admin-tab-btn" data-tab="playbook"><span class="att-icon">📘</span>Playbook</button>
-        <button type="button" class="admin-tab-btn" data-tab="admins"><span class="att-icon">🛡️</span>Správci</button>
-      </div>
-      <div class="admin-content">
-        <div class="admin-tab-panel active" data-tab-panel="news">
+    <div class="modal-kicker">ADMIN PANEL</div>
     <h3>Přidat novinku</h3>
     <form id="adminNewsForm">
       <div class="field">
@@ -1140,10 +970,7 @@
     <h3>Existující novinky</h3>
     <div id="adminNewsList"></div>
 
-
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="roster">
+    <div class="admin-divider"></div>
     <h3 id="playerFormTitle">Přidat hráče do rosteru</h3>
     <form id="adminPlayerForm">
       <div class="field">
@@ -1189,14 +1016,7 @@
         <button type="button" class="btn-ghost" id="cancelPlayerEditBtn" style="display:none;padding:10px 18px;">Zrušit úpravu</button>
       </div>
     </form>
-
     <div class="admin-divider"></div>
-    <h3>Aktuální roster</h3>
-    <div id="adminRosterList"></div>
-
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="users">
     <h3>Přidat účet člena (přihlášení do kalendáře)</h3>
     <form id="adminUserForm">
       <div class="field-row">
@@ -1219,10 +1039,7 @@
     <h3>Existující účty</h3>
     <div id="adminUserList"></div>
 
-
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="calendar">
+    <div class="admin-divider"></div>
     <h3>Přidat akci do kalendáře</h3>
     <form id="adminEventForm">
       <div class="field-row">
@@ -1253,10 +1070,7 @@
     <h3>Existující akce</h3>
     <div id="adminEventList"></div>
 
-
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="attendance">
+    <div class="admin-divider"></div>
     <h3>Docházka</h3>
     <div class="field">
       <label for="att-event-select">Vyber akci</label>
@@ -1266,17 +1080,11 @@
     </div>
     <div id="attendanceTable"></div>
 
-
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="excuses">
+    <div class="admin-divider"></div>
     <h3>Omluvenky</h3>
     <div id="adminExcusesList"></div>
 
-
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="scrim">
+    <div class="admin-divider"></div>
     <h3>Scrim Server</h3>
     <form id="adminScrimForm">
       <div class="field">
@@ -1306,139 +1114,38 @@
       <button type="submit" class="submit-btn">Uložit Scrim Server</button>
     </form>
 
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="clips">
-    <h3>Klipy</h3>
-    <form id="adminClipForm">
-      <div class="field">
-        <label for="clip-player">Jméno hráče</label>
-        <input type="text" id="clip-player" placeholder="např. FILAS" required>
-      </div>
+    <div class="admin-divider"></div>
+    <h3>Přidat partnera</h3>
+    <form id="adminPartnerForm">
       <div class="field-row">
         <div class="field">
-          <label for="clip-faceit">Odkaz na Faceit</label>
-          <input type="url" id="clip-faceit" placeholder="https://www.faceit.com/en/players/...">
+          <label for="pn-kind">Typ</label>
+          <select id="pn-kind">
+            <option value="ASOCIACE">Asociace</option>
+            <option value="SPONZOR">Sponzor</option>
+          </select>
         </div>
         <div class="field">
-          <label for="clip-allstar">Odkaz na klip (Allstar)</label>
-          <input type="url" id="clip-allstar" placeholder="https://allstar.gg/clip?clip=..." required>
+          <label for="pn-name">Název</label>
+          <input type="text" id="pn-name" placeholder="např. Česká asociace esportu" required>
         </div>
-      </div>
-      <button type="submit" class="submit-btn">Přidat klip</button>
-    </form>
-    <div class="admin-divider"></div>
-    <h3>Existující klipy</h3>
-    <div id="adminClipsList"></div>
-
-
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="playbook">
-    <h3>Role v týmu</h3>
-    <form id="adminRoleForm">
-      <div class="field-row">
-        <div class="field">
-          <label for="role-name">Role</label>
-          <input type="text" id="role-name" placeholder="např. IGL, AWP, Entry, Support, Lurker" required>
-        </div>
-        <div class="field">
-          <label for="role-player">Hráč</label>
-          <input type="text" id="role-player" placeholder="např. FILAS" required>
-        </div>
-      </div>
-      <button type="submit" class="submit-btn">Přidat roli</button>
-    </form>
-    <div class="admin-divider"></div>
-    <h3>Existující role</h3>
-    <div id="adminRolesList"></div>
-
-    <div class="admin-divider"></div>
-    <h3>Lineupy</h3>
-    <form id="adminLineupForm">
-      <div class="field">
-        <label for="lineup-map">Mapa</label>
-        <input type="text" id="lineup-map" placeholder="např. Mirage" required>
       </div>
       <div class="field">
-        <label for="lineup-desc">Popis lineupu</label>
-        <textarea id="lineup-desc" placeholder="Výchozí pozice, styl hry, kdo kde..." required></textarea>
-      </div>
-      <button type="submit" class="submit-btn">Přidat lineup</button>
-    </form>
-    <div class="admin-divider"></div>
-    <h3>Existující lineupy</h3>
-    <div id="adminLineupsList"></div>
-
-    <div class="admin-divider"></div>
-    <h3>Mapy (playbook)</h3>
-    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
-      Vytvoř mapu, pak na ni klikni a nahraj do ní playbooky (YouTube nebo Metastack odkaz).
-    </p>
-    <form id="adminMapForm">
-      <div class="field">
-        <label for="map-name">Název mapy</label>
-        <input type="text" id="map-name" placeholder="např. Mirage" required>
+        <label for="pn-url">Odkaz na web</label>
+        <input type="url" id="pn-url" placeholder="https://..." required>
       </div>
       <div class="field">
-        <label for="map-image">Obrázek na pozadí (nepovinné)</label>
-        <input type="file" id="map-image" accept="image/*">
+        <label for="pn-logo-file">Logo — nahrát obrázek</label>
+        <input type="file" id="pn-logo-file" accept="image/*">
       </div>
-      <button type="submit" class="submit-btn">Vytvořit mapu</button>
-    </form>
-    <div id="adminMapsGrid" class="maps-grid" style="margin-top:18px;"></div>
-
-    <div id="adminMapEntryPanel" style="display:none;">
-      <div class="admin-divider"></div>
-      <h3 id="adminMapEntryTitle">Playbooky pro mapu</h3>
-      <form id="adminMapEntryForm">
-        <div class="field">
-          <label for="pb-title">Název strategie</label>
-          <input type="text" id="pb-title" placeholder="např. A execute" required>
-        </div>
-        <div class="field">
-          <label for="pb-video">Odkaz na video (YouTube nebo Metastack)</label>
-          <input type="url" id="pb-video" placeholder="https://youtube.com/watch?v=... nebo https://metastack.gg/...">
-        </div>
-        <div class="field">
-          <label for="pb-desc">Popis (nepovinné)</label>
-          <textarea id="pb-desc" placeholder="Detaily ke strategii..."></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Nahrát playbook</button>
-      </form>
-      <div class="admin-divider"></div>
-      <h3>Playbooky v této mapě</h3>
-      <div id="adminMapEntriesList"></div>
-      <div class="admin-divider"></div>
-      <button type="button" class="excuse-reject-btn" id="deleteMapBtn" style="padding:9px 16px;">Smazat celou mapu</button>
-    </div>
-        </div>
-
-        <div class="admin-tab-panel" data-tab-panel="admins">
-    <h3>Správci webu</h3>
-    <p style="font-size:12.5px;color:var(--ice-dim);margin-bottom:16px;">
-      Jen lidé v tomhle seznamu se dostanou do admin panelu (spolu se svým GitHub tokenem). Přidávej opatrně.
-    </p>
-    <form id="adminAdminsForm">
-      <div class="field-row">
-        <div class="field">
-          <label for="aa-username">Uživatelské jméno</label>
-          <input type="text" id="aa-username" placeholder="např. filas" required>
-        </div>
-        <div class="field">
-          <label for="aa-password">Heslo</label>
-          <input type="text" id="aa-password" placeholder="vygeneruj/zadej heslo" required>
-        </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button type="submit" class="submit-btn" id="partnerFormSubmitBtn">Uložit partnera</button>
+        <button type="button" class="btn-ghost" id="cancelPartnerEditBtn" style="display:none;padding:10px 18px;">Zrušit úpravu</button>
       </div>
-      <button type="submit" class="submit-btn">Přidat / upravit správce</button>
     </form>
     <div class="admin-divider"></div>
-    <h3>Existující správci</h3>
-    <div id="adminAdminsList"></div>
-
-        </div>
-      </div>
-    </div>
+    <h3>Existující partneři</h3>
+    <div id="adminPartnersList"></div>
   </div>
 </div>
 
@@ -1467,7 +1174,6 @@
   </div>
 </div>
 
-<script src="https://w.soundcloud.com/player/api.js"></script>
 <script>
   /* ============ NOVINKY (uložené jako news.json přímo v GitHub repu) ============ */
   const GH_OWNER = 'feitmenn';        // <-- uprav, pokud je tvůj GitHub username jiný
@@ -1476,10 +1182,6 @@
   const GH_FILE_PATH = 'news.json';
   const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_FILE_PATH}`;
   const CONTENTS_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE_PATH}`;
-  const SCRIM_FILE = 'scrimserver.json';
-  const ADMINS_FILE = 'admins.json';
-  const CLIPS_FILE = 'clips.json';
-  const PLAYBOOK_FILE = 'playbook.json';
 
   let ghToken = ''; // GitHub token drží se jen v paměti prohlížeče po dobu session, nikam se neukládá
 
@@ -1487,27 +1189,6 @@
     const div = document.createElement('div');
     div.textContent = str || '';
     return div.innerHTML;
-  }
-  function toEmbedUrl(link){
-    if(!link) return link;
-    try{
-      const url = new URL(link);
-      const host = url.hostname.replace('www.', '');
-      if(host === 'youtube.com' || host === 'm.youtube.com'){
-        if(url.pathname === '/watch'){
-          const id = url.searchParams.get('v');
-          if(id) return `https://www.youtube.com/embed/${id}`;
-        }
-        if(url.pathname.startsWith('/shorts/')){
-          return `https://www.youtube.com/embed/${url.pathname.split('/shorts/')[1]}`;
-        }
-        return link; // už je embed nebo jiný formát
-      }
-      if(host === 'youtu.be'){
-        return `https://www.youtube.com/embed/${url.pathname.slice(1)}`;
-      }
-    }catch(e){ /* neplatná URL, použij beze změny */ }
-    return link;
   }
   function formatDate(iso){
     try{
@@ -1694,30 +1375,11 @@
   });
 
   /* ============ ADMIN MODALY (Ctrl+F) ============ */
-  let adminUsername = '';
-  const ADMIN_SESSION_KEY = 'freezers_admin_session';
-
-  function saveAdminSession(username, token){
-    try{ localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({ username, token })); }
-    catch(e){ console.error('Nepodařilo se uložit admin session:', e); }
-  }
-  function loadAdminSession(){
-    try{
-      const raw = localStorage.getItem(ADMIN_SESSION_KEY);
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ return null; }
-  }
-  function clearAdminSession(){
-    try{ localStorage.removeItem(ADMIN_SESSION_KEY); }catch(e){}
-  }
-
   function openAdminLogin(){
     document.getElementById('adminLoginError').classList.remove('show');
-    document.getElementById('adminUsername').value = '';
-    document.getElementById('adminPasswordField').value = '';
     document.getElementById('adminPassword').value = '';
     document.getElementById('adminLoginOverlay').classList.add('show');
-    setTimeout(() => document.getElementById('adminUsername').focus(), 50);
+    setTimeout(() => document.getElementById('adminPassword').focus(), 50);
   }
   function closeAdminLogin(){
     document.getElementById('adminLoginOverlay').classList.remove('show');
@@ -1728,12 +1390,8 @@
     renderAdminUserList();
     renderAdminEventList();
     renderAdminExcusesList();
-    renderAdminAdminsList();
-    renderAdminClipsList();
-    renderAdminRolesList();
-    renderAdminLineupsList();
-    renderAdminMapsGrid();
     loadAdminScrimForm();
+    renderAdminPartnersList();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
   function closeAdminPanel(){
@@ -1744,11 +1402,7 @@
     const key = e.key.toLowerCase();
     if((e.ctrlKey || e.metaKey) && key === 'f'){
       e.preventDefault();
-      if(adminUsername && ghToken){
-        openAdminPanel();
-      } else {
-        openAdminLogin();
-      }
+      openAdminLogin();
     }
     if(e.key === 'Escape'){
       closeAdminLogin();
@@ -1758,42 +1412,23 @@
 
   document.getElementById('adminLoginForm').addEventListener('submit', async function(e){
     e.preventDefault();
-    const username = document.getElementById('adminUsername').value.trim();
-    const password = document.getElementById('adminPasswordField').value;
-    const tokenVal = document.getElementById('adminPassword').value.trim();
-    const errBox = document.getElementById('adminLoginError');
-    errBox.classList.remove('show');
+    const val = document.getElementById('adminPassword').value.trim();
     const btn = e.target.querySelector('.submit-btn');
     btn.disabled = true;
     btn.textContent = 'Ověřuji...';
     try{
-      const admins = await ghFetchPublic(ADMINS_FILE) || [];
-      const admin = admins.find(a => a.username === username);
-      if(!admin){
-        errBox.textContent = 'Špatné jméno nebo heslo.';
-        errBox.classList.add('show');
-        return;
-      }
-      const hash = await sha256Hex(password);
-      if(hash !== admin.passwordHash){
-        errBox.textContent = 'Špatné jméno nebo heslo.';
-        errBox.classList.add('show');
-        return;
-      }
-      const res = await fetch(CONTENTS_URL, { headers: { Authorization: `token ${tokenVal}` } });
+      const res = await fetch(CONTENTS_URL, { headers: { Authorization: `token ${val}` } });
       if(res.ok || res.status === 404){
-        ghToken = tokenVal;
-        adminUsername = username;
-        saveAdminSession(username, tokenVal);
+        ghToken = val;
         closeAdminLogin();
         openAdminPanel();
       } else {
-        errBox.textContent = 'GitHub token nefunguje nebo nemá práva k zápisu do repa.';
-        errBox.classList.add('show');
+        document.getElementById('adminLoginError').textContent = 'Token nefunguje nebo nemá práva k zápisu do repa.';
+        document.getElementById('adminLoginError').classList.add('show');
       }
     }catch(err){
-      errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
-      errBox.classList.add('show');
+      document.getElementById('adminLoginError').textContent = 'Nepodařilo se spojit s GitHubem.';
+      document.getElementById('adminLoginError').classList.add('show');
     }finally{
       btn.disabled = false;
       btn.textContent = 'Vstoupit';
@@ -1802,26 +1437,9 @@
 
   document.getElementById('closeAdminLoginBtn').addEventListener('click', closeAdminLogin);
   document.getElementById('closeAdminPanelBtn').addEventListener('click', closeAdminPanel);
-  document.getElementById('adminLogoutBtn').addEventListener('click', function(){
-    if(!confirm('Odhlásit správce z tohoto zařízení?')) return;
-    adminUsername = '';
-    ghToken = '';
-    clearAdminSession();
-    closeAdminPanel();
-  });
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', function(e){
       if(e.target === overlay) overlay.classList.remove('show');
-    });
-  });
-
-  document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-    btn.addEventListener('click', function(){
-      const tab = btn.dataset.tab;
-      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelector(`.admin-tab-panel[data-tab-panel="${tab}"]`)?.classList.add('active');
     });
   });
 
@@ -1836,15 +1454,6 @@
         el.innerHTML = '';
         return;
       }
-
-      const dismissKey = 'scrim_dismissed_' + btoa(unescape(encodeURIComponent(JSON.stringify({ m: config.matchup, ip: config.ip, n: config.note }))));
-      let dismissed = false;
-      try{ dismissed = sessionStorage.getItem(dismissKey) === '1'; }catch(e){}
-      if(dismissed){
-        el.innerHTML = '';
-        return;
-      }
-
       el.innerHTML = `
         <div class="scrim-banner">
           <div class="scrim-banner-inner">
@@ -1858,7 +1467,6 @@
               <button type="button" class="scrim-copy-btn" id="scrimCopyBtn">Zkopírovat connect</button>
             </div>
           </div>
-          <button type="button" class="scrim-close-btn" id="scrimCloseBtn" aria-label="Zavřít">✕</button>
         </div>
       `;
       document.getElementById('scrimCopyBtn')?.addEventListener('click', function(){
@@ -1872,10 +1480,6 @@
           alert('Nepodařilo se zkopírovat, zkus to ručně: ' + cmd);
         });
       });
-      document.getElementById('scrimCloseBtn')?.addEventListener('click', function(){
-        try{ sessionStorage.setItem(dismissKey, '1'); }catch(e){}
-        el.innerHTML = '';
-      });
     }catch(e){
       el.innerHTML = '';
       console.error('Nepodařilo se načíst scrim server:', e);
@@ -1883,135 +1487,37 @@
   }
   renderScrimBanner();
 
-  /* ============ KLIPY ============ */
-  function clipCardHtml(clip){
-    return `
-      <div class="clip-card">
-        <div class="clip-embed-wrap">
-          <iframe src="${escapeHtml(toEmbedUrl(clip.allstarLink))}" allowfullscreen loading="lazy" title="Klip — ${escapeHtml(clip.player)}"></iframe>
-        </div>
-        <div class="clip-info">
-          <div class="clip-player-name">${escapeHtml(clip.player)}</div>
-          <div class="clip-links">
-            <a href="${escapeHtml(clip.allstarLink)}" target="_blank" rel="noopener">Otevřít klip ↗</a>
-            ${clip.faceitLink ? `<a href="${escapeHtml(clip.faceitLink)}" target="_blank" rel="noopener">Faceit profil ↗</a>` : ''}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  async function renderClips(){
-    const el = document.getElementById('clipsGrid');
+  /* ============ PARTNEŘI (uložení jako partners.json přímo v GitHub repu) ============ */
+  let partnersCache = [];
+  async function loadPartners(){
+    const grid = document.getElementById('partnersGrid');
+    if(!grid) return;
     try{
-      const clips = await ghFetchPublic(CLIPS_FILE) || [];
-      if(!clips.length){
-        el.innerHTML = `<div class="news-empty clips-empty"><div class="ne-icon">🎬</div><h4>Zatím žádné klipy</h4><p>Jakmile admin přidá první klip, objeví se tady.</p></div>`;
-        return;
-      }
-      el.innerHTML = clips.slice().reverse().map(clipCardHtml).join('');
+      const data = await ghFetchPublic(PARTNERS_FILE);
+      partnersCache = Array.isArray(data) ? data : [];
     }catch(e){
-      el.innerHTML = `<div class="news-empty clips-empty"><h4>Klipy se nepodařilo načíst</h4></div>`;
-      console.error('Nepodařilo se načíst klipy:', e);
+      console.error('Nepodařilo se načíst partnery:', e);
+      partnersCache = [];
     }
+    renderPartners();
   }
-  renderClips();
-
-  /* ============ PLAYBOOK (jen pro přihlášené členy) ============ */
-  function roleCardHtml(r){
-    return `
-      <div class="role-card">
-        <div class="role-name">${escapeHtml(r.role)}</div>
-        <div class="role-player">${escapeHtml(r.player)}</div>
-      </div>
-    `;
-  }
-  function lineupCardHtml(l){
-    return `
-      <div class="lineup-card">
-        <div class="lineup-map">${escapeHtml(l.map)}</div>
-        <div class="lineup-desc">${escapeHtml(l.description)}</div>
-      </div>
-    `;
-  }
-  function playbookEntryHtml(entry){
-    return `
-      <div class="playbook-entry-card">
-        ${entry.videoLink ? `
-          <div class="playbook-entry-embed">
-            <iframe src="${escapeHtml(toEmbedUrl(entry.videoLink))}" allowfullscreen loading="lazy" title="${escapeHtml(entry.title)}"></iframe>
-          </div>
-        ` : ''}
-        <div class="playbook-entry-info">
-          <div class="playbook-entry-title">${escapeHtml(entry.title)}</div>
-          ${entry.description ? `<div class="playbook-entry-desc">${escapeHtml(entry.description)}</div>` : ''}
-          ${entry.videoLink ? `<a href="${escapeHtml(entry.videoLink)}" target="_blank" rel="noopener" style="font-size:12px;color:var(--turquoise);">Otevřít video ↗</a>` : ''}
-        </div>
-      </div>
-    `;
-  }
-
-  function mapTileHtml(map){
-    const count = (map.entries || []).length;
-    const bg = map.image ? ` style="background-image:url('${map.image}');"` : '';
-    return `
-      <div class="map-tile ${map.image ? 'has-image' : ''}" data-map-id="${escapeHtml(map.id)}"${bg}>
-        ${map.image ? '' : '<div class="map-tile-icon">🗺️</div>'}
-        <div>${escapeHtml(map.name)}</div>
-        <span class="map-tile-count">${count} ${count === 1 ? 'playbook' : 'playbooků'}</span>
-      </div>
-    `;
-  }
-
-  let playbookDataCache = { roles: [], lineups: [], maps: [] };
-
-  function showMapDetail(mapId){
-    const map = (playbookDataCache.maps || []).find(m => m.id === mapId);
-    if(!map) return;
-    const content = document.getElementById('mapDetailContent');
-    const entries = map.entries || [];
-    content.innerHTML = `
-      <div class="modal-kicker">MAPA</div>
-      <h3>${escapeHtml(map.name)}</h3>
-      <div class="playbook-entries" style="margin-top:20px;">
-        ${entries.length
-          ? entries.slice().reverse().map(playbookEntryHtml).join('')
-          : '<div class="admin-empty">Zatím žádné playbooky pro tuhle mapu.</div>'}
-      </div>
-    `;
-    document.getElementById('mapDetailOverlay').classList.add('show');
-  }
-  document.getElementById('closeMapDetailBtn').addEventListener('click', function(){
-    document.getElementById('mapDetailOverlay').classList.remove('show');
-  });
-
-  async function loadPlaybook(){
-    const rolesEl = document.getElementById('playbookRoles');
-    const lineupsEl = document.getElementById('playbookLineups');
-    const mapsEl = document.getElementById('playbookMapsGrid');
-    try{
-      const data = await ghFetchPublic(PLAYBOOK_FILE) || { roles: [], lineups: [], maps: [] };
-      playbookDataCache = data;
-
-      rolesEl.innerHTML = (data.roles && data.roles.length)
-        ? data.roles.map(roleCardHtml).join('')
-        : '<div class="admin-empty">Zatím žádné role.</div>';
-
-      lineupsEl.innerHTML = (data.lineups && data.lineups.length)
-        ? data.lineups.map(lineupCardHtml).join('')
-        : '<div class="admin-empty">Zatím žádné lineupy.</div>';
-
-      const maps = data.maps || [];
-      mapsEl.innerHTML = maps.length
-        ? maps.map(mapTileHtml).join('')
-        : '<div class="admin-empty">Zatím žádné mapy.</div>';
-      mapsEl.querySelectorAll('.map-tile').forEach(tile => {
-        tile.addEventListener('click', () => showMapDetail(tile.dataset.mapId));
-      });
-    }catch(e){
-      console.error('Nepodařilo se načíst playbook:', e);
+  function renderPartners(){
+    const grid = document.getElementById('partnersGrid');
+    if(!grid) return;
+    if(!partnersCache.length){
+      grid.innerHTML = '<div class="admin-empty">Zatím žádní partneři.</div>';
+      return;
     }
+    grid.innerHTML = partnersCache.map(p => `
+      <a class="partner-card" href="${escapeHtml(p.url || '#')}" target="_blank" rel="noopener">
+        ${p.logo ? `<div class="partner-logo-bg" style="background-image:url('${escapeHtml(p.logo)}');" aria-hidden="true"></div>` : ''}
+        <div class="partner-kind">${escapeHtml(p.kind || '')}</div>
+        <div class="partner-name">${escapeHtml(p.name || '')}</div>
+        <div class="partner-link">${escapeHtml((p.url || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))} ↗</div>
+      </a>
+    `).join('');
   }
+  loadPartners();
 
   /* ============ ROSTER (uložený jako roster.json přímo v GitHub repu) ============ */
   const ROSTER_FILE = 'roster.json';
@@ -2288,6 +1794,8 @@
   const ATTENDANCE_FILE = 'attendance.json';
   const EXCUSES_FILE = 'excuses.json';
   const NOTIFICATIONS_FILE = 'notifications.json';
+  const SCRIM_FILE = 'scrimserver.json';
+  const PARTNERS_FILE = 'partners.json';
 
   let memberUsername = '';
   let memberAccessCode = ''; // sdílený zápisový token
@@ -2343,18 +1851,6 @@
   }
 
   async function ghFetchPublic(path){
-    // Pokud je admin přihlášený (má token), čteme přímo z GitHub API (žádná CDN cache,
-    // takže admin vidí svoje změny okamžitě). Bez tokenu (běžní návštěvníci) čteme
-    // přes rychlejší veřejnou cestu, která ale má pár minut zpoždění na propsání změn.
-    if(ghToken){
-      try{
-        const { data } = await ghFetchWithSha(path, ghToken);
-        return data;
-      }catch(e){
-        console.error(`Nepodařilo se načíst ${path} (ověřeně):`, e);
-        return null;
-      }
-    }
     try{
       const url = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}?cachebust=${Date.now()}`;
       const res = await fetch(url, { cache:'no-store' });
@@ -2415,14 +1911,11 @@
       this.textContent = 'Přihlásit se';
       document.getElementById('calendarLoggedIn').style.display = 'none';
       document.getElementById('calendarLoggedOut').style.display = 'block';
-      document.getElementById('playbookLoggedIn').style.display = 'none';
-      document.getElementById('playbookLoggedOut').style.display = 'block';
     } else {
       openMemberLogin();
     }
   });
   document.getElementById('openMemberLoginLink')?.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
-  document.querySelectorAll('.playbook-login-link').forEach(a => a.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); }));
   function openMemberLogin(){
     document.getElementById('memberLoginError').classList.remove('show');
     document.getElementById('memberLoginOverlay').classList.add('show');
@@ -2473,11 +1966,8 @@
       closeMemberLogin();
       document.getElementById('calendarLoggedOut').style.display = 'none';
       document.getElementById('calendarLoggedIn').style.display = 'block';
-      document.getElementById('playbookLoggedOut').style.display = 'none';
-      document.getElementById('playbookLoggedIn').style.display = 'block';
       document.getElementById('openMemberLoginNav').textContent = user.displayName || username;
       loadCalendar();
-      loadPlaybook();
       checkAndShowNotifications();
     }catch(err){
       errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
@@ -3017,22 +2507,11 @@
     memberAccessCode = session.accessCode;
     document.getElementById('calendarLoggedOut').style.display = 'none';
     document.getElementById('calendarLoggedIn').style.display = 'block';
-    document.getElementById('playbookLoggedOut').style.display = 'none';
-    document.getElementById('playbookLoggedIn').style.display = 'block';
     document.getElementById('openMemberLoginNav').textContent = session.displayName || session.username;
     loadCalendar();
-    loadPlaybook();
     checkAndShowNotifications();
   }
   restoreMemberSession();
-
-  function restoreAdminSession(){
-    const session = loadAdminSession();
-    if(!session) return;
-    adminUsername = session.username;
-    ghToken = session.token;
-  }
-  restoreAdminSession();
 
   /* ---- Admin: Scrim Server nastavení ---- */
   async function loadAdminScrimForm(){
@@ -3073,427 +2552,112 @@
     }
   });
 
-  /* ---- Admin: správa účtů správců webu ---- */
-  async function renderAdminAdminsList(){
-    const list = document.getElementById('adminAdminsList');
+  /* ---- Admin: Partneři ---- */
+  let editPartnerIndex = -1;
+
+  function resetPartnerForm(){
+    editPartnerIndex = -1;
+    const form = document.getElementById('adminPartnerForm');
+    form.reset();
+    document.getElementById('partnerFormSubmitBtn').textContent = 'Uložit partnera';
+    document.getElementById('cancelPartnerEditBtn').style.display = 'none';
+  }
+
+  document.getElementById('cancelPartnerEditBtn').addEventListener('click', resetPartnerForm);
+
+  async function renderAdminPartnersList(){
+    const list = document.getElementById('adminPartnersList');
     try{
-      const admins = await ghFetchPublic(ADMINS_FILE) || [];
-      if(!admins.length){
-        list.innerHTML = '<div class="admin-empty">Zatím žádní správci.</div>';
+      const data = await ghFetchPublic(PARTNERS_FILE);
+      const partners = Array.isArray(data) ? data : [];
+      partnersCache = partners;
+      if(!partners.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádní partneři.</div>';
         return;
       }
-      list.innerHTML = admins.map((a, idx) => `
-        <div class="admin-news-row">
-          <div class="admin-news-row-text">
-            <strong>${escapeHtml(a.username)}</strong>
-            <span>${a.username === adminUsername ? 'to jsi ty' : ''}</span>
+      list.innerHTML = partners.map((p, idx) => `
+        <div class="admin-partner-row">
+          ${p.logo ? `<img src="${escapeHtml(p.logo)}" alt="">` : ''}
+          <div class="admin-partner-row-text">
+            <strong>${escapeHtml(p.name || '')}</strong>
+            <span>${escapeHtml(p.kind || '')} — ${escapeHtml(p.url || '')}</span>
           </div>
-          <button type="button" class="admin-delete-btn" data-idx="${idx}" ${admins.length <= 1 ? 'disabled title="Musí zůstat aspoň jeden správce"' : ''}>Smazat</button>
+          <div class="admin-partner-row-actions">
+            <button type="button" class="btn-ghost" data-edit-idx="${idx}" style="padding:6px 12px;font-size:12px;">Upravit</button>
+            <button type="button" class="admin-delete-btn" data-del-idx="${idx}">Smazat</button>
+          </div>
         </div>
       `).join('');
-      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+      list.querySelectorAll('[data-edit-idx]').forEach(btn => {
+        btn.addEventListener('click', function(){
+          editPartnerIndex = parseInt(btn.dataset.editIdx, 10);
+          const p = partners[editPartnerIndex] || {};
+          document.getElementById('pn-kind').value = p.kind || 'ASOCIACE';
+          document.getElementById('pn-name').value = p.name || '';
+          document.getElementById('pn-url').value = p.url || '';
+          document.getElementById('partnerFormSubmitBtn').textContent = 'Uložit změny';
+          document.getElementById('cancelPartnerEditBtn').style.display = 'inline-block';
+          document.getElementById('adminPartnerForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      });
+      list.querySelectorAll('[data-del-idx]').forEach(btn => {
         btn.addEventListener('click', async function(){
-          if(!confirm('Opravdu odebrat tohoto správce? Ztratí přístup do admin panelu.')) return;
+          if(!confirm('Opravdu odebrat tohoto partnera?')) return;
           btn.disabled = true;
           btn.textContent = 'Mažu...';
           try{
-            const { data, sha } = await ghFetchWithSha(ADMINS_FILE, ghToken);
-            const admins = data || [];
-            admins.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(ADMINS_FILE, admins, sha, 'Odebrání správce webu', ghToken);
-            renderAdminAdminsList();
+            const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
+            const arr = Array.isArray(data) ? data : [];
+            arr.splice(parseInt(btn.dataset.delIdx, 10), 1);
+            await ghSave(PARTNERS_FILE, arr, sha, 'Odebrání partnera', ghToken);
+            resetPartnerForm();
+            renderAdminPartnersList();
+            loadPartners();
           }catch(e){
-            alert('Nepodařilo se smazat správce: ' + e.message);
+            alert('Nepodařilo se smazat partnera: ' + e.message);
             btn.disabled = false;
             btn.textContent = 'Smazat';
           }
         });
       });
     }catch(e){
-      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst správce: ${escapeHtml(e.message)}</div>`;
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst partnery: ${escapeHtml(e.message)}</div>`;
     }
   }
 
-  document.getElementById('adminAdminsForm').addEventListener('submit', async function(e){
+  document.getElementById('adminPartnerForm').addEventListener('submit', async function(e){
     e.preventDefault();
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const username = document.getElementById('aa-username').value.trim();
-    const password = document.getElementById('aa-password').value;
+    const submitBtn = document.getElementById('partnerFormSubmitBtn');
+    const kind = document.getElementById('pn-kind').value;
+    const name = document.getElementById('pn-name').value.trim();
+    const url = document.getElementById('pn-url').value.trim();
+    const fileInput = document.getElementById('pn-logo-file');
+    const file = fileInput.files[0];
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Ukládám...';
+
+    let logo = null;
+    if(file){
+      try{ logo = await readAndCompressImage(file, 400, 0.8); }
+      catch(e){ /* pokud se logo nepodaří zpracovat, přidá se partner bez něj */ }
+    }
+
     try{
-      const passwordHash = await sha256Hex(password);
-      const { data, sha } = await ghFetchWithSha(ADMINS_FILE, ghToken);
-      const admins = data || [];
-      const existingIdx = admins.findIndex(a => a.username === username);
-      const entry = { username, passwordHash };
-      if(existingIdx >= 0) admins[existingIdx] = entry; else admins.push(entry);
-      await ghSave(ADMINS_FILE, admins, sha, `Přidání/úprava správce: ${username}`, ghToken);
-      e.target.reset();
-      renderAdminAdminsList();
+      const isEdit = editPartnerIndex >= 0;
+      const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
+      const current = Array.isArray(data) ? data : [];
+      const entry = { kind, name, url, logo: logo || (isEdit ? current[editPartnerIndex].logo : '') };
+      if(isEdit) current[editPartnerIndex] = entry; else current.push(entry);
+      await ghSave(PARTNERS_FILE, current, sha, isEdit ? ('Úprava partnera: ' + name) : ('Přidání partnera: ' + name), ghToken);
+      resetPartnerForm();
+      renderAdminPartnersList();
+      loadPartners();
     }catch(err){
-      alert('Nepodařilo se uložit správce: ' + err.message);
+      alert('Nepodařilo se uložit partnera: ' + err.message);
     }finally{
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Přidat / upravit správce';
-    }
-  });
-
-  /* ---- Admin: správa klipů ---- */
-  async function renderAdminClipsList(){
-    const list = document.getElementById('adminClipsList');
-    try{
-      const clips = await ghFetchPublic(CLIPS_FILE) || [];
-      if(!clips.length){
-        list.innerHTML = '<div class="admin-empty">Zatím žádné klipy.</div>';
-        return;
-      }
-      list.innerHTML = clips.map((c, idx) => `
-        <div class="admin-news-row">
-          <div class="admin-news-row-text">
-            <strong>${escapeHtml(c.player)}</strong>
-            <span>${escapeHtml(c.allstarLink)}</span>
-          </div>
-          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
-        </div>
-      `).join('');
-      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
-        btn.addEventListener('click', async function(){
-          btn.disabled = true;
-          btn.textContent = 'Mažu...';
-          try{
-            const { data, sha } = await ghFetchWithSha(CLIPS_FILE, ghToken);
-            const clips = data || [];
-            clips.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(CLIPS_FILE, clips, sha, 'Odebrání klipu', ghToken);
-            renderAdminClipsList();
-            renderClips();
-          }catch(e){
-            alert('Nepodařilo se smazat klip: ' + e.message);
-            btn.disabled = false;
-            btn.textContent = 'Smazat';
-          }
-        });
-      });
-    }catch(e){
-      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst klipy: ${escapeHtml(e.message)}</div>`;
-    }
-  }
-
-  document.getElementById('adminClipForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const player = document.getElementById('clip-player').value.trim();
-    const faceitLink = document.getElementById('clip-faceit').value.trim();
-    const allstarLink = document.getElementById('clip-allstar').value.trim();
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Přidávám...';
-    try{
-      const { data, sha } = await ghFetchWithSha(CLIPS_FILE, ghToken);
-      const clips = data || [];
-      clips.push({ player, faceitLink, allstarLink, addedAt: new Date().toISOString() });
-      await ghSave(CLIPS_FILE, clips, sha, `Přidání klipu: ${player}`, ghToken);
-      e.target.reset();
-      renderAdminClipsList();
-      renderClips();
-    }catch(err){
-      alert('Nepodařilo se přidat klip: ' + err.message);
-    }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Přidat klip';
-    }
-  });
-
-  /* ---- Admin: Playbook (role, lineupy, strategie) ---- */
-  async function fetchPlaybookWithSha(){
-    const { data, sha } = await ghFetchWithSha(PLAYBOOK_FILE, ghToken);
-    const pb = data || { roles: [], lineups: [], maps: [] };
-    if(!pb.roles) pb.roles = [];
-    if(!pb.lineups) pb.lineups = [];
-    if(!pb.maps) pb.maps = [];
-    return { pb, sha };
-  }
-
-  async function renderAdminRolesList(){
-    const list = document.getElementById('adminRolesList');
-    try{
-      const data = await ghFetchPublic(PLAYBOOK_FILE) || { roles: [] };
-      const roles = data.roles || [];
-      if(!roles.length){
-        list.innerHTML = '<div class="admin-empty">Zatím žádné role.</div>';
-        return;
-      }
-      list.innerHTML = roles.map((r, idx) => `
-        <div class="admin-news-row">
-          <div class="admin-news-row-text">
-            <strong>${escapeHtml(r.role)}</strong>
-            <span>${escapeHtml(r.player)}</span>
-          </div>
-          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
-        </div>
-      `).join('');
-      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
-        btn.addEventListener('click', async function(){
-          btn.disabled = true;
-          btn.textContent = 'Mažu...';
-          try{
-            const { pb, sha } = await fetchPlaybookWithSha();
-            pb.roles.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání role z playbooku', ghToken);
-            renderAdminRolesList();
-            loadPlaybook();
-          }catch(e){
-            alert('Nepodařilo se smazat roli: ' + e.message);
-            btn.disabled = false;
-            btn.textContent = 'Smazat';
-          }
-        });
-      });
-    }catch(e){
-      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst role: ${escapeHtml(e.message)}</div>`;
-    }
-  }
-
-  document.getElementById('adminRoleForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const role = document.getElementById('role-name').value.trim();
-    const player = document.getElementById('role-player').value.trim();
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Přidávám...';
-    try{
-      const { pb, sha } = await fetchPlaybookWithSha();
-      pb.roles.push({ role, player });
-      await ghSave(PLAYBOOK_FILE, pb, sha, `Přidání role: ${role} -> ${player}`, ghToken);
-      e.target.reset();
-      renderAdminRolesList();
-      loadPlaybook();
-    }catch(err){
-      alert('Nepodařilo se přidat roli: ' + err.message);
-    }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Přidat roli';
-    }
-  });
-
-  async function renderAdminLineupsList(){
-    const list = document.getElementById('adminLineupsList');
-    try{
-      const data = await ghFetchPublic(PLAYBOOK_FILE) || { lineups: [] };
-      const lineups = data.lineups || [];
-      if(!lineups.length){
-        list.innerHTML = '<div class="admin-empty">Zatím žádné lineupy.</div>';
-        return;
-      }
-      list.innerHTML = lineups.map((l, idx) => `
-        <div class="admin-news-row">
-          <div class="admin-news-row-text">
-            <strong>${escapeHtml(l.map)}</strong>
-            <span>${escapeHtml(l.description)}</span>
-          </div>
-          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
-        </div>
-      `).join('');
-      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
-        btn.addEventListener('click', async function(){
-          btn.disabled = true;
-          btn.textContent = 'Mažu...';
-          try{
-            const { pb, sha } = await fetchPlaybookWithSha();
-            pb.lineups.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání lineupu', ghToken);
-            renderAdminLineupsList();
-            loadPlaybook();
-          }catch(e){
-            alert('Nepodařilo se smazat lineup: ' + e.message);
-            btn.disabled = false;
-            btn.textContent = 'Smazat';
-          }
-        });
-      });
-    }catch(e){
-      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst lineupy: ${escapeHtml(e.message)}</div>`;
-    }
-  }
-
-  document.getElementById('adminLineupForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const map = document.getElementById('lineup-map').value.trim();
-    const description = document.getElementById('lineup-desc').value.trim();
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Přidávám...';
-    try{
-      const { pb, sha } = await fetchPlaybookWithSha();
-      pb.lineups.push({ map, description });
-      await ghSave(PLAYBOOK_FILE, pb, sha, `Přidání lineupu: ${map}`, ghToken);
-      e.target.reset();
-      renderAdminLineupsList();
-      loadPlaybook();
-    }catch(err){
-      alert('Nepodařilo se přidat lineup: ' + err.message);
-    }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Přidat lineup';
-    }
-  });
-
-  let selectedAdminMapId = null;
-
-  async function renderAdminMapsGrid(){
-    const grid = document.getElementById('adminMapsGrid');
-    try{
-      const data = await ghFetchPublic(PLAYBOOK_FILE) || { maps: [] };
-      const maps = data.maps || [];
-      if(!maps.length){
-        grid.innerHTML = '<div class="admin-empty">Zatím žádné mapy.</div>';
-      } else {
-        grid.innerHTML = maps.map(m => `
-          <div class="map-tile ${m.id === selectedAdminMapId ? 'active' : ''} ${m.image ? 'has-image' : ''}" data-map-id="${escapeHtml(m.id)}"${m.image ? ` style="background-image:url('${m.image}');"` : ''}>
-            ${m.image ? '' : '<div class="map-tile-icon">🗺️</div>'}
-            <div>${escapeHtml(m.name)}</div>
-            <span class="map-tile-count">${(m.entries || []).length} playbooků</span>
-          </div>
-        `).join('');
-      }
-      grid.querySelectorAll('.map-tile').forEach(tile => {
-        tile.addEventListener('click', () => selectAdminMap(tile.dataset.mapId));
-      });
-    }catch(e){
-      grid.innerHTML = `<div class="admin-empty">Nepodařilo se načíst mapy: ${escapeHtml(e.message)}</div>`;
-    }
-  }
-
-  document.getElementById('adminMapForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const name = document.getElementById('map-name').value.trim();
-    const fileInput = document.getElementById('map-image');
-    const file = fileInput.files[0];
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Vytvářím...';
-    try{
-      let image = null;
-      if(file){
-        image = await readAndCompressImage(file, 500, 0.65);
-      }
-      const { pb, sha } = await fetchPlaybookWithSha();
-      pb.maps.push({ id: 'map_' + Date.now(), name, image, entries: [] });
-      await ghSave(PLAYBOOK_FILE, pb, sha, `Vytvoření mapy: ${name}`, ghToken);
-      e.target.reset();
-      renderAdminMapsGrid();
-      loadPlaybook();
-    }catch(err){
-      alert('Nepodařilo se vytvořit mapu: ' + err.message);
-    }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Vytvořit mapu';
-    }
-  });
-
-  function selectAdminMap(mapId){
-    selectedAdminMapId = mapId;
-    document.getElementById('adminMapEntryPanel').style.display = 'block';
-    renderAdminMapsGrid();
-    renderAdminMapEntriesList();
-  }
-
-  async function renderAdminMapEntriesList(){
-    const list = document.getElementById('adminMapEntriesList');
-    const titleEl = document.getElementById('adminMapEntryTitle');
-    if(!selectedAdminMapId) return;
-    try{
-      const { pb } = await fetchPlaybookWithSha();
-      const map = pb.maps.find(m => m.id === selectedAdminMapId);
-      if(!map){
-        document.getElementById('adminMapEntryPanel').style.display = 'none';
-        return;
-      }
-      titleEl.textContent = `Playbooky pro mapu: ${map.name}`;
-      const entries = map.entries || [];
-      if(!entries.length){
-        list.innerHTML = '<div class="admin-empty">Zatím žádné playbooky pro tuhle mapu.</div>';
-        return;
-      }
-      list.innerHTML = entries.map((en, idx) => `
-        <div class="admin-news-row">
-          <div class="admin-news-row-text">
-            <strong>${escapeHtml(en.title)}</strong>
-            <span>${escapeHtml(en.videoLink || '')}</span>
-          </div>
-          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
-        </div>
-      `).join('');
-      list.querySelectorAll('.admin-delete-btn').forEach(btn => {
-        btn.addEventListener('click', async function(){
-          btn.disabled = true;
-          btn.textContent = 'Mažu...';
-          try{
-            const { pb, sha } = await fetchPlaybookWithSha();
-            const map = pb.maps.find(m => m.id === selectedAdminMapId);
-            map.entries.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(PLAYBOOK_FILE, pb, sha, 'Odebrání playbooku z mapy', ghToken);
-            renderAdminMapEntriesList();
-            renderAdminMapsGrid();
-            loadPlaybook();
-          }catch(e){
-            alert('Nepodařilo se smazat playbook: ' + e.message);
-            btn.disabled = false;
-            btn.textContent = 'Smazat';
-          }
-        });
-      });
-    }catch(e){
-      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst playbooky: ${escapeHtml(e.message)}</div>`;
-    }
-  }
-
-  document.getElementById('adminMapEntryForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    if(!selectedAdminMapId) return;
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const title = document.getElementById('pb-title').value.trim();
-    const videoLink = document.getElementById('pb-video').value.trim();
-    const description = document.getElementById('pb-desc').value.trim();
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Nahrávám...';
-    try{
-      const { pb, sha } = await fetchPlaybookWithSha();
-      const map = pb.maps.find(m => m.id === selectedAdminMapId);
-      if(!map) throw new Error('Mapa už neexistuje, zkus stránku obnovit.');
-      map.entries.push({ title, videoLink, description, addedAt: new Date().toISOString() });
-      await ghSave(PLAYBOOK_FILE, pb, sha, `Playbook do mapy ${map.name}: ${title}`, ghToken);
-      e.target.reset();
-      renderAdminMapEntriesList();
-      renderAdminMapsGrid();
-      loadPlaybook();
-    }catch(err){
-      alert('Nepodařilo se nahrát playbook: ' + err.message);
-    }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Nahrát playbook';
-    }
-  });
-
-  document.getElementById('deleteMapBtn').addEventListener('click', async function(){
-    if(!selectedAdminMapId) return;
-    if(!confirm('Opravdu smazat celou mapu i se všemi playbooky v ní?')) return;
-    const btn = this;
-    btn.disabled = true;
-    try{
-      const { pb, sha } = await fetchPlaybookWithSha();
-      pb.maps = pb.maps.filter(m => m.id !== selectedAdminMapId);
-      await ghSave(PLAYBOOK_FILE, pb, sha, 'Smazání mapy z playbooku', ghToken);
-      selectedAdminMapId = null;
-      document.getElementById('adminMapEntryPanel').style.display = 'none';
-      renderAdminMapsGrid();
-      loadPlaybook();
-    }catch(e){
-      alert('Nepodařilo se smazat mapu: ' + e.message);
-    }finally{
-      btn.disabled = false;
+      submitBtn.textContent = editPartnerIndex >= 0 ? 'Uložit změny' : 'Uložit partnera';
     }
   });
 
@@ -3565,61 +2729,6 @@
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Odeslat přihlášku';
-    }
-  });
-
-  /* ============ HYMNA FREEZERS (SoundCloud na pozadí) ============ */
-  let anthemWidget = null;
-  let anthemPlaying = false;
-  let anthemAutoplayDone = false;
-
-  function updateAnthemUI(){
-    const btn = document.getElementById('anthemToggleBtn');
-    const icon = document.getElementById('anthemIcon');
-    if(anthemPlaying){
-      btn.classList.add('playing');
-      icon.textContent = '🔊';
-    } else {
-      btn.classList.remove('playing');
-      icon.textContent = '🔇';
-    }
-  }
-
-  function tryAnthemAutoplay(){
-    if(anthemAutoplayDone || !anthemWidget) return;
-    anthemAutoplayDone = true;
-    anthemWidget.play();
-    document.removeEventListener('click', tryAnthemAutoplay);
-  }
-
-  window.addEventListener('load', function(){
-    if(typeof SC === 'undefined') return;
-    const iframe = document.getElementById('anthemPlayer');
-    anthemWidget = SC.Widget(iframe);
-    anthemWidget.bind(SC.Widget.Events.READY, function(){
-      setTimeout(tryAnthemAutoplay, 600);
-    });
-    anthemWidget.bind(SC.Widget.Events.PLAY, function(){
-      anthemPlaying = true;
-      updateAnthemUI();
-    });
-    anthemWidget.bind(SC.Widget.Events.PAUSE, function(){
-      anthemPlaying = false;
-      updateAnthemUI();
-    });
-    anthemWidget.bind(SC.Widget.Events.FINISH, function(){
-      anthemWidget.seekTo(0);
-      anthemWidget.play();
-    });
-  });
-  document.addEventListener('click', tryAnthemAutoplay);
-
-  document.getElementById('anthemToggleBtn').addEventListener('click', function(){
-    if(!anthemWidget) return;
-    if(anthemPlaying){
-      anthemWidget.pause();
-    } else {
-      anthemWidget.play();
     }
   });
 
