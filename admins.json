@@ -5,5 +5,12 @@
     "salt": "ecce5ef208da3dd7efaa0642cfed994b",
     "passwordHash": "64f5817095186e9dd018711ce1157a8c52ea94bb3b611bc802005122347a8d7b",
     "iterations": 600000
+  },
+  {
+    "username": "filas_",
+    "role": "admin",
+    "salt": "ea220610f38a4b971a3b4ff214edfe61",
+    "passwordHash": "4339ce96a1e690034697241bf46fac1beb6d8985d33ae1cb2a582148cf7781f2",
+    "iterations": 100000
   }
 ]
