@@ -13,7 +13,8 @@
   {
     "username": "michi33",
     "displayName": "M I C H I",
-    "passwordHash": "4b205df57971c468291cfa23a35ff76d355f8c71956b718437c5c0cd23017ee1"
+    "passwordHash": "4b205df57971c468291cfa23a35ff76d355f8c71956b718437c5c0cd23017ee1",
+    "role": "admin"
   },
   {
     "username": "filuta",
