@@ -357,6 +357,20 @@
   .attendance-rsvp.yes{color:var(--turquoise);}
   .attendance-rsvp.no{color:#ff8080;}
   .attendance-rsvp.none{color:var(--ice-dim);}
+  .attendance-overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px;}
+  .ao-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;}
+  .ao-card .ao-label{font-size:11px;letter-spacing:.06em;color:var(--ice-dim);font-family:'Chakra Petch',sans-serif;}
+  .ao-card .ao-name{font-size:17px;font-weight:700;margin-top:4px;font-family:'Chakra Petch',sans-serif;}
+  .ao-card .ao-count{font-size:12px;color:var(--turquoise);margin-top:2px;}
+  .ao-card.ao-bad .ao-count{color:#ff8080;}
+  .attendance-overview-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .attendance-overview-table th, .attendance-overview-table td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);}
+  .attendance-overview-table th{color:var(--turquoise);font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.04em;cursor:pointer;user-select:none;}
+  .attendance-overview-table th:hover{color:#fff;}
+  .ao-num{font-variant-numeric:tabular-nums;}
+  .ao-num.excused{color:var(--violet);}
+  .ao-num.unexcused{color:#ff8080;}
+  .ao-num.present{color:var(--turquoise);}
   .attendance-select{
     background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:2px;
     color:var(--ice);padding:5px 8px;font-size:12.5px;font-family:'Inter',sans-serif;
@@ -1081,6 +1095,11 @@
     <div id="attendanceTable"></div>
 
     <div class="admin-divider"></div>
+    <h3>Přehled docházky</h3>
+    <div id="attendanceOverviewStats" class="attendance-overview-stats"></div>
+    <div id="attendanceOverviewTable"></div>
+
+    <div class="admin-divider"></div>
     <h3>Omluvenky</h3>
     <div id="adminExcusesList"></div>
 
@@ -1392,6 +1411,7 @@
     renderAdminExcusesList();
     loadAdminScrimForm();
     renderAdminPartnersList();
+    renderAttendanceOverview();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
   function closeAdminPanel(){
@@ -2396,6 +2416,7 @@
             }
             await ghSave(ATTENDANCE_FILE, attendance, sha, `Docházka: ${sel.dataset.username} -> ${sel.value || 'nezadáno'}`, ghToken);
             sel.className = `attendance-select status-${sel.value}`;
+            renderAttendanceOverview();
           }catch(e){
             alert('Nepodařilo se uložit docházku: ' + e.message);
           }finally{
@@ -2411,6 +2432,111 @@
   document.getElementById('att-event-select').addEventListener('change', function(){
     renderAttendanceTable(this.value);
   });
+
+  /* ---- Admin: Přehled docházky (kdo je nejvíc přítomný / omluvený / neomluvený) ---- */
+  async function renderAttendanceOverview(){
+    const statsBox = document.getElementById('attendanceOverviewStats');
+    const tableBox = document.getElementById('attendanceOverviewTable');
+    if(!statsBox || !tableBox) return;
+    statsBox.innerHTML = '<div class="admin-empty">Načítám...</div>';
+    tableBox.innerHTML = '';
+    try{
+      const attendance = await ghFetchPublic(ATTENDANCE_FILE) || {};
+      const users = await ghFetchPublic(USERS_FILE) || [];
+
+      const stats = {};
+      Object.values(attendance).forEach(byUser => {
+        Object.entries(byUser).forEach(([username, status]) => {
+          if(!stats[username]) stats[username] = { present: 0, excused: 0, unexcused: 0 };
+          if(stats[username][status] !== undefined) stats[username][status]++;
+        });
+      });
+
+      const getDisplayName = (username) => {
+        const u = users.find(x => x.username === username);
+        return u ? (u.displayName || u.username) : username;
+      };
+
+      const rows = Object.entries(stats).map(([username, s]) => {
+        const total = s.present + s.excused + s.unexcused;
+        return { username, displayName: getDisplayName(username), present: s.present, excused: s.excused, unexcused: s.unexcused, total, absent: s.excused + s.unexcused };
+      });
+
+      if(!rows.length){
+        statsBox.innerHTML = '';
+        tableBox.innerHTML = '<div class="admin-empty">Zatím žádná zaznamenaná docházka.</div>';
+        return;
+      }
+
+      const topBy = (field) => [...rows].sort((a, b) => b[field] - a[field])[0];
+      const mostPresent = topBy('present');
+      const mostUnexcused = topBy('unexcused');
+      const mostExcused = topBy('excused');
+      const mostAbsent = topBy('absent');
+
+      const card = (label, r, countLabel, bad) => `
+        <div class="ao-card ${bad ? 'ao-bad' : ''}">
+          <div class="ao-label">${label}</div>
+          <div class="ao-name">${escapeHtml(r.displayName)}</div>
+          <div class="ao-count">${countLabel}</div>
+        </div>
+      `;
+
+      statsBox.innerHTML = [
+        mostPresent.present > 0 ? card('NEJVÍC PŘÍTOMNÝ', mostPresent, `${mostPresent.present}× přítomen`, false) : '',
+        mostUnexcused.unexcused > 0 ? card('NEJVÍC NEOMLUVENÝ', mostUnexcused, `${mostUnexcused.unexcused}× neomluveno`, true) : '',
+        mostExcused.excused > 0 ? card('NEJVÍC OMLUVENÝ', mostExcused, `${mostExcused.excused}× omluveno`, false) : '',
+        mostAbsent.absent > 0 ? card('NEJVÍC NEPŘÍTOMNÝ CELKEM', mostAbsent, `${mostAbsent.absent}× chyběl (omluveno + neomluveno)`, true) : ''
+      ].join('');
+
+      const sortState = { key: 'unexcused', ascending: false };
+      rows.sort((a, b) => b.unexcused - a.unexcused || b.total - a.total);
+
+      function renderTable(){
+        tableBox.innerHTML = `
+          <table class="attendance-overview-table">
+            <thead>
+              <tr>
+                <th data-sort="displayName">Uživatel</th>
+                <th data-sort="present">Přítomen</th>
+                <th data-sort="excused">Omluveno</th>
+                <th data-sort="unexcused">Neomluveno</th>
+                <th data-sort="total">Celkem akcí</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(r => `
+                <tr>
+                  <td>${escapeHtml(r.displayName)}</td>
+                  <td class="ao-num present">${r.present}</td>
+                  <td class="ao-num excused">${r.excused}</td>
+                  <td class="ao-num unexcused">${r.unexcused}</td>
+                  <td class="ao-num">${r.total}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+        tableBox.querySelectorAll('th[data-sort]').forEach(th => {
+          th.addEventListener('click', () => {
+            const key = th.dataset.sort;
+            if(sortState.key === key){ sortState.ascending = !sortState.ascending; }
+            else { sortState.key = key; sortState.ascending = false; }
+            rows.sort((a, b) => {
+              const av = a[sortState.key], bv = b[sortState.key];
+              const result = typeof av === 'string' ? av.localeCompare(bv) : (av - bv);
+              return sortState.ascending ? result : -result;
+            });
+            renderTable();
+          });
+        });
+      }
+      renderTable();
+    }catch(e){
+      statsBox.innerHTML = '';
+      tableBox.innerHTML = `<div class="admin-empty">Nepodařilo se načíst přehled docházky: ${escapeHtml(e.message)}</div>`;
+    }
+  }
 
   /* ---- Admin: omluvenky (schválit -> omluveno, zamítnout -> neomluveno) ---- */
   async function renderAdminExcusesList(){
@@ -2489,6 +2615,7 @@
 
             renderAdminExcusesList();
             renderAttendanceTable(document.getElementById('att-event-select').value);
+            renderAttendanceOverview();
           }catch(e){
             alert('Nepodařilo se zpracovat omluvenku: ' + e.message);
             row.querySelectorAll('button').forEach(b => b.disabled = false);
