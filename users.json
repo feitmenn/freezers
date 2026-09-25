@@ -7,7 +7,8 @@
   {
     "username": "krabik_77",
     "displayName": "",
-    "passwordHash": "035fb7ceab72ae37f5fcd0044e703e5fbf71611eb9f05bcaf34a0e2cfd8706ca"
+    "passwordHash": "035fb7ceab72ae37f5fcd0044e703e5fbf71611eb9f05bcaf34a0e2cfd8706ca",
+    "role": "admin"
   },
   {
     "username": "michi33",
