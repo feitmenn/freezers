@@ -11,5 +11,12 @@
     "type": "scrim",
     "date": "2026-09-16T16:30:00.000Z",
     "description": "Main Roster VS Academy."
+  },
+  {
+    "id": "ev_1790457845366",
+    "title": "Trénink 29.9 18:30",
+    "type": "training",
+    "date": "2026-09-29T16:30:00.000Z",
+    "description": "jenom pro main team.\nmetastack.gg používat!"
   }
 ]
