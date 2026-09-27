@@ -534,6 +534,7 @@
   }
   .pc-type.captain{color:var(--pink);border-color:rgba(255,95,176,0.5);}
   .pc-type.trial{color:var(--turquoise);border-color:rgba(47,224,201,0.5);}
+  .pc-type.coach{color:var(--violet);border-color:rgba(154,92,255,0.5);}
   .pc-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:4px;flex:1;}
   .player-card .p-name{font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;letter-spacing:.02em;}
   .player-card .p-role{font-size:11px;color:var(--violet);letter-spacing:.06em;text-transform:uppercase;}
@@ -548,6 +549,7 @@
   .player-card.captain{border-color:rgba(255,95,176,0.35);}
   .player-card.captain .p-role{color:var(--pink);}
   .player-card.trial .p-role{color:var(--turquoise-dim);}
+  .player-card.coach .p-role{color:var(--violet);}
   .player-card.empty{border-style:dashed;border-color:rgba(238,246,251,0.18);background:transparent;text-align:center;}
   .player-card.empty .pc-media{height:120px;background:transparent;display:flex;align-items:center;justify-content:center;}
   .player-card.empty .pc-media::after{display:none;}
@@ -609,6 +611,8 @@
   }
   .submit-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
   .survey-note{font-size:12.5px;color:var(--ice-dim);margin-top:16px;}
+  .form-error{display:none;color:#ff8080;font-size:12px;margin-top:8px;}
+  .form-error.show{display:block;}
   .toast{
     margin-top:18px;padding:14px 18px;border-radius:2px;
     background:rgba(47,224,201,0.1);border:1px solid rgba(47,224,201,0.4);
@@ -675,6 +679,14 @@
     font-family:'Inter',sans-serif;
   }
   .admin-delete-btn:hover{background:rgba(255,95,95,0.12);}
+  .admin-edit-btn{
+    background:none;border:1px solid rgba(47,224,201,0.4);color:var(--turquoise);
+    padding:5px 12px;border-radius:2px;font-size:12px;cursor:pointer;transition:background .2s;
+    font-family:'Inter',sans-serif;
+  }
+  .admin-edit-btn:hover{background:rgba(47,224,201,0.12);}
+  .admin-hint{font-size:12.5px;color:var(--ice-dim);margin:-6px 0 14px;}
+  .admin-list{margin-top:4px;}
   .admin-empty{font-size:13px;color:var(--ice-dim);padding:12px 0;}
   .n-image{width:100%;height:140px;object-fit:cover;border-radius:2px;margin-bottom:12px;}
 
@@ -836,6 +848,7 @@
   body.theme-light .player-card.captain{border-color:rgba(226,60,143,0.5);}
   body.theme-light .player-card.captain .p-role{color:#ff7cc0;}
   body.theme-light .player-card.trial .p-role{color:#39e0c8;}
+  body.theme-light .player-card.coach .p-role{color:#8b5cf6;}
   body.theme-light .pc-ph{
     color:rgba(244,247,250,0.16);
     background:radial-gradient(circle at 50% 28%, rgba(14,168,150,0.18), transparent 62%),linear-gradient(160deg,#1b1f26,#14171c);
@@ -1129,9 +1142,9 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
     <span class="fz-rail-tip">FAQ</span>
   </button>
-  <button type="button" class="fz-rail-btn" data-target="dotaznik" aria-label="Dotazník">
+  <button type="button" class="fz-rail-btn" data-target="nabor" aria-label="Nábor">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
-    <span class="fz-rail-tip">Dotazník</span>
+    <span class="fz-rail-tip">Nábor</span>
   </button>
   <button type="button" class="fz-rail-btn" data-target="kontakt" aria-label="Kontakt">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -1174,7 +1187,7 @@
       <a href="#staff">Staff</a>
       <a href="#kalendar">Kalendář</a>
       <a href="#partneri">Partneři</a>
-      <a href="#dotaznik">Dotazník</a>
+      <a href="#nabor">Nábor</a>
       <a href="#kontakt">Kontakt</a>
       <span class="nav-legal">
         <a href="https://docs.google.com/document/d/1EBdQSe88_jwCJlTTFNXpMwHdgvTCgXbX/edit?usp=sharing&ouid=105373850656469320482&rtpof=true&sd=true" target="_blank" rel="noopener">Terms Of Service</a>
@@ -1260,10 +1273,10 @@
       </div>
 
       <div class="hub-side">
-        <a class="hub-card" href="#dotaznik">
-          <div class="hc-label">DOTAZNÍK</div>
+        <a class="hub-card" href="#nabor">
+          <div class="hc-label">NÁBOR</div>
           <div class="hc-title">Přihláška</div>
-          <div class="hc-desc">Chceš hrát za Freezers? Vyplň krátký dotazník níže.</div>
+          <div class="hc-desc">Chceš hrát za Freezers? Vyplň přihlášku a ozveme se ti.</div>
         </a>
         <a class="hub-card" href="#kontakt">
           <div class="hc-label">PODPORA</div>
@@ -1415,6 +1428,7 @@
       <h2 class="section-title">Partneři</h2>
       <p class="section-sub">Organizace a sponzoři, kteří nás podporují.</p>
     </div>
+    <p style="margin:0 0 20px;font-size:13.5px;color:var(--ice-dim);">Chceš s námi spolupracovat nebo nás sponzorovat? Napiš nám na <a href="mailto:help@freezers-esport.eu" style="color:var(--turquoise);">help@freezers-esport.eu</a>.</p>
     <div class="partners-grid" id="partnersGrid">
       <!-- Partneři se generují z partners.json přes JS níže -->
     </div>
@@ -1432,19 +1446,30 @@
   </div>
 </section>
 
-<section class="section" id="dotaznik">
+<section class="section" id="nabor">
   <div class="wrap">
     <div class="section-head">
       <div class="section-kicker">CHCEŠ HRÁT ZA FREEZERS?</div>
-      <h2 class="section-title">Dotazník</h2>
-      <p class="section-sub">Vyplň krátký formulář — ozveme se ti na Discordu.</p>
+      <h2 class="section-title">Nábor</h2>
+      <p class="section-sub">Vyplň přihlášku — pošleme ji přímo staffu na Discord. Ozveme se ti co nejdřív.</p>
     </div>
 
     <form class="survey-wrap" id="applyForm">
       <div class="field-row">
         <div class="field">
-          <label for="f-nick">Herní přezdívka</label>
-          <input type="text" id="f-nick" placeholder="např. FILAS" required>
+          <label for="f-first">Jméno</label>
+          <input type="text" id="f-first" placeholder="např. Jan" required>
+        </div>
+        <div class="field">
+          <label for="f-last">Příjmení</label>
+          <input type="text" id="f-last" placeholder="např. Novák" required>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" placeholder="např. jan.novak@email.cz" required>
         </div>
         <div class="field">
           <label for="f-discord">Discord tag</label>
@@ -1452,20 +1477,10 @@
         </div>
       </div>
 
-      <div class="field">
-        <label>O jaký tým máš zájem?</label>
-        <div class="radio-group">
-          <label class="radio-pill"><input type="radio" name="team" value="main">Main</label>
-          <label class="radio-pill"><input type="radio" name="team" value="reserve">Reserve Main</label>
-          <label class="radio-pill"><input type="radio" name="team" value="academy">Academy</label>
-          <label class="radio-pill"><input type="radio" name="team" value="academy-reserve">Academy Reserve</label>
-        </div>
-      </div>
-
       <div class="field-row">
         <div class="field">
           <label for="f-age">Věk</label>
-          <input type="number" id="f-age" min="10" max="99" placeholder="16">
+          <input type="number" id="f-age" min="10" max="99" placeholder="16" required>
         </div>
         <div class="field">
           <label for="f-rank">CS2 Rank / Premier Rating</label>
@@ -1485,13 +1500,59 @@
       </div>
 
       <div class="field">
-        <label for="f-exp">Zkušenosti a dosavadní týmy</label>
-        <textarea id="f-exp" placeholder="Krátce popiš svou CS2 historii, turnaje, předchozí týmy..."></textarea>
+        <label>O jaký tým máš zájem?</label>
+        <div class="radio-group">
+          <label class="radio-pill"><input type="radio" name="team" value="main">Main</label>
+          <label class="radio-pill"><input type="radio" name="team" value="reserve">Reserve Main</label>
+          <label class="radio-pill"><input type="radio" name="team" value="academy">Academy</label>
+          <label class="radio-pill"><input type="radio" name="team" value="academy-reserve">Academy Reserve</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Které role hraješ?</label>
+        <div class="radio-group" id="roleGroup">
+          <label class="radio-pill"><input type="checkbox" name="role" value="IGL">IGL</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="AWP">AWP</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="ENTRY">ENTRY</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="LURK">LURK</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="SUPP">SUPP</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="RIFLE">RIFLE</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="ANCHOR">ANCHOR</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="SUB">SUB</label>
+          <label class="radio-pill"><input type="checkbox" name="role" value="COACH">COACH</label>
+        </div>
+        <div class="form-error" id="roleError">Vyber alespoň jednu herní roli</div>
+      </div>
+
+      <div class="field">
+        <label>Kdy můžeš trénovat / hrát?</label>
+        <div class="radio-group" id="dayGroup">
+          <label class="radio-pill"><input type="checkbox" name="day" value="Po">Po</label>
+          <label class="radio-pill"><input type="checkbox" name="day" value="Út">Út</label>
+          <label class="radio-pill"><input type="checkbox" name="day" value="St">St</label>
+          <label class="radio-pill"><input type="checkbox" name="day" value="Čt">Čt</label>
+          <label class="radio-pill"><input type="checkbox" name="day" value="Pá">Pá</label>
+          <label class="radio-pill"><input type="checkbox" name="day" value="So">So</label>
+          <label class="radio-pill"><input type="checkbox" name="day" value="Ne">Ne</label>
+        </div>
+        <div class="radio-group" style="margin-top:10px;" id="timeGroup">
+          <label class="radio-pill"><input type="checkbox" name="time" value="Denní">☀️ Denní</label>
+          <label class="radio-pill"><input type="checkbox" name="time" value="Večer">🌆 Večer</label>
+          <label class="radio-pill"><input type="checkbox" name="time" value="Noc">🌙 Noc</label>
+          <label class="radio-pill"><input type="checkbox" name="time" value="Noční sova">🦉 Noční sova</label>
+        </div>
+        <div class="form-error" id="dayError">Vyber alespoň jeden den tréninku</div>
+      </div>
+
+      <div class="field">
+        <label for="f-exp">Zkušenosti a proč chceš hrát za nás</label>
+        <textarea id="f-exp" placeholder="Krátce popiš svou CS2 historii, turnaje, předchozí týmy a proč chceš právě k nám..."></textarea>
       </div>
 
       <button type="submit" class="submit-btn">Odeslat přihlášku</button>
       <div class="survey-note">Po odeslání si prosím vytvoř ticket na našem Discordu, ať tě staff nepřehlédne.</div>
-      <div class="toast" id="formToast">Díky! Nezapomeň otevřít ticket na Discordu, ať se ti staff co nejdřív ozve.</div>
+      <div class="toast" id="formToast">Díky! Přihláška byla odeslána, staff se ti brzy ozve.</div>
     </form>
   </div>
 </section>
@@ -1499,12 +1560,13 @@
 <section class="contact-cta" id="kontakt">
   <div class="wrap">
     <h2>Máš dotaz?</h2>
-    <p>Napiš nám na Discordu — buď přímo, nebo přes ticket na serveru.</p>
+    <p>Napiš nám na Discordu — buď přímo, nebo přes ticket na serveru. Případně nám pošli email.</p>
     <div class="contact-buttons">
       <a class="btn-primary" href="https://discord.gg/Ntcz76sXkP" target="_blank" rel="noopener">Náš Discord server</a>
-      <a class="btn-ghost" href="#dotaznik">Vyplnit dotazník</a>
+      <a class="btn-ghost" href="mailto:help@freezers-esport.eu">help@freezers-esport.eu</a>
+      <a class="btn-ghost" href="#nabor">Vyplnit přihlášku</a>
     </div>
-    <p style="margin-top:24px;font-size:13px;">Kontakt: Discord <strong>f1las3</strong> nebo ticket na serveru</p>
+    <p style="margin-top:24px;font-size:13px;">Kontakt: Discord <strong>f1las3</strong>, ticket na serveru nebo email <a href="mailto:help@freezers-esport.eu" style="color:var(--turquoise);">help@freezers-esport.eu</a></p>
   </div>
 </section>
 
@@ -1622,6 +1684,7 @@
             <select id="ap-type">
               <option value="player">Hráč</option>
               <option value="captain">Kapitán / Sub kapitán</option>
+              <option value="coach">Coach</option>
               <option value="trial">Zkušební období</option>
               <option value="empty">Volné místo</option>
             </select>
@@ -1650,6 +1713,10 @@
           <button type="button" class="btn-ghost" id="cancelPlayerEditBtn" style="display:none;padding:10px 18px;">Zrušit úpravu</button>
         </div>
       </form>
+
+      <h3 style="margin-top:28px;">Aktuální hráči v rosteru</h3>
+      <p class="admin-hint">U každého hráče můžeš upravit údaje nebo ho ze sestavy odebrat.</p>
+      <div id="adminRosterList" class="admin-list"></div>
     </div>
 
     <div class="admin-tab-panel" data-panel="accounts">
@@ -2473,9 +2540,10 @@
         <div class="pc-body"><div class="p-name">Volné místo</div><div class="p-role">klikni pro přihlášku</div></div>
       </a>`;
     }
-    const cls = p.type === 'captain' ? 'captain' : (p.type === 'trial' ? 'trial' : '');
+    const cls = p.type === 'captain' ? 'captain' : (p.type === 'trial' ? 'trial' : (p.type === 'coach' ? 'coach' : ''));
     const badge = p.type === 'captain' ? '<span class="pc-type captain">Kapitán</span>'
-      : (p.type === 'trial' ? '<span class="pc-type trial">Zkušební</span>' : '');
+      : (p.type === 'trial' ? '<span class="pc-type trial">Zkušební</span>'
+      : (p.type === 'coach' ? '<span class="pc-type coach">Coach</span>' : ''));
     const media = p.photo
       ? `<img class="pc-photo" src="${escapeHtml(p.photo)}" alt="${escapeHtml(p.name)}">`
       : `<div class="pc-ph">${escapeHtml(playerInitials(p.name))}</div>`;
@@ -3824,8 +3892,8 @@
     }
   });
 
-  /* ============ DOTAZNÍK -> DISCORD WEBHOOK ============ */
-  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1547953283656581120/s2sVfd34zuChdIWCv3nGJ4KZvom_Epphj1PzwUIRRY3TS103Zj3ut6K4ngRMfPSP5Agm';
+  /* ============ NÁBOR -> DISCORD WEBHOOK ============ */
+  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1553882232022638703/imnpoec-Zgu7Tu4ldGEkoqL3ayXAB7v0BMTeeeSaKS-qC4yWlwbZxQCvKHqRDTJrr4AS';
   const TEAM_LABELS = { main:'Main', reserve:'Reserve Main', academy:'Academy', 'academy-reserve':'Academy Reserve' };
 
   document.getElementById('applyForm').addEventListener('submit', async function(e){
@@ -3833,7 +3901,9 @@
     const submitBtn = e.target.querySelector('.submit-btn');
     const toast = document.getElementById('formToast');
 
-    const nick = document.getElementById('f-nick').value.trim();
+    const first = document.getElementById('f-first').value.trim();
+    const last = document.getElementById('f-last').value.trim();
+    const email = document.getElementById('f-email').value.trim();
     const discord = document.getElementById('f-discord').value.trim();
     const teamChecked = document.querySelector('input[name="team"]:checked');
     const team = teamChecked ? TEAM_LABELS[teamChecked.value] : 'Neuvedeno';
@@ -3842,6 +3912,17 @@
     const steam = document.getElementById('f-steam').value.trim();
     const faceit = document.getElementById('f-faceit').value.trim();
     const exp = document.getElementById('f-exp').value.trim() || 'Neuvedeno';
+    const roles = Array.from(document.querySelectorAll('input[name="role"]:checked')).map(i => i.value);
+    const days = Array.from(document.querySelectorAll('input[name="day"]:checked')).map(i => i.value);
+    const times = Array.from(document.querySelectorAll('input[name="time"]:checked')).map(i => i.value);
+
+    const roleErr = document.getElementById('roleError');
+    const dayErr = document.getElementById('dayError');
+    roleErr.classList.toggle('show', roles.length === 0);
+    dayErr.classList.toggle('show', days.length === 0);
+    if(roles.length === 0 || days.length === 0){
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Odesílám...';
@@ -3851,14 +3932,18 @@
         title: 'Nová přihláška do Freezers Esports',
         color: 0x2fe0c9,
         fields: [
-          { name: 'Přezdívka', value: nick || 'Neuvedeno', inline: true },
+          { name: 'Jméno a příjmení', value: `${first} ${last}`.trim() || 'Neuvedeno', inline: true },
+          { name: 'Email', value: email || 'Neuvedeno', inline: true },
           { name: 'Discord', value: discord || 'Neuvedeno', inline: true },
-          { name: 'Zájem o tým', value: team, inline: true },
           { name: 'Věk', value: String(age), inline: true },
+          { name: 'Zájem o tým', value: team, inline: true },
           { name: 'CS2 Rank / Rating', value: rank, inline: true },
+          { name: 'Role', value: roles.join(', ') },
+          { name: 'Tréninkové dny', value: days.join(', ') },
+          { name: 'Čas', value: times.join(', ') || 'Neuvedeno', inline: true },
           { name: 'Steam', value: steam ? `[Profil](${steam})` : 'Neuvedeno', inline: true },
           { name: 'Faceit', value: faceit ? `[Profil](${faceit})` : 'Neuvedeno', inline: true },
-          { name: 'Zkušenosti', value: exp }
+          { name: 'Zkušenosti / motivace', value: exp }
         ],
         timestamp: new Date().toISOString()
       }]
@@ -3883,6 +3968,8 @@
       toast.style.background = '';
       toast.classList.add('show');
       e.target.reset();
+      roleErr.classList.remove('show');
+      dayErr.classList.remove('show');
     } catch(err){
       console.error('Chyba při odesílání dotazníku:', err);
       toast.textContent = 'Něco se pokazilo při odesílání. Zkus to prosím znovu, nebo napiš rovnou na Discord.';
@@ -4096,9 +4183,9 @@
       { cat:'OBECNÉ', q:'Kde nás můžeš sledovat a podpořit?', a:'Nejrychleji přes náš Discord, kde najdeš všechny oznámení, scrimy i nábor. Follow na sociálních sítích a sledování streamů našich tvůrců obsahu je taky velká podpora.' },
       { cat:'OBECNÉ', q:'Je účast v organizaci placená?', a:'Ne, jsme komunitní organizace. Hráči i staff jsou dobrovolníci — o to víc nám jde o zábavu, rozvoj a společné výsledky.' },
       { cat:'TÝMY', q:'Jaké týmy aktuálně máme?', a:'Čtyři sestavy: Main (GlossGlockner), Reserve Main (DasisGlockner), Academy (Sněžníci) a Academy Reserve (Sněhulky). Kompletní roster najdeš v sekci Roster.' },
-      { cat:'TÝMY', q:'Jak se dostanu do týmu?', a:'Vyplň dotazník v sekci Dotazník — ozveme se ti na Discordu a domluvíme trial. Do Reserve i Academy Reserve hledáme průběžně.' },
+      { cat:'TÝMY', q:'Jak se dostanu do týmu?', a:'Vyplň přihlášku v sekci Nábor — ozveme se ti na Discordu a domluvíme trial. Do Reserve i Academy Reserve hledáme průběžně.' },
       { cat:'TURNAJE', q:'Kde aktuálně hrajeme?', a:'Kalendář zápasů a turnajů najdeš v sekci Kalendář. Pravidelně se vracíme například do Hype Cupu.' },
-      { cat:'SPOLUPRÁCE', q:'Jak se stát partnerem Freezers?', a:'Napiš nám přes kontakt nebo Discord. Nabízíme prezentaci značky na webu, na dresech a u našich streamerů.' },
+      { cat:'SPOLUPRÁCE', q:'Jak se stát partnerem Freezers?', a:'Napiš nám na email help@freezers-esport.eu nebo přes kontakt / Discord. Nabízíme prezentaci značky na webu, na dresech a u našich streamerů.' },
       { cat:'SPOLUPRÁCE', q:'Můžu u vás streamovat / tvořit obsah?', a:'Jo! Sekce Influenceři / Streameři je přesně pro tohle — přidej se na Discord a domluvíme zařazení mezi naše tvůrce obsahu.' }
     ];
     const wrap = document.getElementById('faqWrap');
