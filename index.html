@@ -2510,6 +2510,9 @@
   }
 
   async function saveRosterToGithub(roster, sha, message){
+    if(!ghToken){
+      throw new Error('Nejsi přihlášený do admin panelu — pro ukládání rosteru se nejdřív přihlas.');
+    }
     const body = {
       message,
       content: b64EncodeUnicode(JSON.stringify(roster, null, 2)),
@@ -2654,6 +2657,8 @@
 
       list.querySelectorAll('.admin-delete-btn').forEach(btn => {
         btn.addEventListener('click', async function(){
+          const rowName = btn.closest('.admin-news-row')?.querySelector('strong')?.textContent || 'hráče';
+          if(!confirm(`Opravdu chceš odebrat ${rowName} ze sestavy?`)) return;
           btn.disabled = true;
           btn.textContent = 'Mažu...';
           try{
