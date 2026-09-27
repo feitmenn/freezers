@@ -220,6 +220,43 @@
     .scrim-banner-inner{flex-direction:column;align-items:flex-start;}
   }
 
+  /* SERVER STATUS BANNER (Fakaheda query) */
+  .srv-banner{
+    background:var(--card);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:18px 0;
+  }
+  .srv-banner-inner{
+    max-width:1180px;margin:0 auto;padding:0 28px;
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  }
+  .srv-head{display:flex;flex-direction:column;gap:6px;min-width:200px;}
+  .srv-title{
+    display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;
+    color:var(--turquoise);font-family:'Chakra Petch',sans-serif;font-weight:600;
+  }
+  .srv-title::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--turquoise);box-shadow:0 0 10px var(--turquoise);animation:pulse 2s infinite;}
+  .srv-ip{font-family:'Chakra Petch',sans-serif;font-size:16px;font-weight:600;letter-spacing:.02em;}
+  .srv-state{font-size:12px;color:var(--ice-dim);}
+  .srv-query-wrap{flex:1;min-width:280px;max-width:560px;}
+  .srv-query-img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:rgba(0,0,0,0.25);}
+  .srv-offline{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    border:1px dashed var(--line);border-radius:4px;padding:14px 18px;
+    font-size:13px;color:var(--ice-dim);background:rgba(0,0,0,0.15);
+  }
+  .srv-retry-btn{
+    background:transparent;border:1px solid var(--line);color:var(--ice);
+    padding:8px 14px;border-radius:2px;font-family:'Chakra Petch',sans-serif;
+    font-weight:600;font-size:12px;cursor:pointer;transition:border-color .2s,color .2s;
+  }
+  .srv-retry-btn:hover{border-color:var(--turquoise);color:var(--turquoise);}
+  @media (max-width:700px){
+    .srv-banner-inner{flex-direction:column;align-items:flex-start;}
+    .srv-query-wrap{max-width:100%;}
+  }
+
   /* HUB */
   .hub{
     display:grid;
@@ -1174,6 +1211,7 @@
 </section>
 
 <div id="scrimServerBanner"></div>
+<div id="serverStatusBanner"></div>
 
 <section class="section" id="hub">
   <div class="wrap">
@@ -2166,6 +2204,7 @@
   renderNews();
 
   /* ============ SCRIM SERVER BANNER ============ */
+  const SCRIM_FILE = 'scrimserver.json';
   async function renderScrimBanner(){
     const el = document.getElementById('scrimServerBanner');
     try{
@@ -2206,6 +2245,59 @@
     }
   }
   renderScrimBanner();
+
+  /* ============ SERVER STATUS BANNER (Fakaheda query obrázek) ============ */
+  // Query banner se načte ze serveru; pokud server není vidět (offline / obrázek
+  // se nenačte), zobrazí se fallback stav. Cache-buster zajistí čerstvý snímek.
+  const SERVER_QUERY_HOST = '185.180.2.39:27512';
+  const SERVER_QUERY_BASE = 'http://query.fakaheda.eu/' + SERVER_QUERY_HOST + '.jpg';
+  function serverQueryUrl(){
+    return SERVER_QUERY_BASE + '?size=550x100&cb=' + Date.now();
+  }
+  function renderServerStatusBanner(){
+    const el = document.getElementById('serverStatusBanner');
+    if(!el) return;
+    el.innerHTML = `
+      <div class="srv-banner">
+        <div class="srv-banner-inner">
+          <div class="srv-head">
+            <div class="srv-title">CS2 SERVER</div>
+            <div class="srv-ip">${escapeHtml(SERVER_QUERY_HOST)}</div>
+            <div class="srv-state" id="srvState">Načítám stav serveru…</div>
+          </div>
+          <div class="srv-query-wrap" id="srvQueryWrap"></div>
+        </div>
+      </div>
+    `;
+    mountServerQueryImage();
+  }
+  function mountServerQueryImage(){
+    const wrap = document.getElementById('srvQueryWrap');
+    const state = document.getElementById('srvState');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    const img = new Image();
+    img.className = 'srv-query-img';
+    img.alt = 'Counter-Strike 2 — stav serveru';
+    img.referrerPolicy = 'no-referrer';
+    img.onload = function(){
+      wrap.innerHTML = '';
+      wrap.appendChild(img);
+      if(state) state.textContent = 'Server je online';
+    };
+    img.onerror = function(){
+      wrap.innerHTML = `
+        <div class="srv-offline">
+          <span>Server právě není vidět — je offline nebo se stav nepodařilo načíst.</span>
+          <button type="button" class="srv-retry-btn" id="srvRetryBtn">Zkusit znovu</button>
+        </div>
+      `;
+      if(state) state.textContent = 'Server je offline / nedostupný';
+      document.getElementById('srvRetryBtn')?.addEventListener('click', mountServerQueryImage);
+    };
+    img.src = serverQueryUrl();
+  }
+  renderServerStatusBanner();
 
   /* ============ PARTNEŘI (uložení jako partners.json přímo v GitHub repu) ============ */
   const PARTNERS_FILE = 'partners.json';
@@ -2600,7 +2692,6 @@
   const ATTENDANCE_FILE = 'attendance.json';
   const EXCUSES_FILE = 'excuses.json';
   const NOTIFICATIONS_FILE = 'notifications.json';
-  const SCRIM_FILE = 'scrimserver.json';
 
   let memberUsername = '';
   let memberAccessCode = ''; // sdílený zápisový token
