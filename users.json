@@ -17,11 +17,6 @@
     "role": "admin"
   },
   {
-    "username": "filuta",
-    "displayName": "",
-    "passwordHash": "b638ec7a216dea6db629be23f9ec626970ae9de25673f7c675add8c0e68aaa99"
-  },
-  {
     "username": "rope_flp",
     "displayName": "ROPE",
     "passwordHash": "20729cec7c1d9739730b8246c44b337d31907e95032244a6b47268d3cb58d989"
