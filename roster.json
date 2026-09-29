@@ -79,6 +79,14 @@
     },
     {
       "type": "empty"
+    },
+    {
+      "name": "Chudakpriba",
+      "role": "Zkusebni obdobi",
+      "type": "trial",
+      "steam": "https://steamcommunity.com/profiles/76561199818006099/",
+      "faceit": "https://www.faceit.com/cs/players/chudak_priba   , https://steamcommunity.com/profiles/76561199818006099/",
+      "photo": ""
     }
   ],
   "academy-reserve": [
