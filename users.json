@@ -51,5 +51,11 @@
     "displayName": "majales",
     "passwordHash": "78047a191eeee931aa6b76f42c8d64cc443768fc0965cf9deffef72046ddba1d",
     "role": "member"
+  },
+  {
+    "username": "chudakpriba",
+    "displayName": "priba",
+    "passwordHash": "159e6b637588b6199f5cf9efb5d0d8beb49b58c1e6fe3e23015656d319798d77",
+    "role": "member"
   }
 ]
