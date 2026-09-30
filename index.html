@@ -339,6 +339,11 @@
   .week-nav-btn:hover{background:rgba(47,224,201,0.2);transform:scale(1.08);}
   .week-nav-btn:active{transform:scale(0.96);}
   .week-label{font-family:'Chakra Petch',sans-serif;font-size:15px;color:var(--ice-dim);min-width:140px;text-align:center;}
+  .calendar-cal-badge{
+    display:inline-block;margin-bottom:12px;padding:5px 12px;border-radius:999px;
+    font-family:'Chakra Petch',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;
+    color:var(--turquoise);border:1px solid rgba(47,224,201,0.4);background:rgba(47,224,201,0.08);
+  }
   .calendar-legend{display:flex;gap:20px;margin-bottom:18px;font-size:12px;color:var(--ice-dim);flex-wrap:wrap;}
   .legend-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:middle;}
   .calendar-grid{border:1px solid var(--line);border-radius:3px;overflow-x:auto;overflow-y:hidden;}
@@ -427,23 +432,29 @@
   .excuse-reject-btn:hover{background:rgba(255,95,95,0.12);}
 
   .cookie-banner{
-    position:fixed;left:0;right:0;bottom:0;z-index:300;
-    display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
+    position:fixed;right:24px;bottom:24px;z-index:300;
+    width:min(380px, calc(100vw - 48px));
+    display:flex;flex-direction:column;align-items:stretch;gap:14px;
     background:rgba(11,11,12,0.96);backdrop-filter:blur(10px);
-    border-top:1px solid var(--line);
-    padding:16px 24px;
-    transform:translateY(0);transition:transform .3s ease;
+    border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px;
+    box-shadow:0 20px 48px rgba(0,0,0,0.45);
+    transform:translateY(0);opacity:1;
+    transition:transform .35s ease, opacity .35s ease;
   }
-  .cookie-banner.hidden{transform:translateY(120%);}
-  .cookie-text{font-size:13px;color:var(--ice-dim);max-width:640px;}
+  .cookie-banner.hidden{transform:translateY(calc(100% + 40px));opacity:0;pointer-events:none;}
+  .cookie-text{font-size:13px;color:var(--ice-dim);line-height:1.55;}
   .cookie-text a{color:var(--turquoise);}
   .cookie-accept-btn{
     background:linear-gradient(120deg,var(--turquoise),var(--violet));
-    color:#080b14;border:none;padding:10px 24px;border-radius:2px;
+    color:#080b14;border:none;padding:11px 24px;border-radius:12px;
     font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:13px;
     cursor:pointer;white-space:nowrap;transition:filter .2s;
   }
   .cookie-accept-btn:hover{filter:brightness(1.1);}
+  @media (max-width:700px){
+    .cookie-banner{right:14px;bottom:14px;width:calc(100vw - 28px);padding:16px;border-radius:14px;}
+  }
 
   .notification-stack{
     position:fixed;top:90px;right:20px;z-index:400;
@@ -736,6 +747,19 @@
     background:var(--bg-2);border:1px solid var(--line);color:var(--ice);
     font-family:'Inter',sans-serif;font-size:12px;padding:6px 8px;border-radius:2px;
   }
+  .admin-category-select{
+    background:var(--bg-2);border:1px solid var(--line);color:var(--ice);
+    font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:0.06em;
+    padding:6px 8px;border-radius:6px;text-transform:uppercase;
+  }
+  .admin-cal-tag{
+    display:inline-block;padding:3px 9px;border-radius:999px;
+    font-family:'Chakra Petch',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+    border:1px solid rgba(45,212,191,0.45);color:var(--turquoise);background:rgba(45,212,191,0.1);
+  }
+  .admin-cal-tag.academy{
+    border-color:rgba(154,92,255,0.5);color:var(--violet);background:rgba(154,92,255,0.1);
+  }
 
   footer{border-top:1px solid var(--line);padding:36px 0;}
   .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
@@ -797,7 +821,7 @@
     background:#ffffff;border-color:var(--turquoise);
   }
   body.theme-light .field input::placeholder, body.theme-light .field textarea::placeholder{color:rgba(92,102,115,0.6);}
-  body.theme-light .cookie-banner{background:#ffffff;border-top:1px solid var(--line);box-shadow:0 -6px 24px rgba(18,22,28,0.08);}
+  body.theme-light .cookie-banner{background:#ffffff;border:1px solid var(--line);box-shadow:0 20px 48px rgba(18,22,28,0.16);}
   body.theme-light .modal-overlay{background:rgba(18,22,28,0.45);}
   body.theme-light .admin-tabs{background:var(--bg-1);}
   body.theme-light footer{border-top:1px solid var(--line);}
@@ -922,9 +946,7 @@
   .fz-rail-word{font-size:13px;font-weight:700;letter-spacing:.08em;}
   .fz-rail:hover .fz-rail-word{color:#fff;}
   nav.links{display:none;}
-  .cookie-banner{left:64px;}
   @media (max-width:700px){
-    .cookie-banner{left:52px;}
     .fz-rail{width:52px;}
     body{padding-left:52px;}
     .fz-rail-btn{width:38px;height:38px;}
@@ -1094,6 +1116,65 @@
     .fz-car-img{min-height:220px;}
     .fz-car-body{padding:24px 22px 44px;}
   }
+
+  /* ============ PLAYBOOKY (sekce jen pro členy) ============ */
+  .pb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:14px;}
+  .pb-map{
+    position:relative;isolation:isolate;overflow:hidden;
+    border:1px solid var(--line);border-radius:16px;
+    background-color:var(--bg-2);background-size:cover;background-position:center;
+    padding:16px;display:flex;flex-direction:column;gap:12px;min-height:360px;
+  }
+  .pb-map::before{
+    content:'';position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(180deg,rgba(8,9,12,0.5) 0%,rgba(8,9,12,0.78) 50%,rgba(8,9,12,0.93) 100%);
+  }
+  .pb-map-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .pb-map-name{
+    font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:19px;
+    letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.65);
+  }
+  .pb-map-count{
+    font-family:'Chakra Petch',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--turquoise);background:rgba(8,9,12,.62);border:1px solid rgba(47,224,201,.4);
+    padding:4px 10px;border-radius:999px;white-space:nowrap;
+  }
+  .pb-strats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .pb-strat{
+    position:relative;aspect-ratio:1/1;border-radius:12px;padding:10px 11px;cursor:pointer;text-align:left;
+    display:flex;flex-direction:column;justify-content:flex-end;gap:5px;
+    background:rgba(10,11,14,.72);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(4px);
+    font-family:'Inter',sans-serif;color:var(--ice);
+    transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .25s,background .25s;
+  }
+  .pb-strat:hover{transform:translateY(-4px);border-color:rgba(47,224,201,.55);background:rgba(10,11,14,.88);}
+  .pb-strat.has-video::after{
+    content:'▶';position:absolute;top:8px;right:10px;font-size:9px;color:var(--turquoise);
+    background:rgba(8,9,12,.6);border:1px solid rgba(47,224,201,.35);border-radius:999px;padding:3px 6px;
+  }
+  .pb-strat-title{
+    font-family:'Chakra Petch',sans-serif;font-size:12px;font-weight:600;line-height:1.3;color:#fff;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .pb-strat-desc{
+    font-size:11px;line-height:1.45;color:rgba(228,232,238,.72);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .pb-map-empty{
+    grid-column:1/-1;border:1px dashed rgba(255,255,255,.22);border-radius:12px;
+    padding:18px;text-align:center;font-size:12px;color:rgba(228,232,238,.6);
+  }
+  .pb-detail-title{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;color:var(--ice);margin:0 0 10px;}
+  .pb-detail-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .pb-detail-desc{font-size:13px;line-height:1.7;color:var(--ice-dim);white-space:pre-wrap;margin:0 0 18px;}
+  body.theme-light .pb-map::before{background:linear-gradient(180deg,rgba(244,246,248,.35) 0%,rgba(244,246,248,.8) 55%,rgba(244,246,248,.94) 100%);}
+  body.theme-light .pb-map-name{color:#12161c;text-shadow:none;}
+  body.theme-light .pb-map-count{background:rgba(255,255,255,.75);}
+  body.theme-light .pb-strat{background:rgba(255,255,255,.85);border-color:rgba(18,22,28,.14);}
+  body.theme-light .pb-strat:hover{background:rgba(255,255,255,.95);}
+  body.theme-light .pb-strat-title{color:#12161c;}
+  body.theme-light .pb-strat-desc{color:rgba(60,68,78,.85);}
+  body.theme-light .pb-map-empty{border-color:rgba(18,22,28,.25);color:rgba(60,68,78,.7);}
 </style>
 </head>
 <body>
@@ -1133,6 +1214,10 @@
   <button type="button" class="fz-rail-btn" data-target="kalendar" aria-label="Kalendář">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <span class="fz-rail-tip">Kalendář</span>
+  </button>
+  <button type="button" class="fz-rail-btn" data-target="playbooky" aria-label="Playbooky">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <span class="fz-rail-tip">Playbooky</span>
   </button>
   <button type="button" class="fz-rail-btn" data-target="partneri" aria-label="Partneři">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -1404,6 +1489,7 @@
         <div class="week-label" id="weekLabel"></div>
         <button type="button" class="week-nav-btn" id="nextWeekBtn" aria-label="Další týden">›</button>
       </div>
+      <div class="calendar-cal-badge" id="calendarCalBadge"></div>
       <div class="calendar-legend">
         <span><span class="legend-dot" style="background:#2fe0c9;"></span>Scrim (SC)</span>
         <span><span class="legend-dot" style="background:#ff5fb0;"></span>CUP</span>
@@ -1418,6 +1504,34 @@
   <div class="modal-card">
     <button type="button" class="modal-close" id="closeEventDetailBtn">✕</button>
     <div id="eventDetailContent"></div>
+  </div>
+</div>
+
+<section class="section" id="playbooky">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-kicker">STRATEGIE</div>
+      <h2 class="section-title">Playbooky</h2>
+      <p class="section-sub">Nacvičené akce a strategie na jednotlivých mapách. Sekce je viditelná jen pro přihlášené členy.</p>
+    </div>
+
+    <div id="playbookLoggedOut" class="hub-card" style="max-width:440px;">
+      <div class="hc-label">PŘIHLÁŠENÍ ČLENA</div>
+      <div class="hc-title">Playbooky jsou jen pro členy</div>
+      <div class="hc-desc">Pro zobrazení strategií se přihlas svým členským účtem. <a href="#" id="openMemberLoginPb" style="color:var(--turquoise);">Přihlásit se</a></div>
+    </div>
+
+    <div id="playbookLoggedIn" style="display:none;">
+      <div class="calendar-cal-badge" id="playbookCalBadge"></div>
+      <div id="playbookGrid" class="pb-grid"></div>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="playbookDetailOverlay">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="closePlaybookDetailBtn">✕</button>
+    <div id="playbookDetailContent"></div>
   </div>
 </div>
 
@@ -1613,6 +1727,7 @@
 <div class="modal-overlay" id="adminPanelOverlay">
   <div class="modal-card modal-card-fullscreen">
     <button type="button" class="modal-close" id="closeAdminPanelBtn">✕</button>
+    <button type="button" class="btn-ghost" id="adminLogoutBtn" style="position:absolute;top:18px;right:60px;z-index:8;padding:8px 14px;font-size:12px;">Odhlásit se</button>
     <div class="modal-kicker">ADMIN PANEL</div>
 
     <div class="admin-tabs" id="adminTabs" role="tablist">
@@ -1625,6 +1740,7 @@
       <button type="button" class="admin-tab" data-tab="scrim" role="tab">Scrim</button>
       <button type="button" class="admin-tab" data-tab="partners" role="tab">Partneři</button>
       <button type="button" class="admin-tab" data-tab="influenceri" role="tab">Influenceři</button>
+      <button type="button" class="admin-tab" data-tab="playbooky" role="tab">Playbooky</button>
     </div>
 
     <div class="admin-tab-panel active" data-panel="news">
@@ -1736,6 +1852,14 @@
           <label for="au-password">Heslo</label>
           <input type="text" id="au-password" placeholder="vygeneruj/zadej heslo" required>
         </div>
+        <div class="field" id="au-category-field">
+          <label for="au-category">Kategorie (který kalendář člen uvidí)</label>
+          <select id="au-category">
+            <option value="main" selected>Main</option>
+            <option value="academy">Academy</option>
+          </select>
+        </div>
+        <p class="admin-hint">Platí pro nově zakládané účty. U existujících účtů se kategorie nastavuje v seznamu níže (jen owner) a při úpravě hesla se nemění.</p>
         <button type="submit" class="submit-btn">Vytvořit / upravit účet</button>
       </form>
       <div class="admin-divider"></div>
@@ -1759,6 +1883,13 @@
               <option value="training">Trénink (TRN)</option>
             </select>
           </div>
+        </div>
+        <div class="field">
+          <label for="ae-calendar">Kalendář</label>
+          <select id="ae-calendar">
+            <option value="main">Main</option>
+            <option value="academy">Academy</option>
+          </select>
         </div>
         <div class="field">
           <label for="ae-date">Datum a čas</label>
@@ -1900,6 +2031,48 @@
       <h3>Existující influenceři</h3>
       <div id="adminInfluencersList"></div>
     </div>
+
+    <div class="admin-tab-panel" data-panel="playbooky">
+      <h3>Přidat strategii do playbooku</h3>
+      <form id="adminPlaybookForm">
+        <div class="field-row">
+          <div class="field">
+            <label for="pb-title">Název strategie</label>
+            <input type="text" id="pb-title" placeholder="např. Falcons Delayed Banana Take" required>
+          </div>
+          <div class="field">
+            <label for="pb-map">Mapa</label>
+            <select id="pb-map"></select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="pb-video">Odkaz na video (nepovinné)</label>
+            <input type="url" id="pb-video" placeholder="https://youtu.be/...">
+          </div>
+          <div class="field">
+            <label for="pb-visibility">Viditelnost</label>
+            <select id="pb-visibility">
+              <option value="main" selected>Main</option>
+              <option value="academy">Academy</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="pb-desc">Stručný popis</label>
+          <textarea id="pb-desc" rows="4" placeholder="Krátký popisek, který se zobrazí v popisku strategie"></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="playbookFormSubmitBtn">Přidat strategii</button>
+      </form>
+      <div class="admin-divider"></div>
+      <h3>Existující strategie</h3>
+      <p class="admin-hint">U každé strategie můžeš přepnout viditelnost (Main / Academy) nebo ji smazat.</p>
+      <div id="adminPlaybookList" class="admin-list"></div>
+      <div class="admin-divider"></div>
+      <h3>Obrázky map</h3>
+      <p class="admin-hint">Ke každé mapě můžeš nahrát obrázek na pozadí čtverce (nebo vložit URL).</p>
+      <div id="adminPlaybookMaps" class="admin-list"></div>
+    </div>
   </div>
 </div>
 
@@ -1953,7 +2126,11 @@
   const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_FILE_PATH}`;
   const CONTENTS_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE_PATH}`;
 
-  let ghToken = ''; // GitHub token drží se jen v paměti prohlížeče po dobu session, nikam se neukládá
+  // GitHub token pro zápis (Contents API). Ukládá se i do localStorage, aby si
+  // admin panel zapamatoval přihlášení po reloadu; tlačítkem Odhlásit se smaže.
+  let ghToken = '';
+  const ADMIN_TOKEN_KEY = 'freezers_admin_token';
+  try{ ghToken = localStorage.getItem(ADMIN_TOKEN_KEY) || ''; }catch(e){ ghToken = ''; }
 
   function escapeHtml(str){
     const div = document.createElement('div');
@@ -2184,6 +2361,7 @@
     loadAdminScrimForm();
     renderAdminPartnersList();
     renderAdminInfluencersList();
+    renderAdminPlaybookList();
     renderAttendanceOverview();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
@@ -2241,6 +2419,7 @@
       const res = await fetch(CONTENTS_URL, { headers: { Authorization: `token ${val}` } });
       if(res.ok || res.status === 404){
         ghToken = val;
+        try{ localStorage.setItem(ADMIN_TOKEN_KEY, val); }catch(e){}
         closeAdminLogin();
         openAdminPanel();
       } else {
@@ -2262,6 +2441,11 @@
     openMemberLogin();
   });
   document.getElementById('closeAdminPanelBtn').addEventListener('click', closeAdminPanel);
+  document.getElementById('adminLogoutBtn').addEventListener('click', function(){
+    ghToken = '';
+    try{ localStorage.removeItem(ADMIN_TOKEN_KEY); }catch(e){}
+    closeAdminPanel();
+  });
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', function(e){
       if(e.target === overlay) overlay.classList.remove('show');
@@ -2761,6 +2945,7 @@
   /* ============ KALENDÁŘ + ÚČTY ČLENŮ (vše uložené v GitHub repu) ============ */
   const USERS_FILE = 'users.json';
   const CALENDAR_FILE = 'calendar.json';
+  const CALENDAR_ACADEMY_FILE = 'calendar-academy.json';
   const RSVPS_FILE = 'rsvps.json';
   const ATTENDANCE_FILE = 'attendance.json';
   const EXCUSES_FILE = 'excuses.json';
@@ -2769,9 +2954,26 @@
   let memberUsername = '';
   let memberAccessCode = ''; // sdílený zápisový token
   let memberRole = 'member'; // owner | admin | member
+  let memberCategory = 'main'; // main | academy — určuje, který kalendář člen vidí
   const MEMBER_SESSION_KEY = 'freezers_member_session';
   const OWNER_USERNAME = 'filas'; // tento účet má vždy roli owner, nejde ji odebrat
   const ROLE_LABELS = { owner: 'Owner', admin: 'Admin', member: 'Člen' };
+  const CATEGORY_LABELS = { main: 'Main', academy: 'Academy' };
+
+  function calendarFileFor(category){
+    return category === 'academy' ? CALENDAR_ACADEMY_FILE : CALENDAR_FILE;
+  }
+  // Sloučí akce z obou kalendářů (pro admin přehledy, docházku a omluvenky)
+  async function loadAllCalendarEvents(){
+    const [main, academy] = await Promise.all([
+      ghFetchPublic(CALENDAR_FILE).catch(() => null) || [],
+      ghFetchPublic(CALENDAR_ACADEMY_FILE).catch(() => null) || []
+    ]);
+    return [
+      ...main.map(ev => Object.assign({}, ev, { _cal: 'main' })),
+      ...academy.map(ev => Object.assign({}, ev, { _cal: 'academy' }))
+    ];
+  }
 
   // filas je vždy owner; ostatní podle uložené role, výchozí je člen
   function roleOf(user){
@@ -2780,9 +2982,9 @@
     return (user.role === 'owner' || user.role === 'admin') ? user.role : 'member';
   }
 
-  function saveMemberSession(username, accessCode, displayName, role){
+  function saveMemberSession(username, accessCode, displayName, role, category){
     try{
-      localStorage.setItem(MEMBER_SESSION_KEY, JSON.stringify({ username, accessCode, displayName, role }));
+      localStorage.setItem(MEMBER_SESSION_KEY, JSON.stringify({ username, accessCode, displayName, role, category }));
     }catch(e){ console.error('Nepodařilo se uložit přihlášení:', e); }
   }
   function loadMemberSession(){
@@ -2887,10 +3089,15 @@
       memberUsername = '';
       memberAccessCode = '';
       memberRole = 'member';
+      memberCategory = 'main';
       clearMemberSession();
       this.textContent = 'Přihlásit se';
       document.getElementById('calendarLoggedIn').style.display = 'none';
       document.getElementById('calendarLoggedOut').style.display = 'block';
+      document.getElementById('playbookLoggedIn').style.display = 'none';
+      document.getElementById('playbookLoggedOut').style.display = 'block';
+      playbookCache = null;
+      document.getElementById('playbookGrid').innerHTML = '';
     } else {
       openMemberLogin();
     }
@@ -2943,12 +3150,16 @@
       memberUsername = username;
       memberAccessCode = accessCode;
       memberRole = roleOf(user);
-      saveMemberSession(username, accessCode, user.displayName || username, memberRole);
+      memberCategory = (user.category === 'academy') ? 'academy' : 'main';
+      saveMemberSession(username, accessCode, user.displayName || username, memberRole, memberCategory);
       closeMemberLogin();
       document.getElementById('calendarLoggedOut').style.display = 'none';
       document.getElementById('calendarLoggedIn').style.display = 'block';
+      document.getElementById('playbookLoggedOut').style.display = 'none';
+      document.getElementById('playbookLoggedIn').style.display = 'block';
       document.getElementById('openMemberLoginNav').textContent = user.displayName || username;
       loadCalendar();
+      loadPlaybookSection();
       checkAndShowNotifications();
     }catch(err){
       errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
@@ -3153,10 +3364,12 @@
     const gridEl = document.getElementById('calendarGrid');
     gridEl.innerHTML = '<div class="news-empty"><p>Načítám...</p></div>';
     try{
-      calendarEventsCache = await ghFetchPublic(CALENDAR_FILE) || [];
+      calendarEventsCache = await ghFetchPublic(calendarFileFor(memberCategory)) || [];
       calendarRsvpsCache = await ghFetchPublic(RSVPS_FILE) || {};
       calendarUsersCache = await ghFetchPublic(USERS_FILE) || [];
       calendarExcusesCache = await ghFetchPublic(EXCUSES_FILE) || {};
+      const calBadge = document.getElementById('calendarCalBadge');
+      if(calBadge) calBadge.textContent = 'Kalendář: ' + (CATEGORY_LABELS[memberCategory] || 'Main');
       renderCalendarGrid();
     }catch(e){
       gridEl.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
@@ -3176,18 +3389,31 @@
         return;
       }
       const canManage = (memberRole === 'owner' || memberRole === 'admin');
+      const isOwner = (memberRole === 'owner');
+      const catField = document.getElementById('au-category-field');
+      if(catField) catField.style.display = isOwner ? '' : 'none';
       list.innerHTML = users.map((u, idx) => {
         const role = roleOf(u);
+        const category = (u.category === 'academy') ? 'academy' : 'main';
         let control;
         if(role === 'owner'){
           control = `<span class="role-badge owner">Owner</span>`;
         }else if(canManage){
-          control = `<select class="admin-role-select" data-idx="${idx}">
+          control = `<select class="admin-role-select" data-idx="${idx}" title="Role">
               <option value="member"${role === 'member' ? ' selected' : ''}>Člen</option>
               <option value="admin"${role === 'admin' ? ' selected' : ''}>Admin</option>
             </select>`;
         }else{
           control = `<span class="role-badge ${role}">${ROLE_LABELS[role] || role}</span>`;
+        }
+        let categoryControl;
+        if(isOwner){
+          categoryControl = `<select class="admin-category-select" data-idx="${idx}" title="Který kalendář člen uvidí">
+              <option value="main"${category === 'main' ? ' selected' : ''}>Main</option>
+              <option value="academy"${category === 'academy' ? ' selected' : ''}>Academy</option>
+            </select>`;
+        }else{
+          categoryControl = `<span class="admin-cal-tag ${category}">${CATEGORY_LABELS[category]}</span>`;
         }
         return `
         <div class="admin-news-row">
@@ -3196,11 +3422,31 @@
             <span>@${escapeHtml(u.username)}</span>
           </div>
           <div style="display:flex;gap:8px;align-items:center;">
+            ${categoryControl}
             ${control}
             <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
           </div>
         </div>`;
       }).join('');
+      list.querySelectorAll('.admin-category-select').forEach(sel => {
+        sel.addEventListener('change', async function(){
+          const idx = parseInt(sel.dataset.idx, 10);
+          const newCategory = sel.value;
+          sel.disabled = true;
+          try{
+            const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+            const users = data || [];
+            if(users[idx]){
+              users[idx].category = newCategory;
+              await ghSave(USERS_FILE, users, sha, `Změna kategorie: ${users[idx].username} -> ${newCategory}`, ghToken);
+            }
+            renderAdminUserList();
+          }catch(e){
+            alert('Nepodařilo se změnit kategorii: ' + e.message);
+            sel.disabled = false;
+          }
+        });
+      });
       list.querySelectorAll('.admin-role-select').forEach(sel => {
         sel.addEventListener('change', async function(){
           const idx = parseInt(sel.dataset.idx, 10);
@@ -3257,7 +3503,11 @@
       const users = data || [];
       const existingIdx = users.findIndex(u => u.username === username);
       const prevRole = existingIdx >= 0 ? (users[existingIdx].role || 'member') : 'member';
-      const entry = { username, displayName, passwordHash, role: prevRole };
+      const prevCategory = existingIdx >= 0 && users[existingIdx].category === 'academy' ? 'academy' : 'main';
+      const category = (existingIdx >= 0 || memberRole !== 'owner')
+        ? prevCategory
+        : (document.getElementById('au-category').value === 'academy' ? 'academy' : 'main');
+      const entry = { username, displayName, passwordHash, role: prevRole, category };
       if(existingIdx >= 0) users[existingIdx] = entry; else users.push(entry);
       await ghSave(USERS_FILE, users, sha, `Přidání/úprava účtu: ${username}`, ghToken);
       e.target.reset();
@@ -3274,37 +3524,45 @@
   async function renderAdminEventList(){
     const list = document.getElementById('adminEventList');
     try{
-      const events = await ghFetchPublic(CALENDAR_FILE) || [];
+      const events = await loadAllCalendarEvents();
 
       // Naplní i výběr akce v sekci Docházka
       const select = document.getElementById('att-event-select');
       const prevValue = select.value;
       select.innerHTML = '<option value="">— vyber akci —</option>' +
-        events.map(ev => `<option value="${ev.id}">${escapeHtml(ev.title)} — ${formatEventDate(ev.date)}</option>`).join('');
+        events.map(ev => `<option value="${ev.id}">[${CATEGORY_LABELS[ev._cal]}] ${escapeHtml(ev.title)} — ${formatEventDate(ev.date)}</option>`).join('');
       if(events.some(ev => ev.id === prevValue)) select.value = prevValue;
 
       if(!events.length){
         list.innerHTML = '<div class="admin-empty">Zatím žádné akce.</div>';
         return;
       }
-      list.innerHTML = events.map((ev, idx) => `
+      // data-idx je pozice akce uvnitř jejího kalendářového souboru
+      const seenInCal = { main: 0, academy: 0 };
+      list.innerHTML = events.map(ev => {
+        const calIdx = seenInCal[ev._cal]++;
+        return `
         <div class="admin-news-row">
           <div class="admin-news-row-text">
             <strong>${escapeHtml(ev.title)}</strong>
             <span>${formatEventDate(ev.date)}</span>
           </div>
-          <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
-        </div>
-      `).join('');
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="admin-cal-tag ${ev._cal}">${CATEGORY_LABELS[ev._cal]}</span>
+            <button type="button" class="admin-delete-btn" data-cal="${ev._cal}" data-idx="${calIdx}">Smazat</button>
+          </div>
+        </div>`;
+      }).join('');
       list.querySelectorAll('.admin-delete-btn').forEach(btn => {
         btn.addEventListener('click', async function(){
           btn.disabled = true;
           btn.textContent = 'Mažu...';
           try{
-            const { data, sha } = await ghFetchWithSha(CALENDAR_FILE, ghToken);
+            const calFile = calendarFileFor(btn.dataset.cal);
+            const { data, sha } = await ghFetchWithSha(calFile, ghToken);
             const events = data || [];
             events.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(CALENDAR_FILE, events, sha, 'Odebrání akce z kalendáře', ghToken);
+            await ghSave(calFile, events, sha, 'Odebrání akce z kalendáře', ghToken);
             renderAdminEventList();
           }catch(e){
             alert('Nepodařilo se smazat akci: ' + e.message);
@@ -3325,15 +3583,17 @@
     const type = document.getElementById('ae-type').value;
     const date = document.getElementById('ae-date').value;
     const description = document.getElementById('ae-desc').value.trim();
+    const cal = document.getElementById('ae-calendar').value === 'academy' ? 'academy' : 'main';
+    const calFile = calendarFileFor(cal);
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Přidávám...';
     try{
-      const { data, sha } = await ghFetchWithSha(CALENDAR_FILE, ghToken);
+      const { data, sha } = await ghFetchWithSha(calFile, ghToken);
       const events = data || [];
       const id = 'ev_' + Date.now();
       events.push({ id, title, type, date: new Date(date).toISOString(), description });
-      await ghSave(CALENDAR_FILE, events, sha, `Přidání akce: ${title}`, ghToken);
+      await ghSave(calFile, events, sha, `Přidání akce (${CATEGORY_LABELS[cal]}): ${title}`, ghToken);
       e.target.reset();
       renderAdminEventList();
     }catch(err){
@@ -3542,7 +3802,7 @@
     list.innerHTML = '<div class="admin-empty">Načítám...</div>';
     try{
       const excuses = await ghFetchPublic(EXCUSES_FILE) || {};
-      const events = await ghFetchPublic(CALENDAR_FILE) || [];
+      const events = await loadAllCalendarEvents();
       const users = await ghFetchPublic(USERS_FILE) || [];
 
       const rows = [];
@@ -3631,10 +3891,14 @@
     memberUsername = session.username;
     memberAccessCode = session.accessCode;
     memberRole = (session.username === OWNER_USERNAME) ? 'owner' : (session.role || 'member');
+    memberCategory = (session.category === 'academy') ? 'academy' : 'main';
     document.getElementById('calendarLoggedOut').style.display = 'none';
     document.getElementById('calendarLoggedIn').style.display = 'block';
+    document.getElementById('playbookLoggedOut').style.display = 'none';
+    document.getElementById('playbookLoggedIn').style.display = 'block';
     document.getElementById('openMemberLoginNav').textContent = session.displayName || session.username;
     loadCalendar();
+    loadPlaybookSection();
     checkAndShowNotifications();
   }
   restoreMemberSession();
@@ -3984,6 +4248,297 @@
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Odeslat přihlášku';
+    }
+  });
+
+  /* ============ PLAYBOOKY (sekce jen pro přihlášené členy) ============ */
+  const PLAYBOOK_FILE = 'playbook.json';
+  const PLAYBOOK_MAP_NAMES = ['Ancient', 'Cache', 'Dust2', 'Nuke', 'Inferno', 'Mirage', 'Anubis'];
+  // Výchozí obsah, dokud v repu neexistuje playbook.json (vytvoří se prvním uložením v adminu)
+  const PLAYBOOK_SEED = {
+    maps: [
+      { name: 'Ancient', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/ancient-1789677696177.jpg' },
+      { name: 'Mirage', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/mirage-1789677719898.webp' },
+      { name: 'Inferno', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/inferno-1789678627972.jpg' },
+      { name: 'Nuke', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/nuke-1789847901611.webp' }
+    ],
+    entries: [
+      { title: 'TYLOO Window to B Split Pistol', map: 'Ancient', videoLink: 'https://www.youtube.com/watch?v=sS26eXxQdOE', description: 'First Spawn Nades\n\nNo nades attached\nSecond Spawn Nades\n\nNo nades attached\nThird Spawn Nades\nWindow from Mid\nFloater Player Nades\nDrops a Flash\nInstant Window Smoke Spawn 5\nDefault Mid T Flash\nB Lurk Player Nades\n\nNo nades attached', addedAt: '2026-09-17T20:50:48.932Z' },
+      { title: 'Spirit Defensive 3-1-1 Anti-Eco', map: 'Ancient', videoLink: 'https://youtu.be/64xdIqxlMaw', description: 'Mid Player Nades\nDefault Mid CT Flash\nA Site Player Nades\n\nDefault Mid CT HE\nMolotov\nSmoke\n\nAWP Player Nades\nInstant Elbow Smoke Spawn 3\n\nCave Player Nades\nDefault Highway CT HE\nHighway Bounce Molotov from Cave\n\nB Site Player Nades\nFast Banana CT Molotov\nHE Grenade', addedAt: '2026-09-17T21:01:06.356Z' },
+      { title: 'FUT B Exec to Hut Take Pistol', map: 'Ancient', videoLink: 'https://youtu.be/n-3FqKE0YlU', description: 'B Execute Pistol with  and  Smokes, paired up with  Molotov.\n\n1 player takes early \n\nB Lurk Player Nades\nNo nades attached\n\nMid Player Nades\nNo nades attached\n\nFloater Player Nades\nShort from B Doors\nPillar & Hobbit from B Doors\nA Lurk Player Nades\nNo nades attached\n\nAWP Player Nades\nLong from B Lobby Corner #2\nB Site Bonus Flash from B Lobby Corner\nHut from Maden', addedAt: '2026-09-17T21:21:02.560Z' },
+      { title: 'The MongolZ Fast Broken Boost (3B)', map: 'Inferno', videoLink: 'https://youtu.be/kEgMGU1mgtw', description: 'Short Player Nades\nBanana Self Flash from Fallen\nLogs from Fallen\n\nB Rotation Player Nades\nCar from Fallen\nTabsen from Fallen\n\nB Site Player Nades\nBottom Banana from Fallen\nFlash', addedAt: '2026-09-18T22:04:25.595Z' },
+      { title: 'Woxic AWP Bedroom Peek', map: 'Inferno', videoLink: 'https://youtu.be/ELxvkLwRd5c', description: 'AWP Player Nades\nExtinguishes', addedAt: '2026-09-18T22:05:25.794Z' },
+      { title: 'Vitality B Pop Ending', map: 'Inferno', videoLink: 'https://youtu.be/B8scfJGQz3Q', description: 'Banana Player Nades\nNo nades attached\n\nBoiler Player Nades\nNo nades attached\n\nAWP Player Nades\nDrops a HE Grenade\nSmoke\nFloater Player Nades\nCT from Broken\nCT from Broken\nB Site from Broken #2\n\nApps Player Nades\nNo nades attached', addedAt: '2026-09-18T22:07:12.948Z' },
+      { title: 'Falcons Delayed Banana Take (3B)', map: 'Inferno', videoLink: 'https://youtu.be/jpzeZ65hxuI', description: 'B Site Player Nades\nDrops a Flash\nLogs from Fallen\nLogs from Fallen\nExtinguishes\nB Rotation Player Nades\nDefault Banana CT HE\n2x\nTabsen & Logs from Fallen\nShort Player Nades\n2x\nBanana from Pool\nLogs from Fallen', addedAt: '2026-09-18T22:10:42.389Z' },
+      { title: 'Magic Mid 5 HE Stack Opening', map: 'Inferno', videoLink: 'https://youtu.be/rPCANSwkWPo', description: 'Short Player Nades\nDrops a Smoke\nBottom Mid from Top Mid\nPit Player Nades\nBottom Mid from Top Mid\nAWP Player Nades\nInstant FaZe Mid Smoke Spawn 6\nBottom Banana from CT Spawn\nMolotov\nBottom Mid from Top Mid\nB Rotation Player Nades\nCar from Fallen\nBanana Self Flash from Fallen\nElec from Top Banana\n\nB Site Player Nades\nDrops a Smoke\nElec from Top Banana', addedAt: '2026-09-19T18:33:56.007Z' },
+      { title: 'Short Trap Forcebuy (4A)', map: 'Inferno', videoLink: 'https://youtu.be/VmuaHWhpgVk', description: 'Pit Player Nades\n\nNo nades attached\nAWP Player Nades\n\nNo nades attached\nShort Player Nades\nBottom Banana from CT Spawn\nB Rotation Player Nades\nDrops a Smoke\nDrops a Flash\nB Site Player Nades\nSmoke\nDefault Banana CT HE\nDefault Banana CT Flash #2\nFallen from CT', addedAt: '2026-09-19T18:35:02.823Z' },
+      { title: 'Vitality Mid Take from Boiler Opening', map: 'Inferno', videoLink: 'https://youtu.be/t21wKT9rJuc', description: 'Boiler Player Nades\nDrops a Smoke\nDrops a Flash\n\nApps Player Nades\nDefault Boiler T Molotov\n\nFloater Player Nades\nLong from Second Mid\nShort from Second Mid\nShort from Second Mid\n\nAWP Player Nades\nTop Mid Short from Mexico #2', addedAt: '2026-09-19T18:38:46.556Z' },
+      { title: 'TYLOO Fast Secret Cross Opening', map: 'Nuke', videoLink: 'https://youtu.be/9vSSpJjQfRQ', description: 'First Spawn Nades\nOutside Cross Smoke\nRed Box from T Yard\n\nSecond Spawn Nades\nExtinguishes\n\nThird Spawn Nades\nNo nades attached\n\n2nd Lobby Player Nades\nInstant First Diagonal Smoke Outside Spawn 4\nSecond Outside Diagonal Smoke from T Spawn\n\nLobby Player Nades\nDrops a Smoke\nDefault Door Break HE\nMain from Lobby', addedAt: '2026-09-19T20:04:13.907Z' },
+      { title: 'TYLOO Aggressive Outside Opening', map: 'Nuke', videoLink: 'https://youtu.be/eSVaOL8uFyE', description: 'Door Player Nades\nDrops a Smoke\nDrops a HE Grenade\n\nOutside Player Nades\nNo nades attached\n\nAWP Player Nades\nDefault Start CT Molotov\nStart from Blue Box', addedAt: '2026-09-19T20:35:13.371Z' },
+      { title: 'Vitality 3 A Setup Pistol', map: 'Nuke', videoLink: 'https://youtu.be/FArdTbTaIfs', description: '', addedAt: '2026-09-19T22:20:46.309Z' },
+      { title: 'Falcons Door Execute', map: 'Nuke', videoLink: 'https://youtu.be/06JCLsvXi3U', description: '2nd Lobby Player Nades\nCT Vent from Door\nOutside Player Nades\n\nNo nades attached\nFloater Player Nades\nTop Hut & Tetris from Roof\nA Site from Roof', addedAt: '2026-09-19T22:24:41.531Z' },
+      { title: 'Vitality Silo Drop to Ramp Split Pistol', map: 'Nuke', videoLink: 'https://youtu.be/sWcJBXqPryY', description: '2nd Lobby Player Nades\n\nNo nades attached\nFloater Player Nades\nTop Hut from Roof\nLobby Player Nades\nDefault Door Break HE\nOutside Player Nades\nDrops a HE Grenade\nT Vent from T Yard\nMain from Lobby', addedAt: '2026-09-19T22:30:42.194Z' },
+      { title: 'GL A Split Pistol - Mirage', map: 'Mirage', videoLink: 'https://www.youtube.com/watch?v=PW2XV5Ht1dE', description: 'B Lurk Player Nades\nDrops a Molotov\nInstant Window Smoke Spawn 8\nMid Player Nades\nNo nades attached\n\nUnderpass Player Nades\nHunter from Fer\nAWP Player Nades\nDeep Jungle from Top Mid\nConnector from Top Mid\nAbove Connector from Top Mid\nA Lurk Player Nades\nNo nades attached', addedAt: '2026-09-22T12:27:23.963Z' }
+    ]
+  };
+
+  let playbookCache = null;
+
+  function normalizePlaybook(raw){
+    const data = (raw && typeof raw === 'object') ? raw : {};
+    const srcMaps = Array.isArray(data.maps) ? data.maps : [];
+    const maps = PLAYBOOK_MAP_NAMES.map(name => {
+      const found = srcMaps.find(m => m && m.name === name);
+      return { name, image: (found && found.image) ? found.image : '' };
+    });
+    const entries = (Array.isArray(data.entries) ? data.entries : []).map((en, i) => ({
+      id: en.id || ('pb_seed_' + i),
+      title: en.title || '',
+      map: en.map || '',
+      videoLink: en.videoLink || '',
+      description: en.description || '',
+      addedAt: en.addedAt || '',
+      visibility: (en.visibility === 'academy') ? 'academy' : 'main'
+    }));
+    return { maps, entries };
+  }
+
+  async function loadPlaybookData(){
+    const remote = await ghFetchPublic(PLAYBOOK_FILE);
+    return normalizePlaybook(remote || PLAYBOOK_SEED);
+  }
+  async function savePlaybookData(data, message){
+    if(!ghToken) throw new Error('Nejsi přihlášený do admin panelu — pro ukládání playbooků se nejdřív přihlas.');
+    const { sha } = await ghFetchWithSha(PLAYBOOK_FILE, ghToken);
+    await ghSave(PLAYBOOK_FILE, data, sha, message, ghToken);
+  }
+
+  function playbookBrief(desc){
+    const first = String(desc || '').split(/\n+/).map(s => s.trim()).filter(Boolean)[0] || '';
+    return first.length > 90 ? first.slice(0, 90) + '…' : first;
+  }
+
+  async function loadPlaybookSection(){
+    const grid = document.getElementById('playbookGrid');
+    grid.innerHTML = '<div class="news-empty"><p>Načítám playbooky...</p></div>';
+    try{
+      playbookCache = await loadPlaybookData();
+      document.getElementById('playbookCalBadge').textContent = 'Zobrazuješ: ' + (CATEGORY_LABELS[memberCategory] || 'Main');
+      renderPlaybookGrid();
+    }catch(e){
+      grid.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
+    }
+  }
+
+  function renderPlaybookGrid(){
+    const grid = document.getElementById('playbookGrid');
+    if(!playbookCache){ grid.innerHTML = ''; return; }
+    const visible = playbookCache.entries.filter(en => en.visibility === memberCategory);
+    grid.innerHTML = PLAYBOOK_MAP_NAMES.map(mapName => {
+      const mapMeta = playbookCache.maps.find(m => m.name === mapName) || { image: '' };
+      const strats = visible.filter(en => en.map === mapName);
+      const bg = mapMeta.image ? `background-image:url('${escapeHtml(mapMeta.image)}');` : '';
+      const inner = strats.length
+        ? '<div class="pb-strats">' + strats.map(en => `
+            <button type="button" class="pb-strat${en.videoLink ? ' has-video' : ''}" data-id="${escapeHtml(en.id)}">
+              <span class="pb-strat-title">${escapeHtml(en.title)}</span>
+              <span class="pb-strat-desc">${escapeHtml(playbookBrief(en.description)) || 'Bez popisku'}</span>
+            </button>`).join('') + '</div>'
+        : '<div class="pb-map-empty">Zatím žádné strategie pro tuto mapu.</div>';
+      return `
+      <div class="pb-map" style="${bg}">
+        <div class="pb-map-head">
+          <div class="pb-map-name">${escapeHtml(mapName)}</div>
+          <div class="pb-map-count">${strats.length}× strategie</div>
+        </div>
+        ${inner}
+      </div>`;
+    }).join('');
+    grid.querySelectorAll('.pb-strat').forEach(btn => {
+      btn.addEventListener('click', () => openPlaybookDetail(btn.dataset.id));
+    });
+  }
+
+  function openPlaybookDetail(id){
+    const en = playbookCache ? playbookCache.entries.find(e => e.id === id) : null;
+    if(!en) return;
+    document.getElementById('playbookDetailContent').innerHTML = `
+      <h3 class="pb-detail-title">${escapeHtml(en.title)}</h3>
+      <div class="pb-detail-meta">
+        <span class="admin-cal-tag">${escapeHtml(en.map)}</span>
+        <span class="admin-cal-tag${en.visibility === 'academy' ? ' academy' : ''}">${CATEGORY_LABELS[en.visibility] || 'Main'}</span>
+      </div>
+      <p class="pb-detail-desc">${escapeHtml(en.description || 'Bez popisu.')}</p>
+      ${en.videoLink ? `<a class="btn-ghost" href="${escapeHtml(en.videoLink)}" target="_blank" rel="noopener">Přehrát video</a>` : ''}
+    `;
+    document.getElementById('playbookDetailOverlay').classList.add('show');
+  }
+  document.getElementById('closePlaybookDetailBtn').addEventListener('click', function(){
+    document.getElementById('playbookDetailOverlay').classList.remove('show');
+  });
+  document.getElementById('openMemberLoginPb').addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
+
+  /* ---- Admin: správa playbooků ---- */
+  async function renderAdminPlaybookList(){
+    const list = document.getElementById('adminPlaybookList');
+    try{
+      playbookCache = await loadPlaybookData();
+      const mapSel = document.getElementById('pb-map');
+      if(mapSel && !mapSel.options.length){
+        mapSel.innerHTML = PLAYBOOK_MAP_NAMES.map(m => `<option value="${m}">${m}</option>`).join('');
+      }
+      if(!playbookCache.entries.length){
+        list.innerHTML = '<div class="admin-empty">Zatím žádné strategie.</div>';
+      }else{
+        list.innerHTML = playbookCache.entries.map((en, idx) => `
+          <div class="admin-news-row">
+            <div class="admin-news-row-text">
+              <strong>${escapeHtml(en.title)}</strong>
+              <span>${escapeHtml(en.map)}${en.videoLink ? ' · s videem' : ''}</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <select class="admin-category-select pb-vis-select" data-idx="${idx}" title="Viditelnost strategie">
+                <option value="main"${en.visibility === 'main' ? ' selected' : ''}>Main</option>
+                <option value="academy"${en.visibility === 'academy' ? ' selected' : ''}>Academy</option>
+              </select>
+              <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
+            </div>
+          </div>`).join('');
+        list.querySelectorAll('.pb-vis-select').forEach(sel => {
+          sel.addEventListener('change', async function(){
+            const idx = parseInt(sel.dataset.idx, 10);
+            sel.disabled = true;
+            try{
+              const data = await loadPlaybookData();
+              if(data.entries[idx]){
+                data.entries[idx].visibility = sel.value;
+                await savePlaybookData(data, `Playbook viditelnost: ${data.entries[idx].title} -> ${sel.value}`);
+              }
+              playbookCache = data;
+              renderPlaybookGrid();
+              renderAdminPlaybookList();
+            }catch(e){
+              alert('Nepodařilo se změnit viditelnost: ' + e.message);
+              sel.disabled = false;
+            }
+          });
+        });
+        list.querySelectorAll('.admin-delete-btn').forEach(btn => {
+          btn.addEventListener('click', async function(){
+            const idx = parseInt(btn.dataset.idx, 10);
+            const name = playbookCache.entries[idx] ? playbookCache.entries[idx].title : 'strategii';
+            if(!confirm(`Opravdu chceš smazat strategii ${name}?`)) return;
+            btn.disabled = true;
+            btn.textContent = 'Mažu...';
+            try{
+              const data = await loadPlaybookData();
+              data.entries.splice(idx, 1);
+              await savePlaybookData(data, `Smazání strategie z playbooku: ${name}`);
+              playbookCache = data;
+              renderPlaybookGrid();
+              renderAdminPlaybookList();
+            }catch(e){
+              alert('Nepodařilo se smazat strategii: ' + e.message);
+              btn.disabled = false;
+              btn.textContent = 'Smazat';
+            }
+          });
+        });
+      }
+      renderAdminPlaybookMaps();
+      if(memberUsername) renderPlaybookGrid();
+    }catch(e){
+      list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst playbooky: ${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  function renderAdminPlaybookMaps(){
+    const box = document.getElementById('adminPlaybookMaps');
+    if(!playbookCache){ box.innerHTML = ''; return; }
+    box.innerHTML = playbookCache.maps.map((m, idx) => {
+      const isUrl = m.image && m.image.indexOf('data:') !== 0;
+      return `
+      <div class="admin-news-row" style="align-items:center;">
+        <div class="admin-news-row-text">
+          <strong>${escapeHtml(m.name)}</strong>
+          <span>${m.image ? 'obrázek nastaven' : 'bez obrázku — čtverec bude tmavý'}</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <input type="file" class="pb-map-file" data-idx="${idx}" accept="image/*" style="font-size:11px;color:var(--ice-dim);max-width:180px;">
+          <input type="text" class="pb-map-url" data-idx="${idx}" placeholder="https:// URL obrázku" value="${escapeHtml(isUrl ? m.image : '')}" style="background:var(--bg-2);border:1px solid var(--line);color:var(--ice);font-size:12px;padding:7px 9px;border-radius:6px;width:190px;">
+          <button type="button" class="admin-edit-btn pb-map-save" data-idx="${idx}">Uložit URL</button>
+        </div>
+      </div>`;
+    }).join('');
+    box.querySelectorAll('.pb-map-file').forEach(inp => {
+      inp.addEventListener('change', async function(){
+        const idx = parseInt(inp.dataset.idx, 10);
+        const file = inp.files[0];
+        if(!file) return;
+        inp.disabled = true;
+        try{
+          const dataUrl = await readAndCompressImage(file, 900, 0.7);
+          const data = await loadPlaybookData();
+          data.maps[idx].image = dataUrl;
+          await savePlaybookData(data, `Obrázek mapy ${data.maps[idx].name}`);
+          playbookCache = data;
+          renderPlaybookGrid();
+          renderAdminPlaybookMaps();
+        }catch(e){
+          alert('Nepodařilo se nahrát obrázek mapy: ' + e.message);
+          inp.disabled = false;
+        }
+      });
+    });
+    box.querySelectorAll('.pb-map-save').forEach(btn => {
+      btn.addEventListener('click', async function(){
+        const idx = parseInt(btn.dataset.idx, 10);
+        const urlInput = box.querySelector(`.pb-map-url[data-idx="${idx}"]`);
+        const url = urlInput ? urlInput.value.trim() : '';
+        btn.disabled = true;
+        try{
+          const data = await loadPlaybookData();
+          data.maps[idx].image = url;
+          await savePlaybookData(data, `URL obrázku mapy ${data.maps[idx].name}`);
+          playbookCache = data;
+          renderPlaybookGrid();
+          renderAdminPlaybookMaps();
+        }catch(e){
+          alert('Nepodařilo se uložit obrázek mapy: ' + e.message);
+          btn.disabled = false;
+        }
+      });
+    });
+  }
+
+  document.getElementById('adminPlaybookForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = document.getElementById('playbookFormSubmitBtn');
+    const title = document.getElementById('pb-title').value.trim();
+    const map = document.getElementById('pb-map').value;
+    const videoLink = document.getElementById('pb-video').value.trim();
+    const visibility = document.getElementById('pb-visibility').value === 'academy' ? 'academy' : 'main';
+    const description = document.getElementById('pb-desc').value.trim();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Ukládám...';
+    try{
+      const data = await loadPlaybookData();
+      data.entries.push({
+        id: 'pb_' + Date.now(),
+        title, map, videoLink, description,
+        addedAt: new Date().toISOString(),
+        visibility
+      });
+      await savePlaybookData(data, `Přidání strategie (${CATEGORY_LABELS[visibility]}): ${title}`);
+      playbookCache = data;
+      e.target.reset();
+      renderPlaybookGrid();
+      renderAdminPlaybookList();
+    }catch(err){
+      alert('Nepodařilo se přidat strategii: ' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Přidat strategii';
     }
   });
 
