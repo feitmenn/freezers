@@ -30,7 +30,8 @@
     "username": "majales",
     "displayName": "majales",
     "passwordHash": "78047a191eeee931aa6b76f42c8d64cc443768fc0965cf9deffef72046ddba1d",
-    "role": "member"
+    "role": "member",
+    "category": "academy"
   },
   {
     "username": "chudakpriba",
