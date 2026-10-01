@@ -1166,7 +1166,19 @@
   }
   .pb-detail-title{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;color:var(--ice);margin:0 0 10px;}
   .pb-detail-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-  .pb-detail-desc{font-size:13px;line-height:1.7;color:var(--ice-dim);white-space:pre-wrap;margin:0 0 18px;}
+  .pb-detail-desc{font-size:13px;line-height:1.7;color:var(--ice-dim);margin:0 0 18px;}
+  .pb-line{display:block;}
+  .pb-player-wrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;margin:0 0 16px;}
+  .pb-player-wrap iframe, .pb-player-wrap > div{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .pb-ts{
+    display:inline-block;margin-right:6px;padding:2px 9px;border-radius:999px;cursor:pointer;
+    background:rgba(47,224,201,0.12);border:1px solid rgba(47,224,201,0.45);color:var(--turquoise);
+    font-family:'Chakra Petch',sans-serif;font-size:11px;font-weight:600;letter-spacing:.04em;
+    transition:background .2s,transform .2s;
+  }
+  .pb-ts:hover{background:rgba(47,224,201,0.28);transform:translateY(-1px);}
+  body.theme-light .pb-ts{background:rgba(14,168,150,0.1);border-color:rgba(14,168,150,0.45);color:#0b8375;}
+  body.theme-light .pb-ts:hover{background:rgba(14,168,150,0.22);}
   body.theme-light .pb-map::before{background:linear-gradient(180deg,rgba(244,246,248,.35) 0%,rgba(244,246,248,.8) 55%,rgba(244,246,248,.94) 100%);}
   body.theme-light .pb-map-name{color:#12161c;text-shadow:none;}
   body.theme-light .pb-map-count{background:rgba(255,255,255,.75);}
@@ -2057,6 +2069,10 @@
               <option value="academy">Academy</option>
             </select>
           </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin:-4px 0 12px;">
+          <button type="button" class="btn-ghost" id="pbFetchYoutubeBtn" style="padding:8px 14px;font-size:12px;">Načíst název a popisek z YouTube</button>
+          <span class="admin-hint" id="pbFetchYoutubeStatus" style="margin:0;"></span>
         </div>
         <div class="field">
           <label for="pb-desc">Stručný popis</label>
@@ -2959,6 +2975,37 @@
   const OWNER_USERNAME = 'filas'; // tento účet má vždy roli owner, nejde ji odebrat
   const ROLE_LABELS = { owner: 'Owner', admin: 'Admin', member: 'Člen' };
   const CATEGORY_LABELS = { main: 'Main', academy: 'Academy' };
+
+  /* ---- Playbooky: konstanty musí být definované PŘED restoreMemberSession(), jinak TDZ chyba ---- */
+  const PLAYBOOK_FILE = 'playbook.json';
+  const PLAYBOOK_MAP_NAMES = ['Ancient', 'Cache', 'Dust2', 'Nuke', 'Inferno', 'Mirage', 'Anubis'];
+  // Výchozí obsah, dokud v repu neexistuje playbook.json (vytvoří se prvním uložením v adminu)
+  const PLAYBOOK_SEED = {
+    maps: [
+      { name: 'Ancient', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/ancient-1789677696177.jpg' },
+      { name: 'Mirage', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/mirage-1789677719898.webp' },
+      { name: 'Inferno', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/inferno-1789678627972.jpg' },
+      { name: 'Nuke', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/nuke-1789847901611.webp' }
+    ],
+    entries: [
+      { title: 'TYLOO Window to B Split Pistol', map: 'Ancient', videoLink: 'https://www.youtube.com/watch?v=sS26eXxQdOE', description: 'First Spawn Nades\n\nNo nades attached\nSecond Spawn Nades\n\nNo nades attached\nThird Spawn Nades\nWindow from Mid\nFloater Player Nades\nDrops a Flash\nInstant Window Smoke Spawn 5\nDefault Mid T Flash\nB Lurk Player Nades\n\nNo nades attached', addedAt: '2026-09-17T20:50:48.932Z' },
+      { title: 'Spirit Defensive 3-1-1 Anti-Eco', map: 'Ancient', videoLink: 'https://youtu.be/64xdIqxlMaw', description: 'Mid Player Nades\nDefault Mid CT Flash\nA Site Player Nades\n\nDefault Mid CT HE\nMolotov\nSmoke\n\nAWP Player Nades\nInstant Elbow Smoke Spawn 3\n\nCave Player Nades\nDefault Highway CT HE\nHighway Bounce Molotov from Cave\n\nB Site Player Nades\nFast Banana CT Molotov\nHE Grenade', addedAt: '2026-09-17T21:01:06.356Z' },
+      { title: 'FUT B Exec to Hut Take Pistol', map: 'Ancient', videoLink: 'https://youtu.be/n-3FqKE0YlU', description: 'B Execute Pistol with  and  Smokes, paired up with  Molotov.\n\n1 player takes early \n\nB Lurk Player Nades\nNo nades attached\n\nMid Player Nades\nNo nades attached\n\nFloater Player Nades\nShort from B Doors\nPillar & Hobbit from B Doors\nA Lurk Player Nades\nNo nades attached\n\nAWP Player Nades\nLong from B Lobby Corner #2\nB Site Bonus Flash from B Lobby Corner\nHut from Maden', addedAt: '2026-09-17T21:21:02.560Z' },
+      { title: 'The MongolZ Fast Broken Boost (3B)', map: 'Inferno', videoLink: 'https://youtu.be/kEgMGU1mgtw', description: 'Short Player Nades\nBanana Self Flash from Fallen\nLogs from Fallen\n\nB Rotation Player Nades\nCar from Fallen\nTabsen from Fallen\n\nB Site Player Nades\nBottom Banana from Fallen\nFlash', addedAt: '2026-09-18T22:04:25.595Z' },
+      { title: 'Woxic AWP Bedroom Peek', map: 'Inferno', videoLink: 'https://youtu.be/ELxvkLwRd5c', description: 'AWP Player Nades\nExtinguishes', addedAt: '2026-09-18T22:05:25.794Z' },
+      { title: 'Vitality B Pop Ending', map: 'Inferno', videoLink: 'https://youtu.be/B8scfJGQz3Q', description: 'Banana Player Nades\nNo nades attached\n\nBoiler Player Nades\nNo nades attached\n\nAWP Player Nades\nDrops a HE Grenade\nSmoke\nFloater Player Nades\nCT from Broken\nCT from Broken\nB Site from Broken #2\n\nApps Player Nades\nNo nades attached', addedAt: '2026-09-18T22:07:12.948Z' },
+      { title: 'Falcons Delayed Banana Take (3B)', map: 'Inferno', videoLink: 'https://youtu.be/jpzeZ65hxuI', description: 'B Site Player Nades\nDrops a Flash\nLogs from Fallen\nLogs from Fallen\nExtinguishes\nB Rotation Player Nades\nDefault Banana CT HE\n2x\nTabsen & Logs from Fallen\nShort Player Nades\n2x\nBanana from Pool\nLogs from Fallen', addedAt: '2026-09-18T22:10:42.389Z' },
+      { title: 'Magic Mid 5 HE Stack Opening', map: 'Inferno', videoLink: 'https://youtu.be/rPCANSwkWPo', description: 'Short Player Nades\nDrops a Smoke\nBottom Mid from Top Mid\nPit Player Nades\nBottom Mid from Top Mid\nAWP Player Nades\nInstant FaZe Mid Smoke Spawn 6\nBottom Banana from CT Spawn\nMolotov\nBottom Mid from Top Mid\nB Rotation Player Nades\nCar from Fallen\nBanana Self Flash from Fallen\nElec from Top Banana\n\nB Site Player Nades\nDrops a Smoke\nElec from Top Banana', addedAt: '2026-09-19T18:33:56.007Z' },
+      { title: 'Short Trap Forcebuy (4A)', map: 'Inferno', videoLink: 'https://youtu.be/VmuaHWhpgVk', description: 'Pit Player Nades\n\nNo nades attached\nAWP Player Nades\n\nNo nades attached\nShort Player Nades\nBottom Banana from CT Spawn\nB Rotation Player Nades\nDrops a Smoke\nDrops a Flash\nB Site Player Nades\nSmoke\nDefault Banana CT HE\nDefault Banana CT Flash #2\nFallen from CT', addedAt: '2026-09-19T18:35:02.823Z' },
+      { title: 'Vitality Mid Take from Boiler Opening', map: 'Inferno', videoLink: 'https://youtu.be/t21wKT9rJuc', description: 'Boiler Player Nades\nDrops a Smoke\nDrops a Flash\n\nApps Player Nades\nDefault Boiler T Molotov\n\nFloater Player Nades\nLong from Second Mid\nShort from Second Mid\nShort from Second Mid\n\nAWP Player Nades\nTop Mid Short from Mexico #2', addedAt: '2026-09-19T18:38:46.556Z' },
+      { title: 'TYLOO Fast Secret Cross Opening', map: 'Nuke', videoLink: 'https://youtu.be/9vSSpJjQfRQ', description: 'First Spawn Nades\nOutside Cross Smoke\nRed Box from T Yard\n\nSecond Spawn Nades\nExtinguishes\n\nThird Spawn Nades\nNo nades attached\n\n2nd Lobby Player Nades\nInstant First Diagonal Smoke Outside Spawn 4\nSecond Outside Diagonal Smoke from T Spawn\n\nLobby Player Nades\nDrops a Smoke\nDefault Door Break HE\nMain from Lobby', addedAt: '2026-09-19T20:04:13.907Z' },
+      { title: 'TYLOO Aggressive Outside Opening', map: 'Nuke', videoLink: 'https://youtu.be/eSVaOL8uFyE', description: 'Door Player Nades\nDrops a Smoke\nDrops a HE Grenade\n\nOutside Player Nades\nNo nades attached\n\nAWP Player Nades\nDefault Start CT Molotov\nStart from Blue Box', addedAt: '2026-09-19T20:35:13.371Z' },
+      { title: 'Vitality 3 A Setup Pistol', map: 'Nuke', videoLink: 'https://youtu.be/FArdTbTaIfs', description: '', addedAt: '2026-09-19T22:20:46.309Z' },
+      { title: 'Falcons Door Execute', map: 'Nuke', videoLink: 'https://youtu.be/06JCLsvXi3U', description: '2nd Lobby Player Nades\nCT Vent from Door\nOutside Player Nades\n\nNo nades attached\nFloater Player Nades\nTop Hut & Tetris from Roof\nA Site from Roof', addedAt: '2026-09-19T22:24:41.531Z' },
+      { title: 'Vitality Silo Drop to Ramp Split Pistol', map: 'Nuke', videoLink: 'https://youtu.be/sWcJBXqPryY', description: '2nd Lobby Player Nades\n\nNo nades attached\nFloater Player Nades\nTop Hut from Roof\nLobby Player Nades\nDefault Door Break HE\nOutside Player Nades\nDrops a HE Grenade\nT Vent from T Yard\nMain from Lobby', addedAt: '2026-09-19T22:30:42.194Z' },
+      { title: 'GL A Split Pistol - Mirage', map: 'Mirage', videoLink: 'https://www.youtube.com/watch?v=PW2XV5Ht1dE', description: 'B Lurk Player Nades\nDrops a Molotov\nInstant Window Smoke Spawn 8\nMid Player Nades\nNo nades attached\n\nUnderpass Player Nades\nHunter from Fer\nAWP Player Nades\nDeep Jungle from Top Mid\nConnector from Top Mid\nAbove Connector from Top Mid\nA Lurk Player Nades\nNo nades attached', addedAt: '2026-09-22T12:27:23.963Z' }
+    ]
+  };
 
   function calendarFileFor(category){
     return category === 'academy' ? CALENDAR_ACADEMY_FILE : CALENDAR_FILE;
@@ -4252,36 +4299,6 @@
   });
 
   /* ============ PLAYBOOKY (sekce jen pro přihlášené členy) ============ */
-  const PLAYBOOK_FILE = 'playbook.json';
-  const PLAYBOOK_MAP_NAMES = ['Ancient', 'Cache', 'Dust2', 'Nuke', 'Inferno', 'Mirage', 'Anubis'];
-  // Výchozí obsah, dokud v repu neexistuje playbook.json (vytvoří se prvním uložením v adminu)
-  const PLAYBOOK_SEED = {
-    maps: [
-      { name: 'Ancient', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/ancient-1789677696177.jpg' },
-      { name: 'Mirage', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/mirage-1789677719898.webp' },
-      { name: 'Inferno', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/inferno-1789678627972.jpg' },
-      { name: 'Nuke', image: 'https://raw.githubusercontent.com/feitmenn/freezers/main/playbook-maps/nuke-1789847901611.webp' }
-    ],
-    entries: [
-      { title: 'TYLOO Window to B Split Pistol', map: 'Ancient', videoLink: 'https://www.youtube.com/watch?v=sS26eXxQdOE', description: 'First Spawn Nades\n\nNo nades attached\nSecond Spawn Nades\n\nNo nades attached\nThird Spawn Nades\nWindow from Mid\nFloater Player Nades\nDrops a Flash\nInstant Window Smoke Spawn 5\nDefault Mid T Flash\nB Lurk Player Nades\n\nNo nades attached', addedAt: '2026-09-17T20:50:48.932Z' },
-      { title: 'Spirit Defensive 3-1-1 Anti-Eco', map: 'Ancient', videoLink: 'https://youtu.be/64xdIqxlMaw', description: 'Mid Player Nades\nDefault Mid CT Flash\nA Site Player Nades\n\nDefault Mid CT HE\nMolotov\nSmoke\n\nAWP Player Nades\nInstant Elbow Smoke Spawn 3\n\nCave Player Nades\nDefault Highway CT HE\nHighway Bounce Molotov from Cave\n\nB Site Player Nades\nFast Banana CT Molotov\nHE Grenade', addedAt: '2026-09-17T21:01:06.356Z' },
-      { title: 'FUT B Exec to Hut Take Pistol', map: 'Ancient', videoLink: 'https://youtu.be/n-3FqKE0YlU', description: 'B Execute Pistol with  and  Smokes, paired up with  Molotov.\n\n1 player takes early \n\nB Lurk Player Nades\nNo nades attached\n\nMid Player Nades\nNo nades attached\n\nFloater Player Nades\nShort from B Doors\nPillar & Hobbit from B Doors\nA Lurk Player Nades\nNo nades attached\n\nAWP Player Nades\nLong from B Lobby Corner #2\nB Site Bonus Flash from B Lobby Corner\nHut from Maden', addedAt: '2026-09-17T21:21:02.560Z' },
-      { title: 'The MongolZ Fast Broken Boost (3B)', map: 'Inferno', videoLink: 'https://youtu.be/kEgMGU1mgtw', description: 'Short Player Nades\nBanana Self Flash from Fallen\nLogs from Fallen\n\nB Rotation Player Nades\nCar from Fallen\nTabsen from Fallen\n\nB Site Player Nades\nBottom Banana from Fallen\nFlash', addedAt: '2026-09-18T22:04:25.595Z' },
-      { title: 'Woxic AWP Bedroom Peek', map: 'Inferno', videoLink: 'https://youtu.be/ELxvkLwRd5c', description: 'AWP Player Nades\nExtinguishes', addedAt: '2026-09-18T22:05:25.794Z' },
-      { title: 'Vitality B Pop Ending', map: 'Inferno', videoLink: 'https://youtu.be/B8scfJGQz3Q', description: 'Banana Player Nades\nNo nades attached\n\nBoiler Player Nades\nNo nades attached\n\nAWP Player Nades\nDrops a HE Grenade\nSmoke\nFloater Player Nades\nCT from Broken\nCT from Broken\nB Site from Broken #2\n\nApps Player Nades\nNo nades attached', addedAt: '2026-09-18T22:07:12.948Z' },
-      { title: 'Falcons Delayed Banana Take (3B)', map: 'Inferno', videoLink: 'https://youtu.be/jpzeZ65hxuI', description: 'B Site Player Nades\nDrops a Flash\nLogs from Fallen\nLogs from Fallen\nExtinguishes\nB Rotation Player Nades\nDefault Banana CT HE\n2x\nTabsen & Logs from Fallen\nShort Player Nades\n2x\nBanana from Pool\nLogs from Fallen', addedAt: '2026-09-18T22:10:42.389Z' },
-      { title: 'Magic Mid 5 HE Stack Opening', map: 'Inferno', videoLink: 'https://youtu.be/rPCANSwkWPo', description: 'Short Player Nades\nDrops a Smoke\nBottom Mid from Top Mid\nPit Player Nades\nBottom Mid from Top Mid\nAWP Player Nades\nInstant FaZe Mid Smoke Spawn 6\nBottom Banana from CT Spawn\nMolotov\nBottom Mid from Top Mid\nB Rotation Player Nades\nCar from Fallen\nBanana Self Flash from Fallen\nElec from Top Banana\n\nB Site Player Nades\nDrops a Smoke\nElec from Top Banana', addedAt: '2026-09-19T18:33:56.007Z' },
-      { title: 'Short Trap Forcebuy (4A)', map: 'Inferno', videoLink: 'https://youtu.be/VmuaHWhpgVk', description: 'Pit Player Nades\n\nNo nades attached\nAWP Player Nades\n\nNo nades attached\nShort Player Nades\nBottom Banana from CT Spawn\nB Rotation Player Nades\nDrops a Smoke\nDrops a Flash\nB Site Player Nades\nSmoke\nDefault Banana CT HE\nDefault Banana CT Flash #2\nFallen from CT', addedAt: '2026-09-19T18:35:02.823Z' },
-      { title: 'Vitality Mid Take from Boiler Opening', map: 'Inferno', videoLink: 'https://youtu.be/t21wKT9rJuc', description: 'Boiler Player Nades\nDrops a Smoke\nDrops a Flash\n\nApps Player Nades\nDefault Boiler T Molotov\n\nFloater Player Nades\nLong from Second Mid\nShort from Second Mid\nShort from Second Mid\n\nAWP Player Nades\nTop Mid Short from Mexico #2', addedAt: '2026-09-19T18:38:46.556Z' },
-      { title: 'TYLOO Fast Secret Cross Opening', map: 'Nuke', videoLink: 'https://youtu.be/9vSSpJjQfRQ', description: 'First Spawn Nades\nOutside Cross Smoke\nRed Box from T Yard\n\nSecond Spawn Nades\nExtinguishes\n\nThird Spawn Nades\nNo nades attached\n\n2nd Lobby Player Nades\nInstant First Diagonal Smoke Outside Spawn 4\nSecond Outside Diagonal Smoke from T Spawn\n\nLobby Player Nades\nDrops a Smoke\nDefault Door Break HE\nMain from Lobby', addedAt: '2026-09-19T20:04:13.907Z' },
-      { title: 'TYLOO Aggressive Outside Opening', map: 'Nuke', videoLink: 'https://youtu.be/eSVaOL8uFyE', description: 'Door Player Nades\nDrops a Smoke\nDrops a HE Grenade\n\nOutside Player Nades\nNo nades attached\n\nAWP Player Nades\nDefault Start CT Molotov\nStart from Blue Box', addedAt: '2026-09-19T20:35:13.371Z' },
-      { title: 'Vitality 3 A Setup Pistol', map: 'Nuke', videoLink: 'https://youtu.be/FArdTbTaIfs', description: '', addedAt: '2026-09-19T22:20:46.309Z' },
-      { title: 'Falcons Door Execute', map: 'Nuke', videoLink: 'https://youtu.be/06JCLsvXi3U', description: '2nd Lobby Player Nades\nCT Vent from Door\nOutside Player Nades\n\nNo nades attached\nFloater Player Nades\nTop Hut & Tetris from Roof\nA Site from Roof', addedAt: '2026-09-19T22:24:41.531Z' },
-      { title: 'Vitality Silo Drop to Ramp Split Pistol', map: 'Nuke', videoLink: 'https://youtu.be/sWcJBXqPryY', description: '2nd Lobby Player Nades\n\nNo nades attached\nFloater Player Nades\nTop Hut from Roof\nLobby Player Nades\nDefault Door Break HE\nOutside Player Nades\nDrops a HE Grenade\nT Vent from T Yard\nMain from Lobby', addedAt: '2026-09-19T22:30:42.194Z' },
-      { title: 'GL A Split Pistol - Mirage', map: 'Mirage', videoLink: 'https://www.youtube.com/watch?v=PW2XV5Ht1dE', description: 'B Lurk Player Nades\nDrops a Molotov\nInstant Window Smoke Spawn 8\nMid Player Nades\nNo nades attached\n\nUnderpass Player Nades\nHunter from Fer\nAWP Player Nades\nDeep Jungle from Top Mid\nConnector from Top Mid\nAbove Connector from Top Mid\nA Lurk Player Nades\nNo nades attached', addedAt: '2026-09-22T12:27:23.963Z' }
-    ]
-  };
-
   let playbookCache = null;
 
   function normalizePlaybook(raw){
@@ -4359,22 +4376,103 @@
     });
   }
 
+  function youtubeVideoId(url){
+    if(!url) return '';
+    const m = String(url).match(/(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : '';
+  }
+  function tsToSeconds(ts){
+    const parts = String(ts).split(':').map(Number);
+    if(parts.some(isNaN)) return 0;
+    if(parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    if(parts.length === 2) return parts[0] * 60 + parts[1];
+    return parts[0];
+  }
+  // Časové značky typu 3:12 / 1:03:12 v popisku -> klikací tlačítka, která přeskočí video
+  function renderDescriptionWithTimestamps(desc){
+    const TS_RE = /(^|[\s(>])(\d{1,2}:\d{2}(?::\d{2})?)\b/g;
+    return String(desc || '').split(/\r?\n/).map(line => {
+      const safe = escapeHtml(line);
+      const withTs = safe.replace(TS_RE, (whole, pre, ts) =>
+        pre + '<button type="button" class="pb-ts" data-sec="' + tsToSeconds(ts) + '">' + ts + '</button>');
+      return '<span class="pb-line">' + (withTs || '&nbsp;') + '</span>';
+    }).join('');
+  }
+
+  let ytApiPromise = null;
+  function loadYouTubeApi(){
+    if(window.YT && window.YT.Player) return Promise.resolve(window.YT);
+    if(!ytApiPromise){
+      ytApiPromise = new Promise(resolve => {
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function(){ if(prev) prev(); resolve(window.YT || null); };
+        const s = document.createElement('script');
+        s.src = 'https://www.youtube.com/iframe_api';
+        s.onerror = () => resolve(null);
+        document.head.appendChild(s);
+        setTimeout(() => resolve(window.YT || null), 6000);
+      });
+    }
+    return ytApiPromise;
+  }
+  let pbPlayer = null;
+  let pbVideoId = '';
+  async function initPbPlayer(videoId){
+    pbVideoId = videoId;
+    const host = document.getElementById('pbPlayerHost');
+    if(!host) return;
+    const YT = await loadYouTubeApi();
+    if(!YT || !YT.Player || !document.getElementById('pbPlayerHost')){
+      host.innerHTML = `<iframe data-vid="${escapeHtml(videoId)}" src="https://www.youtube-nocookie.com/embed/${escapeHtml(videoId)}" title="Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      return;
+    }
+    try{
+      pbPlayer = new YT.Player('pbPlayerHost', { videoId, playerVars: { rel: 0, playsinline: 1 } });
+    }catch(e){
+      pbPlayer = null;
+    }
+  }
+  function pbSeekTo(sec){
+    if(pbPlayer && typeof pbPlayer.seekTo === 'function'){
+      try{ pbPlayer.seekTo(sec, true); if(pbPlayer.playVideo) pbPlayer.playVideo(); return; }catch(e){ /* player ještě není připravený */ }
+    }
+    const hostEl = document.getElementById('pbPlayerHost');
+    const frame = (hostEl && hostEl.tagName === 'IFRAME') ? hostEl : document.querySelector('#pbPlayerHost iframe');
+    if(frame && pbVideoId){
+      frame.src = 'https://www.youtube-nocookie.com/embed/' + pbVideoId + '?start=' + sec + '&autoplay=1';
+    }
+  }
+  function destroyPbPlayer(){
+    if(pbPlayer && typeof pbPlayer.destroy === 'function'){
+      try{ pbPlayer.destroy(); }catch(e){}
+    }
+    pbPlayer = null;
+    pbVideoId = '';
+  }
+
   function openPlaybookDetail(id){
     const en = playbookCache ? playbookCache.entries.find(e => e.id === id) : null;
     if(!en) return;
+    const vid = youtubeVideoId(en.videoLink);
     document.getElementById('playbookDetailContent').innerHTML = `
       <h3 class="pb-detail-title">${escapeHtml(en.title)}</h3>
       <div class="pb-detail-meta">
         <span class="admin-cal-tag">${escapeHtml(en.map)}</span>
         <span class="admin-cal-tag${en.visibility === 'academy' ? ' academy' : ''}">${CATEGORY_LABELS[en.visibility] || 'Main'}</span>
       </div>
-      <p class="pb-detail-desc">${escapeHtml(en.description || 'Bez popisu.')}</p>
-      ${en.videoLink ? `<a class="btn-ghost" href="${escapeHtml(en.videoLink)}" target="_blank" rel="noopener">Přehrát video</a>` : ''}
+      ${vid ? '<div class="pb-player-wrap"><div id="pbPlayerHost"></div></div>' : ''}
+      <p class="pb-detail-desc">${renderDescriptionWithTimestamps(en.description) || 'Bez popisu.'}</p>
+      ${en.videoLink && !vid ? `<a class="btn-ghost" href="${escapeHtml(en.videoLink)}" target="_blank" rel="noopener">Přehrát video</a>` : ''}
     `;
+    document.querySelectorAll('#playbookDetailContent .pb-ts').forEach(btn => {
+      btn.addEventListener('click', () => pbSeekTo(parseInt(btn.dataset.sec, 10) || 0));
+    });
+    if(vid) initPbPlayer(vid);
     document.getElementById('playbookDetailOverlay').classList.add('show');
   }
   document.getElementById('closePlaybookDetailBtn').addEventListener('click', function(){
     document.getElementById('playbookDetailOverlay').classList.remove('show');
+    destroyPbPlayer();
   });
   document.getElementById('openMemberLoginPb').addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
 
@@ -4540,6 +4638,51 @@
       submitBtn.disabled = false;
       submitBtn.textContent = 'Přidat strategii';
     }
+  });
+
+  // Doplní název (oEmbed) a popisek (shortDescription) z YouTube do formuláře
+  document.getElementById('pbFetchYoutubeBtn').addEventListener('click', async function(){
+    const status = document.getElementById('pbFetchYoutubeStatus');
+    const vid = youtubeVideoId(document.getElementById('pb-video').value.trim());
+    if(!vid){
+      status.textContent = 'Nejdřív vlož platný YouTube odkaz.';
+      return;
+    }
+    this.disabled = true;
+    status.textContent = 'Načítám z YouTube...';
+    let title = '';
+    let description = '';
+    // Veřejný web-klient YouTube (youtubei) vrati nazev i popisek bez API klice
+    try{
+      const r = await fetch('https://www.youtube.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ context: { client: { clientName: 'WEB', clientVersion: '2.20240101.00.00' } }, videoId: vid })
+      });
+      if(r.ok){
+        const j = await r.json();
+        if(j.videoDetails){
+          title = j.videoDetails.title || '';
+          description = j.videoDetails.shortDescription || '';
+        }
+      }
+    }catch(e){ /* youtubei nedostupne */ }
+    if(!title){
+      try{
+        const oe = await fetch('https://www.youtube.com/oembed?format=json&url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + vid));
+        if(oe.ok){ const j = await oe.json(); title = j.title || ''; }
+      }catch(e){ /* oEmbed neni kriticke */ }
+    }
+    if(title && !document.getElementById('pb-title').value.trim()){
+      document.getElementById('pb-title').value = title;
+    }
+    if(description){
+      document.getElementById('pb-desc').value = description;
+    }
+    status.textContent = (title || description)
+      ? 'Načteno z YouTube.'
+      : 'Z YouTube se nepodařilo nic stáhnout, vyplň ručně.';
+    this.disabled = false;
   });
 
   /* ============ COOKIE LIŠTA ============ */
