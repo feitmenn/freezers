@@ -25,7 +25,8 @@
     "username": "SeinZZZ",
     "displayName": "[MNGER] SeinZZZ",
     "passwordHash": "3d255d591862420b178606c6de480a564187801b53e250f9ce16b909d1a462ab",
-    "category": "academy"
+    "category": "academy",
+    "role": "admin"
   },
   {
     "username": "majales",
