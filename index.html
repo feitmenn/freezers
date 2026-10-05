@@ -1118,18 +1118,18 @@
   }
 
   /* ============ PLAYBOOKY (sekce jen pro členy) ============ */
-  .pb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:14px;}
+  .pb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;margin-top:14px;}
   .pb-map{
     position:relative;isolation:isolate;overflow:hidden;
-    border:1px solid var(--line);border-radius:16px;
+    border:1px solid var(--line);border-radius:18px;
     background-color:var(--bg-2);background-size:cover;background-position:center;
-    padding:16px;display:flex;flex-direction:column;gap:12px;min-height:360px;
+    aspect-ratio:1/1;padding:16px;display:flex;flex-direction:column;gap:12px;
   }
   .pb-map::before{
     content:'';position:absolute;inset:0;z-index:-1;
     background:linear-gradient(180deg,rgba(8,9,12,0.5) 0%,rgba(8,9,12,0.78) 50%,rgba(8,9,12,0.93) 100%);
   }
-  .pb-map-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .pb-map-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .pb-map-name{
     font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:19px;
     letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.65);
@@ -1139,7 +1139,13 @@
     color:var(--turquoise);background:rgba(8,9,12,.62);border:1px solid rgba(47,224,201,.4);
     padding:4px 10px;border-radius:999px;white-space:nowrap;
   }
-  .pb-strats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .pb-strats{
+    flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start;padding-right:4px;
+  }
+  .pb-strats::-webkit-scrollbar{width:6px;}
+  .pb-strats::-webkit-scrollbar-thumb{background:rgba(47,224,201,.35);border-radius:999px;}
+  .pb-strats::-webkit-scrollbar-track{background:transparent;}
   .pb-strat{
     position:relative;aspect-ratio:1/1;border-radius:12px;padding:10px 11px;cursor:pointer;text-align:left;
     display:flex;flex-direction:column;justify-content:flex-end;gap:5px;
@@ -1163,6 +1169,7 @@
   .pb-map-empty{
     grid-column:1/-1;border:1px dashed rgba(255,255,255,.22);border-radius:12px;
     padding:18px;text-align:center;font-size:12px;color:rgba(228,232,238,.6);
+    display:flex;align-items:center;justify-content:center;min-height:80px;
   }
   .pb-detail-title{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;color:var(--ice);margin:0 0 10px;}
   .pb-detail-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
@@ -1848,7 +1855,7 @@
     </div>
 
     <div class="admin-tab-panel" data-panel="accounts">
-      <h3>Přidat účet člena (přihlášení do kalendáře)</h3>
+      <h3>Přidat účet člena (přihlášení přes Steam)</h3>
       <form id="adminUserForm">
         <div class="field-row">
           <div class="field">
@@ -1861,8 +1868,11 @@
           </div>
         </div>
         <div class="field">
-          <label for="au-password">Heslo</label>
-          <input type="text" id="au-password" placeholder="vygeneruj/zadej heslo" required>
+          <label for="au-steamid">SteamID64</label>
+          <input type="text" id="au-steamid" placeholder="7656119..." pattern="[0-9]{17}" inputmode="numeric">
+          <div style="font-size:11px;color:var(--ice-dim);margin-top:6px;">
+            Najdi na <a href="https://steamid.io/" target="_blank" rel="noopener" style="color:var(--turquoise);">steamid.io</a> nebo zkopíruj ze Steam profilu.
+          </div>
         </div>
         <div class="field" id="au-category-field">
           <label for="au-category">Kategorie (který kalendář člen uvidí)</label>
@@ -1871,7 +1881,15 @@
             <option value="academy">Academy</option>
           </select>
         </div>
-        <p class="admin-hint">Platí pro nově zakládané účty. U existujících účtů se kategorie nastavuje v seznamu níže (jen owner) a při úpravě hesla se nemění.</p>
+        <div class="field" id="au-permissions-field">
+          <label>Oprávnění</label>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:12px;">
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-cal-main"> Kalendář Main</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-cal-academy"> Kalendář Academy</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-playbooks"> Playbooky</label>
+          </div>
+        </div>
+        <p class="admin-hint">Platí pro nově zakládané účty. U existujících účtů se kategorie a oprávnění nastavují v seznamu níže (jen owner).</p>
         <button type="submit" class="submit-btn">Vytvořit / upravit účet</button>
       </form>
       <div class="admin-divider"></div>
@@ -2093,27 +2111,18 @@
 </div>
 
 <div class="modal-overlay" id="memberLoginOverlay">
-  <div class="modal-card">
+  <div class="modal-card" style="text-align:center;">
     <button type="button" class="modal-close" id="closeMemberLoginBtn">✕</button>
     <div class="modal-kicker">PŘIHLÁŠENÍ ČLENA</div>
-    <h3>Přihlásit se</h3>
-    <form id="memberLoginForm">
-      <div class="field">
-        <label for="member-username">Uživatelské jméno</label>
-        <input type="text" id="member-username" autocomplete="username" required>
-      </div>
-      <div class="field">
-        <label for="member-password">Heslo</label>
-        <input type="password" id="member-password" autocomplete="current-password" required>
-      </div>
-      <div class="field">
-        <label for="member-access-code">Přístupový kód týmu</label>
-        <input type="password" id="member-access-code" autocomplete="off" required>
-        <div style="font-size:11px;color:var(--ice-dim);margin-top:6px;">Tenhle kód ti spolu s heslem dá staff — je stejný pro celý tým.</div>
-      </div>
-      <div class="admin-error" id="memberLoginError">Špatné jméno nebo heslo.</div>
-      <button type="submit" class="submit-btn" style="width:100%;">Přihlásit se</button>
-    </form>
+    <h3>Přihlásit se přes Steam</h3>
+    <p style="font-size:13px;color:var(--ice-dim);margin:0 0 20px;line-height:1.6;">
+      Přihlásíš se přes svůj Steam účet. Tvůj SteamID musí být přiřazený k účtu — pokud není, kontaktuj staff.
+    </p>
+    <button type="button" id="steamLoginBtn" class="submit-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#1b2838;border-color:#66c0f4;color:#fff;">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><circle cx="12" cy="12" r="11" fill="#1b2838"/><circle cx="8.7" cy="15.3" r="2.3" stroke="#66c0f4" stroke-width="1.3"/><circle cx="15.3" cy="8.8" r="3" stroke="#66c0f4" stroke-width="1.3"/><line x1="10.3" y1="13.8" x2="13.6" y2="10.9" stroke="#66c0f4" stroke-width="1.3"/></svg>
+      Přihlásit přes Steam
+    </button>
+    <div class="admin-error" id="memberLoginError" style="display:none;margin-top:12px;"></div>
   </div>
 </div>
 
@@ -2976,9 +2985,13 @@
   const ROLE_LABELS = { owner: 'Owner', admin: 'Admin', member: 'Člen' };
   const CATEGORY_LABELS = { main: 'Main', academy: 'Academy' };
 
-  /* ---- Playbooky: konstanty musí být definované PŘED restoreMemberSession(), jinak TDZ chyba ---- */
+  /* ---- Playbooky: konstanty i stav musí být definované PŘED restoreMemberSession(), jinak TDZ chyba ---- */
   const PLAYBOOK_FILE = 'playbook.json';
   const PLAYBOOK_MAP_NAMES = ['Ancient', 'Cache', 'Dust2', 'Nuke', 'Inferno', 'Mirage', 'Anubis'];
+  let playbookCache = null;
+  let ytApiPromise = null;
+  let pbPlayer = null;
+  let pbVideoId = '';
   // Výchozí obsah, dokud v repu neexistuje playbook.json (vytvoří se prvním uložením v adminu)
   const PLAYBOOK_SEED = {
     maps: [
@@ -3029,19 +3042,49 @@
     return (user.role === 'owner' || user.role === 'admin') ? user.role : 'member';
   }
 
-  function saveMemberSession(username, accessCode, displayName, role, category){
+  const STEAM_API_URL = 'https://freezers-api.netlify.app/.netlify/functions';
+
+  function saveMemberSession(claims, token){
     try{
-      localStorage.setItem(MEMBER_SESSION_KEY, JSON.stringify({ username, accessCode, displayName, role, category }));
+      localStorage.setItem(MEMBER_SESSION_KEY, JSON.stringify({
+        steamToken: token || null,
+        steamId64: claims.steamId64 || null,
+        username: claims.username,
+        displayName: claims.displayName || claims.username,
+        role: claims.role || 'member',
+        category: claims.category || 'main',
+        permissions: claims.permissions || null
+      }));
     }catch(e){ console.error('Nepodařilo se uložit přihlášení:', e); }
   }
   function loadMemberSession(){
     try{
       const raw = localStorage.getItem(MEMBER_SESSION_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if(!raw) return null;
+      const s = JSON.parse(raw);
+      if(s.accessCode && !s.steamToken){ clearMemberSession(); return null; }
+      if(s.steamToken){
+        try{
+          const payload = JSON.parse(atob(s.steamToken.split('.')[0]));
+          if(payload.exp && payload.exp < Date.now()/1000){ clearMemberSession(); return null; }
+        }catch(e){}
+      }
+      return s;
     }catch(e){ return null; }
   }
   function clearMemberSession(){
     try{ localStorage.removeItem(MEMBER_SESSION_KEY); }catch(e){}
+  }
+
+  function parseSteamTokenFromUrl(){
+    const hash = location.hash || '';
+    const m = hash.match(/steam_token=([A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)/);
+    if(!m) return null;
+    try{
+      const payload = JSON.parse(atob(m[1].split('.')[0]));
+      if(payload.exp && payload.exp < Date.now()/1000) return null;
+      return { token: m[1], claims: payload };
+    }catch(e){ return null; }
   }
 
   async function sha256Hex(str){
@@ -3151,7 +3194,7 @@
   });
   document.getElementById('openMemberLoginLink')?.addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
   function openMemberLogin(){
-    document.getElementById('memberLoginError').classList.remove('show');
+    document.getElementById('memberLoginError').style.display = 'none';
     document.getElementById('memberLoginOverlay').classList.add('show');
   }
   function closeMemberLogin(){
@@ -3159,63 +3202,26 @@
   }
   document.getElementById('closeMemberLoginBtn').addEventListener('click', closeMemberLogin);
 
-  document.getElementById('memberLoginForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const username = document.getElementById('member-username').value.trim();
-    const password = document.getElementById('member-password').value;
-    const accessCode = document.getElementById('member-access-code').value.trim();
-    const btn = e.target.querySelector('.submit-btn');
-    const errBox = document.getElementById('memberLoginError');
-    errBox.classList.remove('show');
-
-    btn.disabled = true;
-    btn.textContent = 'Přihlašuji...';
-    try{
-      const users = await ghFetchPublic(USERS_FILE) || [];
-      const user = users.find(u => u.username === username);
-      if(!user){
-        errBox.textContent = 'Špatné jméno nebo heslo.';
-        errBox.classList.add('show');
-        return;
-      }
-      const hash = await sha256Hex(password);
-      if(hash !== user.passwordHash){
-        errBox.textContent = 'Špatné jméno nebo heslo.';
-        errBox.classList.add('show');
-        return;
-      }
-      // Ověříme, že přístupový kód umí zapisovat do repa (jednoduchá kontrola přes GitHub API)
-      const testRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`, {
-        headers: { Authorization: `token ${accessCode}` }
-      });
-      if(!testRes.ok){
-        errBox.textContent = 'Přístupový kód nefunguje, over ho se staffem.';
-        errBox.classList.add('show');
-        return;
-      }
-
-      memberUsername = username;
-      memberAccessCode = accessCode;
-      memberRole = roleOf(user);
-      memberCategory = (user.category === 'academy') ? 'academy' : 'main';
-      saveMemberSession(username, accessCode, user.displayName || username, memberRole, memberCategory);
-      closeMemberLogin();
-      document.getElementById('calendarLoggedOut').style.display = 'none';
-      document.getElementById('calendarLoggedIn').style.display = 'block';
-      document.getElementById('playbookLoggedOut').style.display = 'none';
-      document.getElementById('playbookLoggedIn').style.display = 'block';
-      document.getElementById('openMemberLoginNav').textContent = user.displayName || username;
-      loadCalendar();
-      loadPlaybookSection();
-      checkAndShowNotifications();
-    }catch(err){
-      errBox.textContent = 'Nepodařilo se ověřit přihlášení: ' + err.message;
-      errBox.classList.add('show');
-    }finally{
-      btn.disabled = false;
-      btn.textContent = 'Přihlásit se';
-    }
+  document.getElementById('steamLoginBtn').addEventListener('click', function(){
+    window.location.href = STEAM_API_URL + '/steam-login?returnTo=' + encodeURIComponent(window.location.href);
   });
+
+  function applySteamSession(claims, token){
+    memberUsername = claims.username;
+    memberAccessCode = '';
+    memberRole = (claims.username === OWNER_USERNAME) ? 'owner' : (claims.role || 'member');
+    memberCategory = (claims.category === 'academy') ? 'academy' : 'main';
+    saveMemberSession(claims, token);
+    closeMemberLogin();
+    document.getElementById('calendarLoggedOut').style.display = 'none';
+    document.getElementById('calendarLoggedIn').style.display = 'block';
+    document.getElementById('playbookLoggedOut').style.display = 'none';
+    document.getElementById('playbookLoggedIn').style.display = 'block';
+    document.getElementById('openMemberLoginNav').textContent = claims.displayName || claims.username;
+    loadCalendar();
+    loadPlaybookSection();
+    checkAndShowNotifications();
+  }
 
   /* ---- Kalendář (týdenní mřížka pro přihlášené členy) ---- */
   const TYPE_META = {
@@ -3442,6 +3448,8 @@
       list.innerHTML = users.map((u, idx) => {
         const role = roleOf(u);
         const category = (u.category === 'academy') ? 'academy' : 'main';
+        const steamId = u.steamId64 || '';
+        const steamDisplay = steamId ? `<span style="font-size:11px;color:var(--ice-dim);font-family:monospace;">${steamId.slice(0,6)}…${steamId.slice(-4)}</span>` : '<span style="font-size:11px;color:rgba(255,85,85,.8);">bez SteamID</span>';
         let control;
         if(role === 'owner'){
           control = `<span class="role-badge owner">Owner</span>`;
@@ -3462,19 +3470,45 @@
         }else{
           categoryControl = `<span class="admin-cal-tag ${category}">${CATEGORY_LABELS[category]}</span>`;
         }
+        let steamInput = '';
+        if(isOwner){
+          steamInput = `<input type="text" class="admin-steam-input" data-idx="${idx}" value="${escapeHtml(steamId)}" placeholder="SteamID64" pattern="[0-9]{17}" inputmode="numeric" style="width:170px;font-size:11px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg-2);color:var(--ice);font-family:monospace;" title="SteamID64">`;
+        }
         return `
         <div class="admin-news-row">
           <div class="admin-news-row-text">
             <strong>${escapeHtml(u.displayName || u.username)}</strong>
             <span>@${escapeHtml(u.username)}</span>
+            ${steamDisplay}
           </div>
-          <div style="display:flex;gap:8px;align-items:center;">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            ${steamInput}
             ${categoryControl}
             ${control}
             <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
           </div>
         </div>`;
       }).join('');
+      list.querySelectorAll('.admin-steam-input').forEach(inp => {
+        inp.addEventListener('change', async function(){
+          const idx = parseInt(inp.dataset.idx, 10);
+          const newSteamId = inp.value.trim() || null;
+          if(newSteamId && !/^\d{17}$/.test(newSteamId)){ alert('SteamID64 musí být 17 číslic.'); return; }
+          inp.disabled = true;
+          try{
+            const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+            const users = data || [];
+            if(users[idx]){
+              users[idx].steamId64 = newSteamId;
+              await ghSave(USERS_FILE, users, sha, `SteamID: ${users[idx].username} -> ${newSteamId || 'odebráno'}`, ghToken);
+            }
+            renderAdminUserList();
+          }catch(e){
+            alert('Nepodařilo se uložit SteamID: ' + e.message);
+            inp.disabled = false;
+          }
+        });
+      });
       list.querySelectorAll('.admin-category-select').forEach(sel => {
         sel.addEventListener('change', async function(){
           const idx = parseInt(sel.dataset.idx, 10);
@@ -3540,12 +3574,11 @@
     const submitBtn = e.target.querySelector('.submit-btn');
     const username = document.getElementById('au-username').value.trim();
     const displayName = document.getElementById('au-display').value.trim();
-    const password = document.getElementById('au-password').value;
+    const steamId64 = document.getElementById('au-steamid').value.trim() || null;
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Ukládám...';
     try{
-      const passwordHash = await sha256Hex(password);
       const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
       const users = data || [];
       const existingIdx = users.findIndex(u => u.username === username);
@@ -3554,7 +3587,23 @@
       const category = (existingIdx >= 0 || memberRole !== 'owner')
         ? prevCategory
         : (document.getElementById('au-category').value === 'academy' ? 'academy' : 'main');
-      const entry = { username, displayName, passwordHash, role: prevRole, category };
+      const prevSteamId = existingIdx >= 0 ? (users[existingIdx].steamId64 || null) : null;
+      const prevPerms = existingIdx >= 0 ? (users[existingIdx].permissions || null) : null;
+      let permissions = prevPerms;
+      if(memberRole === 'owner'){
+        const calMain = e.target.querySelector('[name="perm-cal-main"]').checked;
+        const calAcademy = e.target.querySelector('[name="perm-cal-academy"]').checked;
+        const playbooks = e.target.querySelector('[name="perm-playbooks"]').checked;
+        permissions = { calendars: [], playbooks };
+        if(calMain) permissions.calendars.push('main');
+        if(calAcademy) permissions.calendars.push('academy');
+      }
+      const entry = {
+        username, displayName,
+        steamId64: steamId64 || prevSteamId,
+        passwordHash: null,
+        role: prevRole, category, permissions
+      };
       if(existingIdx >= 0) users[existingIdx] = entry; else users.push(entry);
       await ghSave(USERS_FILE, users, sha, `Přidání/úprava účtu: ${username}`, ghToken);
       e.target.reset();
@@ -3933,10 +3982,16 @@
   }
 
   function restoreMemberSession(){
+    const steamData = parseSteamTokenFromUrl();
+    if(steamData){
+      history.replaceState(null, '', location.pathname + location.search);
+      applySteamSession(steamData.claims, steamData.token);
+      return;
+    }
     const session = loadMemberSession();
     if(!session) return;
     memberUsername = session.username;
-    memberAccessCode = session.accessCode;
+    memberAccessCode = '';
     memberRole = (session.username === OWNER_USERNAME) ? 'owner' : (session.role || 'member');
     memberCategory = (session.category === 'academy') ? 'academy' : 'main';
     document.getElementById('calendarLoggedOut').style.display = 'none';
@@ -4299,7 +4354,6 @@
   });
 
   /* ============ PLAYBOOKY (sekce jen pro přihlášené členy) ============ */
-  let playbookCache = null;
 
   function normalizePlaybook(raw){
     const data = (raw && typeof raw === 'object') ? raw : {};
@@ -4399,7 +4453,6 @@
     }).join('');
   }
 
-  let ytApiPromise = null;
   function loadYouTubeApi(){
     if(window.YT && window.YT.Player) return Promise.resolve(window.YT);
     if(!ytApiPromise){
@@ -4415,8 +4468,6 @@
     }
     return ytApiPromise;
   }
-  let pbPlayer = null;
-  let pbVideoId = '';
   async function initPbPlayer(videoId){
     pbVideoId = videoId;
     const host = document.getElementById('pbPlayerHost');
