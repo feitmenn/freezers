@@ -60,5 +60,20 @@
       ],
       "playbooks": true
     }
+  },
+  {
+    "username": "michi",
+    "displayName": "",
+    "steamId64": "76561199036106286",
+    "passwordHash": null,
+    "role": "member",
+    "category": "main",
+    "permissions": {
+      "calendars": [
+        "main",
+        "academy"
+      ],
+      "playbooks": true
+    }
   }
 ]
