@@ -125,5 +125,20 @@
       ],
       "playbooks": true
     }
+  },
+  {
+    "username": "d4rwis",
+    "displayName": "",
+    "steamId64": "76561199496755078",
+    "passwordHash": null,
+    "role": "member",
+    "category": "main",
+    "permissions": {
+      "calendars": [
+        "main",
+        "academy"
+      ],
+      "playbooks": true
+    }
   }
 ]
