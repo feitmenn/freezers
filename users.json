@@ -111,5 +111,19 @@
       ],
       "playbooks": true
     }
+  },
+  {
+    "username": "krabik",
+    "displayName": "",
+    "steamId64": "76561199223157612",
+    "passwordHash": null,
+    "role": "member",
+    "category": "main",
+    "permissions": {
+      "calendars": [
+        "main"
+      ],
+      "playbooks": true
+    }
   }
 ]
