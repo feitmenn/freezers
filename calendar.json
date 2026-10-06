@@ -53,5 +53,12 @@
     "type": "training",
     "date": "2026-10-12T16:00:00.000Z",
     "description": "Trénink a první stratbook na ANUBIS\n\nStratbooky si povine vytisknete jestli mate tiskarnu doma :-)"
+  },
+  {
+    "id": "ev_1791292317496",
+    "title": "Inferno 14.10",
+    "type": "training",
+    "date": "2026-10-14T16:00:00.000Z",
+    "description": "Stratbook a playbook trénink na Inferno"
   }
 ]
