@@ -75,5 +75,19 @@
       ],
       "playbooks": true
     }
+  },
+  {
+    "username": "dankolanko",
+    "displayName": "",
+    "steamId64": "76561199838475165",
+    "passwordHash": null,
+    "role": "member",
+    "category": "academy",
+    "permissions": {
+      "calendars": [
+        "academy"
+      ],
+      "playbooks": true
+    }
   }
 ]
