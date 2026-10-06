@@ -96,5 +96,20 @@
       ],
       "playbooks": true
     }
+  },
+  {
+    "username": "SeinZZZ",
+    "displayName": "",
+    "steamId64": "76561199070224984",
+    "passwordHash": null,
+    "role": "member",
+    "category": "academy",
+    "permissions": {
+      "calendars": [
+        "main",
+        "academy"
+      ],
+      "playbooks": true
+    }
   }
 ]
