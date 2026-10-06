@@ -46,5 +46,12 @@
     "type": "training",
     "date": "2026-10-04T16:00:00.000Z",
     "description": "povine"
+  },
+  {
+    "id": "ev_1791292272367",
+    "title": "12.10 Trénink",
+    "type": "training",
+    "date": "2026-10-12T16:00:00.000Z",
+    "description": "Trénink a první stratbook na ANUBIS\n\nStratbooky si povine vytisknete jestli mate tiskarnu doma :-)"
   }
 ]
