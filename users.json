@@ -89,5 +89,19 @@
       ],
       "playbooks": true
     }
+  },
+  {
+    "username": "nicolasAC",
+    "displayName": "",
+    "steamId64": "76561199810927679",
+    "passwordHash": null,
+    "role": "member",
+    "category": "main",
+    "permissions": {
+      "calendars": [
+        "main"
+      ],
+      "playbooks": true
+    }
   }
 ]
