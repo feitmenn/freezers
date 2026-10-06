@@ -45,5 +45,19 @@
       ],
       "playbooks": false
     }
+  },
+  {
+    "username": "majales",
+    "displayName": "",
+    "steamId64": "76561199438372371",
+    "passwordHash": null,
+    "role": "member",
+    "category": "academy",
+    "permissions": {
+      "calendars": [
+        "academy"
+      ],
+      "playbooks": false
+    }
   }
 ]
