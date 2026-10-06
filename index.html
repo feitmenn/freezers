@@ -1728,18 +1728,16 @@
       <button type="button" class="submit-btn" id="adminLockedMemberBtn" style="width:100%;">Přihlásit se jako člen</button>
     </div>
     <div class="admin-as" id="adminLoginAs" style="display:none;"></div>
-    <form id="adminLoginForm">
-      <div class="field">
-        <label for="adminPass">Heslo administrátora</label>
-        <input type="password" id="adminPass" autocomplete="off" placeholder="••••••••••••" required>
-      </div>
-      <div class="field">
-        <label for="adminPassword">GitHub token</label>
-        <input type="password" id="adminPassword" autocomplete="off" placeholder="ghp_... nebo github_pat_..." required>
-      </div>
-      <div class="admin-error" id="adminLoginError">Token nefunguje, zkus to znovu.</div>
-      <button type="submit" class="submit-btn" style="width:100%;">Vstoupit</button>
-    </form>
+    <div id="adminSteamLoginWrap" style="display:none;">
+      <p style="font-size:13px;color:var(--ice-dim);margin:0 0 16px;line-height:1.6;">
+        Pro vstup do admin panelu se přihlas přes svůj Steam účet. Musíš mít roli <strong>admin</strong> nebo <strong>owner</strong>.
+      </p>
+      <button type="button" id="adminSteamLoginBtn" class="submit-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#1b2838;border-color:#66c0f4;color:#fff;">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><circle cx="12" cy="12" r="11" fill="#1b2838"/><circle cx="8.7" cy="15.3" r="2.3" stroke="#66c0f4" stroke-width="1.3"/><circle cx="15.3" cy="8.8" r="3" stroke="#66c0f4" stroke-width="1.3"/><line x1="10.3" y1="13.8" x2="13.6" y2="10.9" stroke="#66c0f4" stroke-width="1.3"/></svg>
+        Přihlásit přes Steam
+      </button>
+    </div>
+    <div class="admin-error" id="adminLoginError"></div>
   </div>
 </div>
 
@@ -2149,13 +2147,6 @@
   const GH_BRANCH = 'main';
   const GH_FILE_PATH = 'news.json';
   const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_FILE_PATH}`;
-  const CONTENTS_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE_PATH}`;
-
-  // GitHub token pro zápis (Contents API). Ukládá se i do localStorage, aby si
-  // admin panel zapamatoval přihlášení po reloadu; tlačítkem Odhlásit se smaže.
-  let ghToken = '';
-  const ADMIN_TOKEN_KEY = 'freezers_admin_token';
-  try{ ghToken = localStorage.getItem(ADMIN_TOKEN_KEY) || ''; }catch(e){ ghToken = ''; }
 
   function escapeHtml(str){
     const div = document.createElement('div');
@@ -2191,35 +2182,11 @@
 
   // Čtení se sha (potřeba pro zápis přes GitHub API)
   async function fetchNewsWithSha(){
-    const headers = ghToken ? { Authorization: `token ${ghToken}` } : {};
-    const res = await fetch(CONTENTS_URL, { headers, cache:'no-store' });
-    if(res.status === 404) return { items: [], sha: null };
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
-    }
-    const data = await res.json();
-    const items = JSON.parse(b64DecodeUnicode(data.content) || '[]');
-    return { items, sha: data.sha };
+    return ghFetchWithSha(GH_FILE_PATH).then(r => ({ items: r.data || [], sha: r.sha }));
   }
 
   async function saveNewsToGithub(items, sha, message){
-    const body = {
-      message,
-      content: b64EncodeUnicode(JSON.stringify(items, null, 2)),
-      branch: GH_BRANCH
-    };
-    if(sha) body.sha = sha;
-    const res = await fetch(CONTENTS_URL, {
-      method: 'PUT',
-      headers: { 'Authorization': `token ${ghToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
-    }
-    return res.json();
+    return ghSave(GH_FILE_PATH, items, sha, message);
   }
 
   async function renderNews(){
@@ -2349,30 +2316,36 @@
   });
 
   /* ============ ADMIN MODALY (Ctrl+F) ============ */
-  // Heslo administrátora je uloženo jen jako SHA-256 hash. Pozor: jde o čistě
-  // klientskou kontrolu — skutečnou ochranou zápisu je až GitHub token níže.
-  const ADMIN_PASS_HASH = '5eb8acebb389c86a7016d9047548be66d2ad07a12bec090e32f208a1e85e917a';
 
   function openAdminLogin(){
-    const authorized = !!memberUsername && (memberRole === 'owner' || memberRole === 'admin');
+    const loggedIn = !!memberUsername;
+    const authorized = loggedIn && (memberRole === 'owner' || memberRole === 'admin');
     const locked = document.getElementById('adminLoginLocked');
-    const form = document.getElementById('adminLoginForm');
+    const steamWrap = document.getElementById('adminSteamLoginWrap');
     const asEl = document.getElementById('adminLoginAs');
-    document.getElementById('adminLoginError').classList.remove('show');
-    document.getElementById('adminPass').value = '';
-    document.getElementById('adminPassword').value = '';
+    const errEl = document.getElementById('adminLoginError');
+    errEl.classList.remove('show');
     if(authorized){
       locked.style.display = 'none';
-      form.style.display = '';
+      steamWrap.style.display = 'none';
       asEl.style.display = '';
       asEl.textContent = 'Přihlášen jako ' + memberUsername + ' · ' + (ROLE_LABELS[memberRole] || memberRole);
-    }else{
+      closeAdminLogin();
+      openAdminPanel();
+      return;
+    }
+    asEl.style.display = 'none';
+    if(loggedIn){
+      // přihlášený přes Steam, ale bez role admin/owner
+      steamWrap.style.display = 'none';
       locked.style.display = '';
-      form.style.display = 'none';
-      asEl.style.display = 'none';
+      locked.querySelector('p').innerHTML = 'Jsi přihlášený jako <strong>' + escapeHtml(memberUsername) + '</strong>, ale nemáš roli <strong>admin</strong> ani <strong>owner</strong>.';
+      document.getElementById('adminLockedMemberBtn').style.display = 'none';
+    }else{
+      locked.style.display = 'none';
+      steamWrap.style.display = '';
     }
     document.getElementById('adminLoginOverlay').classList.add('show');
-    setTimeout(() => { if(authorized) document.getElementById('adminPass').focus(); }, 50);
   }
   function closeAdminLogin(){
     document.getElementById('adminLoginOverlay').classList.remove('show');
@@ -2425,39 +2398,8 @@
     }
   });
 
-  document.getElementById('adminLoginForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const passVal = document.getElementById('adminPass').value;
-    const val = document.getElementById('adminPassword').value.trim();
-    const btn = e.target.querySelector('.submit-btn');
-    const errEl = document.getElementById('adminLoginError');
-    errEl.classList.remove('show');
-    btn.disabled = true;
-    btn.textContent = 'Ověřuji...';
-    try{
-      const passHash = await sha256Hex(passVal);
-      if(passHash !== ADMIN_PASS_HASH){
-        errEl.textContent = 'Špatné heslo administrátora.';
-        errEl.classList.add('show');
-        return;
-      }
-      const res = await fetch(CONTENTS_URL, { headers: { Authorization: `token ${val}` } });
-      if(res.ok || res.status === 404){
-        ghToken = val;
-        try{ localStorage.setItem(ADMIN_TOKEN_KEY, val); }catch(e){}
-        closeAdminLogin();
-        openAdminPanel();
-      } else {
-        errEl.textContent = 'Token nefunguje nebo nemá práva k zápisu do repa.';
-        errEl.classList.add('show');
-      }
-    }catch(err){
-      errEl.textContent = 'Nepodařilo se ověřit přihlášení.';
-      errEl.classList.add('show');
-    }finally{
-      btn.disabled = false;
-      btn.textContent = 'Vstoupit';
-    }
+  document.getElementById('adminSteamLoginBtn').addEventListener('click', function(){
+    window.location.href = STEAM_API_URL + '/steam-login?returnTo=' + encodeURIComponent(window.location.href);
   });
 
   document.getElementById('closeAdminLoginBtn').addEventListener('click', closeAdminLogin);
@@ -2467,8 +2409,6 @@
   });
   document.getElementById('closeAdminPanelBtn').addEventListener('click', closeAdminPanel);
   document.getElementById('adminLogoutBtn').addEventListener('click', function(){
-    ghToken = '';
-    try{ localStorage.removeItem(ADMIN_TOKEN_KEY); }catch(e){}
     closeAdminPanel();
   });
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
@@ -2653,7 +2593,6 @@
   /* ============ ROSTER (uložený jako roster.json přímo v GitHub repu) ============ */
   const ROSTER_FILE = 'roster.json';
   const ROSTER_RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${ROSTER_FILE}`;
-  const ROSTER_CONTENTS_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ROSTER_FILE}`;
 
   const TEAM_META = {
     'main':            { tier: 'MAIN ROSTER',       name: 'GlossGlockner', banner: 'gg' },
@@ -2706,38 +2645,12 @@
   }
 
   async function fetchRosterWithSha(){
-    const headers = ghToken ? { Authorization: `token ${ghToken}` } : {};
-    const res = await fetch(ROSTER_CONTENTS_URL, { headers, cache:'no-store' });
-    if(res.status === 404) return { roster: null, sha: null };
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
-    }
-    const data = await res.json();
-    const roster = JSON.parse(b64DecodeUnicode(data.content) || 'null');
-    return { roster, sha: data.sha };
+    const r = await ghFetchWithSha(ROSTER_FILE);
+    return { roster: r.data, sha: r.sha };
   }
 
   async function saveRosterToGithub(roster, sha, message){
-    if(!ghToken){
-      throw new Error('Nejsi přihlášený do admin panelu — pro ukládání rosteru se nejdřív přihlas.');
-    }
-    const body = {
-      message,
-      content: b64EncodeUnicode(JSON.stringify(roster, null, 2)),
-      branch: GH_BRANCH
-    };
-    if(sha) body.sha = sha;
-    const res = await fetch(ROSTER_CONTENTS_URL, {
-      method: 'PUT',
-      headers: { 'Authorization': `token ${ghToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
-    }
-    return res.json();
+    return ghSave(ROSTER_FILE, roster, sha, message);
   }
 
   function playerInitials(name){
@@ -2977,7 +2890,6 @@
   const NOTIFICATIONS_FILE = 'notifications.json';
 
   let memberUsername = '';
-  let memberAccessCode = ''; // sdílený zápisový token
   let memberRole = 'member'; // owner | admin | member
   let memberCategory = 'main'; // main | academy — určuje, který kalendář člen vidí
   const MEMBER_SESSION_KEY = 'freezers_member_session';
@@ -3044,6 +2956,15 @@
 
   const STEAM_API_URL = 'https://freezers-steam-auth.jornelliseu-c7d.workers.dev';
 
+  function decodeTokenPayload(token){
+    let b64 = String(token).split('.')[0].replace(/-/g, '+').replace(/_/g, '/');
+    b64 += '='.repeat((4 - (b64.length % 4)) % 4);
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for(let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+
   function saveMemberSession(claims, token){
     try{
       localStorage.setItem(MEMBER_SESSION_KEY, JSON.stringify({
@@ -3065,7 +2986,7 @@
       if(s.accessCode && !s.steamToken){ clearMemberSession(); return null; }
       if(s.steamToken){
         try{
-          const payload = JSON.parse(atob(s.steamToken.split('.')[0]));
+          const payload = decodeTokenPayload(s.steamToken);
           if(payload.exp && payload.exp < Date.now()/1000){ clearMemberSession(); return null; }
         }catch(e){}
       }
@@ -3081,16 +3002,10 @@
     const m = hash.match(/steam_token=([A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)/);
     if(!m) return null;
     try{
-      const payload = JSON.parse(atob(m[1].split('.')[0]));
+      const payload = decodeTokenPayload(m[1]);
       if(payload.exp && payload.exp < Date.now()/1000) return null;
       return { token: m[1], claims: payload };
     }catch(e){ return null; }
-  }
-
-  async function sha256Hex(str){
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest('SHA-256', enc);
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
   function showNotificationToast(notif){
@@ -3109,13 +3024,13 @@
 
   async function checkAndShowNotifications(){
     try{
-      const { data, sha } = await ghFetchWithSha(NOTIFICATIONS_FILE, memberAccessCode);
+      const { data, sha } = await ghFetchWithSha(NOTIFICATIONS_FILE);
       const all = data || [];
       const mine = all.filter(n => n.username === memberUsername);
       if(!mine.length) return;
       mine.forEach(showNotificationToast);
       const remaining = all.filter(n => n.username !== memberUsername);
-      await ghSave(NOTIFICATIONS_FILE, remaining, sha, `Přečtená oznámení: ${memberUsername}`, memberAccessCode);
+      await ghSave(NOTIFICATIONS_FILE, remaining, sha, `Přečtená oznámení: ${memberUsername}`);
     }catch(e){
       console.error('Nepodařilo se zkontrolovat oznámení:', e);
     }
@@ -3134,32 +3049,48 @@
     }
   }
 
-  // Obecné čtení+zápis přes GitHub Contents API, funguje s libovolným tokenem (admin GH token nebo sdílený přístupový kód)
-  async function ghFetchWithSha(path, token){
-    const headers = token ? { Authorization: `token ${token}` } : {};
-    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`;
-    const res = await fetch(url, { headers, cache:'no-store' });
+  // Čtení+zápis jde přes Cloudflare Worker (/gh-proxy), GitHub token zůstává jen na serveru. Autorizace = Steam session token.
+  function getSessionToken(){
+    try{
+      const raw = localStorage.getItem(MEMBER_SESSION_KEY);
+      if(!raw) return null;
+      const s = JSON.parse(raw);
+      return s.steamToken || null;
+    }catch(e){ return null; }
+  }
+
+  async function ghFetchWithSha(path){
+    const token = getSessionToken();
+    if(!token) throw new Error('Nejsi přihlášený — chybí session token.');
+    const res = await fetch(STEAM_API_URL + '/gh-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Session-Token': token },
+      body: JSON.stringify({ action: 'get-sha', path })
+    });
     if(res.status === 404) return { data: null, sha: null };
+    if(res.status === 401){ clearMemberSession(); throw new Error('Přihlášení vypršelo — obnov stránku a přihlas se znovu přes Steam.'); }
     if(!res.ok){
       const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
+      throw new Error(err.error || ('GitHub API chyba ' + res.status));
     }
     const json = await res.json();
     const data = JSON.parse(b64DecodeUnicode(json.content) || 'null');
     return { data, sha: json.sha };
   }
-  async function ghSave(path, data, sha, message, token){
-    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`;
-    const body = { message, content: b64EncodeUnicode(JSON.stringify(data, null, 2)), branch: GH_BRANCH };
+  async function ghSave(path, data, sha, message){
+    const token = getSessionToken();
+    if(!token) throw new Error('Nejsi přihlášený — chybí session token.');
+    const body = { action: 'put', path, message, content: b64EncodeUnicode(JSON.stringify(data, null, 2)), branch: GH_BRANCH };
     if(sha) body.sha = sha;
-    const res = await fetch(url, {
-      method: 'PUT',
-      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+    const res = await fetch(STEAM_API_URL + '/gh-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Session-Token': token },
       body: JSON.stringify(body)
     });
+    if(res.status === 401){ clearMemberSession(); throw new Error('Přihlášení vypršelo — obnov stránku a přihlas se znovu přes Steam.'); }
     if(!res.ok){
       const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('GitHub API chyba ' + res.status));
+      throw new Error(err.error || ('GitHub API chyba ' + res.status));
     }
     return res.json();
   }
@@ -3177,7 +3108,6 @@
     if(memberUsername){
       // Už přihlášen -> odhlásit
       memberUsername = '';
-      memberAccessCode = '';
       memberRole = 'member';
       memberCategory = 'main';
       clearMemberSession();
@@ -3208,7 +3138,6 @@
 
   function applySteamSession(claims, token){
     memberUsername = claims.username;
-    memberAccessCode = '';
     memberRole = (claims.username === OWNER_USERNAME) ? 'owner' : (claims.role || 'member');
     memberCategory = (claims.category === 'academy') ? 'academy' : 'main';
     saveMemberSession(claims, token);
@@ -3293,11 +3222,11 @@
         const row = btn.closest('.rsvp-row');
         row.querySelectorAll('.rsvp-btn').forEach(b => b.disabled = true);
         try{
-          const { data, sha } = await ghFetchWithSha(RSVPS_FILE, memberAccessCode);
+          const { data, sha } = await ghFetchWithSha(RSVPS_FILE);
           const rsvps = data || {};
           if(!rsvps[id]) rsvps[id] = {};
           rsvps[id][memberUsername] = status;
-          await ghSave(RSVPS_FILE, rsvps, sha, `RSVP: ${memberUsername} -> ${status} (${id})`, memberAccessCode);
+          await ghSave(RSVPS_FILE, rsvps, sha, `RSVP: ${memberUsername} -> ${status} (${id})`);
           // Máme už čerstvá data z uložení – není potřeba nic znovu stahovat
           calendarRsvpsCache = rsvps;
           renderCalendarGrid();
@@ -3322,11 +3251,11 @@
         btn.disabled = true;
         btn.textContent = 'Odesílám...';
         try{
-          const { data, sha } = await ghFetchWithSha(EXCUSES_FILE, memberAccessCode);
+          const { data, sha } = await ghFetchWithSha(EXCUSES_FILE);
           const excuses = data || {};
           if(!excuses[id]) excuses[id] = {};
           excuses[id][memberUsername] = { reason, submittedAt: new Date().toISOString() };
-          await ghSave(EXCUSES_FILE, excuses, sha, `Omluvenka: ${memberUsername} (${id})`, memberAccessCode);
+          await ghSave(EXCUSES_FILE, excuses, sha, `Omluvenka: ${memberUsername} (${id})`);
           calendarExcusesCache = excuses;
           showEventDetail(id);
         }catch(e){
@@ -3496,11 +3425,11 @@
           if(newSteamId && !/^\d{17}$/.test(newSteamId)){ alert('SteamID64 musí být 17 číslic.'); return; }
           inp.disabled = true;
           try{
-            const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+            const { data, sha } = await ghFetchWithSha(USERS_FILE);
             const users = data || [];
             if(users[idx]){
               users[idx].steamId64 = newSteamId;
-              await ghSave(USERS_FILE, users, sha, `SteamID: ${users[idx].username} -> ${newSteamId || 'odebráno'}`, ghToken);
+              await ghSave(USERS_FILE, users, sha, `SteamID: ${users[idx].username} -> ${newSteamId || 'odebráno'}`);
             }
             renderAdminUserList();
           }catch(e){
@@ -3515,11 +3444,11 @@
           const newCategory = sel.value;
           sel.disabled = true;
           try{
-            const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+            const { data, sha } = await ghFetchWithSha(USERS_FILE);
             const users = data || [];
             if(users[idx]){
               users[idx].category = newCategory;
-              await ghSave(USERS_FILE, users, sha, `Změna kategorie: ${users[idx].username} -> ${newCategory}`, ghToken);
+              await ghSave(USERS_FILE, users, sha, `Změna kategorie: ${users[idx].username} -> ${newCategory}`);
             }
             renderAdminUserList();
           }catch(e){
@@ -3534,11 +3463,11 @@
           const newRole = sel.value;
           sel.disabled = true;
           try{
-            const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+            const { data, sha } = await ghFetchWithSha(USERS_FILE);
             const users = data || [];
             if(users[idx] && users[idx].username !== OWNER_USERNAME){
               users[idx].role = newRole;
-              await ghSave(USERS_FILE, users, sha, `Změna role: ${users[idx].username} -> ${newRole}`, ghToken);
+              await ghSave(USERS_FILE, users, sha, `Změna role: ${users[idx].username} -> ${newRole}`);
             }
             renderAdminUserList();
           }catch(e){
@@ -3552,10 +3481,10 @@
           btn.disabled = true;
           btn.textContent = 'Mažu...';
           try{
-            const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+            const { data, sha } = await ghFetchWithSha(USERS_FILE);
             const users = data || [];
             users.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(USERS_FILE, users, sha, 'Odebrání účtu člena přes admin panel', ghToken);
+            await ghSave(USERS_FILE, users, sha, 'Odebrání účtu člena přes admin panel');
             renderAdminUserList();
           }catch(e){
             alert('Nepodařilo se smazat účet: ' + e.message);
@@ -3579,7 +3508,7 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Ukládám...';
     try{
-      const { data, sha } = await ghFetchWithSha(USERS_FILE, ghToken);
+      const { data, sha } = await ghFetchWithSha(USERS_FILE);
       const users = data || [];
       const existingIdx = users.findIndex(u => u.username === username);
       const prevRole = existingIdx >= 0 ? (users[existingIdx].role || 'member') : 'member';
@@ -3601,11 +3530,10 @@
       const entry = {
         username, displayName,
         steamId64: steamId64 || prevSteamId,
-        passwordHash: null,
         role: prevRole, category, permissions
       };
       if(existingIdx >= 0) users[existingIdx] = entry; else users.push(entry);
-      await ghSave(USERS_FILE, users, sha, `Přidání/úprava účtu: ${username}`, ghToken);
+      await ghSave(USERS_FILE, users, sha, `Přidání/úprava účtu: ${username}`);
       e.target.reset();
       renderAdminUserList();
     }catch(err){
@@ -3655,10 +3583,10 @@
           btn.textContent = 'Mažu...';
           try{
             const calFile = calendarFileFor(btn.dataset.cal);
-            const { data, sha } = await ghFetchWithSha(calFile, ghToken);
+            const { data, sha } = await ghFetchWithSha(calFile);
             const events = data || [];
             events.splice(parseInt(btn.dataset.idx, 10), 1);
-            await ghSave(calFile, events, sha, 'Odebrání akce z kalendáře', ghToken);
+            await ghSave(calFile, events, sha, 'Odebrání akce z kalendáře');
             renderAdminEventList();
           }catch(e){
             alert('Nepodařilo se smazat akci: ' + e.message);
@@ -3685,11 +3613,11 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Přidávám...';
     try{
-      const { data, sha } = await ghFetchWithSha(calFile, ghToken);
+      const { data, sha } = await ghFetchWithSha(calFile);
       const events = data || [];
       const id = 'ev_' + Date.now();
       events.push({ id, title, type, date: new Date(date).toISOString(), description });
-      await ghSave(calFile, events, sha, `Přidání akce (${CATEGORY_LABELS[cal]}): ${title}`, ghToken);
+      await ghSave(calFile, events, sha, `Přidání akce (${CATEGORY_LABELS[cal]}): ${title}`);
       e.target.reset();
       renderAdminEventList();
     }catch(err){
@@ -3760,7 +3688,7 @@
         sel.addEventListener('change', async function(){
           sel.disabled = true;
           try{
-            const { data, sha } = await ghFetchWithSha(ATTENDANCE_FILE, ghToken);
+            const { data, sha } = await ghFetchWithSha(ATTENDANCE_FILE);
             const attendance = data || {};
             if(!attendance[eventId]) attendance[eventId] = {};
             if(sel.value === ''){
@@ -3768,7 +3696,7 @@
             } else {
               attendance[eventId][sel.dataset.username] = sel.value;
             }
-            await ghSave(ATTENDANCE_FILE, attendance, sha, `Docházka: ${sel.dataset.username} -> ${sel.value || 'nezadáno'}`, ghToken);
+            await ghSave(ATTENDANCE_FILE, attendance, sha, `Docházka: ${sel.dataset.username} -> ${sel.value || 'nezadáno'}`);
             sel.className = `attendance-select status-${sel.value}`;
             renderAttendanceOverview();
           }catch(e){
@@ -3942,21 +3870,21 @@
           const row = btn.closest('.admin-news-row');
           row.querySelectorAll('button').forEach(b => b.disabled = true);
           try{
-            const { data: att, sha: attSha } = await ghFetchWithSha(ATTENDANCE_FILE, ghToken);
+            const { data: att, sha: attSha } = await ghFetchWithSha(ATTENDANCE_FILE);
             const attendance = att || {};
             if(!attendance[eventId]) attendance[eventId] = {};
             attendance[eventId][username] = approve ? 'excused' : 'unexcused';
-            await ghSave(ATTENDANCE_FILE, attendance, attSha, `Omluvenka ${approve ? 'schválena' : 'zamítnuta'}: ${username}`, ghToken);
+            await ghSave(ATTENDANCE_FILE, attendance, attSha, `Omluvenka ${approve ? 'schválena' : 'zamítnuta'}: ${username}`);
 
-            const { data: exc, sha: excSha } = await ghFetchWithSha(EXCUSES_FILE, ghToken);
+            const { data: exc, sha: excSha } = await ghFetchWithSha(EXCUSES_FILE);
             const excuses = exc || {};
             if(excuses[eventId]){
               delete excuses[eventId][username];
               if(Object.keys(excuses[eventId]).length === 0) delete excuses[eventId];
             }
-            await ghSave(EXCUSES_FILE, excuses, excSha, `Vyřízení omluvenky: ${username}`, ghToken);
+            await ghSave(EXCUSES_FILE, excuses, excSha, `Vyřízení omluvenky: ${username}`);
 
-            const { data: notifData, sha: notifSha } = await ghFetchWithSha(NOTIFICATIONS_FILE, ghToken);
+            const { data: notifData, sha: notifSha } = await ghFetchWithSha(NOTIFICATIONS_FILE);
             const notifications = notifData || [];
             notifications.push({
               id: 'notif_' + Date.now(),
@@ -3965,7 +3893,7 @@
               message: `Tvoje omluvenka na akci „${eventTitle}“ byla ${approve ? 'schválena' : 'zamítnuta'}.`,
               createdAt: new Date().toISOString()
             });
-            await ghSave(NOTIFICATIONS_FILE, notifications, notifSha, `Oznámení: ${username}`, ghToken);
+            await ghSave(NOTIFICATIONS_FILE, notifications, notifSha, `Oznámení: ${username}`);
 
             renderAdminExcusesList();
             renderAttendanceTable(document.getElementById('att-event-select').value);
@@ -3981,7 +3909,24 @@
     }
   }
 
+  function showSteamLoginError(){
+    const m = (location.hash || '').match(/steam_error=([a-z_]+)/);
+    if(!m) return false;
+    history.replaceState(null, '', location.pathname + location.search);
+    const messages = {
+      not_registered: 'Tvůj Steam účet není přiřazený k žádnému účtu. Pošli svoje SteamID64 staffu.',
+      cancelled: 'Přihlášení přes Steam bylo zrušeno.',
+      invalid: 'Steam přihlášení se nepodařilo ověřit. Zkus to prosím znovu.'
+    };
+    openMemberLogin();
+    const err = document.getElementById('memberLoginError');
+    err.textContent = messages[m[1]] || 'Přihlášení se nezdařilo.';
+    err.style.display = 'block';
+    return true;
+  }
+
   function restoreMemberSession(){
+    if(showSteamLoginError()) return;
     const steamData = parseSteamTokenFromUrl();
     if(steamData){
       history.replaceState(null, '', location.pathname + location.search);
@@ -3991,7 +3936,6 @@
     const session = loadMemberSession();
     if(!session) return;
     memberUsername = session.username;
-    memberAccessCode = '';
     memberRole = (session.username === OWNER_USERNAME) ? 'owner' : (session.role || 'member');
     memberCategory = (session.category === 'academy') ? 'academy' : 'main';
     document.getElementById('calendarLoggedOut').style.display = 'none';
@@ -4032,8 +3976,8 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Ukládám...';
     try{
-      const { sha } = await ghFetchWithSha(SCRIM_FILE, ghToken);
-      await ghSave(SCRIM_FILE, config, sha, `Scrim server: ${config.active ? 'aktivní' : 'vypnutý'}`, ghToken);
+      const { sha } = await ghFetchWithSha(SCRIM_FILE);
+      await ghSave(SCRIM_FILE, config, sha, `Scrim server: ${config.active ? 'aktivní' : 'vypnutý'}`);
       renderScrimBanner();
       submitBtn.textContent = 'Uloženo!';
       setTimeout(() => { submitBtn.textContent = 'Uložit Scrim Server'; }, 1800);
@@ -4098,10 +4042,10 @@
           btn.disabled = true;
           btn.textContent = 'Mažu...';
           try{
-            const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
+            const { data, sha } = await ghFetchWithSha(PARTNERS_FILE);
             const arr = Array.isArray(data) ? data : [];
             arr.splice(parseInt(btn.dataset.delIdx, 10), 1);
-            await ghSave(PARTNERS_FILE, arr, sha, 'Odebrání partnera', ghToken);
+            await ghSave(PARTNERS_FILE, arr, sha, 'Odebrání partnera');
             resetPartnerForm();
             renderAdminPartnersList();
             loadPartners();
@@ -4137,11 +4081,11 @@
 
     try{
       const isEdit = editPartnerIndex >= 0;
-      const { data, sha } = await ghFetchWithSha(PARTNERS_FILE, ghToken);
+      const { data, sha } = await ghFetchWithSha(PARTNERS_FILE);
       const current = Array.isArray(data) ? data : [];
       const entry = { kind, name, url, logo: logo || (isEdit ? current[editPartnerIndex].logo : '') };
       if(isEdit) current[editPartnerIndex] = entry; else current.push(entry);
-      await ghSave(PARTNERS_FILE, current, sha, isEdit ? ('Úprava partnera: ' + name) : ('Přidání partnera: ' + name), ghToken);
+      await ghSave(PARTNERS_FILE, current, sha, isEdit ? ('Úprava partnera: ' + name) : ('Přidání partnera: ' + name));
       resetPartnerForm();
       renderAdminPartnersList();
       loadPartners();
@@ -4207,10 +4151,10 @@
           btn.disabled = true;
           btn.textContent = 'Mažu...';
           try{
-            const { data, sha } = await ghFetchWithSha(INFLUENCERS_FILE, ghToken);
+            const { data, sha } = await ghFetchWithSha(INFLUENCERS_FILE);
             const arr = Array.isArray(data) ? data : [];
             arr.splice(parseInt(btn.dataset.delIdx, 10), 1);
-            await ghSave(INFLUENCERS_FILE, arr, sha, 'Odebrání influencera', ghToken);
+            await ghSave(INFLUENCERS_FILE, arr, sha, 'Odebrání influencera');
             resetInfluencerForm();
             renderAdminInfluencersList();
             loadInfluencers();
@@ -4247,11 +4191,11 @@
 
     try{
       const isEdit = editInfluencerIndex >= 0;
-      const { data, sha } = await ghFetchWithSha(INFLUENCERS_FILE, ghToken);
+      const { data, sha } = await ghFetchWithSha(INFLUENCERS_FILE);
       const current = Array.isArray(data) ? data : [];
       const entry = { platform, name, url, note, photo: photo || (isEdit ? current[editInfluencerIndex].photo : '') };
       if(isEdit) current[editInfluencerIndex] = entry; else current.push(entry);
-      await ghSave(INFLUENCERS_FILE, current, sha, isEdit ? ('Úprava influencera: ' + name) : ('Přidání influencera: ' + name), ghToken);
+      await ghSave(INFLUENCERS_FILE, current, sha, isEdit ? ('Úprava influencera: ' + name) : ('Přidání influencera: ' + name));
       resetInfluencerForm();
       renderAdminInfluencersList();
       loadInfluencers();
@@ -4379,9 +4323,9 @@
     return normalizePlaybook(remote || PLAYBOOK_SEED);
   }
   async function savePlaybookData(data, message){
-    if(!ghToken) throw new Error('Nejsi přihlášený do admin panelu — pro ukládání playbooků se nejdřív přihlas.');
-    const { sha } = await ghFetchWithSha(PLAYBOOK_FILE, ghToken);
-    await ghSave(PLAYBOOK_FILE, data, sha, message, ghToken);
+    if(!getSessionToken()) throw new Error('Nejsi přihlášený — pro ukládání playbooků se nejdřív přihlas přes Steam.');
+    const { sha } = await ghFetchWithSha(PLAYBOOK_FILE);
+    await ghSave(PLAYBOOK_FILE, data, sha, message);
   }
 
   function playbookBrief(desc){
