@@ -2,7 +2,14 @@
   {
     "username": "filas",
     "displayName": "",
-    "passwordHash": "17756315ebd47b7110359fc7b168179bf6f2df3646fcc888bc8aa05c78b38ac1"
+    "passwordHash": null,
+    "steamId64": "76561199714994891",
+    "role": "admin",
+    "permissions": {
+      "calMain": true,
+      "calAcademy": true,
+      "playbooks": true
+    }
   },
   {
     "username": "krabik_77",
