@@ -143,7 +143,7 @@
   },
   {
     "username": "hrac",
-    "displayName": "Hráč",
+    "displayName": "Reformed",
     "steamId64": "76561199242107755",
     "role": "member",
     "category": "main",
@@ -152,6 +152,6 @@
       "playbooks": false,
       "sections": []
     },
-    "autoName": true
+    "autoName": false
   }
 ]
