@@ -9,7 +9,9 @@
       "calMain": true,
       "calAcademy": true,
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/f8eda8c6ddff9178919c100f28082220ecc083f8_full.jpg",
+    "faceit": null
   },
   {
     "username": "flumfy",
@@ -24,7 +26,9 @@
         "academy"
       ],
       "playbooks": false
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/e372c5f81166dfc93b766c9630488befeb134923_full.jpg",
+    "faceit": null
   },
   {
     "username": "tomziy",
@@ -38,7 +42,9 @@
         "academy"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/7b433df40ccb32acbfa25201124c5fd78380bac6_full.jpg",
+    "faceit": null
   },
   {
     "username": "michi",
@@ -53,7 +59,9 @@
         "academy"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/7b433df40ccb32acbfa25201124c5fd78380bac6_full.jpg",
+    "faceit": null
   },
   {
     "username": "dankolanko",
@@ -67,7 +75,9 @@
         "academy"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/7b433df40ccb32acbfa25201124c5fd78380bac6_full.jpg",
+    "faceit": null
   },
   {
     "username": "nicolasAC",
@@ -81,7 +91,9 @@
         "main"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/7b433df40ccb32acbfa25201124c5fd78380bac6_full.jpg",
+    "faceit": null
   },
   {
     "username": "SeinZZZ",
@@ -96,7 +108,9 @@
         "academy"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/a6e4acf31025e47247dcefa014d360a50aed6e3d_full.jpg",
+    "faceit": null
   },
   {
     "username": "krabik",
@@ -110,7 +124,9 @@
         "main"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/ffae601bcee83cb4c6d6f15e2c531e2a5f5be6d8_full.jpg",
+    "faceit": null
   },
   {
     "username": "majales",
@@ -124,7 +140,9 @@
         "academy"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/b8a6f62b8b7bd48279016ddb5616f9a555b0cf5d_full.jpg",
+    "faceit": null
   },
   {
     "username": "d4rwis",
@@ -139,7 +157,9 @@
         "academy"
       ],
       "playbooks": true
-    }
+    },
+    "avatar": "https://avatars.steamstatic.com/9c72e4ba6264d3a1068d643126783ce042262a2f_full.jpg",
+    "faceit": null
   },
   {
     "username": "hrac",
@@ -152,6 +172,8 @@
       "playbooks": false,
       "sections": []
     },
-    "autoName": false
+    "autoName": false,
+    "avatar": "https://avatars.steamstatic.com/7ace5d43c1e9495836bb21d74d46fdcd6c7abbef_full.jpg",
+    "faceit": null
   }
 ]
