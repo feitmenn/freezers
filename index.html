@@ -1853,45 +1853,56 @@
     </div>
 
     <div class="admin-tab-panel" data-panel="accounts">
-      <h3>Přidat účet člena (přihlášení přes Steam)</h3>
+      <h3 id="auTitle">Přidat účet člena (přihlášení přes Steam)</h3>
       <form id="adminUserForm">
+        <input type="hidden" id="au-username">
+        <div class="field">
+          <label for="au-steamid">Steam profil — SteamID64, odkaz na profil nebo vanity jméno</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="au-steamid" placeholder="7656119… nebo steamcommunity.com/id/jmeno" style="flex:1;" autocomplete="off">
+            <button type="button" class="submit-btn" id="auLookupBtn" style="width:auto;padding:0 16px;">Načíst profil</button>
+          </div>
+          <div id="auProfile" style="display:none;margin-top:10px;align-items:center;gap:12px;"></div>
+          <div id="auLookupMsg" style="font-size:11px;color:var(--ice-dim);margin-top:6px;">Jméno, avatar a Faceit se načtou automaticky. Nic dalšího vyplňovat nemusíš.</div>
+        </div>
         <div class="field-row">
           <div class="field">
-            <label for="au-username">Uživatelské jméno</label>
-            <input type="text" id="au-username" placeholder="např. filas" required>
+            <label for="au-display">Zobrazované jméno (doplní se samo, jde upravit)</label>
+            <input type="text" id="au-display" placeholder="načte se ze Steamu / Faceitu">
           </div>
-          <div class="field">
-            <label for="au-display">Zobrazované jméno (nepovinné)</label>
-            <input type="text" id="au-display" placeholder="např. FILAS">
-          </div>
-        </div>
-        <div class="field">
-          <label for="au-steamid">SteamID64</label>
-          <input type="text" id="au-steamid" placeholder="7656119..." pattern="[0-9]{17}" inputmode="numeric">
-          <div style="font-size:11px;color:var(--ice-dim);margin-top:6px;">
-            Najdi na <a href="https://steamid.io/" target="_blank" rel="noopener" style="color:var(--turquoise);">steamid.io</a> nebo zkopíruj ze Steam profilu.
+          <div class="field" id="au-role-field">
+            <label for="au-role">Role</label>
+            <select id="au-role"><option value="member">Člen</option><option value="admin">Admin</option></select>
           </div>
         </div>
         <div class="field" id="au-category-field">
           <label for="au-category">Kategorie (který kalendář člen uvidí)</label>
-          <select id="au-category">
-            <option value="main" selected>Main</option>
-            <option value="academy">Academy</option>
-          </select>
+          <select id="au-category"><option value="main" selected>Main</option><option value="academy">Academy</option></select>
         </div>
         <div class="field" id="au-permissions-field">
-          <label>Oprávnění</label>
-          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:12px;">
+          <label>Oprávnění admina <button type="button" id="auPermAll" style="margin-left:8px;font-size:11px;background:none;border:1px solid var(--line);color:var(--turquoise);border-radius:6px;padding:2px 8px;cursor:pointer;">vše</button> <button type="button" id="auPermNone" style="font-size:11px;background:none;border:1px solid var(--line);color:var(--ice-dim);border-radius:6px;padding:2px 8px;cursor:pointer;">nic</button></label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px 14px;margin-top:8px;font-size:12px;">
             <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-cal-main"> Kalendář Main</label>
             <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-cal-academy"> Kalendář Academy</label>
             <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-playbooks"> Playbooky</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-sec-news"> Novinky</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-sec-roster"> Roster</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-sec-accounts"> Účty</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-sec-attendance"> Docházka a omluvenky</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-sec-scrim"> Scrim</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-sec-partners"> Partneři</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="checkbox" name="perm-sec-influenceri"> Influenceři</label>
           </div>
         </div>
-        <p class="admin-hint">Platí pro nově zakládané účty. U existujících účtů se kategorie a oprávnění nastavují v seznamu níže (jen owner).</p>
-        <button type="submit" class="submit-btn">Vytvořit / upravit účet</button>
+        <p class="admin-hint">Oprávnění a kategorii nastavuje jen owner. Admin bez zaškrtnutých oprávnění neuvidí žádnou záložku — u starých adminů bez nastavení zůstává přístup ke všemu.</p>
+        <div style="display:flex;gap:8px;">
+          <button type="submit" class="submit-btn">Vytvořit účet</button>
+          <button type="button" class="submit-btn" id="auCancelEdit" style="display:none;background:transparent;border:1px solid var(--line);color:var(--ice);">Zrušit úpravu</button>
+        </div>
       </form>
       <div class="admin-divider"></div>
       <h3>Existující účty</h3>
+      <div style="margin-bottom:10px;"><button type="button" class="submit-btn" id="auRefreshAll" style="width:auto;padding:6px 14px;font-size:12px;">Obnovit profily všech (Steam / Faceit)</button></div>
       <div id="adminUserList"></div>
     </div>
 
@@ -2361,6 +2372,7 @@
     renderAdminInfluencersList();
     renderAdminPlaybookList();
     renderAttendanceOverview();
+    applyAdminTabPermissions();
     document.getElementById('adminPanelOverlay').classList.add('show');
   }
   function closeAdminPanel(){
@@ -3406,18 +3418,20 @@
         return `
         <div class="admin-news-row">
           <div class="admin-news-row-text">
-            <strong>${escapeHtml(u.displayName || u.username)}</strong>
-            <span>@${escapeHtml(u.username)}</span>
+            <strong>${u.avatar ? `<img src="${escapeHtml(u.avatar)}" alt="" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:8px;">` : ''}${escapeHtml(u.displayName || u.username)}</strong>
+            <span>@${escapeHtml(u.username)}${u.faceit && u.faceit.nickname ? ` · Faceit: ${u.faceit.url ? `<a href="${escapeHtml(u.faceit.url)}" target="_blank" rel="noopener" style="color:var(--turquoise);">${escapeHtml(u.faceit.nickname)}</a>` : escapeHtml(u.faceit.nickname)}${u.faceit.level ? ' · lvl ' + u.faceit.level : ''}` : ''}</span>
             ${steamDisplay}
           </div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             ${steamInput}
             ${categoryControl}
             ${control}
+            <button type="button" class="admin-edit-btn" data-idx="${idx}" style="background:none;border:1px solid var(--line);color:var(--turquoise);border-radius:8px;padding:5px 12px;cursor:pointer;font-size:12px;">Upravit</button>
             <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
           </div>
         </div>`;
       }).join('');
+      list.querySelectorAll('.admin-edit-btn').forEach(btn => btn.addEventListener('click', () => startEditAccount(users[parseInt(btn.dataset.idx, 10)])));
       list.querySelectorAll('.admin-steam-input').forEach(inp => {
         inp.addEventListener('change', async function(){
           const idx = parseInt(inp.dataset.idx, 10);
@@ -3498,51 +3512,200 @@
     }
   }
 
+  /* ---- Admin: účty – automatický profil ze Steamu/Faceitu, úpravy, oprávnění ---- */
+  const PERM_SECTIONS = ['news','roster','accounts','attendance','scrim','partners','influenceri'];
+  let auProfile = null; // poslední načtený profil {steamId64, steamName, avatar, faceit}
+
+  async function lookupProfile(q){
+    const res = await fetch(STEAM_API_URL + '/profile-lookup?q=' + encodeURIComponent(q), { headers: { 'X-Session-Token': getSessionToken() || '' } });
+    const j = await res.json().catch(() => ({}));
+    if(res.status === 401){ clearMemberSession(); throw new Error('Přihlášení vypršelo — přihlas se znovu přes Steam.'); }
+    if(!res.ok) throw new Error(j.error || 'Profil se nepodařilo načíst.');
+    return j;
+  }
+
+  function showAuProfile(p){
+    auProfile = p;
+    const box = document.getElementById('auProfile');
+    if(!p){ box.style.display = 'none'; return; }
+    const chip = (label, name) => name ? `<button type="button" class="au-name-chip" data-name="${escapeHtml(name)}" style="background:none;border:1px solid var(--line);color:var(--ice);border-radius:999px;padding:3px 10px;font-size:12px;cursor:pointer;">${label}: <strong>${escapeHtml(name)}</strong></button>` : '';
+    box.innerHTML = (p.avatar ? `<img src="${escapeHtml(p.avatar)}" alt="" style="width:48px;height:48px;border-radius:10px;">` : '') +
+      `<div style="display:flex;flex-wrap:wrap;gap:6px;">${chip('Steam', p.steamName)}${chip('Faceit', p.faceit && p.faceit.nickname)}${p.faceit && p.faceit.level ? `<span style="font-size:12px;color:var(--ice-dim);align-self:center;">lvl ${p.faceit.level}${p.faceit.elo ? ' · ' + p.faceit.elo + ' elo' : ''}</span>` : ''}</div>`;
+    box.style.display = 'flex';
+    box.querySelectorAll('.au-name-chip').forEach(c => c.addEventListener('click', () => { document.getElementById('au-display').value = c.dataset.name; }));
+  }
+
+  async function runAuLookup(){
+    const inp = document.getElementById('au-steamid');
+    const msg = document.getElementById('auLookupMsg');
+    const q = inp.value.trim();
+    if(!q) return;
+    msg.textContent = 'Načítám profil…';
+    try{
+      const p = await lookupProfile(q);
+      inp.value = p.steamId64;
+      showAuProfile(p);
+      const dn = document.getElementById('au-display');
+      if(!dn.value.trim() || dn.dataset.auto === '1'){ dn.value = (p.faceit && p.faceit.nickname) || p.steamName || ''; dn.dataset.auto = '1'; }
+      msg.textContent = 'Hotovo — jméno ' + ((p.faceit && p.faceit.nickname) ? 'z Faceitu (klikem přepneš na Steam).' : 'ze Steamu.');
+    }catch(err){ showAuProfile(null); msg.textContent = '⚠ ' + err.message; }
+  }
+  document.getElementById('auLookupBtn').addEventListener('click', runAuLookup);
+  document.getElementById('au-steamid').addEventListener('change', runAuLookup);
+  document.getElementById('au-display').addEventListener('input', function(){ this.dataset.auto = '0'; });
+
+  function setPermChecks(perms){
+    const f = document.getElementById('adminUserForm');
+    const all = !perms; // starý admin bez nastavení = vše
+    const cal = (perms && perms.calendars) || [];
+    const secs = (perms && perms.sections) || null;
+    f.querySelector('[name="perm-cal-main"]').checked = all || cal.includes('main');
+    f.querySelector('[name="perm-cal-academy"]').checked = all || cal.includes('academy');
+    f.querySelector('[name="perm-playbooks"]').checked = all || !!(perms && perms.playbooks);
+    PERM_SECTIONS.forEach(k => { f.querySelector('[name="perm-sec-' + k + '"]').checked = all || !secs || secs.includes(k); });
+  }
+  function readPermChecks(){
+    const f = document.getElementById('adminUserForm');
+    const calendars = [];
+    if(f.querySelector('[name="perm-cal-main"]').checked) calendars.push('main');
+    if(f.querySelector('[name="perm-cal-academy"]').checked) calendars.push('academy');
+    return { calendars, playbooks: f.querySelector('[name="perm-playbooks"]').checked,
+             sections: PERM_SECTIONS.filter(k => f.querySelector('[name="perm-sec-' + k + '"]').checked) };
+  }
+  document.getElementById('auPermAll').addEventListener('click', () => setPermChecks(null));
+  document.getElementById('auPermNone').addEventListener('click', () => setPermChecks({ calendars: [], playbooks: false, sections: [] }));
+
+  function resetAccountForm(){
+    const f = document.getElementById('adminUserForm');
+    f.reset();
+    document.getElementById('au-username').value = '';
+    document.getElementById('au-display').dataset.auto = '';
+    showAuProfile(null);
+    document.getElementById('auTitle').textContent = 'Přidat účet člena (přihlášení přes Steam)';
+    f.querySelector('.submit-btn[type="submit"]').textContent = 'Vytvořit účet';
+    document.getElementById('auCancelEdit').style.display = 'none';
+    document.getElementById('auLookupMsg').textContent = 'Jméno, avatar a Faceit se načtou automaticky. Nic dalšího vyplňovat nemusíš.';
+    setPermChecks({ calendars: [], playbooks: false, sections: [] });
+  }
+
+  function startEditAccount(u){
+    if(!u) return;
+    resetAccountForm();
+    const isOwnerAcc = u.username === OWNER_USERNAME;
+    document.getElementById('au-username').value = u.username;
+    document.getElementById('au-steamid').value = u.steamId64 || '';
+    document.getElementById('au-display').value = u.displayName || u.username;
+    document.getElementById('au-role').value = roleOf(u) === 'admin' ? 'admin' : 'member';
+    document.getElementById('au-role-field').style.display = isOwnerAcc ? 'none' : '';
+    document.getElementById('au-category').value = u.category === 'academy' ? 'academy' : 'main';
+    setPermChecks(u.permissions || null);
+    if(u.avatar || u.faceit) showAuProfile({ steamId64: u.steamId64, steamName: null, avatar: u.avatar || null, faceit: u.faceit || null });
+    document.getElementById('auTitle').textContent = 'Upravit účet @' + u.username;
+    document.getElementById('adminUserForm').querySelector('.submit-btn[type="submit"]').textContent = 'Uložit změny';
+    document.getElementById('auCancelEdit').style.display = '';
+    document.getElementById('adminUserForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.getElementById('auCancelEdit').addEventListener('click', resetAccountForm);
+
+  function slugUsername(name, users, steamId){
+    let base = String(name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9_]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 24) || 'hrac';
+    if(users.some(u => u.username === base)) base = base.slice(0, 19) + '_' + String(steamId).slice(-4);
+    return base;
+  }
+
   document.getElementById('adminUserForm').addEventListener('submit', async function(e){
     e.preventDefault();
-    const submitBtn = e.target.querySelector('.submit-btn');
-    const username = document.getElementById('au-username').value.trim();
-    const displayName = document.getElementById('au-display').value.trim();
-    const steamId64 = document.getElementById('au-steamid').value.trim() || null;
-
+    const submitBtn = e.target.querySelector('.submit-btn[type="submit"]');
+    const label = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Ukládám...';
     try{
+      let steamId64 = document.getElementById('au-steamid').value.trim();
+      if(!/^\d{17}$/.test(steamId64)){ await runAuLookup(); steamId64 = document.getElementById('au-steamid').value.trim(); }
+      if(!/^\d{17}$/.test(steamId64)) throw new Error('Zadej platný Steam profil (SteamID64 nebo odkaz).');
+      if(!auProfile || auProfile.steamId64 !== steamId64){ try{ showAuProfile(await lookupProfile(steamId64)); }catch(_){ /* jméno si admin doplní ručně */ } }
+
+      const editing = document.getElementById('au-username').value;
       const { data, sha } = await ghFetchWithSha(USERS_FILE);
       const users = data || [];
-      const existingIdx = users.findIndex(u => u.username === username);
-      const prevRole = existingIdx >= 0 ? (users[existingIdx].role || 'member') : 'member';
-      const prevCategory = existingIdx >= 0 && users[existingIdx].category === 'academy' ? 'academy' : 'main';
-      const category = (existingIdx >= 0 || memberRole !== 'owner')
-        ? prevCategory
-        : (document.getElementById('au-category').value === 'academy' ? 'academy' : 'main');
-      const prevSteamId = existingIdx >= 0 ? (users[existingIdx].steamId64 || null) : null;
-      const prevPerms = existingIdx >= 0 ? (users[existingIdx].permissions || null) : null;
-      let permissions = prevPerms;
-      if(memberRole === 'owner'){
-        const calMain = e.target.querySelector('[name="perm-cal-main"]').checked;
-        const calAcademy = e.target.querySelector('[name="perm-cal-academy"]').checked;
-        const playbooks = e.target.querySelector('[name="perm-playbooks"]').checked;
-        permissions = { calendars: [], playbooks };
-        if(calMain) permissions.calendars.push('main');
-        if(calAcademy) permissions.calendars.push('academy');
-      }
-      const entry = {
-        username, displayName,
-        steamId64: steamId64 || prevSteamId,
-        role: prevRole, category, permissions
-      };
+      const existingIdx = editing ? users.findIndex(u => u.username === editing) : -1;
+      if(editing && existingIdx < 0) throw new Error('Účet už neexistuje, obnov stránku.');
+      if(users.some((u, i) => u.steamId64 === steamId64 && i !== existingIdx)) throw new Error('Tohle SteamID už má jiný účet.');
+
+      const prev = existingIdx >= 0 ? users[existingIdx] : {};
+      const nameInput = document.getElementById('au-display').value.trim();
+      const autoName = (document.getElementById('au-display').dataset.auto === '1') || (!nameInput);
+      const displayName = nameInput || (auProfile && ((auProfile.faceit && auProfile.faceit.nickname) || auProfile.steamName)) || prev.displayName || 'Hráč';
+      const username = prev.username || slugUsername(displayName, users, steamId64);
+      const isOwnerAcc = username === OWNER_USERNAME;
+
+      const entry = Object.assign({}, prev, {
+        username, displayName, steamId64,
+        role: isOwnerAcc ? (prev.role || 'owner') : (document.getElementById('au-role').value === 'admin' ? 'admin' : 'member'),
+        category: memberRole === 'owner' ? (document.getElementById('au-category').value === 'academy' ? 'academy' : 'main') : (prev.category === 'academy' ? 'academy' : 'main'),
+        permissions: memberRole === 'owner' ? readPermChecks() : (prev.permissions || null)
+      });
+      if(auProfile){ entry.avatar = auProfile.avatar || prev.avatar || null; entry.faceit = auProfile.faceit || prev.faceit || null; }
+      if(autoName) entry.autoName = true; else if(existingIdx >= 0) entry.autoName = false;
+
       if(existingIdx >= 0) users[existingIdx] = entry; else users.push(entry);
-      await ghSave(USERS_FILE, users, sha, `Přidání/úprava účtu: ${username}`);
-      e.target.reset();
+      await ghSave(USERS_FILE, users, sha, (existingIdx >= 0 ? 'Úprava účtu: ' : 'Nový účet: ') + username);
+      resetAccountForm();
       renderAdminUserList();
     }catch(err){
-      alert('Nepodařilo se vytvořit účet: ' + err.message);
+      alert('Nepodařilo se uložit účet: ' + err.message);
     }finally{
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Vytvořit / upravit účet';
+      submitBtn.textContent = label;
     }
   });
+
+  document.getElementById('auRefreshAll').addEventListener('click', async function(){
+    const btn = this; const old = btn.textContent;
+    btn.disabled = true;
+    try{
+      const { data, sha } = await ghFetchWithSha(USERS_FILE);
+      const users = data || [];
+      let n = 0;
+      for(const u of users){
+        if(!u.steamId64) continue;
+        btn.textContent = 'Načítám ' + (++n) + '…';
+        try{
+          const p = await lookupProfile(u.steamId64);
+          u.avatar = p.avatar || u.avatar || null;
+          u.faceit = p.faceit || u.faceit || null;
+          if(u.autoName) u.displayName = (p.faceit && p.faceit.nickname) || p.steamName || u.displayName;
+        }catch(_){ /* přeskočit soukromé/nenalezené profily */ }
+      }
+      await ghSave(USERS_FILE, users, sha, 'Obnovení profilů ze Steamu/Faceitu');
+      renderAdminUserList();
+    }catch(err){ alert('Obnovení se nepovedlo: ' + err.message); }
+    finally{ btn.disabled = false; btn.textContent = old; }
+  });
+
+  /* Admin vidí jen záložky, na které má oprávnění (owner všechny) */
+  function applyAdminTabPermissions(){
+    let perms = null;
+    try{ perms = decodeTokenPayload(getSessionToken()).permissions || null; }catch(_){}
+    const restricted = memberRole !== 'owner' && perms && Array.isArray(perms.sections);
+    const need = { news:'news', roster:'roster', accounts:'accounts', attendance:'attendance', excuses:'attendance', scrim:'scrim', partners:'partners', influenceri:'influenceri' };
+    let firstVisible = null, activeHidden = false;
+    document.querySelectorAll('#adminTabs .admin-tab').forEach(t => {
+      const k = t.dataset.tab;
+      let ok = true;
+      if(restricted){
+        if(k === 'calendar') ok = (perms.calendars || []).length > 0;
+        else if(k === 'playbooky') ok = !!perms.playbooks;
+        else ok = perms.sections.includes(need[k]);
+      }
+      t.style.display = ok ? '' : 'none';
+      if(ok && !firstVisible) firstVisible = k;
+      if(!ok && t.classList.contains('active')) activeHidden = true;
+    });
+    if(activeHidden && firstVisible) activateAdminTab(firstVisible);
+    const ownerOnly = memberRole === 'owner';
+    ['au-permissions-field'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = ownerOnly ? '' : 'none'; });
+  }
 
   /* ---- Admin: správa akcí v kalendáři ---- */
   async function renderAdminEventList(){
