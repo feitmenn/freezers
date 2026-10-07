@@ -140,5 +140,18 @@
       ],
       "playbooks": true
     }
+  },
+  {
+    "username": "hrac",
+    "displayName": "Hráč",
+    "steamId64": "76561199242107755",
+    "role": "member",
+    "category": "main",
+    "permissions": {
+      "calendars": [],
+      "playbooks": false,
+      "sections": []
+    },
+    "autoName": true
   }
 ]
