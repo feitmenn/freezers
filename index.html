@@ -153,6 +153,24 @@
 
   /* SECTION HEADERS */
   .section{padding:110px 0;position:relative;}
+  /* ---- Skiny (WeaponPaints) ---- */
+  .sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin:0 0 28px;}
+  .sk-card{border:1px solid var(--line);border-radius:14px;padding:18px;background:rgba(255,255,255,0.03);transition:transform .2s,border-color .2s;}
+  .sk-card:hover{transform:translateY(-2px);border-color:rgba(47,224,201,0.4);}
+  .sk-card .sk-ico{font-size:22px;margin-bottom:8px;}
+  .sk-card h4{font-family:'Chakra Petch',sans-serif;font-size:16px;margin:0 0 4px;}
+  .sk-card code{font-size:12px;color:var(--turquoise);}
+  .sk-card p{font-size:12.5px;color:var(--ice-dim);margin:6px 0 0;}
+  .sk-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:28px;counter-reset:sk;}
+  .sk-step{position:relative;padding:16px 16px 16px 54px;border-radius:14px;border:1px dashed var(--line);font-size:13px;color:var(--ice-dim);}
+  .sk-step::before{counter-increment:sk;content:counter(sk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--turquoise);color:#041412;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Chakra Petch',sans-serif;}
+  .sk-step strong{display:block;color:var(--ice);font-size:14px;margin-bottom:2px;}
+  .sk-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:20px;border-radius:16px;border:1px solid rgba(47,224,201,0.35);background:linear-gradient(135deg,rgba(47,224,201,0.08),rgba(255,255,255,0.02));}
+  .sk-cta-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;border:0;cursor:pointer;background:var(--turquoise);color:#041412;font-weight:700;font-family:'Chakra Petch',sans-serif;text-decoration:none;font-size:14px;}
+  .sk-cta-btn[aria-disabled="true"]{opacity:.45;pointer-events:none;}
+  .sk-cta-text{flex:1;min-width:200px;font-size:13px;color:var(--ice-dim);}
+  .sk-cta-text strong{color:var(--ice);}
+
   .section-head{margin-bottom:52px;max-width:640px;}
   .section-kicker{
     font-size:13px;color:var(--turquoise);font-family:'Chakra Petch',sans-serif;
@@ -1238,6 +1256,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     <span class="fz-rail-tip">Playbooky</span>
   </button>
+  <button type="button" class="fz-rail-btn" data-target="skiny" aria-label="Skiny">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.8 5.5 21 7.5 13.5 2 9h7z"/></svg>
+    <span class="fz-rail-tip">Skiny</span>
+  </button>
   <button type="button" class="fz-rail-btn" data-target="partneri" aria-label="Partneři">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
     <span class="fz-rail-tip">Partneři</span>
@@ -1290,6 +1312,7 @@
       <a href="#roster">Roster</a>
       <a href="#staff">Staff</a>
       <a href="#kalendar">Kalendář</a>
+      <a href="#skiny">Skiny</a>
       <a href="#partneri">Partneři</a>
       <a href="#nabor">Nábor</a>
       <a href="#kontakt">Kontakt</a>
@@ -1498,8 +1521,8 @@
 
     <div id="calendarLoggedOut" class="hub-card" style="max-width:440px;">
       <div class="hc-label">PŘIHLÁŠENÍ ČLENA</div>
-      <div class="hc-title">Nejdřív se přihlas</div>
-      <div class="hc-desc">Přihlašovací údaje ti dá staff. <a href="#" id="openMemberLoginLink" style="color:var(--turquoise);">Přihlásit se</a></div>
+      <div class="hc-title">Kalendář je jen pro hráče s přístupem</div>
+      <div class="hc-desc">Přihlas se přes Steam — přístup ti nastaví admin. <a href="#" id="openMemberLoginLink" style="color:var(--turquoise);">Přihlásit se</a></div>
     </div>
 
     <div id="calendarLoggedIn" style="display:none;">
@@ -1536,8 +1559,8 @@
 
     <div id="playbookLoggedOut" class="hub-card" style="max-width:440px;">
       <div class="hc-label">PŘIHLÁŠENÍ ČLENA</div>
-      <div class="hc-title">Playbooky jsou jen pro členy</div>
-      <div class="hc-desc">Pro zobrazení strategií se přihlas svým členským účtem. <a href="#" id="openMemberLoginPb" style="color:var(--turquoise);">Přihlásit se</a></div>
+      <div class="hc-title">Playbooky jsou jen pro tým</div>
+      <div class="hc-desc">Pro zobrazení strategií se přihlas přes Steam — přístup ti nastaví admin. <a href="#" id="openMemberLoginPb" style="color:var(--turquoise);">Přihlásit se</a></div>
     </div>
 
     <div id="playbookLoggedIn" style="display:none;">
@@ -1565,6 +1588,65 @@
     <div class="partners-grid" id="partnersGrid">
       <!-- Partneři se generují z partners.json přes JS níže -->
     </div>
+  </div>
+</section>
+
+<section class="section" id="skiny">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-kicker">SKINY</div>
+      <h2 class="section-title">Skiny na našich serverech</h2>
+      <p class="section-sub">Vyber si skiny zbraní, nože, rukavice, agenta, MVP hudbu i odznak. Nastavení se ti načte samo na každém našem serveru.</p>
+    </div>
+
+    <div class="sk-grid">
+      <div class="sk-card"><div class="sk-ico">🔫</div><h4>Zbraně</h4><code>!wp</code><p>Skiny, opotřebení a seed. Po změně napiš <code>!wp</code> pro obnovení.</p></div>
+      <div class="sk-card"><div class="sk-ico">🗡</div><h4>Nože</h4><code>!knife</code><p>Vyber si typ nože přímo ve hře.</p></div>
+      <div class="sk-card"><div class="sk-ico">🧤</div><h4>Rukavice</h4><code>!gloves</code><p>Rukavice i s vlastním vzorem.</p></div>
+      <div class="sk-card"><div class="sk-ico">🧑‍🚀</div><h4>Agenti</h4><code>!agents</code><p>Model postavy za T i CT.</p></div>
+      <div class="sk-card"><div class="sk-ico">🎵</div><h4>MVP hudba</h4><code>!music</code><p>Hudba, která zahraje při tvém MVP.</p></div>
+      <div class="sk-card"><div class="sk-ico">❅</div><h4>Odznaky</h4><code>!pins</code><p>Odznak k profilu a na tabulce.</p></div>
+    </div>
+
+    <div class="sk-steps">
+      <div class="sk-step"><strong>Přihlas se přes Steam</strong>Stejným účtem, kterým hraješ. Heslo od Steamu nikdy nezadáváš nám.</div>
+      <div class="sk-step"><strong>Vyber skiny</strong>Na stránce skinů si u každé zbraně klikneš na vzhled, který chceš.</div>
+      <div class="sk-step"><strong>Napiš !wp ve hře</strong>Skiny se ti obnoví hned, bez restartu serveru.</div>
+    </div>
+
+    <div class="sk-cta" id="skinsCta"></div>
+    <div id="skPickerRoot"></div>
+    <style>
+.sk-picker{display:flex;flex-direction:column;gap:18px;margin-top:18px;}
+.sk-panel{border:1px solid var(--line);border-radius:16px;padding:18px;background:rgba(28,28,31,.5);}
+.sk-panel h4{font-family:'Chakra Petch',sans-serif;color:var(--turquoise);margin:0 0 12px;font-size:15px;}
+.sk-edit{display:flex;flex-direction:column;gap:10px;}
+.sk-grid-box{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;max-height:300px;overflow-y:auto;padding:4px;}
+.sk-skin-tile{border:1px solid var(--line);border-radius:10px;background:transparent;padding:4px;cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center;color:var(--ice);}
+.sk-skin-tile img{width:100%;height:56px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));}
+.sk-skin-tile span{font-size:9px;color:var(--ice-dim);text-align:center;line-height:1.2;max-height:22px;overflow:hidden;}
+.sk-skin-tile.active{border-color:var(--turquoise);box-shadow:0 0 0 1px var(--turquoise);}
+.sk-select,.sk-input{background:rgba(28,28,31,.6);border:1px solid var(--line);color:var(--ice);border-radius:10px;padding:8px 10px;font-size:13px;width:100%;max-width:420px;}
+.sk-btn{background:var(--turquoise);color:#041412;border:0;border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;font-family:'Chakra Petch',sans-serif;align-self:flex-start;}
+.sk-btn:disabled{opacity:.5;cursor:default;}
+.sk-form-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.sk-form-row label{font-size:12px;color:var(--ice-dim);min-width:40px;}
+.sk-form-row .sk-select{max-width:270px;}
+.sk-form-row .sk-input{max-width:120px;}
+.sk-msg{font-size:12px;color:var(--turquoise);margin-left:10px;}
+.sk-mine{display:flex;flex-direction:column;gap:8px;max-height:460px;overflow-y:auto;}
+.sk-mine-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;}
+.sk-mine-row img{width:64px;height:40px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));}
+.sk-mine-name{font-size:12px;color:var(--ice);}
+.sk-mine-sub{font-size:11px;color:var(--ice-dim);}
+.sk-empty,.sk-err{font-size:13px;color:var(--ice-dim);padding:10px 0;}
+.sk-err{color:#ff7b7b;}
+.sk-perms{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;}
+.sk-perm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;flex-wrap:wrap;}
+.sk-perm-name{font-size:13px;color:var(--ice);}
+.sk-perm-sub{font-size:11px;color:var(--ice-dim);display:block;}
+.sk-perm-select{max-width:230px;}
+    </style>
   </div>
 </section>
 
@@ -2906,7 +2988,7 @@
   let memberCategory = 'main'; // main | academy — určuje, který kalendář člen vidí
   const MEMBER_SESSION_KEY = 'freezers_member_session';
   const OWNER_USERNAME = 'filas'; // tento účet má vždy roli owner, nejde ji odebrat
-  const ROLE_LABELS = { owner: 'Owner', admin: 'Admin', member: 'Člen' };
+  const ROLE_LABELS = { owner: 'Owner', admin: 'Admin', main: 'Main tým', academy: 'Academy', normal: 'Hráč' };
   const CATEGORY_LABELS = { main: 'Main', academy: 'Academy' };
 
   /* ---- Playbooky: konstanty i stav musí být definované PŘED restoreMemberSession(), jinak TDZ chyba ---- */
@@ -2984,7 +3066,7 @@
         steamId64: claims.steamId64 || null,
         username: claims.username,
         displayName: claims.displayName || claims.username,
-        role: claims.role || 'member',
+        role: claims.role || 'normal',
         category: claims.category || 'main',
         permissions: claims.permissions || null
       }));
@@ -3120,7 +3202,7 @@
     if(memberUsername){
       // Už přihlášen -> odhlásit
       memberUsername = '';
-      memberRole = 'member';
+      memberRole = 'normal';
       memberCategory = 'main';
       clearMemberSession();
       this.textContent = 'Přihlásit se';
@@ -3130,6 +3212,7 @@
       document.getElementById('playbookLoggedOut').style.display = 'block';
       playbookCache = null;
       document.getElementById('playbookGrid').innerHTML = '';
+      renderSkinsSection();
     } else {
       openMemberLogin();
     }
@@ -3148,20 +3231,305 @@
     window.location.href = STEAM_API_URL + '/steam-login?returnTo=' + encodeURIComponent(window.location.href);
   });
 
+  /* ---- Sekce Skiny: vestavěný výběr skinů (WeaponPaints MySQL přes Worker) ---- */
+  const skinsState = {
+    catalog: null,
+    weapons: [],
+    knives: [],
+    selected: {},
+    knife: null,
+    activeWeapon: null,
+    loaded: false
+  };
+  const WEAR_OPTIONS = [
+    { v: '0.00', label: 'Z výroby (Factory New)' },
+    { v: '0.07', label: 'Lehce opotřebený (Minimal Wear)' },
+    { v: '0.15', label: 'Po zkouškách (Field-Tested)' },
+    { v: '0.38', label: 'Opotřebený (Well-Worn)' },
+    { v: '0.45', label: 'Válečné opotřebení (Battle-Scarred)' }
+  ];
+  const KNIFE_DEFAULT = { defindex: 0, weaponName: 'weapon_knife', label: 'Výchozí nůž', image: 'https://raw.githubusercontent.com/Nereziel/cs2-WeaponPaints/main/website/img/skins/weapon_knife.png' };
+
+  async function skinsApi(path, opts){
+    const init = Object.assign({ headers: { 'Content-Type': 'application/json', 'X-Session-Token': getSessionToken() || '' } }, opts || {});
+    const res = await fetch(STEAM_API_URL + path, init);
+    if(res.status === 401){ clearMemberSession(); throw new Error('Přihlášení vypršelo — přihlas se znovu.'); }
+    const j = await res.json().catch(() => ({}));
+    if(!res.ok) throw new Error(j.error || ('Chyba ' + res.status));
+    return j;
+  }
+
+  function buildSkinsCatalog(catalog){
+    const weapons = {};
+    const knives = {};
+    for(const row of catalog){
+      const defindex = parseInt(row.weapon_defindex, 10);
+      const isKnife = /^weapon_(knife|bayonet)/.test(row.weapon_name || '');
+      const target = isKnife ? knives : weapons;
+      if(!target[defindex]) target[defindex] = { defindex, weaponName: row.weapon_name, paints: [] };
+      target[defindex].paints.push({ paint: parseInt(row.paint, 10), paintName: row.paint_name, image: row.image });
+    }
+    for(const w of Object.values(weapons)) w.paints.sort((a, b) => a.paint - b.paint);
+    for(const k of Object.values(knives)) k.paints.sort((a, b) => a.paint - b.paint);
+    return { weapons: Object.values(weapons), knives: Object.values(knives) };
+  }
+
+  async function loadSkinsData(){
+    const [catalog, mine] = await Promise.all([
+      skinsApi('/api/skins/catalog'),
+      skinsApi('/api/skins')
+    ]);
+    skinsState.catalog = catalog;
+    const built = buildSkinsCatalog(catalog);
+    skinsState.weapons = built.weapons;
+    skinsState.knives = built.knives;
+    skinsState.selected = mine.skins || {};
+    skinsState.knife = mine.knife || null;
+    skinsState.loaded = true;
+  }
+
+  function skinLabel(defindex){
+    const w = skinsState.weapons.find(w => w.defindex === defindex);
+    if(!w) return 'Zbraň #' + defindex;
+    const sel = skinsState.selected[defindex];
+    if(!sel) return w.weaponName.replace(/^weapon_/, '').toUpperCase() + ' — default';
+    const p = w.paints.find(p => p.paint === sel.paint);
+    return p ? p.paintName : (w.weaponName + ' #' + sel.paint);
+  }
+
+  function knifeEntryFor(name){
+    if(!name || name === 'weapon_knife') return KNIFE_DEFAULT;
+    return skinsState.knives.find(k => k.weaponName === name) || { defindex: 0, weaponName: name, label: name, image: KNIFE_DEFAULT.image };
+  }
+  function knifeLabelFor(name){
+    const e = knifeEntryFor(name);
+    if(e === KNIFE_DEFAULT) return 'Výchozí nůž';
+    if(e.paints && e.paints.length) return e.paints[0].paintName.split('|')[0].trim();
+    return e.weaponName.replace(/^weapon_/, '').replace(/_/g, ' ');
+  }
+  function knifeImageFor(name){
+    const e = knifeEntryFor(name);
+    return (e.paints && e.paints.length && e.paints[0].image) || e.image;
+  }
+
+  function renderSkinsSection(){
+    const box = document.getElementById('skinsCta');
+    if(!box) return;
+    const root = document.getElementById('skPickerRoot');
+    if(!memberUsername){
+      box.innerHTML = '<div class="sk-cta-text"><strong>Vyber si svoje skiny.</strong><br>Přihlas se přes Steam stejným účtem, kterým hraješ, a nastav si skiny zbraní i nůž.</div><button type="button" class="sk-cta-btn" id="skinsLoginBtn">Přihlásit se přes Steam</button>';
+      document.getElementById('skinsLoginBtn').addEventListener('click', openMemberLogin);
+      if(root) root.innerHTML = '';
+      return;
+    }
+    box.innerHTML = '<div class="sk-cta-text"><strong>Ahoj, ' + escapeHtml(memberUsername) + '!</strong><br>Tady si nastavíš skiny. Po uložení napiš ve hře <code>!wp</code> (obnoví skiny) — změny platí na všech Freezers serverech.</div><span class="sk-cta-btn" aria-disabled="true">' + escapeHtml(ROLE_LABELS[memberRole] || memberRole) + '</span>';
+    if(!root) return;
+    root.innerHTML = `
+      <div class="sk-picker">
+        <div class="sk-panel sk-panel-mine">
+          <h4>Moje skiny</h4>
+          <div id="skMySkins" class="sk-mine"><div class="sk-empty">Načítám…</div></div>
+        </div>
+        <div class="sk-panel sk-panel-edit">
+          <h4>Výběr skinu</h4>
+          <div class="sk-edit">
+            <select id="skWeaponSelect" class="sk-select"></select>
+            <div id="skSkinsGrid" class="sk-grid-box"></div>
+            <div id="skSkinForm" class="sk-form"></div>
+          </div>
+          <h4 style="margin-top:18px;">Nůž</h4>
+          <div class="sk-edit">
+            <select id="skKnifeSelect" class="sk-select"></select>
+            <button type="button" class="sk-btn" id="skKnifeSave">Uložit nůž</button>
+          </div>
+        </div>
+        <div class="sk-panel sk-panel-admin" id="skPermsPanel" style="display:none;">
+          <h4>Správa oprávnění (admin)</h4>
+          <div id="skPermsList" class="sk-perms"></div>
+        </div>
+      </div>`;
+    loadSkinsData().then(() => {
+      renderPickerContent();
+      renderMySkins();
+      renderKnifeSection();
+      renderPermsPanel();
+    }).catch(e => {
+      const my = document.getElementById('skMySkins');
+      if(my) my.innerHTML = '<div class="sk-err">Nepodařilo se načíst skiny: ' + escapeHtml(e.message) + '</div>';
+    });
+  }
+
+  function renderPickerContent(){
+    const sel = document.getElementById('skWeaponSelect');
+    if(!sel) return;
+    sel.innerHTML = '<option value="">— Vyber zbraň —</option>' + skinsState.weapons.map(w =>
+      '<option value="' + w.defindex + '"' + (skinsState.activeWeapon === w.defindex ? ' selected' : '') + '>' + escapeHtml(skinLabel(w.defindex)) + '</option>'
+    ).join('');
+    sel.addEventListener('change', () => {
+      skinsState.activeWeapon = sel.value ? parseInt(sel.value, 10) : null;
+      renderSkinsGrid();
+    });
+    if(!skinsState.activeWeapon && skinsState.weapons.length) skinsState.activeWeapon = skinsState.weapons[0].defindex;
+    if(skinsState.activeWeapon) renderSkinsGrid();
+  }
+
+  function renderSkinsGrid(){
+    const grid = document.getElementById('skSkinsGrid');
+    const form = document.getElementById('skSkinForm');
+    const w = skinsState.weapons.find(w => w.defindex === skinsState.activeWeapon);
+    if(!grid || !form) return;
+    if(!w){ grid.innerHTML = ''; form.innerHTML = ''; return; }
+    const cur = skinsState.selected[w.defindex];
+    const curPaint = cur ? cur.paint : 0;
+    grid.innerHTML = w.paints.map(p => `
+      <button type="button" class="sk-skin-tile${p.paint === curPaint ? ' active' : ''}" data-paint="${p.paint}" title="${escapeHtml(p.paintName)}">
+        <img src="${escapeHtml(p.image)}" alt="" loading="lazy">
+        <span>${escapeHtml(p.paintName)}</span>
+      </button>`).join('');
+    grid.querySelectorAll('.sk-skin-tile').forEach(t => t.addEventListener('click', () => {
+      grid.querySelectorAll('.sk-skin-tile').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      renderSkinForm(w.defindex, parseInt(t.dataset.paint, 10));
+    }));
+    renderSkinForm(w.defindex, curPaint);
+  }
+
+  function renderSkinForm(defindex, paint){
+    const form = document.getElementById('skSkinForm');
+    if(!form) return;
+    const cur = skinsState.selected[defindex];
+    const wear = (cur && cur.paint === paint) ? cur.wear : 0.0;
+    const seed = (cur && cur.paint === paint) ? cur.seed : 0;
+    form.innerHTML = `
+      <div class="sk-form-row">
+        <label>Wear</label>
+        <select id="skWearSelect" class="sk-select">
+          ${WEAR_OPTIONS.map(o => '<option value="' + o.v + '"' + (String(wear) === o.v ? ' selected' : '') + '>' + o.label + '</option>').join('')}
+        </select>
+        <input type="number" id="skWearInput" min="0" max="1" step="0.01" value="${wear}" class="sk-input">
+      </div>
+      <div class="sk-form-row">
+        <label>Seed</label>
+        <input type="number" id="skSeedInput" min="0" max="1000" step="1" value="${seed}" class="sk-input">
+      </div>
+      <div class="sk-form-row">
+        <button type="button" class="sk-btn sk-btn-save" id="skSkinSave">Uložit skin</button>
+        <span class="sk-msg" id="skSkinMsg"></span>
+      </div>`;
+    document.getElementById('skWearSelect').addEventListener('change', e => { document.getElementById('skWearInput').value = e.target.value; });
+    document.getElementById('skSkinSave').addEventListener('click', async () => {
+      const btn = document.getElementById('skSkinSave');
+      const msg = document.getElementById('skSkinMsg');
+      const wearVal = parseFloat(document.getElementById('skWearInput').value);
+      const seedVal = parseInt(document.getElementById('skSeedInput').value, 10);
+      btn.disabled = true; msg.textContent = '';
+      try{
+        await skinsApi('/api/skins/skin', { method: 'POST', body: JSON.stringify({ defindex, paint, wear: wearVal, seed: seedVal }) });
+        skinsState.selected[defindex] = { paint, wear: wearVal, seed: seedVal };
+        msg.textContent = 'Uloženo! Ve hře napiš !wp.';
+        renderMySkins();
+      }catch(e){ msg.textContent = e.message; }
+      finally{ btn.disabled = false; }
+    });
+  }
+
+  function renderMySkins(){
+    const box = document.getElementById('skMySkins');
+    if(!box) return;
+    const rows = Object.entries(skinsState.selected).map(([defindex, s]) => {
+      const w = skinsState.weapons.find(w => w.defindex === parseInt(defindex, 10));
+      if(!w) return '';
+      const p = w.paints.find(p => p.paint === s.paint);
+      return `
+        <div class="sk-mine-row">
+          <img src="${escapeHtml(p ? p.image : w.paints[0].image)}" alt="" loading="lazy">
+          <div class="sk-mine-info">
+            <div class="sk-mine-name">${escapeHtml(p ? p.paintName : skinLabel(parseInt(defindex, 10)))}</div>
+            <div class="sk-mine-sub">wear ${s.wear} · seed ${s.seed}</div>
+          </div>
+        </div>`;
+    }).join('');
+    const knifeRow = skinsState.knife ? `
+        <div class="sk-mine-row">
+          <img src="${escapeHtml(knifeImageFor(skinsState.knife))}" alt="" loading="lazy">
+          <div class="sk-mine-info">
+            <div class="sk-mine-name">${escapeHtml(knifeLabelFor(skinsState.knife))}</div>
+            <div class="sk-mine-sub">nůž</div>
+          </div>
+        </div>` : '';
+    box.innerHTML = (rows || '<div class="sk-empty">Zatím nemáš nastavený žádný skin.</div>') + knifeRow;
+  }
+
+  function renderKnifeSection(){
+    const sel = document.getElementById('skKnifeSelect');
+    const saveBtn = document.getElementById('skKnifeSave');
+    if(!sel || !saveBtn) return;
+    const options = [KNIFE_DEFAULT].concat(skinsState.knives).map(k => {
+      const label = k === KNIFE_DEFAULT ? 'Výchozí nůž' : (k.paints[0] ? k.paints[0].paintName.split('|')[0].trim() : k.weaponName);
+      const current = skinsState.knife === k.weaponName;
+      return '<option value="' + escapeHtml(k.weaponName) + '"' + (current ? ' selected' : '') + '>' + escapeHtml(label) + '</option>';
+    }).join('');
+    sel.innerHTML = options;
+    saveBtn.addEventListener('click', async () => {
+      saveBtn.disabled = true;
+      try{
+        await skinsApi('/api/skins/knife', { method: 'POST', body: JSON.stringify({ knife: sel.value }) });
+        skinsState.knife = sel.value;
+        renderMySkins();
+        alert('Nůž uložen! Ve hře napiš !knife pro obnovení.');
+      }catch(e){ alert(e.message); }
+      finally{ saveBtn.disabled = false; }
+    });
+  }
+
+  async function renderPermsPanel(){
+    const panel = document.getElementById('skPermsPanel');
+    if(!panel) return;
+    if(memberRole !== 'owner' && memberRole !== 'admin'){ panel.style.display = 'none'; return; }
+    panel.style.display = '';
+    const list = document.getElementById('skPermsList');
+    list.innerHTML = '<div class="sk-empty">Načítám…</div>';
+    try{
+      const users = await skinsApi('/api/perms/users');
+      const roleLabel = { normal: 'normal (jen skiny)', academy: 'academy', main: 'main', admin: 'admin' };
+      list.innerHTML = users.map(u => `
+        <div class="sk-perm-row">
+          <div class="sk-perm-name">${escapeHtml(u.display_name || u.username)} <span class="sk-perm-sub">${escapeHtml(u.username)} · ${escapeHtml(u.steamid64)}</span></div>
+          <select class="sk-select sk-perm-select" data-steamid="${escapeHtml(u.steamid64)}">
+            ${['normal','academy','main','admin'].map(r => '<option value="' + r + '"' + (u.role === r ? ' selected' : '') + '>' + roleLabel[r] + '</option>').join('')}
+          </select>
+        </div>`).join('') || '<div class="sk-empty">Zatím se nikdo nepřihlásil.</div>';
+      list.querySelectorAll('.sk-perm-select').forEach(s => s.addEventListener('change', async () => {
+        s.disabled = true;
+        try{
+          await skinsApi('/api/perms/set', { method: 'POST', body: JSON.stringify({ steamId64: s.dataset.steamid, role: s.value }) });
+          alert('Oprávnění uloženo. Hráč se musí znovu přihlásit, aby se změna projevila.');
+        }catch(e){ alert(e.message); }
+        finally{ s.disabled = false; }
+      }));
+    }catch(e){
+      list.innerHTML = '<div class="sk-err">' + escapeHtml(e.message) + '</div>';
+    }
+  }
+
   function applySteamSession(claims, token){
     memberUsername = claims.username;
-    memberRole = (claims.username === OWNER_USERNAME) ? 'owner' : (claims.role || 'member');
-    memberCategory = (claims.category === 'academy') ? 'academy' : 'main';
+    memberRole = (claims.username === OWNER_USERNAME) ? 'owner' : (claims.role || 'normal');
+    memberCategory = (claims.role === 'academy') ? 'academy' : 'main';
+    const hasMemberAccess = memberRole !== 'normal';
     saveMemberSession(claims, token);
     closeMemberLogin();
-    document.getElementById('calendarLoggedOut').style.display = 'none';
-    document.getElementById('calendarLoggedIn').style.display = 'block';
-    document.getElementById('playbookLoggedOut').style.display = 'none';
-    document.getElementById('playbookLoggedIn').style.display = 'block';
+    document.getElementById('calendarLoggedOut').style.display = hasMemberAccess ? 'none' : 'block';
+    document.getElementById('calendarLoggedIn').style.display = hasMemberAccess ? 'block' : 'none';
+    document.getElementById('playbookLoggedOut').style.display = hasMemberAccess ? 'none' : 'block';
+    document.getElementById('playbookLoggedIn').style.display = hasMemberAccess ? 'block' : 'none';
     document.getElementById('openMemberLoginNav').textContent = claims.displayName || claims.username;
-    loadCalendar();
-    loadPlaybookSection();
-    checkAndShowNotifications();
+    if(hasMemberAccess){
+      loadCalendar();
+      loadPlaybookSection();
+      checkAndShowNotifications();
+    }
+    renderSkinsSection();
   }
 
   /* ---- Kalendář (týdenní mřížka pro přihlášené členy) ---- */
@@ -4089,6 +4457,7 @@
   }
 
   function restoreMemberSession(){
+    renderSkinsSection();
     if(showSteamLoginError()) return;
     const steamData = parseSteamTokenFromUrl();
     if(steamData){
@@ -4099,16 +4468,19 @@
     const session = loadMemberSession();
     if(!session) return;
     memberUsername = session.username;
-    memberRole = (session.username === OWNER_USERNAME) ? 'owner' : (session.role || 'member');
+    memberRole = (session.username === OWNER_USERNAME) ? 'owner' : (session.role || 'normal');
     memberCategory = (session.category === 'academy') ? 'academy' : 'main';
-    document.getElementById('calendarLoggedOut').style.display = 'none';
-    document.getElementById('calendarLoggedIn').style.display = 'block';
-    document.getElementById('playbookLoggedOut').style.display = 'none';
-    document.getElementById('playbookLoggedIn').style.display = 'block';
+    const hasMemberAccess = memberRole !== 'normal';
+    document.getElementById('calendarLoggedOut').style.display = hasMemberAccess ? 'none' : 'block';
+    document.getElementById('calendarLoggedIn').style.display = hasMemberAccess ? 'block' : 'none';
+    document.getElementById('playbookLoggedOut').style.display = hasMemberAccess ? 'none' : 'block';
+    document.getElementById('playbookLoggedIn').style.display = hasMemberAccess ? 'block' : 'none';
     document.getElementById('openMemberLoginNav').textContent = session.displayName || session.username;
-    loadCalendar();
-    loadPlaybookSection();
-    checkAndShowNotifications();
+    if(hasMemberAccess){
+      loadCalendar();
+      loadPlaybookSection();
+      checkAndShowNotifications();
+    }
   }
   restoreMemberSession();
 
