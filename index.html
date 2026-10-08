@@ -1322,6 +1322,197 @@
   .bk-ev:hover{transform:none;box-shadow:0 0 0 2px var(--c);}
   .bk-ev-foot{height:6px;}
 
+
+  /* ============ ADMIN PANEL VE STYLU EDUPAGE ============ */
+  #adminPanelOverlay{padding:0;background:rgba(6,8,14,.55);}
+  .ep-admin{
+    --ep-bg:#0e1218; --ep-side:#141a23; --ep-card:#171e29; --ep-line:rgba(255,255,255,.08); --ep-ink:#e6edf6; --ep-mut:#93a3b8; --ep-hover:rgba(255,255,255,.05); --ep-accent:#3b9cff;
+    max-width:none !important;width:100vw !important;height:100vh !important;height:100dvh !important;max-height:none !important;
+    border-radius:0 !important;border:0 !important;padding:0 !important;resize:none !important;overflow:hidden !important;
+    display:flex;flex-direction:column;background:var(--ep-bg) !important;color:var(--ep-ink);
+  }
+  body.theme-light .ep-admin{
+    --ep-bg:#f1f4f8; --ep-side:#ffffff; --ep-card:#ffffff; --ep-line:#e2e8f0; --ep-ink:#1b2a3a; --ep-mut:#64748b; --ep-hover:#f1f6fc; --ep-accent:#1d74c4;
+    box-shadow:none !important;
+  }
+  .ep-top{flex:0 0 auto;display:flex;align-items:center;gap:12px;height:58px;padding:0 14px 0 16px;background:var(--ep-side);border-bottom:1px solid var(--ep-line);}
+  .ep-top-logo{width:32px;height:32px;object-fit:contain;}
+  .ep-top-title{display:flex;flex-direction:column;line-height:1.1;}
+  .ep-top-title b{font-family:'Chakra Petch',sans-serif;font-size:16px;letter-spacing:.04em;}
+  .ep-top-title span{font-size:11.5px;color:var(--ep-mut);}
+  .ep-top-sp{flex:1;}
+  .ep-user{font-size:12.5px;color:var(--ep-mut);padding:6px 12px;border-radius:999px;background:var(--ep-hover);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+  .ep-iconbtn{background:transparent;border:1px solid var(--ep-line);color:var(--ep-ink);border-radius:8px;height:34px;min-width:34px;padding:0 10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;}
+  .ep-iconbtn:hover{background:var(--ep-hover);}
+  .ep-logout{color:#e5484d;}
+  .ep-close{position:static !important;width:34px;height:34px;border-radius:8px;font-size:15px !important;color:var(--ep-mut) !important;}
+  .ep-close:hover{background:var(--ep-hover);}
+  .ep-burger{display:none;background:none;border:0;color:var(--ep-ink);font-size:20px;cursor:pointer;padding:4px 6px;}
+  .ep-body{flex:1;display:flex;min-height:0;}
+  .ep-admin .admin-tabs.ep-side{
+    position:static;margin:0;padding:12px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;overflow-x:hidden;
+    width:224px;flex:0 0 224px;background:var(--ep-side);border-right:1px solid var(--ep-line);border-bottom:0;
+  }
+  .ep-admin .admin-tab{display:flex;align-items:center;gap:12px;width:100%;padding:8px 10px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;letter-spacing:0;color:var(--ep-ink);text-align:left;white-space:nowrap;}
+  .ep-admin .admin-tab::after{display:none;}
+  .ep-admin .admin-tab:hover{background:var(--ep-hover);color:var(--ep-ink);}
+  .ep-admin .admin-tab.active{background:color-mix(in srgb, var(--ic) 14%, transparent);color:var(--ep-ink);font-weight:700;}
+  .ep-ic{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:var(--ic);color:#fff;flex:0 0 auto;box-shadow:0 2px 6px color-mix(in srgb, var(--ic) 35%, transparent);}
+  .ep-ic svg{width:17px;height:17px;}
+  .ep-lbl{flex:1;}
+  .ep-badge{background:#e5484d;color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;}
+  .ep-main{flex:1;min-width:0;overflow-y:auto;padding:26px 30px 60px;}
+  .ep-admin .admin-tab-panel{max-width:1000px;margin:0 auto;}
+  .ep-admin .admin-tab-panel:not([data-panel="home"]).active{background:var(--ep-card);border:1px solid var(--ep-line);border-radius:14px;padding:26px 28px;box-shadow:0 1px 3px rgba(15,30,50,.06);}
+  .ep-admin .admin-tab-panel h3{font-family:'Inter',sans-serif;font-weight:700;font-size:19px;color:var(--ep-ink);}
+  .ep-admin .field label{font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;color:var(--ep-mut);letter-spacing:0;}
+  .ep-admin .field input,.ep-admin .field select,.ep-admin .field textarea{border-radius:9px;border-color:var(--ep-line);background:var(--ep-bg);color:var(--ep-ink);font-size:14px;padding:10px 12px;}
+  .ep-admin .field input:focus,.ep-admin .field select:focus,.ep-admin .field textarea:focus{border-color:var(--ep-accent);background:var(--ep-card);box-shadow:0 0 0 3px color-mix(in srgb, var(--ep-accent) 18%, transparent);}
+  .ep-admin .submit-btn{background:var(--ep-accent);color:#fff;border-radius:9px;font-family:'Inter',sans-serif;font-weight:700;padding:12px 22px;}
+  .ep-admin .submit-btn::after{display:none;}
+  .ep-admin .admin-news-row{padding:12px 4px;border-color:var(--ep-line);}
+  .ep-admin .admin-news-row:hover{background:var(--ep-hover);}
+  .ep-admin .admin-divider{background:var(--ep-line);}
+  .ep-admin .admin-hint{color:var(--ep-mut);}
+  .ep-admin .radio-pill{border-radius:9px;}
+  .ep-admin .admin-delete-btn,.ep-admin .admin-edit-btn,.ep-admin .excuse-approve-btn,.ep-admin .excuse-reject-btn{border-radius:8px;padding:6px 12px;}
+  .ep-hello{font-size:26px;font-weight:800;color:var(--ep-ink);margin:4px 0 4px;}
+  .ep-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:22px;}
+  .ep-stat{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--ep-card);border:1px solid var(--ep-line);border-left:4px solid var(--ic,#1d74c4);border-radius:12px;padding:14px 16px;color:var(--ep-ink);cursor:pointer;font-family:'Inter',sans-serif;}
+  .ep-stat:hover{background:var(--ep-hover);}
+  .ep-stat b{font-size:22px;font-weight:800;}
+  .ep-stat small{font-size:12px;color:var(--ep-mut);}
+  .ep-stat-wide{grid-column:span 2;}
+  .ep-stat-wide b{font-size:17px;}
+  .ep-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .ep-tile{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:var(--ep-card);border:1px solid var(--ep-line);border-radius:14px;padding:20px 12px 16px;cursor:pointer;color:var(--ep-ink);font-family:'Inter',sans-serif;transition:transform .15s,box-shadow .15s;}
+  .ep-tile:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,30,50,.12);}
+  .ep-tile-ic{display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:15px;background:var(--ic);color:#fff;box-shadow:0 4px 12px color-mix(in srgb, var(--ic) 40%, transparent);}
+  .ep-tile-ic svg{width:26px;height:26px;}
+  .ep-tile b{font-size:14px;}
+  .ep-tile small{font-size:11.5px;color:var(--ep-mut);line-height:1.35;}
+  @media (max-width:820px){
+    .ep-burger{display:block;}
+    .ep-user,.ep-top-title span{display:none;}
+    .ep-admin .admin-tabs.ep-side{position:absolute;top:0;bottom:0;left:0;z-index:20;transform:translateX(-102%);transition:transform .22s ease;box-shadow:8px 0 30px rgba(0,0,0,.25);}
+    .ep-admin.ep-side-open .admin-tabs.ep-side{transform:none;}
+    .ep-body{position:relative;}
+    .ep-main{padding:16px 14px 80px;}
+    .ep-admin .admin-tab-panel:not([data-panel="home"]).active{padding:18px 16px;border-radius:12px;}
+    .ep-stat-wide{grid-column:span 1;}
+    .ep-stats{grid-template-columns:1fr 1fr;}
+    .ep-tiles{grid-template-columns:repeat(3,1fr);gap:8px;}
+    .ep-tile{padding:14px 6px 12px;}
+    .ep-tile small{display:none;}
+    .ep-tile-ic{width:46px;height:46px;border-radius:13px;}
+  }
+
+
+  /* ============ ROZVRH – TMAVÝ REŽIM (Bakaláři „night“) ============ */
+  body:not(.theme-light) .bk-cal{--bk-sky:#13233a;--bk-sky2:#162a45;--bk-line:#24395a;--bk-ink:#dce8f6;--bk-mut:#8ea6c2;--bk-blue:#3b9cff;--bk-blue-d:#a9d4ff;background:#0d1626;}
+  body:not(.theme-light) .bk-top{background:linear-gradient(180deg,#15263f,#10203a);}
+  body:not(.theme-light) .bk-btn, body:not(.theme-light) .bk-switch button{background:#0d1626;color:#cfe3fa;}
+  body:not(.theme-light) .bk-switch button.active, body:not(.theme-light) .bk-pdf{background:#2b7fd6;color:#fff;}
+  body:not(.theme-light) .bk-btn:hover{background:#16304f;}
+  body:not(.theme-light) .bk-grid-wrap, body:not(.theme-light) .bk-empty{background:#0d1626;}
+  body:not(.theme-light) .bk-slot{border-left-color:#1a2c47;}
+  body:not(.theme-light) .bk-day.weekend .bk-slot{background:#0f1b2e;}
+  body:not(.theme-light) .bk-day.today .bk-slot{background:#10223b;}
+  body:not(.theme-light) .bk-day.today .bk-dh{background:#2b7fd6;}
+  body:not(.theme-light) .bk-slot.can-add:hover{background:#16304f !important;box-shadow:inset 0 0 0 1px #2f5d90;}
+  body:not(.theme-light) .bk-ev{background:color-mix(in srgb, var(--c) 17%, #0d1626);border-color:color-mix(in srgb, var(--c) 50%, #0d1626);border-top-color:var(--c);}
+  body:not(.theme-light) .bk-ev-time{color:#cddbeb;}
+  body:not(.theme-light) .bk-ev-abbr{color:color-mix(in srgb, var(--c) 72%, #fff);}
+  body:not(.theme-light) .bk-legend, body:not(.theme-light) .bk-rules{background:#0f1b2e;}
+  body:not(.theme-light) .bk-leg-sw{background:transparent !important;}
+  body:not(.theme-light) .bk-leg em{color:#ff7b74;}
+  body:not(.theme-light) .bk-req{color:#ff7b74;}
+  body:not(.theme-light) .bk-d-head{background:color-mix(in srgb, var(--c) 16%, #121a26);color:#e6edf6;}
+  body:not(.theme-light) .bk-d-title{color:#f1f5fa !important;}
+  body:not(.theme-light) .bk-d-meta{color:#a9b9cc;}
+  body:not(.theme-light) .bk-chip{background:color-mix(in srgb, var(--c) 18%, transparent);}
+
+  /* ============ MOBIL: spodní lišta + aplikace Rozvrh (jako Bakaláři) ============ */
+  .fz-tabbar, .bk-app{display:none;}
+  .fz-more[hidden]{display:none !important;}
+  @media (max-width:760px){
+    .fz-rail{display:none !important;}
+    #openMemberLoginNav, .nav-theme{display:none !important;} /* jsou v menu „Více“ */
+    .bka-logo{background:transparent;padding:0;}
+    body{padding-left:0 !important;padding-bottom:calc(64px + env(safe-area-inset-bottom));}
+    .fz-tabbar{
+      display:flex;position:fixed;left:0;right:0;bottom:0;z-index:150;height:calc(62px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);
+      background:var(--bg-1);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.12);
+    }
+    body.theme-light .fz-tabbar{background:#fff;}
+    .fz-tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:0;color:var(--ice-dim);font-size:10.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+    .fz-tabbar svg{width:22px;height:22px;}
+    .fz-tabbar button.active{color:#1d74c4;}
+    body:not(.theme-light) .fz-tabbar button.active{color:#5fb0ff;}
+    .fz-tabbar .tb-main svg{width:24px;height:24px;}
+    .fz-more{position:fixed;inset:0;z-index:149;background:rgba(5,8,14,.45);display:flex;align-items:flex-end;}
+    .fz-more-card{width:100%;background:var(--bg-1);border-radius:18px 18px 0 0;padding:14px 14px calc(78px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    body.theme-light .fz-more-card{background:#fff;}
+    .fz-more-card a,.fz-more-card button{display:flex;align-items:center;justify-content:center;padding:14px 10px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:var(--ice);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+    .fz-more-card button{grid-column:1 / -1;}
+
+    body.app-open{overflow:hidden;}
+    .bk-app{
+      --a-bg:#eef4fa;--a-card:#fff;--a-ink:#163049;--a-mut:#5f7890;--a-line:#d5e4f1;--a-head:#1d74c4;--a-day:#ffffff;
+      position:fixed;left:0;right:0;top:0;bottom:calc(62px + env(safe-area-inset-bottom));z-index:120;background:var(--a-bg);color:var(--a-ink);
+      flex-direction:column;font-family:'Inter',sans-serif;
+    }
+    body:not(.theme-light) .bk-app{--a-bg:#0b1220;--a-card:#131d2e;--a-ink:#e3ecf7;--a-mut:#8ea3bd;--a-line:#22324a;--a-head:#13294a;--a-day:#131d2e;}
+    .bk-app.open{display:flex;}
+    .bka-top{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 10px 10px;background:var(--a-head);color:#fff;}
+    .bka-logo{width:30px;height:30px;object-fit:contain;background:rgba(255,255,255,.92);border-radius:8px;padding:3px;}
+    .bka-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15;}
+    .bka-t b{font-size:18px;font-weight:800;}
+    .bka-t span{font-size:11.5px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .bka-ib{background:rgba(255,255,255,.16);border:0;color:#fff;min-width:36px;height:36px;border-radius:10px;font-size:20px;font-weight:700;cursor:pointer;}
+    .bka-today{font-size:12.5px;padding:0 10px;}
+    .bka-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:8px 8px 10px;background:var(--a-head);}
+    .bka-day{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 0 6px;border-radius:12px;border:0;background:transparent;color:rgba(255,255,255,.8);font-family:inherit;cursor:pointer;position:relative;}
+    .bka-day b{font-size:12px;font-weight:700;}
+    .bka-day span{font-size:15px;font-weight:800;color:#fff;}
+    .bka-day.sel{background:var(--a-day);color:var(--a-mut);}
+    .bka-day.sel span{color:var(--a-ink);}
+    .bka-day i{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);display:flex;gap:2px;}
+    .bka-day i em{width:5px;height:5px;border-radius:50%;background:var(--c);display:block;}
+    .bka-day.today b::after{content:' •';color:#ffd54a;}
+    .bka-list{flex:1;overflow-y:auto;padding:12px 12px 24px;-webkit-overflow-scrolling:touch;}
+    .bka-dayhead{font-size:13px;font-weight:700;color:var(--a-mut);margin:2px 4px 10px;text-transform:capitalize;}
+    .bka-row{display:grid;grid-template-columns:54px 1fr;gap:10px;margin-bottom:10px;}
+    .bka-time{display:flex;flex-direction:column;align-items:flex-end;padding-top:10px;line-height:1.2;}
+    .bka-time b{font-size:15px;font-weight:800;}
+    .bka-time span{font-size:11.5px;color:var(--a-mut);}
+    .bka-card{display:block;width:100%;text-align:left;background:var(--a-card);border:1px solid var(--a-line);border-left:6px solid var(--c);border-radius:12px;padding:10px 12px;color:var(--a-ink);font-family:inherit;cursor:pointer;box-shadow:0 1px 3px rgba(10,40,80,.06);}
+    .bka-card:active{transform:scale(.99);}
+    .bka-card-top{display:flex;align-items:center;gap:8px;}
+    .bka-abbr{font-family:'Chakra Petch',sans-serif;font-size:20px;font-weight:700;color:var(--c);letter-spacing:.04em;}
+    body:not(.theme-light) .bka-abbr{color:color-mix(in srgb, var(--c) 72%, #fff);}
+    .bka-tag{margin-left:auto;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:color-mix(in srgb, var(--c) 14%, transparent);color:var(--c);}
+    body:not(.theme-light) .bka-tag{color:color-mix(in srgb, var(--c) 70%, #fff);}
+    .bka-title{font-size:14px;font-weight:600;margin-top:2px;}
+    .bka-meta{font-size:12px;color:var(--a-mut);margin-top:2px;}
+    .bka-hours{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+    .bka-h{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--a-mut);background:var(--a-bg);border-radius:999px;padding:2px 7px 2px 3px;}
+    .bka-h .bk-st{min-width:16px;height:16px;}
+    .bka-gap{margin:-2px 0 10px 64px;font-size:11.5px;color:var(--a-mut);display:flex;align-items:center;gap:8px;}
+    .bka-gap::after{content:'';flex:1;border-top:1px dashed var(--a-line);}
+    .bka-empty{text-align:center;color:var(--a-mut);padding:50px 20px;font-size:15px;}
+    .bka-empty b{display:block;font-size:40px;margin-bottom:8px;}
+    .bka-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin:18px 4px 0;font-size:11.5px;color:var(--a-mut);}
+    .bka-legend span{display:inline-flex;align-items:center;gap:4px;}
+
+    /* detail akce jako „bottom sheet“ */
+    .modal-overlay:not(#adminPanelOverlay){align-items:flex-end;padding:0;}
+    .modal-overlay:not(#adminPanelOverlay) .modal-card{max-width:100% !important;width:100%;border-radius:18px 18px 0 0;max-height:90vh;padding:26px 16px calc(20px + env(safe-area-inset-bottom));}
+    .bk-hrow{grid-template-columns:22px 1fr auto;grid-template-areas:"c t k" "c n n" "c m m";}
+    .notification-stack{top:auto;bottom:80px;}
+    .cookie-banner{bottom:76px;}
+  }
+
   /* Detail bloku (modal) */
   .bk-modal{max-width:640px;}
   .bk-d-head{display:flex;gap:14px;align-items:center;margin:0 26px 14px 0;padding:12px 14px;border-radius:8px;background:var(--bg);border-left:5px solid var(--c);color:#163049;}
@@ -2004,25 +2195,41 @@
 </div>
 
 <div class="modal-overlay" id="adminPanelOverlay">
-  <div class="modal-card modal-card-fullscreen">
-    <button type="button" class="modal-close" id="closeAdminPanelBtn">✕</button>
-    <button type="button" class="btn-ghost" id="adminLogoutBtn" style="position:absolute;top:18px;right:60px;z-index:8;padding:8px 14px;font-size:12px;">Odhlásit se</button>
-    <div class="modal-kicker">ADMIN PANEL</div>
+  <div class="modal-card modal-card-fullscreen ep-admin">
+    <header class="ep-top">
+      <button type="button" class="ep-burger" id="epBurger" aria-label="Menu">☰</button>
+      <img class="ep-top-logo" id="epTopLogo" alt="">
+      <div class="ep-top-title"><b>Freezers</b><span>Administrace</span></div>
+      <div class="ep-top-sp"></div>
+      <span class="ep-user" id="epUser"></span>
+      <button type="button" class="ep-iconbtn" id="epThemeBtn" title="Světlý / tmavý režim" aria-label="Přepnout režim"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <button type="button" class="ep-iconbtn ep-logout" id="adminLogoutBtn" title="Odhlásit se">Odhlásit</button>
+      <button type="button" class="modal-close ep-close" id="closeAdminPanelBtn" aria-label="Zavřít">✕</button>
+    </header>
+    <div class="ep-body">
+    <nav class="admin-tabs ep-side" id="adminTabs" role="tablist">
+      <button type="button" class="admin-tab active" data-tab="home" role="tab" style="--ic:#1d74c4"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="ep-lbl">Přehled</span></button>
+      <button type="button" class="admin-tab" data-tab="calendar" role="tab" style="--ic:#e53935"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span><span class="ep-lbl">Rozvrh</span></button>
+      <button type="button" class="admin-tab" data-tab="excuses" role="tab" style="--ic:#f0a020"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span class="ep-lbl">Omluvenky</span><b class="ep-badge" id="epExcBadge" hidden></b></button>
+      <button type="button" class="admin-tab" data-tab="attendance" role="tab" style="--ic:#2e9d5b"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="ep-lbl">Docházka</span></button>
+      <button type="button" class="admin-tab" data-tab="news" role="tab" style="--ic:#0ea5e9"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="ep-lbl">Novinky</span></button>
+      <button type="button" class="admin-tab" data-tab="roster" role="tab" style="--ic:#7c3aed"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="ep-lbl">Roster</span></button>
+      <button type="button" class="admin-tab" data-tab="accounts" role="tab" style="--ic:#475569"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="ep-lbl">Účty</span></button>
+      <button type="button" class="admin-tab" data-tab="playbooky" role="tab" style="--ic:#db2777"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span class="ep-lbl">Playbooky</span></button>
+      <button type="button" class="admin-tab" data-tab="scrim" role="tab" style="--ic:#0d9488"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span><span class="ep-lbl">Scrim server</span></button>
+      <button type="button" class="admin-tab" data-tab="partners" role="tab" style="--ic:#ca8a04"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><span class="ep-lbl">Partneři</span></button>
+      <button type="button" class="admin-tab" data-tab="influenceri" role="tab" style="--ic:#9333ea"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span><span class="ep-lbl">Influenceři</span></button>
+    </nav>
+    <main class="ep-main" id="epMain">
 
-    <div class="admin-tabs" id="adminTabs" role="tablist">
-      <button type="button" class="admin-tab active" data-tab="news" role="tab">Novinky</button>
-      <button type="button" class="admin-tab" data-tab="roster" role="tab">Roster</button>
-      <button type="button" class="admin-tab" data-tab="accounts" role="tab">Účty</button>
-      <button type="button" class="admin-tab" data-tab="calendar" role="tab">Kalendář</button>
-      <button type="button" class="admin-tab" data-tab="attendance" role="tab">Docházka</button>
-      <button type="button" class="admin-tab" data-tab="excuses" role="tab">Omluvenky</button>
-      <button type="button" class="admin-tab" data-tab="scrim" role="tab">Scrim</button>
-      <button type="button" class="admin-tab" data-tab="partners" role="tab">Partneři</button>
-      <button type="button" class="admin-tab" data-tab="influenceri" role="tab">Influenceři</button>
-      <button type="button" class="admin-tab" data-tab="playbooky" role="tab">Playbooky</button>
+    <div class="admin-tab-panel active" data-panel="home">
+      <div class="ep-hello" id="epHello">Ahoj!</div>
+      <p class="admin-hint" style="margin:0 0 18px;">Co chceš dnes udělat? Klikni na dlaždici.</p>
+      <div class="ep-stats" id="epStats"></div>
+      <div class="ep-tiles" id="epTiles"></div>
     </div>
 
-    <div class="admin-tab-panel active" data-panel="news">
+    <div class="admin-tab-panel" data-panel="news">
       <h3>Přidat novinku</h3>
       <form id="adminNewsForm">
         <div class="field">
@@ -2404,6 +2611,8 @@
       <p class="admin-hint">Ke každé mapě můžeš nahrát obrázek na pozadí čtverce (nebo vložit URL).</p>
       <div id="adminPlaybookMaps" class="admin-list"></div>
     </div>
+    </main>
+    </div>
   </div>
 </div>
 
@@ -2425,6 +2634,35 @@
 
 <div class="fz-page" id="newsPage" aria-hidden="true"></div>
 <div class="fz-page" id="articlePage" aria-hidden="true"></div>
+
+<!-- Mobilní „aplikace“ Rozvrh (jako Bakaláři) + spodní lišta -->
+<div class="bk-app" id="bkApp" aria-hidden="true">
+  <header class="bka-top">
+    <button type="button" class="bka-ib" id="bkaPrev" aria-label="Předchozí týden">‹</button>
+    <img class="bka-logo" id="bkaLogo" alt="">
+    <div class="bka-t"><b id="bkaTitle">Rozvrh</b><span id="bkaSub"></span></div>
+    <button type="button" class="bka-ib bka-today" id="bkaToday">Dnes</button>
+    <button type="button" class="bka-ib" id="bkaNext" aria-label="Další týden">›</button>
+  </header>
+  <div class="bka-days" id="bkaDays"></div>
+  <div class="bka-list" id="bkaList"><div class="bka-empty">Načítám rozvrh…</div></div>
+</div>
+<nav class="fz-tabbar" id="fzTabbar" aria-label="Mobilní navigace">
+  <button type="button" data-tb="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Domů</span></button>
+  <button type="button" data-tb="news"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Novinky</span></button>
+  <button type="button" data-tb="app" class="tb-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Rozvrh</span></button>
+  <button type="button" data-tb="playbooky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span>Playbooky</span></button>
+  <button type="button" data-tb="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg><span>Více</span></button>
+</nav>
+<div class="fz-more" id="fzMore" hidden>
+  <div class="fz-more-card">
+    <a href="#roster" data-close>Roster</a><a href="#staff" data-close>Staff</a><a href="#skiny" data-close>Skiny</a>
+    <a href="#partneri" data-close>Partneři</a><a href="#nabor" data-close>Nábor</a><a href="#kontakt" data-close>Kontakt</a>
+    <button type="button" id="fzMoreTheme">◐ Světlý / tmavý režim</button>
+    <button type="button" id="fzMoreAdmin" hidden>⚙ Admin panel</button>
+    <button type="button" id="fzMoreLogin">Přihlásit se</button>
+  </div>
+</div>
 
 <div id="fzLoader" class="fz-loader" aria-hidden="true">
   <img class="fz-loader-logo" id="fzLoaderLogo" data-fz-logo alt="">
@@ -2725,9 +2963,56 @@
   function closeAdminLogin(){
     document.getElementById('adminLoginOverlay').classList.remove('show');
   }
+  /* ---- EduPage-style přehled (úvodní obrazovka adminu) ---- */
+  const EP_TILE_DESC = {
+    calendar:'Přidat trénink, faceit, scrim…', excuses:'Schválit / zamítnout omluvenky', attendance:'Kdo byl a kdo chyběl',
+    news:'Napsat novinku na web', roster:'Hráči v sestavách', accounts:'Kdo se může přihlásit', playbooky:'Strategie a videa',
+    scrim:'Zapnout banner se serverem', partners:'Loga sponzorů', influenceri:'Streameři a tvůrci'
+  };
+  async function renderAdminHome(){
+    const hello = document.getElementById('epHello');
+    const h = new Date().getHours();
+    if(hello) hello.textContent = (h < 10 ? 'Dobré ráno' : h < 18 ? 'Ahoj' : 'Dobrý večer') + ', ' + (memberUsername || 'admine') + ' 👋';
+    const tiles = document.getElementById('epTiles');
+    tiles.innerHTML = Array.from(document.querySelectorAll('#adminTabs .admin-tab')).filter(t => t.dataset.tab !== 'home' && t.style.display !== 'none').map(t =>
+      `<button type="button" class="ep-tile" data-go="${t.dataset.tab}" style="--ic:${t.style.getPropertyValue('--ic')}">
+        <span class="ep-tile-ic">${t.querySelector('.ep-ic').innerHTML}</span>
+        <b>${t.querySelector('.ep-lbl').textContent}</b><small>${EP_TILE_DESC[t.dataset.tab] || ''}</small>
+      </button>`).join('');
+    tiles.querySelectorAll('.ep-tile').forEach(b => b.addEventListener('click', () => activateAdminTab(b.dataset.go)));
+    const stats = document.getElementById('epStats');
+    stats.innerHTML = '<div class="ep-stat"><small>Načítám…</small></div>';
+    try{
+      const [events, excuses, roster] = await Promise.all([loadAllCalendarEvents(), ghFetchPublic(EXCUSES_FILE), ghFetchPublic(ROSTER_FILE)]);
+      const now = new Date();
+      const mon = getWeekStart(0), nextMon = new Date(mon); nextMon.setDate(nextMon.getDate() + 7);
+      const week = events.filter(e => { const d = evStart(e); return d >= mon && d < nextMon; });
+      const next = events.filter(e => evEnd(e) > now).sort((a, b) => evStart(a) - evStart(b))[0];
+      let pending = 0; Object.values(excuses || {}).forEach(by => pending += Object.keys(by || {}).length);
+      let players = 0; Object.values(roster || {}).forEach(arr => (arr || []).forEach(p => { if(p.type !== 'empty') players++; }));
+      updateExcuseBadge(pending);
+      const st = (n, l, c, go) => `<button type="button" class="ep-stat" style="--ic:${c}" ${go ? `data-go="${go}"` : ''}><b>${n}</b><small>${l}</small></button>`;
+      stats.innerHTML =
+        st(week.filter(e => e.type === 'training').length + ' h', 'tréninků tento týden', '#e53935', 'calendar') +
+        st(week.filter(e => e.type === 'faceit').length + ' h', 'faceitů tento týden', '#f57c00', 'calendar') +
+        st(pending, pending === 1 ? 'omluvená hodina čeká' : 'omluvených hodin čeká', '#f0a020', 'excuses') +
+        st(players, 'hráčů v rosteru', '#7c3aed', 'roster') +
+        (next ? `<button type="button" class="ep-stat ep-stat-wide" style="--ic:${evMeta(next).color}" data-go="calendar"><small>Nejbližší akce</small><b>${escapeHtml(next.title || evMeta(next).label)}</b><small>${DAY_NAMES_LONG[(evStart(next).getDay() + 6) % 7]} ${formatShortDate(evStart(next))} · ${hhmm(evStart(next))}</small></button>` : '');
+      stats.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => activateAdminTab(b.dataset.go)));
+    }catch(e){ stats.innerHTML = ''; }
+  }
+  function updateExcuseBadge(n){
+    const b = document.getElementById('epExcBadge');
+    if(!b) return;
+    b.hidden = !n; b.textContent = n > 99 ? '99+' : n;
+  }
+  document.getElementById('epThemeBtn').addEventListener('click', () => document.getElementById('themeToggleNav').click());
+  document.getElementById('epBurger').addEventListener('click', () => document.querySelector('.ep-admin').classList.toggle('ep-side-open'));
+
   // PERF: dřív se při otevření adminu najednou spustilo ~10 sekcí a ~25 požadavků na GitHub.
   // Teď se každá záložka načte až při prvním otevření.
   const ADMIN_TAB_LOADERS = {
+    home: () => renderAdminHome(),
     news: () => renderAdminList(),
     roster: () => renderAdminRosterList(),
     accounts: () => renderAdminUserList(),
@@ -2747,6 +3032,8 @@
   }
   function openAdminPanel(){
     adminTabsLoaded = {};
+    const u = document.getElementById('epUser');
+    if(u) u.textContent = (memberUsername || '') + (memberRole ? ' · ' + (ROLE_LABELS[memberRole] || memberRole) : '');
     applyAdminTabPermissions();
     const active = document.querySelector('#adminTabs .admin-tab.active');
     loadAdminTab(active ? active.dataset.tab : 'news');
@@ -2772,8 +3059,9 @@
     const tab = e.target.closest('.admin-tab');
     if(!tab) return;
     activateAdminTab(tab.dataset.tab);
-    const panel = this.closest('.modal-card-fullscreen');
-    if(panel) panel.scrollTop = 0;
+    const main = document.getElementById('epMain');
+    if(main) main.scrollTop = 0;
+    document.querySelector('.ep-admin')?.classList.remove('ep-side-open');
   });
 
   document.addEventListener('keydown', function(e){
@@ -3504,6 +3792,7 @@
 
   /* ---- Přihlášení člena ---- */
   function logoutMember(){
+    if(window.fzCloseApp) window.fzCloseApp();
     memberUsername = '';
     memberRole = 'normal';
     memberCategory = 'main';
@@ -3846,6 +4135,7 @@
       checkAndShowNotifications();
     }
     renderSkinsSection();
+    if(typeof maybeAutoOpenApp === 'function') maybeAutoOpenApp();
   }
 
   /* ======================================================================
@@ -4057,6 +4347,7 @@
     renderLegend();
 
     gridEl.querySelectorAll('.bk-ev').forEach(el => el.addEventListener('click', () => showEventDetail(el.dataset.block)));
+    renderBkApp();
     if(canEdit){
       gridEl.querySelectorAll('.bk-slot.can-add').forEach(el => el.addEventListener('click', () => {
         const d = days[parseInt(el.dataset.day, 10)];
@@ -4267,7 +4558,149 @@
     calViewCategory = b.dataset.cat;
     loadCalendar(true);
   }));
-  (function(){ const l = document.getElementById('bkLogo'); if(l) l.src = window.FZ_CAL_LOGO || window.FZ_LOGO; })();
+  ['bkLogo','epTopLogo','bkaLogo'].forEach(id => { const l = document.getElementById(id); if(l) l.src = window.FZ_CAL_LOGO || window.FZ_LOGO; });
+
+  /* ======================================================================
+     MOBILNÍ APLIKACE ROZVRH (jako Bakaláři) + spodní lišta
+     Na telefonu se přihlášenému hráči web rovnou otevře v rozvrhu.
+     ====================================================================== */
+  const isMobileView = () => window.matchMedia('(max-width:760px)').matches;
+  let appDay = (new Date().getDay() + 6) % 7;
+  function appIsOpen(){ return document.getElementById('bkApp').classList.contains('open'); }
+  function setTabbarActive(k){ document.querySelectorAll('#fzTabbar button').forEach(b => b.classList.toggle('active', b.dataset.tb === k)); }
+
+  function renderBkApp(){
+    if(!appIsOpen()) return;
+    const monday = getWeekStart(weekOffset);
+    const days = []; for(let i = 0; i < 7; i++){ const d = new Date(monday); d.setDate(d.getDate() + i); days.push(d); }
+    const weekEnd = new Date(monday); weekEnd.setDate(weekEnd.getDate() + 7);
+    const weekEvents = calendarEventsCache.filter(ev => { const s = evStart(ev); return s >= monday && s < weekEnd; });
+    const now = new Date();
+    const wk = isoWeek(monday);
+    document.getElementById('bkaTitle').textContent = 'Rozvrh · ' + (calViewCategory === 'academy' ? 'Academy' : 'Main');
+    document.getElementById('bkaSub').textContent = `${formatShortDate(monday)} – ${formatShortDate(days[6])} · ${wk}. týden (${wk % 2 ? 'lichý' : 'sudý'})`;
+    document.getElementById('bkaDays').innerHTML = days.map((d, i) => {
+      const types = Array.from(new Set(weekEvents.filter(ev => sameDay(evStart(ev), d)).map(ev => evMeta(ev).color))).slice(0, 3);
+      return `<button type="button" class="bka-day${i === appDay ? ' sel' : ''}${sameDay(d, now) ? ' today' : ''}" data-i="${i}"><b>${DAY_NAMES[i]}</b><span>${d.getDate()}.</span><i>${types.map(c => `<em style="--c:${c}"></em>`).join('')}</i></button>`;
+    }).join('');
+    document.querySelectorAll('#bkaDays .bka-day').forEach(b => b.addEventListener('click', () => { appDay = parseInt(b.dataset.i, 10); renderBkApp(); }));
+
+    const d = days[appDay];
+    const { blocks } = buildDayBlocks(weekEvents.filter(ev => sameDay(evStart(ev), d)));
+    const list = document.getElementById('bkaList');
+    let html = `<div class="bka-dayhead">${DAY_NAMES_LONG[appDay]} ${d.getDate()}. ${d.getMonth() + 1}.${sameDay(d, now) ? ' · dnes' : ''}</div>`;
+    if(calendarLoadedFor !== calViewCategory){
+      html += '<div class="bka-empty">Načítám rozvrh…</div>';
+    }else if(!blocks.length){
+      html += `<div class="bka-empty"><b>🎉</b>Volno — na tento den nic není.</div>`;
+    }else{
+      let prevEnd = null;
+      blocks.forEach(b => {
+        calBlocksById[b.id] = b;
+        const m = TYPE_META[b.type] || TYPE_META.other;
+        if(prevEnd && b.start - prevEnd >= 30 * 60000){
+          const g = (b.start - prevEnd) / HOUR_MS;
+          html += `<div class="bka-gap">volno ${g % 1 ? g.toFixed(1) : g} h</div>`;
+        }
+        prevEnd = prevEnd && prevEnd > b.end ? prevEnd : b.end;
+        const hours = (b.end - b.start) / HOUR_MS;
+        const titles = Array.from(new Set(b.events.map(e => (e.title || '').trim()).filter(Boolean)));
+        const chips = b.events.map(ev => {
+          const st = myStatusFor(ev);
+          return `<span class="bka-h">${st ? `<b class="bk-st ${st.cls}">${st.ic}</b>` : '<b class="bk-st" style="background:transparent;color:inherit;">·</b>'}${hhmm(evStart(ev))}</span>`;
+        }).join('');
+        html += `<div class="bka-row">
+            <div class="bka-time"><b>${hhmm(b.start)}</b><span>${hhmm(b.end)}</span></div>
+            <button type="button" class="bka-card${b.mandatory ? '' : ' opt'}" data-block="${b.id}" style="--c:${m.color}">
+              <div class="bka-card-top"><span class="bka-abbr">${m.abbr}</span><span class="bka-tag">${b.mandatory ? 'povinné' : 'nepovinné'}</span></div>
+              ${titles[0] && titles[0] !== m.label ? `<div class="bka-title">${escapeHtml(titles[0])}</div>` : ''}
+              <div class="bka-meta">${m.label} · ${hours % 1 ? hours.toFixed(1) : hours} h${b.end < now ? ' · proběhlo' : ''}</div>
+              <div class="bka-hours">${chips}</div>
+            </button>
+          </div>`;
+      });
+    }
+    html += `<div class="bka-legend"><span><b class="bk-st yes">✔</b>přijdu</span><span><b class="bk-st pend">✉</b>omluvenka odeslána</span><span><b class="bk-st ok">O</b>omluveno</span><span><b class="bk-st bad">!</b>neomluveno</span></div>`;
+    list.innerHTML = html;
+    list.querySelectorAll('.bka-card').forEach(c => c.addEventListener('click', () => showEventDetail(c.dataset.block)));
+  }
+
+  function shiftAppDay(delta){
+    appDay += delta;
+    if(appDay < 0){ appDay = 6; weekOffset--; }
+    if(appDay > 6){ appDay = 0; weekOffset++; }
+    renderCalendarGrid();
+  }
+  window.fzOpenApp = function(){
+    if(!memberUsername || memberRole === 'normal'){ openMemberLogin(); return; }
+    if(window.fzExitRoutes && document.body.classList.contains('page-open')) window.fzExitRoutes();
+    const app = document.getElementById('bkApp');
+    app.classList.add('open'); app.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('app-open');
+    setTabbarActive('app');
+    if(calendarLoadedFor !== calViewCategory) loadCalendar(); else renderCalendarGrid();
+    renderBkApp();
+  };
+  window.fzCloseApp = function(){
+    const app = document.getElementById('bkApp');
+    app.classList.remove('open'); app.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('app-open');
+  };
+  document.getElementById('bkaPrev').addEventListener('click', () => { weekOffset--; renderCalendarGrid(); });
+  document.getElementById('bkaNext').addEventListener('click', () => { weekOffset++; renderCalendarGrid(); });
+  document.getElementById('bkaToday').addEventListener('click', () => { weekOffset = 0; appDay = (new Date().getDay() + 6) % 7; renderCalendarGrid(); });
+  (function(){
+    // swipe doleva/doprava = další/předchozí den
+    const list = document.getElementById('bkaList');
+    let x0 = null, y0 = null;
+    list.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive:true });
+    list.addEventListener('touchend', e => {
+      if(x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) shiftAppDay(dx < 0 ? 1 : -1);
+    }, { passive:true });
+  })();
+
+  // Spodní lišta
+  function scrollToSection(id){
+    const el = document.getElementById(id);
+    if(el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 10, behavior:'smooth' });
+  }
+  function syncMoreMenu(){
+    const logged = !!memberUsername;
+    document.getElementById('fzMoreLogin').textContent = logged ? 'Odhlásit se (' + memberUsername + ')' : 'Přihlásit se přes Steam';
+    document.getElementById('fzMoreAdmin').hidden = !(memberRole === 'owner' || memberRole === 'admin');
+  }
+  document.querySelectorAll('#fzTabbar button').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.tb;
+    const more = document.getElementById('fzMore');
+    if(k !== 'more') more.hidden = true;
+    if(k === 'app'){ fzOpenApp(); return; }
+    if(k === 'more'){ syncMoreMenu(); more.hidden = !more.hidden; setTabbarActive(more.hidden ? '' : 'more'); return; }
+    fzCloseApp();
+    setTabbarActive(k);
+    if(k === 'home'){ if(window.fzExitRoutes) window.fzExitRoutes(); window.scrollTo({ top:0, behavior:'smooth' }); }
+    if(k === 'news'){ location.hash = '#/novinky'; }
+    if(k === 'playbooky'){ if(window.fzExitRoutes) window.fzExitRoutes(); scrollToSection('playbooky'); }
+  }));
+  document.getElementById('fzMore').addEventListener('click', e => {
+    const more = document.getElementById('fzMore');
+    if(e.target === more){ more.hidden = true; setTabbarActive(''); return; }
+    const a = e.target.closest('a[data-close]');
+    if(a){ e.preventDefault(); more.hidden = true; fzCloseApp(); if(window.fzExitRoutes) window.fzExitRoutes(); scrollToSection(a.getAttribute('href').slice(1)); setTabbarActive(''); }
+  });
+  document.getElementById('fzMoreTheme').addEventListener('click', () => document.getElementById('themeToggleNav').click());
+  document.getElementById('fzMoreAdmin').addEventListener('click', () => { document.getElementById('fzMore').hidden = true; openAdminLogin(); });
+  document.getElementById('fzMoreLogin').addEventListener('click', () => {
+    document.getElementById('fzMore').hidden = true;
+    if(memberUsername){ if(confirm('Odhlásit se?')){ fzCloseApp(); logoutMember(); } }
+    else openMemberLogin();
+  });
+  // Na telefonu otevře přihlášenému hráči web rovnou v rozvrhu (jako appka Bakaláři)
+  function maybeAutoOpenApp(){
+    if(isMobileView() && memberUsername && memberRole !== 'normal' && !location.hash) fzOpenApp();
+  }
 
   /* ---------- PDF / tisk: vytiskne jen rozvrh na A4 na šířku ---------- */
   window.fzPreparePrint = function(){
@@ -4281,9 +4714,13 @@
     root.appendChild(clone);
     document.body.appendChild(root);
     document.body.classList.add('bk-printing');
+    // PDF je vždy světlé, i když máš tmavý režim
+    window.__fzWasDark = !document.body.classList.contains('theme-light');
+    document.body.classList.add('theme-light');
   };
   window.fzCleanupPrint = function(){
     document.body.classList.remove('bk-printing');
+    if(window.__fzWasDark){ document.body.classList.remove('theme-light'); window.__fzWasDark = false; }
     const root = document.getElementById('bkPrintRoot'); if(root) root.remove();
   };
   document.getElementById('bkPdfBtn').addEventListener('click', function(){
@@ -4614,7 +5051,8 @@
       const k = t.dataset.tab;
       let ok = true;
       if(restricted){
-        if(k === 'calendar') ok = (perms.calendars || []).length > 0;
+        if(k === 'home') ok = true;
+        else if(k === 'calendar') ok = (perms.calendars || []).length > 0;
         else if(k === 'playbooky') ok = !!perms.playbooks;
         else ok = perms.sections.includes(need[k]);
       }
@@ -4981,6 +5419,7 @@
       });
       function dayKey(ev){ const s = evStart(ev); return (ev._cal || '') + s.getFullYear() + '-' + s.getMonth() + '-' + s.getDate() + '-' + (ev.type || ''); }
       const rows = Object.values(groups).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+      if(typeof updateExcuseBadge === 'function') updateExcuseBadge(rows.reduce((n, r) => n + r.items.length, 0));
 
       if(!rows.length){
         list.innerHTML = '<div class="admin-empty">Zatím žádné omluvenky.</div>';
@@ -5097,6 +5536,7 @@
     }
     // OPRAVA: po obnovení stránky zůstávala sekce Skiny ve stavu „Přihlas se“, i když byl hráč přihlášený
     renderSkinsSection();
+    maybeAutoOpenApp();
   }
   restoreMemberSession();
 
