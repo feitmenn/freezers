@@ -149,7 +149,7 @@
     "displayName": "",
     "steamId64": "76561199496755078",
     "passwordHash": null,
-    "role": "member",
+    "role": "admin",
     "category": "main",
     "permissions": {
       "calendars": [
