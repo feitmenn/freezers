@@ -1948,11 +1948,26 @@
 <body>
 
 <script>
+  // Hezké adresy na GitHub Pages: 404.html přesměruje na /?p=/clenska-sekce/... a tady se adresa vrátí zpět
+  (function(){
+    try{
+      var q = new URLSearchParams(location.search), p = q.get('p');
+      if(p && p.charAt(0) === '/' && p.charAt(1) !== '/'){ q.delete('p'); var rest = q.toString(); history.replaceState(null, '', p + (rest ? (p.indexOf('?') < 0 ? '?' : '&') + rest : '') + location.hash); }
+    }catch(e){}
+  })();
+</script>
+<script>
   try{ if(localStorage.getItem('fz-theme') !== 'dark') document.body.classList.add('theme-light'); }
   catch(e){ document.body.classList.add('theme-light'); }
 </script>
 <script>
   /* Logo je v HTML jen jednou (dřív 4× ≈ 600 kB). Nastaví se všem <img data-fz-logo> i glow efektu. */
+  // Neprůhledné ID strategie do adresy (např. k7f3x9q2) — z názvu se nedá nic vyčíst, ale je stálé
+  window.fzCode = function(id){
+    let h1 = 0x811c9dc5, h2 = 0x9e3779b9; const str = 'fz:' + String(id || '');
+    for(let i = 0; i < str.length; i++){ const c = str.charCodeAt(i); h1 = Math.imul(h1 ^ c, 16777619) >>> 0; h2 = Math.imul(h2 ^ c, 2246822507) >>> 0; h2 = (h2 ^ (h2 >>> 13)) >>> 0; }
+    return (h1.toString(36) + h2.toString(36)).replace(/[^a-z0-9]/g, '').slice(0, 10);
+  };
   window.fzSlug = function(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'x'; };
   window.FZ_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0yNCAtMjQgNjQ4IDU2Ny42IiB3aWR0aD0iNjQ4IiBoZWlnaHQ9IjU2OCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1Y2M4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjhmZWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4YjhkZjciLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2YTZmZTYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjxwb2x5Z29uIHBvaW50cz0iMC4wLDAuMCA2MDAuMCwwLjAgNTUwLjMsODYuMCAxNTIuMCw4Ni4wIDIwMS43LDE3Mi4wIDMwMC4wLDE3Mi4wIDE5OS43LDM0NS44IiBmaWxsPSJ1cmwoI2EpIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjxwb2x5Z29uIHBvaW50cz0iNDAyLjcsMTcyLjAgNTAwLjcsMTcyLjAgNDUxLjAsMjU4LjAgMzUzLjAsMjU4LjAiIGZpbGw9InVybCgjYikiLz4KPHBvbHlnb24gcG9pbnRzPSIzMDMuNCwzNDQuMCA0MDEuNCwzNDQuMCAzMDAuMCw1MTkuNiAyNTEuMCw0MzQuNyIgZmlsbD0idXJsKCNiKSIvPgo8L3N2Zz4=';
   window.FZ_CAL_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0yNCAtMjQgNjQ4IDU2Ny42IiB3aWR0aD0iNjQ4IiBoZWlnaHQ9IjU2OCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1Y2M4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjhmZWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4YjhkZjciLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2YTZmZTYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjxwb2x5Z29uIHBvaW50cz0iMC4wLDAuMCA2MDAuMCwwLjAgNTUwLjMsODYuMCAxNTIuMCw4Ni4wIDIwMS43LDE3Mi4wIDMwMC4wLDE3Mi4wIDE5OS43LDM0NS44IiBmaWxsPSJ1cmwoI2EpIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjxwb2x5Z29uIHBvaW50cz0iNDAyLjcsMTcyLjAgNTAwLjcsMTcyLjAgNDUxLjAsMjU4LjAgMzUzLjAsMjU4LjAiIGZpbGw9InVybCgjYikiLz4KPHBvbHlnb24gcG9pbnRzPSIzMDMuNCwzNDQuMCA0MDEuNCwzNDQuMCAzMDAuMCw1MTkuNiAyNTEuMCw0MzQuNyIgZmlsbD0idXJsKCNiKSIvPgo8L3N2Zz4=';
@@ -6753,7 +6768,7 @@
     }));
     view.querySelectorAll('.pbx-card').forEach(c => c.addEventListener('click', () => {
       const en = playbookCache.entries.find(e => e.id === c.dataset.id);
-      if(en) window.fzNavigate('/clenska-sekce/playbook/' + fzSlug(en.map) + '/' + fzSlug(en.title), { noRoute: true });
+      if(en) window.fzNavigate('/clenska-sekce/playbook/' + fzSlug(en.map) + '/' + fzCode(en.id), { noRoute: true });
       openPlaybookDetail(c.dataset.id, c);
     }));
   }
@@ -6920,7 +6935,7 @@
     }));
     const cl = document.getElementById('pbxCopyLink');
     if(cl) cl.addEventListener('click', () => {
-      const link = location.origin + '/clenska-sekce/playbook/' + fzSlug(en.map) + '/' + fzSlug(en.title);
+      const link = location.origin + '/clenska-sekce/playbook/' + fzSlug(en.map) + '/' + fzCode(en.id);
       (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => { cl.textContent = '✔ Zkopírováno'; }).catch(() => { prompt('Zkopíruj odkaz:', link); });
       setTimeout(() => { cl.textContent = '🔗 Kopírovat odkaz pro tým'; }, 2200);
     });
@@ -8400,7 +8415,8 @@
       }
       const ov = document.getElementById('playbookDetailOverlay');
       if(mapName && seg[3]){
-        const en = playbookCache.entries.find(e => e.map === mapName && (fzSlug(e.title) === seg[3] || e.id === seg[3]));
+        // nové odkazy: neprůhledné ID; staré odkazy s názvem fungují dál
+        const en = playbookCache.entries.find(e => fzCode(e.id) === seg[3]) || playbookCache.entries.find(e => e.map === mapName && (fzSlug(e.title) === seg[3] || e.id === seg[3]));
         if(en && !(ov.classList.contains('show') && ov.dataset.id === en.id)){ openPlaybookDetail(en.id); ov.dataset.id = en.id; document.title = en.title + ' — Playbook — Freezers'; }
       }else if(ov.classList.contains('show')){ ov.classList.remove('show'); destroyPbPlayer(); }
       return true;
