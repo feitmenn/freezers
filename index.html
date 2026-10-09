@@ -6568,6 +6568,7 @@
   function pbRepoUrls(path){
     if(!path) return [];
     if(/^https?:|^data:/.test(path)) return [path];
+    if(path.indexOf('r2:') === 0) return [STEAM_API_URL + '/media/' + path.slice(3)]; // Cloudflare R2 přes Worker
     const raw = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}`;
     // web běží ze stejného repa (GitHub/Cloudflare Pages) → relativní cesta má správný typ souboru (lepší pro Safari)
     return /^https?:$/.test(location.protocol) && !/github\.io$/.test(location.hostname) ? [path, raw] : [raw];
@@ -6994,7 +6995,33 @@
 
   /* ---- Admin: správa playbooků (MP4 upload, editace, STRAT BOOKy) ---- */
   let pbEditingId = null;
-  function pbUploadBinary(path, file, message, onProgress){
+  /* Nahrání videa / PDF. 1) Cloudflare R2 přes Worker (/media/upload) — rychlé, bez limitu GitHubu.
+     2) Když Worker R2 ještě nemá (404), zkusí se GitHub repo. Vrací cestu, kterou uložíme do playbook.json. */
+  function pbUploadToR2(path, file, onProgress){
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', STEAM_API_URL + '/media/upload?path=' + encodeURIComponent(path));
+      xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+      xhr.setRequestHeader('X-Session-Token', getSessionToken() || '');
+      xhr.upload.onprogress = e => { if(e.lengthComputable && onProgress) onProgress(e.loaded / e.total); };
+      xhr.onload = () => {
+        if(xhr.status >= 200 && xhr.status < 300) return resolve('r2:' + path);
+        if(xhr.status === 404 || xhr.status === 405 || xhr.status === 501) return resolve(null); // Worker zatím R2 nemá
+        let msg = 'Upload na R2 selhal (' + xhr.status + ')';
+        try{ const j = JSON.parse(xhr.responseText); if(j.error) msg += ': ' + j.error; }catch(_){}
+        reject(new Error(msg));
+      };
+      xhr.onerror = () => resolve(null);
+      xhr.send(file);
+    });
+  }
+  async function pbUploadBinary(path, file, message, onProgress){
+    const r2 = await pbUploadToR2(path, file, onProgress);
+    if(r2) return r2;
+    await pbUploadToGithub(path, file, message, onProgress);
+    return path;
+  }
+  function pbUploadToGithub(path, file, message, onProgress){
     // soubor → base64 → Worker (stejná akce „put“ jako u JSON souborů) s průběhem nahrávání
     return new Promise((resolve, reject) => {
       const token = getSessionToken();
@@ -7013,6 +7040,7 @@
           let msg = 'Server odmítl soubor (' + xhr.status + ')';
           try{ const j = JSON.parse(xhr.responseText); if(j.error || j.message) msg += ': ' + (j.error || j.message); }catch(_){}
           if(xhr.status === 413) msg = 'Soubor je na server moc velký — zmenši ho (720p, kratší klip) nebo použij odkaz.';
+          if(xhr.status === 409 && /rule/i.test(xhr.responseText)) msg = 'GitHub odmítl velký soubor (kontrola pravidel repa vypršela). Videa a PDF patří do Cloudflare R2 — viz návod, nebo zatím použij odkaz na video.';
           reject(new Error(msg));
         };
         xhr.onerror = () => reject(new Error('Spojení se serverem selhalo (soubor je možná moc velký).'));
@@ -7206,9 +7234,9 @@
       const visibility = wrapEl.querySelector('.pb-sb-vis').value;
       btn.disabled = true;
       try{
-        await pbUploadBinary(path, file, `Strat book ${m.name}: ${title}`, p => { msg.textContent = 'Nahrávám… ' + Math.round(p * 100) + ' %'; });
+        const stored = await pbUploadBinary(path, file, `Strat book ${m.name}: ${title}`, p => { msg.textContent = 'Nahrávám… ' + Math.round(p * 100) + ' %'; });
         msg.textContent = 'Ukládám…';
-        await pbSave(d => { const mm = d.maps.find(x => x.name === m.name); mm.stratbooks = (mm.stratbooks || []).concat([{ id, title, file: path, players, visibility, uploadedAt: new Date().toISOString() }]); }, `Strat book ${m.name}: ${title}`);
+        await pbSave(d => { const mm = d.maps.find(x => x.name === m.name); mm.stratbooks = (mm.stratbooks || []).concat([{ id, title, file: stored, players, visibility, uploadedAt: new Date().toISOString() }]); }, `Strat book ${m.name}: ${title}`);
         renderAdminPlaybookMaps();
       }catch(e){ msg.textContent = '⚠ ' + e.message; btn.disabled = false; }
     }));
@@ -7241,7 +7269,7 @@
         const ext = (file.name.match(/\.(mp4|webm|mov)$/i) || ['.mp4'])[0].toLowerCase();
         videoFile = `playbook-videos/${id}-${Date.now()}${ext}`;
         msg.textContent = 'Nahrávám video…';
-        await pbUploadBinary(videoFile, file, `Playbook video: ${title}`, p => { pbSetProg(p); msg.textContent = 'Nahrávám video… ' + Math.round(p * 100) + ' %'; });
+        videoFile = await pbUploadBinary(videoFile, file, `Playbook video: ${title}`, p => { pbSetProg(p); msg.textContent = 'Nahrávám video… ' + Math.round(p * 100) + ' %'; });
       }
       msg.textContent = 'Ukládám strategii…';
       await pbSave(d => {
