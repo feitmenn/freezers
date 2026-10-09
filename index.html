@@ -1737,6 +1737,210 @@
   @media (prefers-reduced-motion: reduce){
     .ak-part,.ak-cart,.ak-gun{transition:none !important;animation:none !important;}
   }
+
+  /* 3D AK */
+  .ak3-host{position:relative;flex:1;min-height:340px;display:none;touch-action:pan-y;}
+  .ak3-host canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;}
+  .ak3-host canvas:active{cursor:grabbing;}
+  .ak-wrap.ak3-on .ak3-host{display:block;}
+  .ak-wrap.ak3-on .ak-svg{display:none;}
+  .ak3-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+  .ak3-lbl{position:absolute;left:0;top:0;pointer-events:auto;display:flex;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;margin:-8px 0 0 -8px;}
+  .ak3-lbl i{width:16px;height:16px;border-radius:50%;background:#5cc8ff;border:2.5px solid #fff;box-shadow:0 0 0 0 rgba(92,200,255,.7);animation:ak3Ping 1.8s infinite;flex:0 0 auto;}
+  @keyframes ak3Ping{0%{box-shadow:0 0 0 0 rgba(92,200,255,.7)}100%{box-shadow:0 0 0 14px rgba(92,200,255,0)}}
+  .ak3-lbl span{opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s;white-space:nowrap;background:rgba(10,15,24,.88);border:1.5px solid rgba(92,200,255,.55);color:#e6edf6;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;padding:6px 12px;border-radius:999px;backdrop-filter:blur(4px);}
+  .ak3-lbl.show span{opacity:1;transform:none;}
+  .ak3-lbl:hover span{border-color:#fff;}
+  .ak3-lbl.sel i{background:#fff;}
+  .ak3-lbl.l{flex-direction:row-reverse;}
+  .ak3-lbl.l span{transform:translateX(6px);}
+  .ak3-lbl.l.show span{transform:none;}
+  .ak3-lbl.sel span{background:#5cc8ff;color:#06121e;border-color:#fff;}
+  .ak3-ammo{position:absolute;left:0;top:0;margin-top:-9px;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:13px;color:#f3d68a;letter-spacing:.06em;text-shadow:0 2px 6px rgba(0,0,0,.8);opacity:0;transition:opacity .4s;white-space:nowrap;}
+  .ak3-ammo.show{opacity:1;}
+  .ak3-tip{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);font-size:11px;color:#8ea6c2;letter-spacing:.1em;text-transform:uppercase;pointer-events:none;}
+  @media (max-width:600px){ .ak3-lbl span{font-size:11px;padding:4px 9px;} .ak3-host{min-height:280px;} .ak3-ammo{font-size:11px;} }
+
+  /* ============ PLAYBOOK VE STYLU EDUPAGE ============ */
+  .pbx{
+    --ep-bg:#0e1218; --ep-side:#141a23; --ep-card:#171e29; --ep-line:rgba(255,255,255,.08); --ep-ink:#e6edf6; --ep-mut:#93a3b8; --ep-hover:rgba(255,255,255,.05); --ep-accent:#3b9cff;
+    display:block !important;border:1px solid var(--ep-line);border-radius:18px;overflow:hidden;background:var(--ep-bg);color:var(--ep-ink);font-family:'Inter',sans-serif;
+  }
+  body.theme-light .pbx{--ep-bg:#f1f4f8; --ep-side:#ffffff; --ep-card:#ffffff; --ep-line:#e2e8f0; --ep-ink:#1b2a3a; --ep-mut:#64748b; --ep-hover:#f1f6fc; --ep-accent:#1d74c4;box-shadow:0 2px 14px rgba(18,22,28,.06);}
+  .pbx-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:var(--ep-side);border-bottom:1px solid var(--ep-line);}
+  .pbx-t{flex:1;min-width:160px;display:flex;flex-direction:column;line-height:1.25;}
+  .pbx-t b{font-size:17px;font-weight:800;}
+  .pbx-t span{font-size:12px;color:var(--ep-mut);}
+  .pbx-search{background:var(--ep-card);border:1px solid var(--ep-line);color:var(--ep-ink);border-radius:10px;padding:9px 12px;font-size:13px;min-width:220px;font-family:inherit;transition:border-color .2s,box-shadow .2s;}
+  .pbx-search:focus{outline:none;border-color:var(--ep-accent);box-shadow:0 0 0 3px color-mix(in srgb, var(--ep-accent) 20%, transparent);}
+  .pbx-mine-btn{border:1px solid color-mix(in srgb,#f59e0b 50%,transparent);background:color-mix(in srgb,#f59e0b 12%,transparent);color:var(--ep-ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;animation:pbxGlow 2.4s ease-in-out infinite;}
+  .pbx-mine-btn b{background:#f59e0b;color:#1a1200;border-radius:999px;padding:1px 7px;margin-left:4px;}
+  .pbx-mine-btn.on{background:#f59e0b;color:#1a1200;}
+  @keyframes pbxGlow{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.0)}50%{box-shadow:0 0 0 6px rgba(245,158,11,.15)}}
+  .pbx-view{padding:16px;}
+  /* mapy */
+  .pbx-maps{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;perspective:1000px;}
+  .pbx-map{position:relative;aspect-ratio:16/11;border:0;border-radius:18px;overflow:hidden;cursor:pointer;padding:0;color:#fff;text-align:left;font-family:inherit;
+    background:#1b2230;transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .25s ease, box-shadow .3s;box-shadow:0 6px 18px rgba(0,0,0,.18);}
+  .pbx-map:hover{box-shadow:0 18px 40px rgba(0,0,0,.35);}
+  .pbx-map-bg{position:absolute;inset:-6%;background:var(--bg, linear-gradient(135deg,#243049,#121826)) center/cover;transition:transform .8s cubic-bezier(.2,.9,.2,1), filter .4s;filter:saturate(.9) brightness(.85);}
+  .pbx-map:hover .pbx-map-bg{transform:scale(1.08);filter:saturate(1.1) brightness(1);}
+  .pbx-map::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,10,18,.05) 30%,rgba(6,10,18,.88));}
+  .pbx-map-shine{position:absolute;inset:0;z-index:2;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.22), transparent 60%);opacity:0;transition:opacity .3s;}
+  .pbx-map:hover .pbx-map-shine{opacity:1;}
+  .pbx-map-c{position:absolute;left:16px;bottom:14px;z-index:3;display:flex;flex-direction:column;}
+  .pbx-map-c b{font-family:'Chakra Petch',sans-serif;font-size:24px;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 3px 14px rgba(0,0,0,.6);transition:letter-spacing .4s;}
+  .pbx-map:hover .pbx-map-c b{letter-spacing:.14em;}
+  .pbx-map-c small{font-size:12px;opacity:.85;}
+  .pbx-map-n{position:absolute;top:12px;right:12px;z-index:3;min-width:30px;height:30px;padding:0 9px;border-radius:999px;background:rgba(8,12,20,.6);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;backdrop-filter:blur(4px);}
+  .pbx-view.anim .pbx-map{animation:pbxIn .7s cubic-bezier(.2,.9,.2,1) backwards;animation-delay:calc(var(--i) * 70ms);}
+  @keyframes pbxIn{from{opacity:0;transform:translateY(26px) scale(.94);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+  /* detail mapy */
+  .pbx-hero{position:relative;min-height:190px;border-radius:18px;overflow:hidden;display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;padding:18px;color:#fff;background:#1b2230;margin-bottom:14px;}
+  .pbx-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,10,18,.9),rgba(6,10,18,.35) 60%,rgba(6,10,18,.6));}
+  .pbx-hero.small{min-height:0;background:var(--ep-card);color:var(--ep-ink);border:1px solid var(--ep-line);}
+  .pbx-hero.small::after{display:none;}
+  .pbx-hero .pbx-map-bg{animation:pbxKen 18s ease-in-out infinite alternate;}
+  @keyframes pbxKen{from{transform:scale(1.04)}to{transform:scale(1.16) translateX(-2%)}}
+  .pbx-hero > *{position:relative;z-index:2;}
+  .pbx-hero > .pbx-map-bg{position:absolute;z-index:0;}
+  .pbx-back{position:absolute !important;top:14px;left:14px;background:rgba(8,12,20,.55);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;padding:7px 14px;font-weight:700;font-size:12.5px;cursor:pointer;backdrop-filter:blur(4px);transition:transform .2s;font-family:inherit;}
+  .pbx-hero.small .pbx-back{position:static !important;background:var(--ep-hover);color:var(--ep-ink);border-color:var(--ep-line);}
+  .pbx-back:hover{transform:translateX(-3px);}
+  .pbx-hero-c{flex:1;display:flex;flex-direction:column;animation:pbxUp .6s .15s cubic-bezier(.2,.9,.2,1) both;}
+  .pbx-hero-c b{font-family:'Chakra Petch',sans-serif;font-size:40px;letter-spacing:.1em;text-transform:uppercase;line-height:1;}
+  .pbx-hero.small .pbx-hero-c b{font-size:20px;letter-spacing:.04em;}
+  .pbx-hero-c small{font-size:13px;opacity:.85;margin-top:4px;}
+  @keyframes pbxUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .pbx-sbs{display:flex;gap:8px;flex-wrap:wrap;animation:pbxUp .6s .3s cubic-bezier(.2,.9,.2,1) both;}
+  .pbx-sb{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:linear-gradient(120deg,#e53935,#db2777);color:#fff;box-shadow:0 8px 22px rgba(219,39,119,.35);transition:transform .2s, box-shadow .2s;}
+  .pbx-sb:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 30px rgba(219,39,119,.5);}
+  .pbx-sb > span:first-child{font-size:22px;}
+  .pbx-sb b{display:block;font-family:'Chakra Petch',sans-serif;letter-spacing:.08em;font-size:13px;}
+  .pbx-sb small{font-size:11.5px;opacity:.9;}
+  .pbx-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px;}
+  .pbx-chip{border:1px solid var(--ep-line);background:var(--ep-card);color:var(--ep-ink);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .15s,background .2s,border-color .2s,color .2s;}
+  .pbx-chip:hover{transform:translateY(-1px);}
+  .pbx-chip.on{background:var(--tc,var(--ep-accent));border-color:var(--tc,var(--ep-accent));color:#fff;}
+  .pbx-chip.mine.on{background:#f59e0b;border-color:#f59e0b;color:#1a1200;}
+  .pbx-sep{width:1px;height:20px;background:var(--ep-line);margin:0 4px;}
+  .pbx-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;}
+  .pbx-card{display:flex;align-items:stretch;gap:12px;text-align:left;padding:12px;border:1px solid var(--ep-line);border-left:4px solid var(--kc);border-radius:14px;background:var(--ep-card);color:var(--ep-ink);font-family:inherit;cursor:pointer;
+    animation:pbxIn .55s cubic-bezier(.2,.9,.2,1) backwards;animation-delay:calc(var(--i) * 45ms);transition:transform .2s, box-shadow .2s;}
+  .pbx-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.18);}
+  .pbx-card.mine{box-shadow:0 0 0 2px color-mix(in srgb,#f59e0b 55%,transparent);}
+  .pbx-card-ic{flex:0 0 44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--kc);color:#fff;font-size:17px;box-shadow:0 4px 12px color-mix(in srgb, var(--kc) 40%, transparent);transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+  .pbx-card:hover .pbx-card-ic{transform:scale(1.12) rotate(-6deg);}
+  .pbx-card-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+  .pbx-card-b b{font-size:14px;font-weight:700;line-height:1.3;}
+  .pbx-card-b small{font-size:12px;color:var(--ep-mut);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .pbx-card-tags{display:flex;flex-wrap:wrap;gap:4px;}
+  .pbx-card-tags em,.pbx-d-tags em{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:color-mix(in srgb, var(--tc,#64748b) 16%, transparent);color:var(--tc,var(--ep-mut));border:1px solid color-mix(in srgb, var(--tc,#64748b) 40%, transparent);}
+  .pbx-card-tags em.me{--tc:#f59e0b;}
+  .pbx-card-ps{display:flex;gap:3px;margin-top:3px;}
+  .pbx-card-ps i{font-style:normal;width:22px;height:22px;border-radius:7px;background:var(--pc);color:#0b0f17;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .pbx-card-go{align-self:center;font-size:22px;color:var(--ep-mut);transition:transform .2s;}
+  .pbx-card:hover .pbx-card-go{transform:translateX(4px);color:var(--ep-accent);}
+  .pbx-empty{grid-column:1/-1;text-align:center;color:var(--ep-mut);padding:40px 10px;}
+  .pbx-empty b{display:block;font-size:38px;margin-bottom:6px;}
+  /* detail strategie */
+  #playbookDetailOverlay .modal-card.pbx-modal{max-width:1180px;width:96vw;padding:22px;}
+  .pbx-d{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:20px;}
+  .pbx-d-player{position:relative;}
+  .pbx-d-player .pb-player-wrap{margin:0;position:relative;}
+  .pbx-d-novid{aspect-ratio:16/9;border-radius:14px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--ice-dim);}
+  .pbx-d-chaps{display:flex;gap:6px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:thin;}
+  .pbx-d-chap{flex:0 0 auto;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .pbx-d-keys{font-size:11px;color:var(--ice-dim);margin-top:6px;}
+  .pbx-d-keys kbd{font-family:inherit;font-size:10.5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;margin:0 1px;}
+  .pbx-d-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+  .pbx-d-title{font-family:'Chakra Petch',sans-serif !important;font-size:24px !important;line-height:1.2;margin:0 0 12px !important;color:var(--ice);}
+  .pbx-d-right{max-height:min(72vh,720px);overflow-y:auto;padding-right:4px;}
+  .pbx-d-mine{border:1.5px solid #f59e0b;background:color-mix(in srgb,#f59e0b 10%,transparent);border-radius:14px;padding:10px 12px;margin-bottom:12px;animation:pbxMine 2.6s ease-in-out infinite;}
+  @keyframes pbxMine{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.25)}50%{box-shadow:0 0 0 6px rgba(245,158,11,0)}}
+  .pbx-d-mine-h{font-family:'Chakra Petch',sans-serif;font-weight:700;letter-spacing:.08em;color:#f59e0b;font-size:13px;margin-bottom:4px;text-transform:uppercase;}
+  .pbx-d-desc{font-size:14px;line-height:1.65;color:var(--ice);}
+  .pbd-h{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--turquoise);margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--line);}
+  .pbd-line{display:flex;gap:8px;align-items:flex-start;padding:5px 8px;border-radius:9px;transition:background .3s, box-shadow .3s;}
+  .pbd-line > span{flex:1;min-width:0;}
+  .pbd-line.now{background:color-mix(in srgb, var(--turquoise) 14%, transparent);box-shadow:inset 3px 0 0 var(--turquoise);}
+  .pbd-line.pbd-mine{background:color-mix(in srgb,#f59e0b 10%,transparent);}
+  .pbd-warn{color:#ef4444;font-weight:700;}
+  .pbd-warn::before{content:'⚠';margin-right:2px;}
+  .pbd-gap{height:6px;}
+  .pbd-b{color:var(--turquoise);}
+  .pbd-p{display:inline-flex;align-items:center;gap:3px;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.04em;padding:0 8px;border-radius:7px;background:color-mix(in srgb, var(--pc) 22%, transparent);color:var(--pc);border:1px solid color-mix(in srgb, var(--pc) 55%, transparent);line-height:20px;}
+  body.theme-light .pbd-p{color:color-mix(in srgb, var(--pc) 70%, #000);}
+  .pbd-p.me{background:var(--pc);color:#0b0f17 !important;}
+  .pbd-p i{font-style:normal;font-size:9px;background:#0b0f17;color:#fff;border-radius:4px;padding:0 4px;}
+  .pbd-u{display:inline-flex;gap:3px;align-items:center;font-size:11.5px;font-weight:700;padding:0 7px;border-radius:999px;background:color-mix(in srgb, var(--uc) 18%, transparent);color:var(--uc);border:1px solid color-mix(in srgb, var(--uc) 45%, transparent);line-height:19px;text-transform:uppercase;}
+  body.theme-light .pbd-u{color:color-mix(in srgb, var(--uc) 65%, #000);}
+  .pb-ts.pbd-ts{flex:0 0 auto;margin:0;min-width:46px;text-align:center;}
+  .pb-ts.hit{animation:pbxHit .5s ease;}
+  @keyframes pbxHit{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+  /* přehrávač */
+  .fzp{position:relative;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;outline:none;user-select:none;}
+  .fzp video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;}
+  .fzp-logo,.pb-player-wrap .fzp-logo{position:absolute;top:12px;right:12px;width:52px;height:auto;z-index:4;pointer-events:none;opacity:.92;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));}
+  .pb-player-wrap .fzp-logo{width:46px;}
+  .fzp-chap{position:absolute;left:12px;top:12px;z-index:4;max-width:70%;background:rgba(8,12,20,.72);color:#fff;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;padding:6px 12px;border-radius:999px;border:1px solid rgba(92,200,255,.5);backdrop-filter:blur(6px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .fzp-chap.pop{animation:fzpPop .5s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes fzpPop{from{opacity:0;transform:translateY(-8px) scale(.9)}to{opacity:1;transform:none}}
+  .fzp-big{position:absolute;left:50%;top:50%;z-index:3;width:78px;height:78px;margin:-39px 0 0 -39px;border-radius:50%;border:0;background:linear-gradient(135deg,#5cc8ff,#8b8df7);color:#06121e;font-size:28px;cursor:pointer;box-shadow:0 10px 30px rgba(92,200,255,.45);transition:transform .25s cubic-bezier(.34,1.56,.64,1), opacity .25s;}
+  .fzp-big:hover{transform:scale(1.1);}
+  .fzp.playing .fzp-big{opacity:0;transform:scale(.6);pointer-events:none;}
+  .fzp-load{position:absolute;inset:0;z-index:2;display:none;align-items:center;justify-content:center;pointer-events:none;}
+  .fzp.wait .fzp-load{display:flex;}
+  .fzp-load i{width:42px;height:42px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#5cc8ff;animation:fzpSpin .8s linear infinite;}
+  @keyframes fzpSpin{to{transform:rotate(360deg)}}
+  .fzp-ui{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:30px 12px 8px;background:linear-gradient(transparent,rgba(0,0,0,.78));opacity:0;transform:translateY(8px);transition:opacity .3s, transform .3s;}
+  .fzp.ui .fzp-ui,.fzp:not(.playing) .fzp-ui{opacity:1;transform:none;}
+  .fzp-bar{position:relative;height:6px;border-radius:6px;background:rgba(255,255,255,.22);cursor:pointer;margin-bottom:8px;transition:height .15s;touch-action:none;}
+  .fzp-bar:hover{height:9px;}
+  .fzp-buf,.fzp-prog{position:absolute;left:0;top:0;bottom:0;border-radius:6px;}
+  .fzp-buf{background:rgba(255,255,255,.3);}
+  .fzp-prog{background:linear-gradient(90deg,#5cc8ff,#8b8df7);}
+  .fzp-marks i{position:absolute;top:-2px;bottom:-2px;width:3px;margin-left:-1.5px;background:#facc15;border-radius:2px;box-shadow:0 0 6px rgba(250,204,21,.8);}
+  .fzp-knob{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(92,200,255,.35);transform:scale(0);transition:transform .15s;}
+  .fzp-bar:hover .fzp-knob{transform:scale(1);}
+  .fzp-tip{position:absolute;bottom:16px;transform:translateX(-50%);background:rgba(8,12,20,.9);color:#fff;font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:7px;white-space:nowrap;pointer-events:none;}
+  .fzp-row{display:flex;align-items:center;gap:4px;color:#fff;}
+  .fzp-b{background:none;border:0;color:#fff;font-size:15px;min-width:34px;height:32px;border-radius:8px;cursor:pointer;font-family:inherit;transition:background .15s, transform .15s;}
+  .fzp-b:hover{background:rgba(255,255,255,.14);transform:translateY(-1px);}
+  .fzp-time{font-size:12.5px;font-variant-numeric:tabular-nums;margin-left:6px;opacity:.9;}
+  .fzp-sp{flex:1;}
+  .fzp-rate{font-size:12.5px;font-weight:700;}
+  .fzp-vol{width:80px;accent-color:#5cc8ff;}
+  .fzp.jump .fzp-prog{box-shadow:0 0 14px #5cc8ff;}
+  .fzp-err{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,.7);font-size:14px;}
+  .fzp-err[hidden]{display:none;}
+  .fzp:fullscreen{border-radius:0;}
+  .pbx-d-left,.pbx-d-right{min-width:0;}
+  @media (max-width:900px){
+    .pbx-d{grid-template-columns:minmax(0,1fr);}
+    #playbookDetailOverlay .modal-card.pbx-modal{width:100%;padding:18px 12px;}
+    .pbx-d-right{max-height:none;}
+    .pbx-hero-c b{font-size:28px;}
+    .fzp-vol,.fzp-prev,.fzp-next{display:none;}
+    .pbx-search{min-width:0;width:100%;}
+    .pbx-cards{grid-template-columns:1fr;}
+    .pbx-maps{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .pbx-map-c b{font-size:18px;}
+  }
+  /* admin: pomocník pro popisek */
+  .pba-help{font-size:12px;color:var(--ep-mut, var(--ice-dim));line-height:1.7;background:var(--ep-hover, rgba(255,255,255,.04));border-radius:10px;padding:10px 12px;margin:-6px 0 10px;}
+  .pba-help code{font-weight:700;color:var(--ep-accent, var(--turquoise));}
+  .pba-chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px;}
+  .pba-chips button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ice);}
+  .pba-prev{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:0 0 14px;max-height:260px;overflow:auto;}
+  .pba-vid{width:100%;max-height:260px;border-radius:12px;background:#000;margin:6px 0 8px;}
+  .pba-prog{height:8px;border-radius:8px;background:var(--line);overflow:hidden;margin:8px 0;display:none;}
+  .pba-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5cc8ff,#8b8df7);transition:width .2s;}
+  .pba-sb{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:6px 0 4px;}
+  .pba-sb-row{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:4px 0;}
+  .pba-sb-row span{flex:1;}
+  .pba-players{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:4px 10px;font-size:12px;margin:6px 0;max-height:150px;overflow:auto;}
+  .pba-players label{display:flex;align-items:center;gap:5px;}
 </style>
 </head>
 <body>
@@ -2211,7 +2415,7 @@
 </section>
 
 <div class="modal-overlay" id="playbookDetailOverlay">
-  <div class="modal-card">
+  <div class="modal-card pbx-modal">
     <button type="button" class="modal-close" id="closePlaybookDetailBtn">✕</button>
     <div id="playbookDetailContent"></div>
   </div>
@@ -2836,12 +3040,12 @@
     </div>
 
     <div class="admin-tab-panel" data-panel="playbooky">
-      <h3>Přidat strategii do playbooku</h3>
+      <h3 id="pbFormTitle">Přidat strategii do playbooku</h3>
       <form id="adminPlaybookForm">
         <div class="field-row">
           <div class="field">
             <label for="pb-title">Název strategie</label>
-            <input type="text" id="pb-title" placeholder="např. Falcons Delayed Banana Take" required>
+            <input type="text" id="pb-title" placeholder="např. B split přes Banán" required>
           </div>
           <div class="field">
             <label for="pb-map">Mapa</label>
@@ -2850,9 +3054,15 @@
         </div>
         <div class="field-row">
           <div class="field">
-            <label for="pb-video">Odkaz na video (nepovinné)</label>
-            <input type="url" id="pb-video" placeholder="https://youtu.be/...">
+            <label for="pb-side">Strana</label>
+            <select id="pb-side"><option value="">—</option><option value="T">T</option><option value="CT">CT</option></select>
           </div>
+          <div class="field">
+            <label for="pb-kind">Typ kola</label>
+            <select id="pb-kind"></select>
+          </div>
+        </div>
+        <div class="field-row">
           <div class="field">
             <label for="pb-visibility">Viditelnost</label>
             <select id="pb-visibility">
@@ -2860,24 +3070,54 @@
               <option value="academy">Academy</option>
             </select>
           </div>
+          <div class="field">
+            <label>Video</label>
+            <div class="radio-group">
+              <label class="radio-pill"><input type="radio" name="pb-vsrc" value="file" checked>Nahrát MP4</label>
+              <label class="radio-pill"><input type="radio" name="pb-vsrc" value="url">Odkaz (YouTube / MP4)</label>
+            </div>
+          </div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;margin:-4px 0 12px;">
-          <button type="button" class="btn-ghost" id="pbFetchYoutubeBtn" style="padding:8px 14px;font-size:12px;">Načíst název a popisek z YouTube</button>
-          <span class="admin-hint" id="pbFetchYoutubeStatus" style="margin:0;"></span>
+        <div class="field" id="pbFileField">
+          <label for="pb-file">MP4 soubor (doporučeno do 40 MB — 720p, krátký klip)</label>
+          <input type="file" id="pb-file" accept="video/mp4,video/webm,video/quicktime">
+          <video class="pba-vid" id="pbPreviewVid" controls playsinline hidden></video>
+          <div class="admin-hint" id="pbFileInfo" style="margin:4px 0 0;"></div>
+        </div>
+        <div class="field" id="pbUrlField" style="display:none;">
+          <label for="pb-video">Odkaz na video</label>
+          <input type="url" id="pb-video" placeholder="https://youtu.be/… nebo https://…/video.mp4">
+          <div style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+            <button type="button" class="btn-ghost" id="pbFetchYoutubeBtn" style="padding:8px 14px;font-size:12px;">Načíst název a popisek z YouTube</button>
+            <span class="admin-hint" id="pbFetchYoutubeStatus" style="margin:0;"></span>
+          </div>
         </div>
         <div class="field">
-          <label for="pb-desc">Stručný popis</label>
-          <textarea id="pb-desc" rows="4" placeholder="Krátký popisek, který se zobrazí v popisku strategie"></textarea>
+          <label for="pb-desc">Popisek (stručně — každý řádek = jeden krok)</label>
+          <div class="pba-help">
+            <code>0:12</code> na začátku řádku = klikací čas (skočí ve videu) · <code>@FILAS</code> = hráč (uvidí to jako „Tvůj úkol“) ·
+            <code>#smoke #flash #molly #he</code> = granáty · <code>## Nadpis</code> · <code>!důležité</code> · <code>**tučně**</code>
+            <br>Příklad: <code>0:05 @FILAS #smoke CT, @AC #flash nad B</code>
+          </div>
+          <div class="pba-chips" id="pbPlayerChips"></div>
+          <textarea id="pb-desc" rows="7" placeholder="## Rozestavení&#10;0:00 @FILAS #smoke CT z T spawnu&#10;0:08 @AC #flash nad banán&#10;0:15 @Krabík77 entry na B, ostatní tradují&#10;!Když padne entry, rotujeme mid"></textarea>
+          <div style="display:flex;gap:8px;margin-top:6px;"><button type="button" class="btn-ghost" id="pbInsertTime" style="padding:6px 12px;font-size:12px;">+ vložit čas z náhledu videa</button></div>
         </div>
-        <button type="submit" class="submit-btn" id="playbookFormSubmitBtn">Přidat strategii</button>
+        <div class="field"><label>Náhled popisku</label><div class="pba-prev pbx-d-desc" id="pbDescPreview"></div></div>
+        <div class="pba-prog" id="pbUpProg"><i></i></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button type="submit" class="submit-btn" id="playbookFormSubmitBtn">Přidat strategii</button>
+          <button type="button" class="btn-ghost" id="pbCancelEdit" style="display:none;padding:10px 18px;">Zrušit úpravu</button>
+          <span class="admin-hint" id="pbSaveMsg" style="margin:0;"></span>
+        </div>
       </form>
       <div class="admin-divider"></div>
       <h3>Existující strategie</h3>
-      <p class="admin-hint">U každé strategie můžeš přepnout viditelnost (Main / Academy) nebo ji smazat.</p>
+      <p class="admin-hint">Strategii můžeš upravit, přepnout viditelnost (Main / Academy) nebo smazat.</p>
       <div id="adminPlaybookList" class="admin-list"></div>
       <div class="admin-divider"></div>
-      <h3>Obrázky map</h3>
-      <p class="admin-hint">Ke každé mapě můžeš nahrát obrázek na pozadí čtverce (nebo vložit URL).</p>
+      <h3>Mapy: obrázek + STRAT BOOK (PDF)</h3>
+      <p class="admin-hint">U každé mapy nahraješ obrázek pozadí a STRAT BOOK v PDF. Vybereš, kteří hráči si ho můžou stáhnout (nikdo nevybrán = celá sestava dané kategorie).</p>
       <div id="adminPlaybookMaps" class="admin-list"></div>
     </div>
     </main>
@@ -6262,7 +6502,7 @@
     const srcMaps = Array.isArray(data.maps) ? data.maps : [];
     const maps = PLAYBOOK_MAP_NAMES.map(name => {
       const found = srcMaps.find(m => m && m.name === name);
-      return { name, image: (found && found.image) ? found.image : '' };
+      return { name, image: (found && found.image) ? found.image : '', stratbooks: (found && Array.isArray(found.stratbooks)) ? found.stratbooks : [] };
     });
     const entries = (Array.isArray(data.entries) ? data.entries : []).map((en, i) => ({
       id: en.id || ('pb_seed_' + i),
@@ -6271,7 +6511,10 @@
       videoLink: en.videoLink || '',
       description: en.description || '',
       addedAt: en.addedAt || '',
-      visibility: (en.visibility === 'academy') ? 'academy' : 'main'
+      visibility: (en.visibility === 'academy') ? 'academy' : 'main',
+      videoFile: en.videoFile || '',
+      side: en.side || '',
+      kind: en.kind || ''
     }));
     return { maps, entries };
   }
@@ -6303,33 +6546,373 @@
     }
   }
 
-  function renderPlaybookGrid(){
-    const grid = document.getElementById('playbookGrid');
-    if(!playbookCache){ grid.innerHTML = ''; return; }
-    const visible = playbookCache.entries.filter(en => en.visibility === memberCategory);
-    grid.innerHTML = PLAYBOOK_MAP_NAMES.map(mapName => {
-      const mapMeta = playbookCache.maps.find(m => m.name === mapName) || { image: '' };
-      const strats = visible.filter(en => en.map === mapName);
-      const bg = mapMeta.image ? `background-image:url('${escapeHtml(mapMeta.image)}');` : '';
-      const inner = strats.length
-        ? '<div class="pb-strats">' + strats.map(en => `
-            <button type="button" class="pb-strat${en.videoLink ? ' has-video' : ''}" data-id="${escapeHtml(en.id)}">
-              <span class="pb-strat-title">${escapeHtml(en.title)}</span>
-              <span class="pb-strat-desc">${escapeHtml(playbookBrief(en.description)) || 'Bez popisku'}</span>
-            </button>`).join('') + '</div>'
-        : '<div class="pb-map-empty">Zatím žádné strategie pro tuto mapu.</div>';
-      return `
-      <div class="pb-map" style="${bg}">
-        <div class="pb-map-head">
-          <div class="pb-map-name">${escapeHtml(mapName)}</div>
-          <div class="pb-map-count">${strats.length}× strategie</div>
-        </div>
-        ${inner}
-      </div>`;
+  /* ======================================================================
+     PLAYBOOK VE STYLU EDUPAGE
+     - mapy v jedné mřížce → klik = přiblížení do mapy (FLIP animace)
+     - karty strategií, filtry T/CT/typ, „Jen moje úkoly“
+     - vlastní MP4 přehrávač s logem Freezers vpravo nahoře, kapitolami z popisku, klávesovými zkratkami
+     - popisek: 1:05 = skok ve videu, @Hráč = barevný hráč ze sestavy, #smoke #flash #molly #he = granáty,
+       ## Nadpis, !důležité, **tučně**
+     ====================================================================== */
+  const PB_SIDES = { T: { label:'T', c:'#e0a526' }, CT: { label:'CT', c:'#3b82f6' } };
+  const PB_KINDS = {
+    pistol:{ label:'Pistolovka', c:'#e53935' }, eco:{ label:'Eco', c:'#16a34a' }, force:{ label:'Force buy', c:'#f57c00' },
+    buy:{ label:'Full buy', c:'#7c3aed' }, execute:{ label:'Execute', c:'#db2777' }, default:{ label:'Default', c:'#0ea5e9' },
+    retake:{ label:'Retake', c:'#0891b2' }, setup:{ label:'Setup (CT)', c:'#2563eb' }, antieco:{ label:'Anti-eco', c:'#65a30d' }
+  };
+  const PB_UTIL = { smoke:{ c:'#94a3b8', i:'☁' }, flash:{ c:'#facc15', i:'✦' }, molly:{ c:'#f97316', i:'🔥' }, molotov:{ c:'#f97316', i:'🔥' }, he:{ c:'#ef4444', i:'💥' }, decoy:{ c:'#a3a3a3', i:'◎' } };
+  const PB_PCOLORS = ['#5cc8ff','#f472b6','#facc15','#4ade80','#a78bfa','#fb923c','#2dd4bf','#f87171'];
+  const pbxState = { view:'maps', map:null, side:'all', kind:'all', mine:false, q:'' };
+  let fzPlayerInst = null;
+
+  function pbRepoUrls(path){
+    if(!path) return [];
+    if(/^https?:|^data:/.test(path)) return [path];
+    const raw = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}`;
+    // web běží ze stejného repa (GitHub/Cloudflare Pages) → relativní cesta má správný typ souboru (lepší pro Safari)
+    return /^https?:$/.test(location.protocol) && !/github\.io$/.test(location.hostname) ? [path, raw] : [raw];
+  }
+  function pbMe(){
+    const s = (typeof loadMemberSession === 'function' && loadMemberSession()) || {};
+    return [memberUsername, s.displayName].filter(Boolean).map(x => String(x).toLowerCase());
+  }
+  function pbRosterNames(){
+    const r = (typeof rosterCache !== 'undefined' && rosterCache) || {};
+    const out = [];
+    Object.values(r).forEach(arr => (arr || []).forEach(p => { if(p && p.name && p.type !== 'empty' && !out.includes(p.name)) out.push(p.name); }));
+    return out;
+  }
+  function pbPlayerColor(name){
+    const list = pbRosterNames().map(n => n.toLowerCase());
+    let i = list.indexOf(String(name).toLowerCase());
+    if(i < 0){ i = 0; for(const ch of String(name)) i = (i * 31 + ch.charCodeAt(0)) >>> 0; }
+    return PB_PCOLORS[i % PB_PCOLORS.length];
+  }
+  function pbTagsOf(desc){ return Array.from(new Set((String(desc || '').match(/@[\wÀ-ž.\-]+/g) || []).map(t => t.slice(1)))); }
+  function pbIsMine(en){ const me = pbMe(); return me.length && pbTagsOf(en.description).some(t => me.includes(t.toLowerCase())); }
+  function pbFmt(sec){ sec = Math.max(0, Math.floor(sec || 0)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60; return (h ? h + ':' + String(m).padStart(2,'0') : m) + ':' + String(s).padStart(2,'0'); }
+
+  /* Popisek → barevné HTML + kapitoly pro přehrávač */
+  function pbParseDesc(desc){
+    const me = pbMe();
+    const chapters = [], mine = [];
+    const lines = String(desc || '').split(/\r?\n/);
+    const html = lines.map(raw => {
+      let line = raw.trim();
+      if(!line) return '<div class="pbd-gap"></div>';
+      let cls = 'pbd-line';
+      if(/^##\s+/.test(line) || /^[^:@#]{2,40}:$/.test(line)){
+        return `<div class="pbd-h">${escapeHtml(line.replace(/^##\s+/, '').replace(/:$/, ''))}</div>`;
+      }
+      if(line.startsWith('!')){ cls += ' pbd-warn'; line = line.slice(1).trim(); }
+      let tsSec = null;
+      const m = line.match(/^\[?(\d{1,2}:\d{2}(?::\d{2})?)\]?\s*[-–—]?\s*/);
+      let lead = '';
+      if(m){ tsSec = tsToSeconds(m[1]); line = line.slice(m[0].length); }
+      let h = escapeHtml(line);
+      h = h.replace(/\*\*(.+?)\*\*/g, '<b class="pbd-b">$1</b>');
+      // časy uvnitř řádku
+      h = h.replace(/(^|[\s(])(\d{1,2}:\d{2}(?::\d{2})?)(?=$|[\s),.])/g, (w, pre, ts) => `${pre}<button type="button" class="pb-ts" data-sec="${tsToSeconds(ts)}">${ts}</button>`);
+      let isMine = false;
+      h = h.replace(/@([\wÀ-ž.\-]+)/g, (w, n) => {
+        const my = me.includes(n.toLowerCase()); if(my) isMine = true;
+        return `<span class="pbd-p${my ? ' me' : ''}" style="--pc:${pbPlayerColor(n)}">${escapeHtml(n)}${my ? ' <i>TY</i>' : ''}</span>`;
+      });
+      h = h.replace(/#(smoke|flash|molly|molotov|he|decoy)\b/gi, (w, u) => { const x = PB_UTIL[u.toLowerCase()]; return `<span class="pbd-u" style="--uc:${x.c}">${x.i} ${u.toLowerCase() === 'he' ? 'HE' : u.toLowerCase()}</span>`; });
+      if(tsSec !== null){
+        lead = `<button type="button" class="pb-ts pbd-ts" data-sec="${tsSec}">${pbFmt(tsSec)}</button>`;
+        chapters.push({ sec: tsSec, label: line.replace(/[@#*!]/g, '').slice(0, 60) });
+      }
+      if(isMine){ cls += ' pbd-mine'; mine.push({ sec: tsSec, html: h }); }
+      return `<div class="${cls}">${lead}<span>${h}</span></div>`;
     }).join('');
-    grid.querySelectorAll('.pb-strat').forEach(btn => {
-      btn.addEventListener('click', () => openPlaybookDetail(btn.dataset.id));
+    chapters.sort((a, b) => a.sec - b.sec);
+    return { html, chapters, mine };
+  }
+
+  function pbVisibleEntries(){
+    if(!playbookCache) return [];
+    return playbookCache.entries.filter(en => en.visibility === (memberCategory || 'main'));
+  }
+  function pbCanStratbook(sb){
+    if(memberRole === 'owner' || memberRole === 'admin') return true;
+    const cat = sb.visibility || 'main';
+    if(cat !== memberCategory) return false;
+    return !sb.players || !sb.players.length || sb.players.includes(memberUsername);
+  }
+
+  function renderPlaybookGrid(){
+    const root = document.getElementById('playbookGrid');
+    if(!root) return;
+    if(!playbookCache){ root.innerHTML = ''; return; }
+    root.className = 'pbx';
+    const ents = pbVisibleEntries();
+    const mineN = ents.filter(pbIsMine).length;
+    const top = `
+      <div class="pbx-top">
+        <span class="ep-ic" style="--ic:#db2777"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+        <div class="pbx-t"><b>Playbook</b><span>${ents.length} strategií · ${PLAYBOOK_MAP_NAMES.length} map · ${CATEGORY_LABELS[memberCategory] || 'Main'}</span></div>
+        ${mineN ? `<button type="button" class="pbx-mine-btn${pbxState.mine ? ' on' : ''}" id="pbxMineTop">🎯 Moje úkoly <b>${mineN}</b></button>` : ''}
+        <input type="search" class="pbx-search" id="pbxSearch" placeholder="Hledat strategii…" value="${escapeHtml(pbxState.q)}">
+      </div>`;
+    root.innerHTML = top + '<div class="pbx-view" id="pbxView"></div>';
+    const s = document.getElementById('pbxSearch');
+    s.addEventListener('input', () => { pbxState.q = s.value; if(pbxState.view === 'maps' && s.value.trim()) pbxState.view = 'search'; if(!s.value.trim() && pbxState.view === 'search') pbxState.view = 'maps'; pbxRenderView(false); });
+    const mt = document.getElementById('pbxMineTop');
+    if(mt) mt.addEventListener('click', () => { pbxState.mine = !pbxState.mine; if(pbxState.view === 'maps') pbxState.view = 'search'; else if(pbxState.view === 'search' && !pbxState.q) pbxState.view = 'maps'; renderPlaybookGrid(); });
+    pbxRenderView(true);
+  }
+
+  function pbxCard(en, i){
+    const kind = PB_KINDS[en.kind], side = PB_SIDES[en.side];
+    const tags = pbTagsOf(en.description);
+    const hasVid = !!(en.videoFile || en.videoLink);
+    const mine = pbIsMine(en);
+    const brief = playbookBrief(String(en.description || '').replace(/^\[?\d{1,2}:\d{2}(?::\d{2})?\]?\s*/gm, '').replace(/[@#*!]/g, ''));
+    return `<button type="button" class="pbx-card${mine ? ' mine' : ''}" data-id="${escapeHtml(en.id)}" style="--i:${i};--kc:${kind ? kind.c : '#64748b'}">
+      <span class="pbx-card-ic">${hasVid ? '▶' : '📄'}</span>
+      <span class="pbx-card-b">
+        <span class="pbx-card-tags">${side ? `<em style="--tc:${side.c}">${side.label}</em>` : ''}${kind ? `<em style="--tc:${kind.c}">${kind.label}</em>` : ''}${mine ? '<em class="me">🎯 tvůj úkol</em>' : ''}</span>
+        <b>${escapeHtml(en.title)}</b>
+        <small>${escapeHtml(brief) || 'Bez popisku'}</small>
+        ${tags.length ? `<span class="pbx-card-ps">${tags.slice(0, 5).map(t => `<i style="--pc:${pbPlayerColor(t)}" title="${escapeHtml(t)}">${escapeHtml(t.slice(0, 2).toUpperCase())}</i>`).join('')}</span>` : ''}
+      </span>
+      <span class="pbx-card-go">›</span>
+    </button>`;
+  }
+  function pbxFilter(list){
+    const q = pbxState.q.trim().toLowerCase();
+    return list.filter(en => (pbxState.side === 'all' || en.side === pbxState.side) && (pbxState.kind === 'all' || en.kind === pbxState.kind) && (!pbxState.mine || pbIsMine(en)) &&
+      (!q || (en.title + ' ' + en.description + ' ' + en.map).toLowerCase().includes(q)));
+  }
+
+  function pbxRenderView(animate){
+    const view = document.getElementById('pbxView');
+    if(!view) return;
+    const ents = pbVisibleEntries();
+    view.classList.toggle('anim', !!animate);
+    if(pbxState.view === 'maps'){
+      view.innerHTML = `<div class="pbx-maps">${PLAYBOOK_MAP_NAMES.map((name, i) => {
+        const m = playbookCache.maps.find(x => x.name === name) || {};
+        const n = ents.filter(e => e.map === name).length;
+        const sbs = (m.stratbooks || []).filter(pbCanStratbook).length;
+        return `<button type="button" class="pbx-map" data-map="${escapeHtml(name)}" style="--i:${i};${m.image ? `--bg:url('${escapeHtml(m.image)}')` : ''}">
+          <span class="pbx-map-bg"></span><span class="pbx-map-shine"></span>
+          <span class="pbx-map-c"><b>${escapeHtml(name)}</b><small>${n} ${n === 1 ? 'strategie' : n >= 2 && n <= 4 ? 'strategie' : 'strategií'}${sbs ? ' · 📕 Strat book' : ''}</small></span>
+          <span class="pbx-map-n">${n}</span>
+        </button>`;
+      }).join('')}</div>`;
+      view.querySelectorAll('.pbx-map').forEach(b => {
+        b.addEventListener('click', () => pbxOpenMap(b.dataset.map, b));
+        b.addEventListener('pointermove', e => {
+          if(e.pointerType !== 'mouse') return;
+          const r = b.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+          b.style.setProperty('--rx', (-y * 10).toFixed(2) + 'deg'); b.style.setProperty('--ry', (x * 12).toFixed(2) + 'deg');
+          b.style.setProperty('--mx', ((x + .5) * 100).toFixed(1) + '%'); b.style.setProperty('--my', ((y + .5) * 100).toFixed(1) + '%');
+        });
+        b.addEventListener('pointerleave', () => { b.style.setProperty('--rx', '0deg'); b.style.setProperty('--ry', '0deg'); });
+      });
+      return;
+    }
+    const isSearch = pbxState.view === 'search';
+    const name = pbxState.map;
+    const m = isSearch ? {} : (playbookCache.maps.find(x => x.name === name) || {});
+    const list = pbxFilter(isSearch ? ents : ents.filter(e => e.map === name));
+    const sbs = isSearch ? [] : (m.stratbooks || []).filter(pbCanStratbook);
+    const chip = (k, v, label, c) => `<button type="button" class="pbx-chip${pbxState[k] === v ? ' on' : ''}" data-k="${k}" data-v="${v}" ${c ? `style="--tc:${c}"` : ''}>${label}</button>`;
+    view.innerHTML = `
+      ${isSearch ? `<div class="pbx-hero small"><button type="button" class="pbx-back" id="pbxBack">‹ Mapy</button><div class="pbx-hero-c"><b>${pbxState.mine ? '🎯 Moje úkoly' : 'Hledání'}</b><small>${list.length} výsledků</small></div></div>` : `
+      <div class="pbx-hero" id="pbxHero" style="${m.image ? `--bg:url('${escapeHtml(m.image)}')` : ''}">
+        <span class="pbx-map-bg"></span>
+        <button type="button" class="pbx-back" id="pbxBack">‹ Všechny mapy</button>
+        <div class="pbx-hero-c"><b>${escapeHtml(name)}</b><small>${list.length} strategií</small></div>
+        ${sbs.length ? `<div class="pbx-sbs">${sbs.map(sb => `<a class="pbx-sb" href="${escapeHtml(pbRepoUrls(sb.file)[pbRepoUrls(sb.file).length - 1])}" target="_blank" rel="noopener" download="${escapeHtml((sb.title || 'stratbook') + '.pdf')}"><span>📕</span><span><b>STRAT BOOK</b><small>${escapeHtml(sb.title || name)}</small></span><span>⤓</span></a>`).join('')}</div>` : ''}
+      </div>`}
+      <div class="pbx-filters">
+        ${chip('side', 'all', 'Vše')}${chip('side', 'T', 'T strana', PB_SIDES.T.c)}${chip('side', 'CT', 'CT strana', PB_SIDES.CT.c)}
+        <span class="pbx-sep"></span>
+        ${chip('kind', 'all', 'Všechny typy')}${Object.keys(PB_KINDS).filter(k => (isSearch ? ents : ents.filter(e => e.map === name)).some(e => e.kind === k)).map(k => chip('kind', k, PB_KINDS[k].label, PB_KINDS[k].c)).join('')}
+        <span class="pbx-sep"></span>
+        <button type="button" class="pbx-chip mine${pbxState.mine ? ' on' : ''}" data-k="mine">🎯 Jen moje úkoly</button>
+      </div>
+      <div class="pbx-cards">${list.length ? list.map(pbxCard).join('') : `<div class="pbx-empty"><b>🗺️</b>${pbxState.mine ? 'Tady pro tebe zatím žádný úkol není.' : 'Zatím žádné strategie.'}</div>`}</div>`;
+    document.getElementById('pbxBack').addEventListener('click', () => { pbxState.view = 'maps'; pbxState.q = ''; pbxState.mine = false; renderPlaybookGrid(); document.getElementById('playbooky').scrollIntoView({ behavior:'smooth', block:'start' }); });
+    view.querySelectorAll('.pbx-chip').forEach(b => b.addEventListener('click', () => {
+      if(b.dataset.k === 'mine') pbxState.mine = !pbxState.mine; else pbxState[b.dataset.k] = b.dataset.v;
+      pbxRenderView(false);
+    }));
+    view.querySelectorAll('.pbx-card').forEach(c => c.addEventListener('click', () => openPlaybookDetail(c.dataset.id, c)));
+  }
+
+  // FLIP: dlaždice mapy se „roztáhne“ do hlavičky mapy
+  function pbxOpenMap(name, tile){
+    const from = tile ? tile.getBoundingClientRect() : null;
+    pbxState.view = 'map'; pbxState.map = name; pbxState.side = 'all'; pbxState.kind = 'all';
+    pbxRenderView(true);
+    const hero = document.getElementById('pbxHero');
+    if(!from || !hero || !hero.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const to = hero.getBoundingClientRect();
+    hero.animate([
+      { transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`, borderRadius: '18px' },
+      { transform: 'none', borderRadius: '18px' }
+    ], { duration: 620, easing: 'cubic-bezier(.2,.9,.2,1)' });
+    hero.style.transformOrigin = 'top left';
+  }
+
+  /* ---------- Vlastní přehrávač ---------- */
+  function FzPlayer(host, srcs, chapters){
+    host.innerHTML = `
+      <div class="fzp" tabindex="0">
+        <video playsinline preload="metadata">${srcs.map(s => `<source src="${escapeHtml(s)}" type="video/mp4">`).join('')}</video>
+        <img class="fzp-logo" alt="Freezers" src="${window.FZ_LOGO || ''}">
+        <div class="fzp-chap" hidden></div>
+        <button type="button" class="fzp-big" aria-label="Přehrát">▶</button>
+        <div class="fzp-load"><i></i></div>
+        <div class="fzp-ui">
+          <div class="fzp-bar"><div class="fzp-buf"></div><div class="fzp-prog"></div><div class="fzp-marks"></div><div class="fzp-knob"></div><div class="fzp-tip" hidden></div></div>
+          <div class="fzp-row">
+            <button type="button" class="fzp-b fzp-play" aria-label="Přehrát/pauza">▶</button>
+            <button type="button" class="fzp-b" data-skip="-5" aria-label="-5 s">↺5</button>
+            <button type="button" class="fzp-b" data-skip="5" aria-label="+5 s">5↻</button>
+            <span class="fzp-time">0:00 / 0:00</span>
+            <span class="fzp-sp"></span>
+            <button type="button" class="fzp-b fzp-prev" aria-label="Předchozí kapitola" title="Předchozí kapitola">⏮</button>
+            <button type="button" class="fzp-b fzp-next" aria-label="Další kapitola" title="Další kapitola">⏭</button>
+            <button type="button" class="fzp-b fzp-rate" title="Rychlost">1×</button>
+            <button type="button" class="fzp-b fzp-mute" aria-label="Zvuk">🔊</button>
+            <input type="range" class="fzp-vol" min="0" max="1" step="0.05" value="1" aria-label="Hlasitost">
+            <button type="button" class="fzp-b fzp-fs" aria-label="Celá obrazovka">⛶</button>
+          </div>
+        </div>
+        <div class="fzp-err" hidden>Video se nepodařilo načíst.</div>
+      </div>`;
+    const root = host.querySelector('.fzp'), v = root.querySelector('video');
+    const $ = s => root.querySelector(s);
+    const bar = $('.fzp-bar'), tip = $('.fzp-tip'), chap = $('.fzp-chap');
+    let hideT = 0, lastChap = -1;
+    const RATES = [0.5, 0.75, 1, 1.25, 1.5, 2];
+    function chapAt(t){ let c = -1; chapters.forEach((x, i) => { if(t + 0.25 >= x.sec) c = i; }); return c; }
+    function showUi(){ root.classList.add('ui'); clearTimeout(hideT); if(!v.paused) hideT = setTimeout(() => root.classList.remove('ui'), 2600); }
+    function paintMarks(){
+      if(!v.duration) return;
+      $('.fzp-marks').innerHTML = chapters.filter(c => c.sec < v.duration).map(c => `<i style="left:${c.sec / v.duration * 100}%"></i>`).join('');
+    }
+    function update(){
+      const d = v.duration || 0, t = v.currentTime || 0;
+      $('.fzp-prog').style.width = d ? (t / d * 100) + '%' : 0;
+      $('.fzp-knob').style.left = d ? (t / d * 100) + '%' : 0;
+      $('.fzp-time').textContent = pbFmt(t) + ' / ' + pbFmt(d);
+      try{ if(v.buffered.length && d) $('.fzp-buf').style.width = (v.buffered.end(v.buffered.length - 1) / d * 100) + '%'; }catch(_){}
+      const c = chapAt(t);
+      if(c !== lastChap){
+        lastChap = c;
+        document.querySelectorAll('.pbd-line').forEach(l => l.classList.remove('now'));
+        if(c >= 0){
+          chap.hidden = false; chap.textContent = pbFmt(chapters[c].sec) + ' · ' + chapters[c].label;
+          chap.classList.remove('pop'); void chap.offsetWidth; chap.classList.add('pop');
+          const btn = document.querySelector(`.pbd-ts[data-sec="${chapters[c].sec}"]`);
+          if(btn){ const ln = btn.closest('.pbd-line'); if(ln) ln.classList.add('now'); }
+        }else chap.hidden = true;
+      }
+    }
+    function toggle(){ if(v.paused){ v.play().catch(() => {}); } else v.pause(); }
+    v.addEventListener('play', () => { root.classList.add('playing'); $('.fzp-play').textContent = '❚❚'; showUi(); });
+    v.addEventListener('pause', () => { root.classList.remove('playing'); $('.fzp-play').textContent = '▶'; root.classList.add('ui'); });
+    v.addEventListener('timeupdate', update);
+    v.addEventListener('progress', update);
+    v.addEventListener('loadedmetadata', () => { paintMarks(); update(); root.classList.add('ready'); });
+    v.addEventListener('waiting', () => root.classList.add('wait'));
+    v.addEventListener('playing', () => root.classList.remove('wait'));
+    v.addEventListener('canplay', () => root.classList.remove('wait'));
+    const lastSrc = v.querySelectorAll('source'); if(lastSrc.length) lastSrc[lastSrc.length - 1].addEventListener('error', () => { $('.fzp-err').hidden = false; });
+    v.addEventListener('click', toggle);
+    v.addEventListener('dblclick', () => $('.fzp-fs').click());
+    $('.fzp-big').addEventListener('click', toggle);
+    $('.fzp-play').addEventListener('click', toggle);
+    root.querySelectorAll('[data-skip]').forEach(b => b.addEventListener('click', () => { v.currentTime = Math.max(0, v.currentTime + +b.dataset.skip); }));
+    $('.fzp-prev').addEventListener('click', () => { const c = chapAt(v.currentTime - 1.5); seek(c >= 0 ? chapters[c].sec : 0); });
+    $('.fzp-next').addEventListener('click', () => { const n = chapters.find(c => c.sec > v.currentTime + 0.3); if(n) seek(n.sec); });
+    $('.fzp-rate').addEventListener('click', e => { const i = (RATES.indexOf(v.playbackRate) + 1) % RATES.length; v.playbackRate = RATES[i]; e.target.textContent = RATES[i] + '×'; });
+    $('.fzp-mute').addEventListener('click', e => { v.muted = !v.muted; e.target.textContent = v.muted ? '🔇' : '🔊'; });
+    $('.fzp-vol').addEventListener('input', e => { v.volume = +e.target.value; v.muted = v.volume === 0; $('.fzp-mute').textContent = v.muted ? '🔇' : '🔊'; });
+    $('.fzp-fs').addEventListener('click', () => {
+      if(document.fullscreenElement) document.exitFullscreen();
+      else if(root.requestFullscreen) root.requestFullscreen().catch(() => {});
+      else if(v.webkitEnterFullscreen) v.webkitEnterFullscreen();
     });
+    const seekFromEvent = e => { const r = bar.getBoundingClientRect(); const p = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); if(v.duration) v.currentTime = p * v.duration; };
+    let dragging = false;
+    bar.addEventListener('pointerdown', e => { dragging = true; bar.setPointerCapture(e.pointerId); seekFromEvent(e); });
+    bar.addEventListener('pointermove', e => {
+      const r = bar.getBoundingClientRect(); const p = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+      if(dragging) seekFromEvent(e);
+      if(v.duration){ const t = p * v.duration, c = chapAt(t); tip.hidden = false; tip.style.left = (p * 100) + '%'; tip.textContent = pbFmt(t) + (c >= 0 ? ' · ' + chapters[c].label.slice(0, 32) : ''); }
+    });
+    bar.addEventListener('pointerup', () => { dragging = false; });
+    bar.addEventListener('pointerleave', () => { tip.hidden = true; });
+    root.addEventListener('pointermove', showUi);
+    root.addEventListener('keydown', e => {
+      const k = e.key.toLowerCase();
+      if(k === ' ' || k === 'k'){ e.preventDefault(); toggle(); }
+      else if(k === 'arrowleft' || k === 'j'){ e.preventDefault(); v.currentTime = Math.max(0, v.currentTime - 5); }
+      else if(k === 'arrowright' || k === 'l'){ e.preventDefault(); v.currentTime += 5; }
+      else if(k === ','){ v.pause(); v.currentTime = Math.max(0, v.currentTime - 1 / 30); }
+      else if(k === '.'){ v.pause(); v.currentTime += 1 / 30; }
+      else if(k === 'f'){ $('.fzp-fs').click(); }
+      else if(k === 'm'){ $('.fzp-mute').click(); }
+      showUi();
+    });
+    root.classList.add('ui');
+    function seek(sec){
+      if(!isFinite(sec)) return;
+      v.currentTime = sec; v.play().catch(() => {});
+      root.classList.add('jump'); setTimeout(() => root.classList.remove('jump'), 500);
+      root.focus({ preventScroll: true });
+    }
+    return { seek, destroy(){ try{ v.pause(); v.removeAttribute('src'); v.querySelectorAll('source').forEach(s => s.remove()); v.load(); }catch(_){} host.innerHTML = ''; } };
+  }
+
+  function openPlaybookDetail(id, fromEl){
+    const en = playbookCache ? playbookCache.entries.find(e => e.id === id) : null;
+    if(!en) return;
+    destroyPbPlayer();
+    const parsed = pbParseDesc(en.description);
+    const ytid = youtubeVideoId(en.videoLink);
+    const mp4 = en.videoFile ? pbRepoUrls(en.videoFile) : (/\.(mp4|webm|mov)(\?|$)/i.test(en.videoLink || '') ? [en.videoLink] : []);
+    const kind = PB_KINDS[en.kind], side = PB_SIDES[en.side];
+    const content = document.getElementById('playbookDetailContent');
+    content.innerHTML = `
+      <div class="pbx-d">
+        <div class="pbx-d-left">
+          ${mp4.length || ytid ? `<div class="pbx-d-player" id="pbxPlayerHost">${ytid ? '<div class="pb-player-wrap"><div id="pbPlayerHost"></div><img class="fzp-logo" alt="Freezers" src="' + (window.FZ_LOGO || '') + '"></div>' : ''}</div>` : `<div class="pbx-d-novid">Bez videa</div>`}
+          ${parsed.chapters.length ? `<div class="pbx-d-chaps">${parsed.chapters.map(c => `<button type="button" class="pb-ts pbx-d-chap" data-sec="${c.sec}"><b>${pbFmt(c.sec)}</b> ${escapeHtml(c.label)}</button>`).join('')}</div>` : ''}
+          <div class="pbx-d-keys">Zkratky: <kbd>mezerník</kbd> play · <kbd>←</kbd><kbd>→</kbd> ±5 s · <kbd>,</kbd><kbd>.</kbd> po snímku · <kbd>F</kbd> celá obrazovka</div>
+        </div>
+        <div class="pbx-d-right">
+          <div class="pbx-d-tags"><em>${escapeHtml(en.map)}</em>${side ? `<em style="--tc:${side.c}">${side.label} strana</em>` : ''}${kind ? `<em style="--tc:${kind.c}">${kind.label}</em>` : ''}<em>${CATEGORY_LABELS[en.visibility] || 'Main'}</em></div>
+          <h3 class="pbx-d-title">${escapeHtml(en.title)}</h3>
+          ${parsed.mine.length ? `<div class="pbx-d-mine"><div class="pbx-d-mine-h">🎯 Tvůj úkol</div>${parsed.mine.map(x => `<div class="pbd-line">${x.sec !== null ? `<button type="button" class="pb-ts pbd-ts" data-sec="${x.sec}">${pbFmt(x.sec)}</button>` : ''}<span>${x.html}</span></div>`).join('')}</div>` : ''}
+          <div class="pbx-d-desc">${parsed.html || '<p class="bk-muted">Bez popisu.</p>'}</div>
+        </div>
+      </div>`;
+    if(mp4.length){ fzPlayerInst = FzPlayer(document.getElementById('pbxPlayerHost'), mp4, parsed.chapters); }
+    else if(ytid){ initPbPlayer(ytid); }
+    content.querySelectorAll('.pb-ts').forEach(btn => btn.addEventListener('click', () => {
+      const sec = parseInt(btn.dataset.sec, 10) || 0;
+      if(fzPlayerInst) fzPlayerInst.seek(sec); else pbSeekTo(sec);
+      btn.classList.remove('hit'); void btn.offsetWidth; btn.classList.add('hit');
+      if(window.innerWidth < 900){ const p = document.getElementById('pbxPlayerHost'); if(p) p.scrollIntoView({ behavior:'smooth', block:'start' }); }
+    }));
+    const ov = document.getElementById('playbookDetailOverlay');
+    ov.classList.add('show');
+    const card = ov.querySelector('.modal-card');
+    if(fromEl && card.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const a = fromEl.getBoundingClientRect(), b = card.getBoundingClientRect();
+      card.animate([
+        { transform: `translate(${a.left + a.width / 2 - (b.left + b.width / 2)}px, ${a.top + a.height / 2 - (b.top + b.height / 2)}px) scale(${Math.max(.2, a.width / b.width)})`, opacity: .2 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: 480, easing: 'cubic-bezier(.2,.9,.2,1)' });
+    }
   }
 
   function youtubeVideoId(url){
@@ -6396,6 +6979,7 @@
     }
   }
   function destroyPbPlayer(){
+    if(typeof fzPlayerInst !== 'undefined' && fzPlayerInst){ try{ fzPlayerInst.destroy(); }catch(e){} fzPlayerInst = null; }
     if(pbPlayer && typeof pbPlayer.destroy === 'function'){
       try{ pbPlayer.destroy(); }catch(e){}
     }
@@ -6403,40 +6987,128 @@
     pbVideoId = '';
   }
 
-  function openPlaybookDetail(id){
-    const en = playbookCache ? playbookCache.entries.find(e => e.id === id) : null;
-    if(!en) return;
-    const vid = youtubeVideoId(en.videoLink);
-    document.getElementById('playbookDetailContent').innerHTML = `
-      <h3 class="pb-detail-title">${escapeHtml(en.title)}</h3>
-      <div class="pb-detail-meta">
-        <span class="admin-cal-tag">${escapeHtml(en.map)}</span>
-        <span class="admin-cal-tag${en.visibility === 'academy' ? ' academy' : ''}">${CATEGORY_LABELS[en.visibility] || 'Main'}</span>
-      </div>
-      ${vid ? '<div class="pb-player-wrap"><div id="pbPlayerHost"></div></div>' : ''}
-      <p class="pb-detail-desc">${renderDescriptionWithTimestamps(en.description) || 'Bez popisu.'}</p>
-      ${en.videoLink && !vid ? `<a class="btn-ghost" href="${escapeHtml(en.videoLink)}" target="_blank" rel="noopener">Přehrát video</a>` : ''}
-    `;
-    document.querySelectorAll('#playbookDetailContent .pb-ts').forEach(btn => {
-      btn.addEventListener('click', () => pbSeekTo(parseInt(btn.dataset.sec, 10) || 0));
-    });
-    if(vid) initPbPlayer(vid);
-    document.getElementById('playbookDetailOverlay').classList.add('show');
-  }
   document.getElementById('closePlaybookDetailBtn').addEventListener('click', function(){
     closeOverlay(document.getElementById('playbookDetailOverlay'));
   });
   document.getElementById('openMemberLoginPb').addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
 
-  /* ---- Admin: správa playbooků ---- */
+  /* ---- Admin: správa playbooků (MP4 upload, editace, STRAT BOOKy) ---- */
+  let pbEditingId = null;
+  function pbUploadBinary(path, file, message, onProgress){
+    // soubor → base64 → Worker (stejná akce „put“ jako u JSON souborů) s průběhem nahrávání
+    return new Promise((resolve, reject) => {
+      const token = getSessionToken();
+      if(!token) return reject(new Error('Nejsi přihlášený.'));
+      const fr = new FileReader();
+      fr.onerror = () => reject(new Error('Soubor se nepodařilo přečíst.'));
+      fr.onload = () => {
+        const b64 = String(fr.result).split(',')[1] || '';
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', STEAM_API_URL + '/gh-proxy');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-Session-Token', token);
+        xhr.upload.onprogress = e => { if(e.lengthComputable && onProgress) onProgress(e.loaded / e.total); };
+        xhr.onload = () => {
+          if(xhr.status >= 200 && xhr.status < 300) return resolve();
+          let msg = 'Server odmítl soubor (' + xhr.status + ')';
+          try{ const j = JSON.parse(xhr.responseText); if(j.error || j.message) msg += ': ' + (j.error || j.message); }catch(_){}
+          if(xhr.status === 413) msg = 'Soubor je na server moc velký — zmenši ho (720p, kratší klip) nebo použij odkaz.';
+          reject(new Error(msg));
+        };
+        xhr.onerror = () => reject(new Error('Spojení se serverem selhalo (soubor je možná moc velký).'));
+        xhr.send(JSON.stringify({ action: 'put', path, message, content: b64, branch: GH_BRANCH }));
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+  function pbSetProg(p){
+    const bar = document.getElementById('pbUpProg');
+    if(p === null){ bar.style.display = 'none'; return; }
+    bar.style.display = 'block'; bar.querySelector('i').style.width = Math.round(p * 100) + '%';
+  }
+  (function initPbAdminForm(){
+    const kind = document.getElementById('pb-kind');
+    kind.innerHTML = '<option value="">—</option>' + Object.entries(PB_KINDS).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+    const desc = document.getElementById('pb-desc'), prev = document.getElementById('pbDescPreview');
+    const paint = () => { prev.innerHTML = pbParseDesc(desc.value).html || '<span class="admin-hint">Tady uvidíš, jak bude popisek vypadat.</span>'; };
+    desc.addEventListener('input', paint); paint();
+    document.querySelectorAll('input[name="pb-vsrc"]').forEach(r => r.addEventListener('change', () => {
+      const f = document.querySelector('input[name="pb-vsrc"]:checked').value === 'file';
+      document.getElementById('pbFileField').style.display = f ? '' : 'none';
+      document.getElementById('pbUrlField').style.display = f ? 'none' : '';
+    }));
+    const file = document.getElementById('pb-file'), pv = document.getElementById('pbPreviewVid');
+    file.addEventListener('change', () => {
+      const f = file.files[0]; const info = document.getElementById('pbFileInfo');
+      if(!f){ pv.hidden = true; info.textContent = ''; return; }
+      const mb = f.size / 1048576;
+      info.innerHTML = `${escapeHtml(f.name)} · <b>${mb.toFixed(1)} MB</b>` + (mb > 95 ? ' · <span style="color:#ef4444">moc velké (max ~95 MB) — zmenši video</span>' : mb > 40 ? ' · <span style="color:#f59e0b">velké, nahrávání může trvat déle</span>' : ' · ✔ v pořádku');
+      pv.src = URL.createObjectURL(f); pv.hidden = false;
+    });
+    document.getElementById('pbInsertTime').addEventListener('click', () => {
+      const t = pv.hidden ? 0 : pv.currentTime;
+      const ins = pbFmt(t) + ' ';
+      const s = desc.selectionStart, ln = desc.value.lastIndexOf('\n', s - 1) + 1;
+      desc.value = desc.value.slice(0, ln) + ins + desc.value.slice(ln);
+      desc.focus(); desc.selectionStart = desc.selectionEnd = s + ins.length; paint();
+    });
+    async function chips(){
+      let r = (typeof rosterCache !== 'undefined' && rosterCache) || null;
+      if(!r){ try{ r = await fetchRosterPublic(); rosterCache = rosterCache || r; }catch(_){} }
+      const names = pbRosterNames();
+      document.getElementById('pbPlayerChips').innerHTML = names.map(n => `<button type="button" data-n="${escapeHtml(n)}" style="color:${pbPlayerColor(n)};border-color:${pbPlayerColor(n)}">@${escapeHtml(n)}</button>`).join('');
+      document.querySelectorAll('#pbPlayerChips button').forEach(b => b.addEventListener('click', () => {
+        const ins = '@' + b.dataset.n + ' ', s = desc.selectionStart;
+        desc.value = desc.value.slice(0, s) + ins + desc.value.slice(desc.selectionEnd); desc.focus(); desc.selectionStart = desc.selectionEnd = s + ins.length; paint();
+      }));
+    }
+    chips();
+    document.getElementById('pbCancelEdit').addEventListener('click', pbResetForm);
+  })();
+  function pbResetForm(){
+    pbEditingId = null;
+    const f = document.getElementById('adminPlaybookForm'); f.reset();
+    document.getElementById('pbFormTitle').textContent = 'Přidat strategii do playbooku';
+    document.getElementById('playbookFormSubmitBtn').textContent = 'Přidat strategii';
+    document.getElementById('pbCancelEdit').style.display = 'none';
+    document.getElementById('pbPreviewVid').hidden = true; document.getElementById('pbFileInfo').textContent = '';
+    document.getElementById('pbFileField').style.display = ''; document.getElementById('pbUrlField').style.display = 'none';
+    document.getElementById('pb-desc').dispatchEvent(new Event('input'));
+  }
+  function pbStartEdit(en){
+    pbEditingId = en.id;
+    document.getElementById('pb-title').value = en.title;
+    document.getElementById('pb-map').value = en.map;
+    document.getElementById('pb-side').value = en.side || '';
+    document.getElementById('pb-kind').value = en.kind || '';
+    document.getElementById('pb-visibility').value = en.visibility;
+    document.getElementById('pb-desc').value = en.description || '';
+    const isUrl = !en.videoFile && !!en.videoLink;
+    document.querySelector(`input[name="pb-vsrc"][value="${isUrl ? 'url' : 'file'}"]`).checked = true;
+    document.getElementById('pbFileField').style.display = isUrl ? 'none' : '';
+    document.getElementById('pbUrlField').style.display = isUrl ? '' : 'none';
+    document.getElementById('pb-video').value = en.videoLink || '';
+    const pv = document.getElementById('pbPreviewVid');
+    if(en.videoFile){ pv.src = pbRepoUrls(en.videoFile).slice(-1)[0]; pv.hidden = false; document.getElementById('pbFileInfo').textContent = 'Současné video zůstane, pokud nevybereš nové.'; }
+    document.getElementById('pbFormTitle').textContent = 'Upravit strategii';
+    document.getElementById('playbookFormSubmitBtn').textContent = 'Uložit změny';
+    document.getElementById('pbCancelEdit').style.display = '';
+    document.getElementById('pb-desc').dispatchEvent(new Event('input'));
+    document.getElementById('adminPlaybookForm').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  async function pbSave(mutate, message){
+    const saved = await ghUpdate(PLAYBOOK_FILE, d => { const n = normalizePlaybook(d || PLAYBOOK_SEED); mutate(n); return n; }, message, () => JSON.parse(JSON.stringify(PLAYBOOK_SEED)));
+    playbookCache = normalizePlaybook(saved);
+    if(document.getElementById('playbookLoggedIn').style.display !== 'none') renderPlaybookGrid();
+    return playbookCache;
+  }
+
   async function renderAdminPlaybookList(){
     const list = document.getElementById('adminPlaybookList');
     try{
       playbookCache = await loadPlaybookData();
       const mapSel = document.getElementById('pb-map');
-      if(mapSel && !mapSel.options.length){
-        mapSel.innerHTML = PLAYBOOK_MAP_NAMES.map(m => `<option value="${m}">${m}</option>`).join('');
-      }
+      if(mapSel && !mapSel.options.length) mapSel.innerHTML = PLAYBOOK_MAP_NAMES.map(m => `<option value="${m}">${m}</option>`).join('');
       if(!playbookCache.entries.length){
         list.innerHTML = '<div class="admin-empty">Zatím žádné strategie.</div>';
       }else{
@@ -6444,151 +7116,148 @@
           <div class="admin-news-row">
             <div class="admin-news-row-text">
               <strong>${escapeHtml(en.title)}</strong>
-              <span>${escapeHtml(en.map)}${en.videoLink ? ' · s videem' : ''}</span>
+              <span>${escapeHtml(en.map)}${en.side ? ' · ' + en.side : ''}${PB_KINDS[en.kind] ? ' · ' + PB_KINDS[en.kind].label : ''}${en.videoFile ? ' · 🎬 MP4' : en.videoLink ? ' · ▶ odkaz' : ''}${pbTagsOf(en.description).length ? ' · 👥 ' + pbTagsOf(en.description).map(escapeHtml).join(', ') : ''}</span>
             </div>
             <div style="display:flex;gap:8px;align-items:center;">
-              <select class="admin-category-select pb-vis-select" data-idx="${idx}" title="Viditelnost strategie">
+              <select class="admin-category-select pb-vis-select" data-id="${escapeHtml(en.id)}" title="Viditelnost strategie">
                 <option value="main"${en.visibility === 'main' ? ' selected' : ''}>Main</option>
                 <option value="academy"${en.visibility === 'academy' ? ' selected' : ''}>Academy</option>
               </select>
-              <button type="button" class="admin-delete-btn" data-idx="${idx}">Smazat</button>
+              <button type="button" class="admin-edit-btn" data-id="${escapeHtml(en.id)}">Upravit</button>
+              <button type="button" class="admin-delete-btn" data-id="${escapeHtml(en.id)}">Smazat</button>
             </div>
           </div>`).join('');
-        list.querySelectorAll('.pb-vis-select').forEach(sel => {
-          sel.addEventListener('change', async function(){
-            const idx = parseInt(sel.dataset.idx, 10);
-            sel.disabled = true;
-            try{
-              const data = await loadPlaybookData();
-              if(data.entries[idx]){
-                data.entries[idx].visibility = sel.value;
-                await savePlaybookData(data, `Playbook viditelnost: ${data.entries[idx].title} -> ${sel.value}`);
-              }
-              playbookCache = data;
-              renderPlaybookGrid();
-              renderAdminPlaybookList();
-            }catch(e){
-              alert('Nepodařilo se změnit viditelnost: ' + e.message);
-              sel.disabled = false;
-            }
-          });
-        });
-        list.querySelectorAll('.admin-delete-btn').forEach(btn => {
-          btn.addEventListener('click', async function(){
-            const idx = parseInt(btn.dataset.idx, 10);
-            const name = playbookCache.entries[idx] ? playbookCache.entries[idx].title : 'strategii';
-            if(!confirm(`Opravdu chceš smazat strategii ${name}?`)) return;
-            btn.disabled = true;
-            btn.textContent = 'Mažu...';
-            try{
-              const data = await loadPlaybookData();
-              data.entries.splice(idx, 1);
-              await savePlaybookData(data, `Smazání strategie z playbooku: ${name}`);
-              playbookCache = data;
-              renderPlaybookGrid();
-              renderAdminPlaybookList();
-            }catch(e){
-              alert('Nepodařilo se smazat strategii: ' + e.message);
-              btn.disabled = false;
-              btn.textContent = 'Smazat';
-            }
-          });
-        });
+        list.querySelectorAll('.pb-vis-select').forEach(sel => sel.addEventListener('change', async () => {
+          sel.disabled = true;
+          try{ await pbSave(d => { const e = d.entries.find(x => x.id === sel.dataset.id); if(e) e.visibility = sel.value; }, 'Playbook viditelnost'); renderAdminPlaybookList(); }
+          catch(e){ alert('Nepodařilo se změnit viditelnost: ' + e.message); sel.disabled = false; }
+        }));
+        list.querySelectorAll('.admin-edit-btn').forEach(b => b.addEventListener('click', () => { const en = playbookCache.entries.find(x => x.id === b.dataset.id); if(en) pbStartEdit(en); }));
+        list.querySelectorAll('.admin-delete-btn').forEach(btn => btn.addEventListener('click', async () => {
+          const en = playbookCache.entries.find(x => x.id === btn.dataset.id);
+          if(!en || !confirm(`Opravdu chceš smazat strategii ${en.title}?`)) return;
+          btn.disabled = true; btn.textContent = 'Mažu...';
+          try{ await pbSave(d => { d.entries = d.entries.filter(x => x.id !== en.id); }, `Smazání strategie: ${en.title}`); renderAdminPlaybookList(); }
+          catch(e){ alert('Nepodařilo se smazat strategii: ' + e.message); btn.disabled = false; btn.textContent = 'Smazat'; }
+        }));
       }
       renderAdminPlaybookMaps();
-      if(memberUsername) renderPlaybookGrid();
     }catch(e){
       list.innerHTML = `<div class="admin-empty">Nepodařilo se načíst playbooky: ${escapeHtml(e.message)}</div>`;
     }
   }
 
-  function renderAdminPlaybookMaps(){
+  async function renderAdminPlaybookMaps(){
     const box = document.getElementById('adminPlaybookMaps');
     if(!playbookCache){ box.innerHTML = ''; return; }
+    const users = (await ghFetchPublic(USERS_FILE)) || [];
     box.innerHTML = playbookCache.maps.map((m, idx) => {
       const isUrl = m.image && m.image.indexOf('data:') !== 0;
+      const sbs = m.stratbooks || [];
       return `
-      <div class="admin-news-row" style="align-items:center;">
-        <div class="admin-news-row-text">
-          <strong>${escapeHtml(m.name)}</strong>
-          <span>${m.image ? 'obrázek nastaven' : 'bez obrázku — čtverec bude tmavý'}</span>
+      <div class="pba-sb" data-idx="${idx}">
+        <div class="admin-news-row" style="align-items:center;border:0;">
+          <div class="admin-news-row-text"><strong>${escapeHtml(m.name)}</strong><span>${m.image ? 'obrázek nastaven' : 'bez obrázku'} · ${sbs.length} strat book${sbs.length === 1 ? '' : 'y'}</span></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+            <input type="file" class="pb-map-file" data-idx="${idx}" accept="image/*" style="font-size:11px;max-width:180px;">
+            <input type="text" class="pb-map-url" data-idx="${idx}" placeholder="https:// URL obrázku" value="${escapeHtml(isUrl ? m.image : '')}" style="background:var(--bg-2);border:1px solid var(--line);color:var(--ice);font-size:12px;padding:7px 9px;border-radius:6px;width:190px;">
+            <button type="button" class="admin-edit-btn pb-map-save" data-idx="${idx}">Uložit URL</button>
+          </div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
-          <input type="file" class="pb-map-file" data-idx="${idx}" accept="image/*" style="font-size:11px;color:var(--ice-dim);max-width:180px;">
-          <input type="text" class="pb-map-url" data-idx="${idx}" placeholder="https:// URL obrázku" value="${escapeHtml(isUrl ? m.image : '')}" style="background:var(--bg-2);border:1px solid var(--line);color:var(--ice);font-size:12px;padding:7px 9px;border-radius:6px;width:190px;">
-          <button type="button" class="admin-edit-btn pb-map-save" data-idx="${idx}">Uložit URL</button>
-        </div>
+        ${sbs.map(sb => `<div class="pba-sb-row">📕 <span><b>${escapeHtml(sb.title || 'Strat book')}</b> · ${CATEGORY_LABELS[sb.visibility] || 'Main'} · ${sb.players && sb.players.length ? '👥 ' + sb.players.map(u => escapeHtml((users.find(x => x.username === u) || {}).displayName || u)).join(', ') : 'celá sestava'}</span><a class="admin-edit-btn" href="${escapeHtml(pbRepoUrls(sb.file).slice(-1)[0])}" target="_blank" rel="noopener">Otevřít</a><button type="button" class="admin-delete-btn pb-sb-del" data-map="${escapeHtml(m.name)}" data-id="${escapeHtml(sb.id)}">Smazat</button></div>`).join('')}
+        <details style="margin-top:6px;"><summary style="cursor:pointer;font-size:12.5px;color:var(--turquoise);font-weight:700;">+ Nahrát STRAT BOOK (PDF)</summary>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center;">
+            <input type="text" class="pb-sb-title" placeholder="Název (např. ${escapeHtml(m.name)} T-side v1)" style="flex:1;min-width:180px;background:var(--bg-2);border:1px solid var(--line);color:var(--ice);font-size:12.5px;padding:8px 10px;border-radius:8px;">
+            <select class="admin-category-select pb-sb-vis"><option value="main">Main</option><option value="academy">Academy</option></select>
+            <input type="file" class="pb-sb-file" accept="application/pdf" style="font-size:11px;">
+          </div>
+          <div class="admin-hint" style="margin:8px 0 2px;">Kdo si ho může stáhnout (nikdo nezaškrtnutý = celá sestava kategorie):</div>
+          <div class="pba-players">${users.map(u => `<label><input type="checkbox" class="pb-sb-p" value="${escapeHtml(u.username)}"> ${escapeHtml(u.displayName || u.username)}</label>`).join('') || '<span class="admin-hint">Žádné účty.</span>'}</div>
+          <button type="button" class="submit-btn pb-sb-up" data-idx="${idx}" style="padding:9px 16px;font-size:13px;">Nahrát PDF</button> <span class="admin-hint pb-sb-msg" style="margin:0;"></span>
+        </details>
       </div>`;
     }).join('');
-    box.querySelectorAll('.pb-map-file').forEach(inp => {
-      inp.addEventListener('change', async function(){
-        const idx = parseInt(inp.dataset.idx, 10);
-        const file = inp.files[0];
-        if(!file) return;
-        inp.disabled = true;
-        try{
-          const dataUrl = await readAndCompressImage(file, 900, 0.7);
-          const data = await loadPlaybookData();
-          data.maps[idx].image = dataUrl;
-          await savePlaybookData(data, `Obrázek mapy ${data.maps[idx].name}`);
-          playbookCache = data;
-          renderPlaybookGrid();
-          renderAdminPlaybookMaps();
-        }catch(e){
-          alert('Nepodařilo se nahrát obrázek mapy: ' + e.message);
-          inp.disabled = false;
-        }
-      });
-    });
-    box.querySelectorAll('.pb-map-save').forEach(btn => {
-      btn.addEventListener('click', async function(){
-        const idx = parseInt(btn.dataset.idx, 10);
-        const urlInput = box.querySelector(`.pb-map-url[data-idx="${idx}"]`);
-        const url = urlInput ? urlInput.value.trim() : '';
-        btn.disabled = true;
-        try{
-          const data = await loadPlaybookData();
-          data.maps[idx].image = url;
-          await savePlaybookData(data, `URL obrázku mapy ${data.maps[idx].name}`);
-          playbookCache = data;
-          renderPlaybookGrid();
-          renderAdminPlaybookMaps();
-        }catch(e){
-          alert('Nepodařilo se uložit obrázek mapy: ' + e.message);
-          btn.disabled = false;
-        }
-      });
-    });
+    box.querySelectorAll('.pb-map-file').forEach(inp => inp.addEventListener('change', async () => {
+      const idx = parseInt(inp.dataset.idx, 10), file = inp.files[0];
+      if(!file) return;
+      inp.disabled = true;
+      try{
+        const dataUrl = await readAndCompressImage(file, 1200, 0.72);
+        await pbSave(d => { d.maps[idx].image = dataUrl; }, `Obrázek mapy ${playbookCache.maps[idx].name}`);
+        renderAdminPlaybookMaps();
+      }catch(e){ alert('Nepodařilo se nahrát obrázek mapy: ' + e.message); inp.disabled = false; }
+    }));
+    box.querySelectorAll('.pb-map-save').forEach(btn => btn.addEventListener('click', async () => {
+      const idx = parseInt(btn.dataset.idx, 10);
+      const url = box.querySelector(`.pb-map-url[data-idx="${idx}"]`).value.trim();
+      btn.disabled = true;
+      try{ await pbSave(d => { d.maps[idx].image = url; }, `URL obrázku mapy ${playbookCache.maps[idx].name}`); renderAdminPlaybookMaps(); }
+      catch(e){ alert('Nepodařilo se uložit obrázek mapy: ' + e.message); btn.disabled = false; }
+    }));
+    box.querySelectorAll('.pb-sb-up').forEach(btn => btn.addEventListener('click', async () => {
+      const wrapEl = btn.closest('.pba-sb'), idx = parseInt(btn.dataset.idx, 10), m = playbookCache.maps[idx];
+      const file = wrapEl.querySelector('.pb-sb-file').files[0], msg = wrapEl.querySelector('.pb-sb-msg');
+      if(!file){ msg.textContent = 'Vyber PDF.'; return; }
+      if(file.size > 60 * 1048576){ msg.textContent = 'PDF je moc velké (max 60 MB).'; return; }
+      const id = 'sb_' + Date.now();
+      const path = `stratbooks/${m.name.toLowerCase()}-${id}.pdf`;
+      const title = wrapEl.querySelector('.pb-sb-title').value.trim() || (m.name + ' Strat book');
+      const players = Array.from(wrapEl.querySelectorAll('.pb-sb-p:checked')).map(c => c.value);
+      const visibility = wrapEl.querySelector('.pb-sb-vis').value;
+      btn.disabled = true;
+      try{
+        await pbUploadBinary(path, file, `Strat book ${m.name}: ${title}`, p => { msg.textContent = 'Nahrávám… ' + Math.round(p * 100) + ' %'; });
+        msg.textContent = 'Ukládám…';
+        await pbSave(d => { const mm = d.maps.find(x => x.name === m.name); mm.stratbooks = (mm.stratbooks || []).concat([{ id, title, file: path, players, visibility, uploadedAt: new Date().toISOString() }]); }, `Strat book ${m.name}: ${title}`);
+        renderAdminPlaybookMaps();
+      }catch(e){ msg.textContent = '⚠ ' + e.message; btn.disabled = false; }
+    }));
+    box.querySelectorAll('.pb-sb-del').forEach(btn => btn.addEventListener('click', async () => {
+      if(!confirm('Smazat tento strat book z webu?')) return;
+      btn.disabled = true;
+      try{ await pbSave(d => { const mm = d.maps.find(x => x.name === btn.dataset.map); if(mm) mm.stratbooks = (mm.stratbooks || []).filter(s => s.id !== btn.dataset.id); }, 'Smazání strat booku'); renderAdminPlaybookMaps(); }
+      catch(e){ alert(e.message); btn.disabled = false; }
+    }));
   }
 
   document.getElementById('adminPlaybookForm').addEventListener('submit', async function(e){
     e.preventDefault();
-    const submitBtn = document.getElementById('playbookFormSubmitBtn');
+    const submitBtn = document.getElementById('playbookFormSubmitBtn'), msg = document.getElementById('pbSaveMsg');
     const title = document.getElementById('pb-title').value.trim();
     const map = document.getElementById('pb-map').value;
-    const videoLink = document.getElementById('pb-video').value.trim();
+    const side = document.getElementById('pb-side').value;
+    const kind = document.getElementById('pb-kind').value;
     const visibility = document.getElementById('pb-visibility').value === 'academy' ? 'academy' : 'main';
     const description = document.getElementById('pb-desc').value.trim();
+    const useFile = document.querySelector('input[name="pb-vsrc"]:checked').value === 'file';
+    const file = useFile ? document.getElementById('pb-file').files[0] : null;
+    const videoLink = useFile ? '' : document.getElementById('pb-video').value.trim();
+    if(file && file.size > 95 * 1048576){ msg.textContent = '⚠ Video je moc velké (max ~95 MB). Zmenši ho nebo použij odkaz.'; return; }
+    const id = pbEditingId || ('pb_' + Date.now());
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Ukládám...';
     try{
-      const data = await loadPlaybookData();
-      data.entries.push({
-        id: 'pb_' + Date.now(),
-        title, map, videoLink, description,
-        addedAt: new Date().toISOString(),
-        visibility
-      });
-      await savePlaybookData(data, `Přidání strategie (${CATEGORY_LABELS[visibility]}): ${title}`);
-      playbookCache = data;
-      e.target.reset();
-      renderPlaybookGrid();
+      let videoFile = null;
+      if(file){
+        const ext = (file.name.match(/\.(mp4|webm|mov)$/i) || ['.mp4'])[0].toLowerCase();
+        videoFile = `playbook-videos/${id}-${Date.now()}${ext}`;
+        msg.textContent = 'Nahrávám video…';
+        await pbUploadBinary(videoFile, file, `Playbook video: ${title}`, p => { pbSetProg(p); msg.textContent = 'Nahrávám video… ' + Math.round(p * 100) + ' %'; });
+      }
+      msg.textContent = 'Ukládám strategii…';
+      await pbSave(d => {
+        const prevE = d.entries.find(x => x.id === id);
+        const entry = Object.assign({}, prevE || {}, { id, title, map, side, kind, visibility, description, addedAt: (prevE && prevE.addedAt) || new Date().toISOString() });
+        if(videoFile){ entry.videoFile = videoFile; entry.videoLink = ''; }
+        else if(!useFile){ entry.videoLink = videoLink; entry.videoFile = ''; }
+        if(prevE) d.entries[d.entries.indexOf(prevE)] = entry; else d.entries.push(entry);
+      }, `${pbEditingId ? 'Úprava' : 'Přidání'} strategie (${CATEGORY_LABELS[visibility]}): ${title}`);
+      pbResetForm();
       renderAdminPlaybookList();
+      msg.textContent = 'Uloženo ✔';
     }catch(err){
-      alert('Nepodařilo se přidat strategii: ' + err.message);
+      msg.textContent = '⚠ ' + err.message;
     }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Přidat strategii';
+      submitBtn.disabled = false; pbSetProg(null);
     }
   });
 
@@ -6661,6 +7330,15 @@
       { role:'Moderátor', name:'M I C H I', dc:'majkloo' }
     ];
     let selected = null;
+    const changeHooks = [];
+    window.akApi = {
+      isOpen: () => wrap.classList.contains('open'),
+      selected: () => selected,
+      setOpen: on => setOpen(on),
+      select: k => select(k),
+      onChange: f => changeHooks.push(f)
+    };
+    const fire = () => changeHooks.forEach(f => { try{ f(); }catch(_){ } });
 
     // Náboje v zásobníku = hráči Main sestavy
     async function fillAmmo(){
@@ -6684,6 +7362,7 @@
       toggle.textContent = on ? '🔩 Složit zpět' : '🔧 Rozebrat zbraň';
       hint.textContent = on ? 'Klikni na díl' : 'Klikni na zbraň a rozeber ji';
       if(!on){ select(null); }
+      fire();
     }
     function select(k){
       selected = k;
@@ -6691,6 +7370,7 @@
       wrap.classList.toggle('has-sel', !!k);
       svg.querySelectorAll('.ak-part').forEach(p => p.classList.toggle('sel', p.dataset.part === k));
       renderInfo();
+      fire();
     }
 
     function partsMenu(){
@@ -6797,6 +7477,353 @@
     setTimeout(sizeLabels, 1500);
     fillAmmo();
     renderInfo();
+  })();
+
+  /* ============ ABOUT US: 3D AK-47 (three.js) ============
+     Skutečný 3D model složený z dílů (pažba, tělo, rukojeť, zásobník, předpažbí, hlaveň, mířidla).
+     Otáčí se myší / prstem, díly se v prostoru rozletí. Three.js se načte až když k sekci doscrolluješ
+     a vykresluje se jen když je sekce vidět (žádný lag jinde na webu). Když WebGL nejde, zůstane 2D verze. */
+  (function(){
+    const wrap = document.getElementById('akWrap');
+    const stage = document.getElementById('akStage');
+    if(!wrap || !stage || !window.akApi) return;
+    const CDN = 'https://cdn.jsdelivr.net/npm/three@0.128.0/';
+    const SCRIPTS = ['build/three.min.js', 'examples/js/controls/OrbitControls.js', 'examples/js/environments/RoomEnvironment.js', 'examples/js/geometries/RoundedBoxGeometry.js'];
+    function loadScript(src){
+      return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.async = false; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+    }
+    function webglOk(){
+      try{ const c = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl'))); }catch(_){ return false; }
+    }
+    let started = false;
+    const io = new IntersectionObserver(es => {
+      if(started || !es.some(e => e.isIntersecting)) return;
+      started = true; io.disconnect();
+      if(!webglOk()) return;
+      (async () => {
+        try{ for(const s of SCRIPTS) await loadScript(CDN + s); init(); }
+        catch(e){ console.warn('3D AK se nenačetlo, zůstává 2D verze', e); }
+      })();
+    }, { rootMargin: '600px 0px' });
+    io.observe(wrap);
+
+    function init(){
+      const T = window.THREE;
+      // ---------- plátno + scéna ----------
+      const host = document.createElement('div');
+      host.className = 'ak3-host';
+      const labels = document.createElement('div');
+      labels.className = 'ak3-labels';
+      host.appendChild(labels);
+      stage.insertBefore(host, document.getElementById('akSvg'));
+      const renderer = new T.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.outputEncoding = T.sRGBEncoding;
+      renderer.toneMapping = T.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 0.82;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = T.PCFSoftShadowMap;
+      host.insertBefore(renderer.domElement, labels);
+      const scene = new T.Scene();
+      const pmrem = new T.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(new T.RoomEnvironment(), 0.04).texture;
+      const camera = new T.PerspectiveCamera(28, 2, 0.1, 100);
+      camera.position.set(0.6, 1.1, 12.5);
+      const controls = new T.OrbitControls(camera, renderer.domElement);
+      controls.enableZoom = false; controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
+      controls.minPolarAngle = Math.PI * 0.22; controls.maxPolarAngle = Math.PI * 0.72;
+      controls.rotateSpeed = 0.7;
+      controls.target.set(0, -0.15, 0);
+
+      const key = new T.DirectionalLight(0xffffff, 2.2); key.position.set(4, 7, 6); key.castShadow = true;
+      key.shadow.mapSize.set(1024, 1024); Object.assign(key.shadow.camera, { left:-8, right:8, top:6, bottom:-6, near:1, far:30 }); key.shadow.radius = 6;
+      scene.add(key);
+      const rim = new T.DirectionalLight(0x5cc8ff, 1.6); rim.position.set(-6, 3, -6); scene.add(rim);
+      const fill = new T.PointLight(0x8b8df7, 1.2, 30); fill.position.set(5, -3, 5); scene.add(fill);
+      scene.add(new T.HemisphereLight(0xbfd8ff, 0x1a1030, 0.35));
+      const ground = new T.Mesh(new T.PlaneGeometry(40, 40), new T.ShadowMaterial({ opacity: 0.32 }));
+      ground.rotation.x = -Math.PI / 2; ground.position.y = -2.55; ground.receiveShadow = true; scene.add(ground);
+
+      // ---------- materiály ----------
+      function woodTexture(){
+        const c = document.createElement('canvas'); c.width = 1024; c.height = 256;
+        const g = c.getContext('2d');
+        const grd = g.createLinearGradient(0, 0, 0, 256); grd.addColorStop(0, '#b4672e'); grd.addColorStop(.5, '#8c4b21'); grd.addColorStop(1, '#6a3415');
+        g.fillStyle = grd; g.fillRect(0, 0, 1024, 256);
+        for(let i = 0; i < 140; i++){
+          const y = Math.random() * 256, a = Math.random() * .22 + .05;
+          g.strokeStyle = `rgba(${Math.random() < .5 ? '40,16,4' : '220,150,90'},${a})`;
+          g.lineWidth = Math.random() * 2.2 + .4;
+          g.beginPath(); g.moveTo(0, y);
+          for(let x = 0; x <= 1024; x += 32) g.lineTo(x, y + Math.sin(x / (60 + Math.random() * 40) + i) * (3 + Math.random() * 4));
+          g.stroke();
+        }
+        for(let i = 0; i < 6; i++){ // suky
+          const x = Math.random() * 1024, y = Math.random() * 256;
+          const r = g.createRadialGradient(x, y, 1, x, y, 18); r.addColorStop(0, 'rgba(50,20,6,.55)'); r.addColorStop(1, 'rgba(50,20,6,0)');
+          g.fillStyle = r; g.beginPath(); g.ellipse(x, y, 26, 8, 0, 0, Math.PI * 2); g.fill();
+        }
+        const t = new T.CanvasTexture(c); t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(0.35, 1.2); t.encoding = T.sRGBEncoding; t.anisotropy = 8;
+        return t;
+      }
+      const woodTex = woodTexture();
+      const MAT = {
+        wood:   () => new T.MeshStandardMaterial({ map: woodTex, color: 0xb07050, roughness: .58, metalness: 0, envMapIntensity: .3, emissiveIntensity: 0 }),
+        steel:  () => new T.MeshStandardMaterial({ color: 0x15171a, roughness: .42, metalness: .85, envMapIntensity: .55, emissiveIntensity: 0 }),
+        steelL: () => new T.MeshStandardMaterial({ color: 0x2e3238, roughness: .36, metalness: .9, envMapIntensity: .6, emissiveIntensity: 0 }),
+        black:  () => new T.MeshStandardMaterial({ color: 0x0a0b0c, roughness: .65, metalness: .4, envMapIntensity: .3, emissiveIntensity: 0 }),
+        brass:  () => new T.MeshStandardMaterial({ color: 0xc9902a, roughness: .3, metalness: 1, envMapIntensity: .8, emissiveIntensity: 0 }),
+        copper: () => new T.MeshStandardMaterial({ color: 0xa8582a, roughness: .32, metalness: 1, envMapIntensity: .7, emissiveIntensity: 0 })
+      };
+
+      // ---------- tvary z 2D profilů (stejné souřadnice jako SVG verze) ----------
+      const X = x => (x - 600) / 100, Y = y => -(y - 180) / 100;
+      function shapeFrom(d){
+        const s = new T.Shape();
+        const tk = d.match(/[MLQCZ]|-?\d*\.?\d+/g); let i = 0, cmd = '';
+        const n = () => parseFloat(tk[i++]);
+        while(i < tk.length){
+          if(/[MLQCZ]/.test(tk[i])) cmd = tk[i++];
+          if(cmd === 'M'){ s.moveTo(X(n()), Y(n())); cmd = 'L'; }
+          else if(cmd === 'L'){ s.lineTo(X(n()), Y(n())); }
+          else if(cmd === 'Q'){ const a = X(n()), b = Y(n()), c = X(n()), e = Y(n()); s.quadraticCurveTo(a, b, c, e); }
+          else if(cmd === 'C'){ const a = X(n()), b = Y(n()), c = X(n()), e = Y(n()), f = X(n()), h = Y(n()); s.bezierCurveTo(a, b, c, e, f, h); }
+          else if(cmd === 'Z'){ s.closePath(); }
+        }
+        return s;
+      }
+      function extrude(d, depth, bevel, mat){
+        const geo = new T.ExtrudeGeometry(shapeFrom(d), { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel * .8, bevelSegments: 4, curveSegments: 24 });
+        geo.translate(0, 0, -depth / 2);
+        geo.computeVertexNormals();
+        const m = new T.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; return m;
+      }
+      function box(w, h, d, mat, x, y, z, r){
+        const geo = (T.RoundedBoxGeometry && r) ? new T.RoundedBoxGeometry(w, h, d, 3, r) : new T.BoxGeometry(w, h, d);
+        const m = new T.Mesh(geo, mat); m.position.set(x, y, z || 0); m.castShadow = true; return m;
+      }
+      function cyl(r1, r2, len, mat, x, y, z, axis, seg){
+        const m = new T.Mesh(new T.CylinderGeometry(r1, r2, len, seg || 32), mat);
+        if(axis === 'x') m.rotation.z = Math.PI / 2; if(axis === 'z') m.rotation.x = Math.PI / 2;
+        m.position.set(x, y, z || 0); m.castShadow = true; return m;
+      }
+
+      const gun = new T.Group(); scene.add(gun);
+      const parts = {};
+      function part(k, anchor){ const g = new T.Group(); g.userData = { part: k, anchor: new T.Vector3(...anchor), mats: [] }; parts[k] = g; gun.add(g); return g; }
+      function add(g, mesh){ g.add(mesh); mesh.traverse(o => { if(o.isMesh){ o.userData.part = g.userData.part; g.userData.mats.push(o.material); } }); return mesh; }
+
+      // PAŽBA
+      let g = part('stock', [X(190), Y(196), .25]);
+      let wood = MAT.wood(), steel = MAT.steel(), steelL = MAT.steelL(), black = MAT.black();
+      add(g, extrude('M332,150 L96,170 Q62,173 54,178 L46,252 Q62,258 82,252 L250,206 Q292,196 332,198 Z', .34, .05, wood));
+      add(g, extrude('M56,176 L48,254 Q40,253 38,248 L44,180 Q47,174 56,176 Z', .42, .02, steel));
+      add(g, cyl(.035, .035, .5, steelL, X(120), Y(214), 0, 'z', 16));
+      // RUKOJEŤ
+      g = part('grip', [X(446), Y(250), .2]); wood = MAT.wood();
+      add(g, extrude('M442,198 L482,198 L466,292 Q462,302 448,302 L424,300 Q412,298 416,286 Z', .26, .045, wood));
+      // ZÁSOBNÍK
+      g = part('mag', [X(548), Y(214), .2]); steel = MAT.steel(); const steelR = MAT.steelL();
+      add(g, extrude('M522,198 L596,198 Q604,252 646,330 L594,354 Q548,290 522,198 Z', .22, .03, steel));
+      [['M534,214 L586,212 L587,220 L536,222 Z'], ['M543,244 L598,240 L600,248 L546,252 Z'], ['M556,274 L611,268 L614,276 L559,282 Z'], ['M570,304 L627,296 L631,304 L574,312 Z']]
+        .forEach(([d]) => add(g, extrude(d, .27, .01, steelR)));
+      add(g, extrude('M594,354 L646,330 L652,342 L600,366 Z', .28, .02, MAT.black()));
+      // náboje (vylétnou při rozložení)
+      const ammo = new T.Group(); g.add(ammo); ammo.visible = false;
+      const brass = MAT.brass(), copper = MAT.copper();
+      for(let k = 0; k < 6; k++){
+        const c = new T.Group();
+        const body = cyl(.075, .075, .46, brass, 0, 0, 0, 'x'); const neck = cyl(.075, .052, .07, brass, .265, 0, 0, 'x');
+        const tip = new T.Mesh(new T.ConeGeometry(.052, .2, 24), copper); tip.rotation.z = -Math.PI / 2; tip.position.x = .4;
+        const rimm = cyl(.08, .08, .03, brass, -.23, 0, 0, 'x');
+        [body, neck, tip, rimm].forEach(o => { o.castShadow = true; c.add(o); o.userData.part = 'mag'; });
+        c.userData.k = k; ammo.add(c);
+      }
+      // TĚLO
+      g = part('receiver', [X(420), Y(170), .2]); steel = MAT.steel(); steelL = MAT.steelL(); black = MAT.black();
+      add(g, extrude('M330,148 L644,146 L644,200 L330,202 Z', .3, .02, steel));
+      add(g, box(3.1, .2, .32, steelL, X(484), Y(142), 0, .09));             // víko pouzdra závěru
+      for(let i = 0; i < 6; i++) add(g, box(.03, .05, .33, steel, X(380 + i * 40), Y(136), 0));
+      add(g, box(1.0, .1, .02, black, X(540), Y(166), .17));                  // výhozní okénko
+      add(g, box(.12, .08, .16, steelL, X(612), Y(166), .23, .02));           // napínací páka
+      add(g, box(1.25, .045, .03, steelL, X(470), Y(178), .17));              // pojistka
+      const guard = new T.Mesh(new T.TorusGeometry(.2, .02, 10, 32, Math.PI), steel); guard.rotation.z = Math.PI; guard.position.set(X(500), Y(204), 0); guard.castShadow = true; add(g, guard);
+      add(g, box(.04, .2, .05, black, X(494), Y(212), 0));                    // spoušť
+      [[350, 160], [350, 190], [630, 160], [630, 190], [470, 192]].forEach(([x, y]) => { add(g, cyl(.022, .022, .34, steelL, X(x), Y(y), 0, 'z', 12)); });
+      // PŘEDPAŽBÍ + plynová trubice
+      g = part('handguard', [X(740), Y(174), .25]); wood = MAT.wood(); steelL = MAT.steelL(); black = MAT.black();
+      add(g, cyl(.08, .08, 2.62, steelL, X(779), Y(140), 0, 'x'));
+      add(g, extrude('M650,126 L812,128 Q826,138 814,150 L650,150 Z', .28, .05, MAT.wood()));
+      add(g, extrude('M646,152 L830,154 Q842,164 832,196 L646,198 Z', .38, .06, wood));
+      [170, 183].forEach(y => { add(g, box(1.2, .03, .02, black, X(740), Y(y), .245)); add(g, box(1.2, .03, .02, black, X(740), Y(y), -.245)); });
+      // HLAVEŇ
+      g = part('barrel', [X(990), Y(168), .15]); steelL = MAT.steelL(); steel = MAT.steel(); black = MAT.black();
+      add(g, cyl(.075, .075, 3.04, steelL, X(980), Y(168), 0, 'x'));
+      add(g, box(.3, .42, .22, steel, X(911), Y(155), 0, .04));               // plynový blok
+      add(g, box(.46, .3, .2, steel, X(1063), Y(165), 0, .04));               // základna mušky
+      add(g, cyl(.11, .11, .48, steel, X(1152), Y(168), 0, 'x'));             // úsťová brzda
+      add(g, box(.04, .16, .25, black, X(1146), Y(168), 0)); add(g, box(.04, .16, .25, black, X(1160), Y(168), 0));
+      add(g, cyl(.025, .025, 2.26, steelL, X(943), Y(185), 0, 'x', 12));       // čisticí tyč
+      // MÍŘIDLA
+      g = part('sights', [X(1062), Y(126), .1]); steelL = MAT.steelL();
+      add(g, extrude('M646,138 L690,132 L692,124 L700,124 L700,138 L646,146 Z', .16, .01, steelL));
+      add(g, extrude('M1052,150 L1056,116 L1068,116 L1072,150 Z', .1, .01, MAT.steelL()));
+      const hood = new T.Mesh(new T.TorusGeometry(.085, .018, 10, 28, Math.PI * 1.2), MAT.steelL()); hood.rotation.y = Math.PI / 2; hood.rotation.x = Math.PI * -.1; hood.position.set(X(1062), Y(122), 0); add(g, hood);
+
+      // vycentrovat zbraň
+      gun.position.set(-0.15, 0.1, 0);
+
+      // ---------- rozložení ----------
+      const EXPLODE = {
+        stock:     { p: [-0.55, 0.3, 0.1],  r: [0, 0, .07] },
+        grip:      { p: [-0.65, -1.0, 0.5], r: [0, .2, .16] },
+        mag:       { p: [0.45, -1.15, 0.7], r: [0, -.25, -.18] },
+        receiver:  { p: [0, 0.35, 0],       r: [0, 0, 0] },
+        handguard: { p: [0.5, 0.95, -0.3],  r: [0, 0, 0] },
+        barrel:    { p: [1.0, -0.4, 0],     r: [0, 0, 0] },
+        sights:    { p: [0.45, 1.55, 0.2],  r: [.25, 0, 0] }
+      };
+      const ORDER = ['stock','grip','mag','receiver','handguard','barrel','sights'];
+      let open = false, tOpen = 0, openStart = 0;
+      const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+      // ---------- popisky + body (HTML nad plátnem) ----------
+      const PART_LBL = { stock:'PAŽBA · Kdo nás vede', grip:'RUKOJEŤ · Chceš se přidat?', mag:'ZÁSOBNÍK · Sestava', receiver:'TĚLO · Kdo jsme', handguard:'PŘEDPAŽBÍ · Hodnoty', barrel:'HLAVEŇ · Jak aktivní jsme', sights:'MÍŘIDLA · Na co míříme' };
+      const lblEls = {};
+      ORDER.forEach(k => {
+        const el = document.createElement('button'); el.type = 'button'; el.className = 'ak3-lbl'; el.dataset.k = k;
+        el.innerHTML = `<i></i><span>${PART_LBL[k]}</span>`;
+        el.addEventListener('click', ev => { ev.stopPropagation(); if(!akApi.isOpen()) akApi.setOpen(true); akApi.select(akApi.selected() === k ? null : k); });
+        labels.appendChild(el); lblEls[k] = el;
+      });
+      const ammoLbls = [];
+      (async () => {
+        let roster = (typeof rosterCache !== 'undefined' && rosterCache) ? rosterCache : null;
+        if(!roster){ try{ roster = await fetchRosterPublic(); }catch(_){} }
+        const names = ((roster || DEFAULT_ROSTER).main || []).filter(p => p.type !== 'empty' && p.name).map(p => p.name).slice(0, 6);
+        ammo.children.forEach((c, k) => { c.visible = k < names.length; });
+        names.forEach((n, k) => { const el = document.createElement('div'); el.className = 'ak3-ammo'; el.textContent = n; labels.appendChild(el); ammoLbls[k] = el; });
+      })();
+
+      // ---------- interakce ----------
+      const ray = new T.Raycaster(), mouse = new T.Vector2();
+      let hover = null, downXY = null, userTouched = false;
+      const meshes = []; gun.traverse(o => { if(o.isMesh) meshes.push(o); });
+      function pick(ev){
+        const r = renderer.domElement.getBoundingClientRect();
+        mouse.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+        ray.setFromCamera(mouse, camera);
+        const hit = ray.intersectObjects(meshes, false)[0];
+        return hit ? hit.object.userData.part : null;
+      }
+      renderer.domElement.addEventListener('pointermove', ev => {
+        if(ev.pointerType === 'touch') return;
+        hover = pick(ev); renderer.domElement.style.cursor = hover ? 'pointer' : 'grab';
+      });
+      renderer.domElement.addEventListener('pointerleave', () => { hover = null; });
+      renderer.domElement.addEventListener('pointerdown', ev => { downXY = [ev.clientX, ev.clientY]; userTouched = true; });
+      renderer.domElement.addEventListener('pointerup', ev => {
+        if(!downXY || Math.hypot(ev.clientX - downXY[0], ev.clientY - downXY[1]) > 6) return;
+        const k = pick(ev);
+        if(!akApi.isOpen()){ akApi.setOpen(true); if(k) setTimeout(() => akApi.select(k), 380); return; }
+        if(k) akApi.select(akApi.selected() === k ? null : k);
+      });
+      akApi.onChange(() => {
+        if(open !== akApi.isOpen()){ open = akApi.isOpen(); openStart = performance.now(); fromT = tOpen; }
+      });
+      let fromT = 0;
+
+      // ---------- smyčka (jen když je sekce vidět) ----------
+      let visible = true, raf = 0;
+      new IntersectionObserver(es => { visible = es[0].isIntersecting; if(visible && !raf) raf = requestAnimationFrame(loop); }, { rootMargin: '100px 0px' }).observe(host);
+      function resize(){
+        const w = host.clientWidth, h = host.clientHeight;
+        if(!w || !h) return;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.fov = 30;
+        camera.updateProjectionMatrix();
+      }
+      new ResizeObserver(resize).observe(host); resize();
+      const tmp = new T.Vector3();
+      const t0 = performance.now();
+      let last = 0;
+      function loop(now){
+        raf = 0;
+        if(!visible){ last = 0; return; }
+        const dt = last ? Math.min(0.1, (now - last) / 1000) : 0.016; last = now;
+        const time = (now - t0) / 1000;
+        // tween rozložení
+        const dur = 1100;
+        const k = Math.min(1, (now - openStart) / dur);
+        const target = open ? 1 : 0;
+        tOpen = fromT + (target - fromT) * ease(k);
+        ORDER.forEach((p, i) => {
+          const e = EXPLODE[p], gp = parts[p];
+          const d = Math.max(0, Math.min(1, (tOpen * 1.25) - i * 0.035));
+          const s = ease(d);
+          gp.position.set(e.p[0] * s, e.p[1] * s, e.p[2] * s);
+          gp.rotation.set(e.r[0] * s, e.r[1] * s, e.r[2] * s);
+        });
+        // náboje vějířem
+        ammo.visible = tOpen > 0.02;
+        ammo.children.forEach((c, i) => {
+          const s = ease(Math.max(0, Math.min(1, tOpen * 1.6 - 0.45 - i * 0.07)));
+          c.position.set(X(600) + (1.05 + i * 0.12) * s, Y(262) - i * 0.3 * s, 0.25 * s);
+          c.rotation.set(0, 0, (-0.9 + i * 0.05) * (1 - s));
+          c.scale.setScalar(0.4 + 0.6 * s);
+        });
+        // jemné „inspect“ pohupování
+        if(!userTouched){ const sw = 1 - tOpen * 0.85; gun.rotation.y = Math.sin(time * 0.45) * 0.28 * sw; gun.rotation.x = Math.sin(time * 0.3) * 0.04 * sw; }
+        else { gun.rotation.y *= 0.96; gun.rotation.x *= 0.96; }
+        gun.position.y = 0.1 + Math.sin(time * 1.2) * 0.04 * (1 - tOpen);
+        // vzdálenost kamery tak, aby se celá (i rozložená) zbraň vešla na šířku i výšku
+        const halfW = open ? 7.9 : 6.3, halfH = open ? 3.7 : 2.4;
+        const tv = Math.tan(T.MathUtils.degToRad(camera.fov / 2));
+        const want = Math.max(halfW / (tv * camera.aspect), halfH / tv, 8);
+        const cur = camera.position.distanceTo(controls.target);
+        const nd = cur + (want - cur) * Math.min(1, dt * 4);
+        tmp.copy(camera.position).sub(controls.target).setLength(nd).add(controls.target); camera.position.copy(tmp);
+        controls.update();
+        // zvýraznění
+        const sel = akApi.selected();
+        ORDER.forEach(p => {
+          const on = p === sel || p === hover;
+          const dim = sel && p !== sel;
+          parts[p].userData.mats.forEach(m => {
+            if(!m.userData.base) m.userData.base = { ei: 0 };
+            m.emissive = m.emissive || new T.Color();
+            m.emissive.setHex(0x2a7fd0);
+            m.emissiveIntensity += ((on ? (p === sel ? .28 : .16) : 0) - m.emissiveIntensity) * .2;
+            m.opacity += ((dim ? .35 : 1) - m.opacity) * .15;
+            m.transparent = m.opacity < .99;
+          });
+        });
+        renderer.render(scene, camera);
+        // popisky
+        const w = host.clientWidth, h = host.clientHeight;
+        ORDER.forEach(p => {
+          const el = lblEls[p];
+          tmp.copy(parts[p].userData.anchor); parts[p].localToWorld(tmp); tmp.project(camera);
+          const px = (tmp.x * .5 + .5) * w;
+          el.classList.toggle('l', px > w * 0.58);
+          const off = el.classList.contains('l') ? el.offsetWidth - 16 : 0;
+          el.style.transform = `translate(${px - off}px, ${(-tmp.y * .5 + .5) * h}px)`;
+          // popisek jen u dílu pod myší / vybraného (ať to není nepřehledné), na širokém plátně u všech
+          el.classList.toggle('show', tOpen > .85 && (p === sel || p === hover || w > 1000));
+          el.classList.toggle('sel', p === sel);
+        });
+        ammoLbls.forEach((el, i) => {
+          const c = ammo.children[i]; if(!c || !el) return;
+          tmp.set(.62, 0, 0); c.localToWorld(tmp); tmp.project(camera);
+          el.style.transform = `translate(${(tmp.x * .5 + .5) * w}px, ${(-tmp.y * .5 + .5) * h}px)`;
+          el.classList.toggle('show', tOpen > .9);
+        });
+        raf = requestAnimationFrame(loop);
+      }
+      wrap.classList.add('ak3-on');
+      raf = requestAnimationFrame(loop);
+    }
   })();
 
   /* ============ COOKIE LIŠTA ============ */
