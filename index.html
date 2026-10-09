@@ -1818,6 +1818,40 @@
   .pbx-sb > span:first-child{font-size:22px;}
   .pbx-sb b{display:block;font-family:'Chakra Petch',sans-serif;letter-spacing:.08em;font-size:13px;}
   .pbx-sb small{font-size:11.5px;opacity:.9;}
+  button.pbx-sb{border:0;cursor:pointer;font-family:inherit;text-align:left;}
+  .pbx-sbbar{margin:-4px 0 14px;padding:12px 14px;border:1px solid var(--ep-line);background:var(--ep-card);border-radius:16px;animation:pbxUp .5s .2s cubic-bezier(.2,.9,.2,1) both;}
+  .pbx-sbbar-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-bottom:10px;}
+  .pbx-sbbar-h b{font-family:'Chakra Petch',sans-serif;letter-spacing:.08em;font-size:14px;color:var(--ep-ink);}
+  .pbx-sbbar-h small{font-size:12px;color:#e53935;font-weight:700;}
+  .pbx-sbbar .pbx-sbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;animation:none;}
+  .pbx-sbbar .pbx-sb{padding:9px 12px;min-width:0;}
+  .pbx-sbbar .pbx-sb > span:nth-child(2){flex:1;min-width:0;}
+  .pbx-sbbar .pbx-sb small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  /* souhlas s mlčenlivostí */
+  #sbConsentOverlay .modal-card{max-width:620px;width:100%;text-align:left;max-height:92vh;overflow:auto;}
+  .sbc-head{display:flex;gap:12px;align-items:center;margin-bottom:12px;}
+  .sbc-head .sbc-ic{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#e53935,#8b0000);display:grid;place-items:center;font-size:24px;flex:none;}
+  .sbc-head h3{margin:0;font-family:'Chakra Petch',sans-serif;letter-spacing:.06em;}
+  .sbc-head small{color:var(--muted,#8aa);font-size:12.5px;}
+  .sbc-warn{border:2px solid #e53935;background:rgba(229,57,53,.08);border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.5;margin-bottom:12px;}
+  .sbc-warn b{color:#ff5a55;}
+  .sbc-pen{display:flex;gap:10px;align-items:center;background:#1a0606;color:#fff;border-radius:10px;padding:11px 14px;margin-bottom:12px;font-size:13.5px;}
+  .sbc-pen strong{font-family:'Chakra Petch',sans-serif;letter-spacing:.08em;color:#ff5a55;font-size:15px;}
+  .sbc-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+  .sbc-list label{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;cursor:pointer;padding:8px 10px;border:1px solid var(--line);border-radius:8px;}
+  .sbc-list input{margin-top:3px;width:16px;height:16px;flex:none;accent-color:#e53935;}
+  .sbc-sign{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:12.5px;}
+  .sbc-sign input{background:var(--bg-2);border:1px solid var(--line);color:var(--ice);font-size:15px;padding:10px 12px;border-radius:8px;font-weight:700;letter-spacing:.06em;}
+  .sbc-act{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .sbc-act .submit-btn[disabled]{opacity:.45;cursor:not-allowed;}
+  .sbc-msg{font-size:12.5px;}
+  .pba-bulk{border:1px dashed var(--line);border-radius:10px;padding:12px;margin-bottom:12px;}
+  .pba-bulk table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0;}
+  .pba-bulk td,.pba-bulk th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;}
+  .pba-bulk select,.pba-bulk input[type=text]{background:var(--bg-2);border:1px solid var(--line);color:var(--ice);font-size:12px;padding:5px 7px;border-radius:6px;max-width:100%;}
+  .pba-bulk .ok{color:#3fb950;font-weight:700}.pba-bulk .bad{color:#ff5a55;font-weight:700}
+  .pba-log{max-height:340px;overflow:auto;font-size:12px;}
+  .pba-log table{width:100%;border-collapse:collapse}.pba-log td,.pba-log th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
   .pbx-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px;}
   .pbx-chip{border:1px solid var(--ep-line);background:var(--ep-card);color:var(--ep-ink);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .15s,background .2s,border-color .2s,color .2s;}
   .pbx-chip:hover{transform:translateY(-1px);}
@@ -3140,6 +3174,24 @@
     </div>
     </main>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="sbConsentOverlay">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="sbConsentClose">✕</button>
+    <div class="sbc-head"><span class="sbc-ic">🔒</span><div><h3>DŮVĚRNÝ DOKUMENT</h3><small id="sbConsentTitle">STRAT BOOK</small></div></div>
+    <div class="sbc-warn">Tento STRAT BOOK je <b>přísně důvěrný a intimní interní materiál týmu Freezers Esports</b>. Je určený <b>výhradně tobě</b> jako členovi sestavy.<br>
+      <b>Nesmíš ho sdílet ABSOLUTNĚ s nikým</b> — ani s lidmi, kterým věříš.</div>
+    <div class="sbc-pen">⚖️<div>Porušení = <strong>BLACKLIST + PRÁVNÍ OPATŘENÍ</strong><br><span style="opacity:.8;font-size:12px;">okamžité vyřazení z Freezers Esports a všech jeho týmů, náhrada škody</span></div></div>
+    <div class="sbc-list">
+      <label><input type="checkbox" class="sbc-c"><span>Rozumím, že dokument je přísně důvěrný a intimní materiál týmu Freezers Esports.</span></label>
+      <label><input type="checkbox" class="sbc-c"><span>Zavazuji se, že ho <b>nebudu sdílet s NIKÝM</b>, ani s lidmi, kterým věřím, v žádné podobě (soubor, tisk, foto, screenshot, převyprávění).</span></label>
+      <label><input type="checkbox" class="sbc-c"><span>Beru na vědomí, že <b>každá kopie je označená mým jménem a unikátním ID</b> a že se stažení zaznamenává (jméno, Steam ID, čas, IP adresa). Únik se dá zpětně dohledat ke mně.</span></label>
+      <label><input type="checkbox" class="sbc-c"><span>Souhlasím, že při porušení následuje <b>blacklist a právní opatření</b>. Výtisk po použití zničím nebo vrátím týmu.</span></label>
+    </div>
+    <div class="sbc-sign"><span>Pro potvrzení napiš <b>SOUHLASÍM</b>:</span><input type="text" id="sbConsentWord" autocomplete="off" spellcheck="false" placeholder="SOUHLASÍM"></div>
+    <div class="sbc-act"><button type="button" class="submit-btn" id="sbConsentGo" disabled>🔒 Souhlasím a stahuji</button><span class="sbc-msg" id="sbConsentMsg"></span></div>
   </div>
 </div>
 
@@ -6128,7 +6180,11 @@
     const messages = {
       not_registered: 'Tvůj Steam účet není přiřazený k žádnému účtu. Pošli svoje SteamID64 staffu.',
       cancelled: 'Přihlášení přes Steam bylo zrušeno.',
-      invalid: 'Steam přihlášení se nepodařilo ověřit. Zkus to prosím znovu.'
+      invalid: 'Steam přihlášení se nepodařilo ověřit. Zkus to prosím znovu.',
+      steam_check: 'Steam nepotvrdil přihlášení (kontrola podpisu). Zkus to znovu — když to nepůjde, napiš staffu (kód: steam_check).',
+      no_steamid: 'Steam nevrátil tvoje SteamID. Zkus to znovu (kód: no_steamid).',
+      db: 'Přihlášení prošlo, ale server se nespojil s databází účtů. Zkus to za chvíli — když to přetrvá, napiš staffu (kód: db).',
+      server: 'Chyba serveru při přihlášení. Zkus to za chvíli (kód: server).'
     };
     openMemberLogin();
     const err = document.getElementById('memberLoginError');
@@ -6592,6 +6648,7 @@
     if(!path) return [];
     if(/^https?:|^data:/.test(path)) return [path];
     if(path.indexOf('r2:') === 0) return [STEAM_API_URL + '/media/' + path.slice(3)]; // Cloudflare R2 přes Worker
+    if(path.indexOf('ghpriv:') === 0) return []; // soukromé repo — jen přes chráněné stažení
     if(path.indexOf('ghrel:') === 0) return [`https://github.com/${GH_OWNER}/${GH_REPO}/releases/download/media/${path.slice(6)}`]; // GitHub Releases (zdarma)
     const raw = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}`;
     // web běží ze stejného repa (GitHub/Cloudflare Pages) → relativní cesta má správný typ souboru (lepší pro Safari)
@@ -6751,8 +6808,8 @@
         <span class="pbx-map-bg"></span>
         <button type="button" class="pbx-back" id="pbxBack">‹ Všechny mapy</button>
         <div class="pbx-hero-c"><b>${escapeHtml(name)}</b><small>${list.length} strategií</small></div>
-        ${sbs.length ? `<div class="pbx-sbs">${sbs.map(sb => `<a class="pbx-sb" href="${escapeHtml(pbRepoUrls(sb.file)[pbRepoUrls(sb.file).length - 1])}" target="_blank" rel="noopener" download="${escapeHtml((sb.title || 'stratbook') + '.pdf')}"><span>📕</span><span><b>STRAT BOOK</b><small>${escapeHtml(sb.title || name)}</small></span><span>⤓</span></a>`).join('')}</div>` : ''}
-      </div>`}
+      </div>
+      ${sbs.length ? `<div class="pbx-sbbar"><div class="pbx-sbbar-h"><b>📕 STRAT BOOKY</b><small>🔒 Přísně důvěrné · před stažením potvrdíš mlčenlivost</small></div><div class="pbx-sbs">${sbs.map(sb => `<button type="button" class="pbx-sb" data-map="${escapeHtml(name)}" data-id="${escapeHtml(sb.id)}"><span>📕</span><span><b>${escapeHtml(sb.role || 'STRAT BOOK')}</b><small>${escapeHtml(sb.title || name)}</small></span><span>🔒</span></button>`).join('')}</div></div>` : ''}`}
       <div class="pbx-filters">
         ${chip('side', 'all', 'Vše')}${chip('side', 'T', 'T strana', PB_SIDES.T.c)}${chip('side', 'CT', 'CT strana', PB_SIDES.CT.c)}
         <span class="pbx-sep"></span>
@@ -6761,6 +6818,7 @@
         <button type="button" class="pbx-chip mine${pbxState.mine ? ' on' : ''}" data-k="mine">🎯 Jen moje úkoly</button>
       </div>
       <div class="pbx-cards">${list.length ? list.map(pbxCard).join('') : `<div class="pbx-empty"><b>🗺️</b>${pbxState.mine ? 'Tady pro tebe zatím žádný úkol není.' : 'Zatím žádné strategie.'}</div>`}</div>`;
+    view.querySelectorAll('.pbx-sb[data-id]').forEach(b => b.addEventListener('click', () => sbOpenConsent(b.dataset.map, b.dataset.id)));
     document.getElementById('pbxBack').addEventListener('click', () => { window.fzNavigate('/clenska-sekce/playbook', { noRoute: true }); pbxState.view = 'maps'; pbxState.q = ''; pbxState.mine = false; renderPlaybookGrid(); document.getElementById('playbooky').scrollIntoView({ behavior:'smooth', block:'start' }); });
     view.querySelectorAll('.pbx-chip').forEach(b => b.addEventListener('click', () => {
       if(b.dataset.k === 'mine') pbxState.mine = !pbxState.mine; else pbxState[b.dataset.k] = b.dataset.v;
@@ -7029,6 +7087,131 @@
   });
   document.getElementById('openMemberLoginPb').addEventListener('click', function(e){ e.preventDefault(); openMemberLogin(); });
 
+  /* ---- STRAT BOOK: souhlas s mlčenlivostí + chráněné stažení s vodoznakem ---- */
+  const SB_MAP_ALIASES = { dust2: ['dust2', 'dust 2', 'dust_2', 'dust-2', 'd2'] };
+  function sbAscii(t){ return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\x20-\x7E]/g, ''); }
+  function sbDetectMap(fileName){
+    const n = sbAscii(fileName).toLowerCase();
+    for(const m of PLAYBOOK_MAP_NAMES){
+      const keys = SB_MAP_ALIASES[m.toLowerCase()] || [m.toLowerCase()];
+      if(keys.some(k => new RegExp('(^|[^a-z])' + k.replace(/[-_ ]/g, '[-_ ]?') + '([^a-z]|$)').test(n))) return m;
+    }
+    return '';
+  }
+  function sbRoleFromName(fileName, map){
+    let n = String(fileName).replace(/\.pdf$/i, '');
+    if(map) n = n.replace(new RegExp(map, 'ig'), ' ');
+    n = n.replace(/freezers|stratbook|strat[-_ ]?book|\bct\b/ig, ' ').replace(/[-_.]+/g, ' ').replace(/^\s*\d+\s+/, '').replace(/\s+\d+\s*$/, '').replace(/\s+/g, ' ').trim();
+    const nice = { 'B BANAN SUPPORT': 'B BANÁN / SUPPORT', 'A SUPPORT ROTACE': 'A SUPPORT / ROTACE', 'MID': 'MID / ARCH' };
+    n = n.toUpperCase();
+    return nice[n] || n;
+  }
+  let pdfLibP = null;
+  function loadPdfLib(){
+    if(window.PDFLib) return Promise.resolve(window.PDFLib);
+    if(!pdfLibP) pdfLibP = new Promise((res, rej) => {
+      const sc = document.createElement('script');
+      sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js';
+      sc.onload = () => window.PDFLib ? res(window.PDFLib) : rej(new Error('pdf-lib'));
+      sc.onerror = () => { pdfLibP = null; rej(new Error('Knihovnu pro označení PDF se nepodařilo načíst.')); };
+      document.head.appendChild(sc);
+    });
+    return pdfLibP;
+  }
+  async function sbWatermark(buf, who, dlId, player){
+    const { PDFDocument, StandardFonts, rgb, degrees } = await loadPdfLib();
+    const doc = await PDFDocument.load(buf, { ignoreEncryption: true });
+    const font = await doc.embedFont(StandardFonts.HelveticaBold);
+    // vyplnit pole HRÁČ / STEAM ID (pokud je PDF má) a zamknout je
+    try{
+      const form = doc.getForm();
+      const set = (names, val) => { for(const n of names){ try{ form.getTextField(n).setText(val); return; }catch(_){} } };
+      if(player){ set(['hrac', 'hráč', 'player', 'Hrac'], sbAscii(player.name).toUpperCase()); set(['steamid', 'steam_id', 'SteamID'], player.steam || ''); }
+      form.updateFieldAppearances(font); form.flatten();
+    }catch(e){ console.warn('PDF formulář:', e); }
+    const d = new Date(), date = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    const name = sbAscii(who).slice(0, 40) || 'clen';
+    const line = `DUVERNE - POUZE PRO: ${name.toUpperCase()} - ID ${dlId} - ${date} - SDILENI ZAKAZANO = BLACKLIST + PRAVNI KROKY`;
+    for(const pg of doc.getPages()){
+      const { width, height } = pg.getSize();
+      let fs = 7.5; while(font.widthOfTextAtSize(line, fs) > width - 24 && fs > 4) fs -= .25;
+      pg.drawRectangle({ x: 0, y: 0, width, height: fs + 7, color: rgb(.78, .1, .1), opacity: .92 });
+      pg.drawText(line, { x: 12, y: 3.6, size: fs, font, color: rgb(1, 1, 1) });
+      const big = `${name.toUpperCase()} - ${dlId}`;
+      let bs = Math.min(width, height) / 9; while(font.widthOfTextAtSize(big, bs) > Math.hypot(width, height) * .7 && bs > 10) bs -= 1;
+      const bw = font.widthOfTextAtSize(big, bs), ang = Math.atan2(height, width);
+      pg.drawText(big, { x: width / 2 - Math.cos(ang) * bw / 2 + Math.sin(ang) * bs / 3, y: height / 2 - Math.sin(ang) * bw / 2 - Math.cos(ang) * bs / 3, size: bs, font, color: rgb(.8, .1, .1), opacity: .07, rotate: degrees(ang * 180 / Math.PI) });
+    }
+    doc.setTitle('DUVERNE - ' + name + ' - ' + dlId);
+    doc.setSubject('Licencovano pro ' + name + ' (ID ' + dlId + '). Sdileni zakazano.');
+    return await doc.save();
+  }
+  let sbPending = null;
+  function sbOpenConsent(mapName, id){
+    const m = playbookCache && playbookCache.maps.find(x => x.name === mapName);
+    const sb = m && (m.stratbooks || []).find(x => x.id === id);
+    if(!sb) return;
+    sbPending = { map: mapName, id, sb };
+    const ov = document.getElementById('sbConsentOverlay');
+    document.getElementById('sbConsentTitle').textContent = sb.title || `${mapName} · ${sb.role || 'STRAT BOOK'}`;
+    ov.querySelectorAll('.sbc-c').forEach(c => { c.checked = false; });
+    document.getElementById('sbConsentWord').value = '';
+    document.getElementById('sbConsentMsg').textContent = '';
+    sbConsentCheck();
+    ov.classList.add('show');
+  }
+  function sbConsentOk(){
+    const ov = document.getElementById('sbConsentOverlay');
+    return Array.from(ov.querySelectorAll('.sbc-c')).every(c => c.checked) && sbAscii(document.getElementById('sbConsentWord').value).trim().toUpperCase() === 'SOUHLASIM';
+  }
+  function sbConsentCheck(){ document.getElementById('sbConsentGo').disabled = !sbConsentOk(); }
+  (function(){
+    const ov = document.getElementById('sbConsentOverlay');
+    ov.querySelectorAll('.sbc-c').forEach(c => c.addEventListener('change', sbConsentCheck));
+    document.getElementById('sbConsentWord').addEventListener('input', sbConsentCheck);
+    document.getElementById('sbConsentClose').addEventListener('click', () => ov.classList.remove('show'));
+    ov.addEventListener('click', e => { if(e.target === ov) ov.classList.remove('show'); });
+    document.getElementById('sbConsentGo').addEventListener('click', async () => {
+      if(!sbPending || !sbConsentOk()) return;
+      const btn = document.getElementById('sbConsentGo'), msg = document.getElementById('sbConsentMsg');
+      btn.disabled = true; msg.style.color = ''; msg.textContent = 'Ověřuji oprávnění a zaznamenávám souhlas…';
+      try{
+        const res = await fetch(STEAM_API_URL + '/stratbook/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Session-Token': getSessionToken() || '' },
+          body: JSON.stringify({ map: sbPending.map, id: sbPending.id, accepted: true, confirm: 'SOUHLASÍM' })
+        });
+        if(!res.ok){
+          let e = 'Stažení odmítnuto (' + res.status + ')';
+          try{ const j = await res.json(); if(j.error) e = j.error; }catch(_){}
+          if(res.status === 404 && !/strat book/i.test(e)) e = 'Server zatím chráněné stahování neumí — admin musí nasadit nový worker.js.';
+          throw new Error(e);
+        }
+        const dlId = res.headers.get('X-Download-Id') || Math.random().toString(16).slice(2, 10).toUpperCase();
+        msg.textContent = 'Označuji kopii tvým jménem…';
+        const s = loadMemberSession() || {};
+        const who = s.displayName || memberUsername || 'clen';
+        let pName = ''; try{ pName = decodeURIComponent(res.headers.get('X-Player-Name') || ''); }catch(_){}
+        const assigned = (sbPending.sb.players || []).length === 1 ? sbPending.sb.players[0] : '';
+        const player = { name: pName || (assigned && assigned !== memberUsername ? assigned : who), steam: res.headers.get('X-Player-Steam') || (!assigned || assigned === memberUsername ? (s.steamId64 || '') : '') };
+        const out = await sbWatermark(await res.arrayBuffer(), who, dlId, player);
+        const blob = new Blob([out], { type: 'application/pdf' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `FREEZERS-DUVERNE-${sbAscii(sbPending.map)}-${sbAscii(sbPending.sb.role || sbPending.sb.title || 'stratbook').replace(/\s+/g, '-')}-${dlId}.pdf`;
+        document.body.appendChild(a); a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+        msg.style.color = '#3fb950'; msg.textContent = '✔ Staženo. Kopie je označená tvým jménem a ID ' + dlId + '.';
+        setTimeout(() => ov.classList.remove('show'), 2600);
+      }catch(e){ msg.style.color = '#ff5a55'; msg.textContent = '⚠ ' + e.message; btn.disabled = !sbConsentOk(); }
+    });
+  })();
+  async function pbUploadStratbook(path, file, onProgress){
+    const stored = await pbUploadToR2(path, file, onProgress, '/media-gh/upload', 'ghrel:');
+    if(!stored) throw new Error('Worker zatím neumí nahrávat strat booky (kód ' + pbUploadToR2.last + '). Nasaď nový worker.js.');
+    return stored;
+  }
+
   /* ---- Admin: správa playbooků (MP4 upload, editace, STRAT BOOKy) ---- */
   let pbEditingId = null;
   /* Nahrání videa / PDF. 1) Cloudflare R2 přes Worker (/media/upload) — rychlé, bez limitu GitHubu.
@@ -7229,7 +7412,19 @@
     const box = document.getElementById('adminPlaybookMaps');
     if(!playbookCache){ box.innerHTML = ''; return; }
     const users = (await ghFetchPublic(USERS_FILE)) || [];
-    box.innerHTML = playbookCache.maps.map((m, idx) => {
+    const bulkHtml = `
+      <div class="pba-bulk" id="pbaBulk">
+        <strong>📥 Hromadné nahrání STRAT BOOKů</strong>
+        <div class="admin-hint" style="margin:4px 0 8px;">Vyber víc PDF najednou. Mapa se pozná z <b>názvu souboru</b> (např. <code>inferno-1-b-anchor.pdf</code> → Inferno, role „B ANCHOR“). U každého můžeš vybrat hráče. Strat booky jdou do soukromého úložiště a stahují se jen po souhlasu s mlčenlivostí.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <input type="file" id="pbaBulkFiles" accept="application/pdf" multiple style="font-size:12px;">
+          <select class="admin-category-select" id="pbaBulkVis"><option value="main">Main</option><option value="academy">Academy</option></select>
+          <button type="button" class="admin-edit-btn" id="pbaLogBtn">📋 Záznam stažení</button>
+        </div>
+        <div id="pbaBulkList"></div>
+        <div id="pbaLog" class="pba-log"></div>
+      </div>`;
+    box.innerHTML = bulkHtml + playbookCache.maps.map((m, idx) => {
       const isUrl = m.image && m.image.indexOf('data:') !== 0;
       const sbs = m.stratbooks || [];
       return `
@@ -7242,7 +7437,7 @@
             <button type="button" class="admin-edit-btn pb-map-save" data-idx="${idx}">Uložit URL</button>
           </div>
         </div>
-        ${sbs.map(sb => `<div class="pba-sb-row">📕 <span><b>${escapeHtml(sb.title || 'Strat book')}</b> · ${CATEGORY_LABELS[sb.visibility] || 'Main'} · ${sb.players && sb.players.length ? '👥 ' + sb.players.map(u => escapeHtml((users.find(x => x.username === u) || {}).displayName || u)).join(', ') : 'celá sestava'}</span><a class="admin-edit-btn" href="${escapeHtml(pbRepoUrls(sb.file).slice(-1)[0])}" target="_blank" rel="noopener">Otevřít</a><button type="button" class="admin-delete-btn pb-sb-del" data-map="${escapeHtml(m.name)}" data-id="${escapeHtml(sb.id)}">Smazat</button></div>`).join('')}
+        ${sbs.map(sb => `<div class="pba-sb-row">📕 <span><b>${escapeHtml(sb.title || sb.role || 'Strat book')}</b> · ${CATEGORY_LABELS[sb.visibility] || 'Main'}</span><select class="admin-category-select pb-sb-assign" data-map="${escapeHtml(m.name)}" data-id="${escapeHtml(sb.id)}" title="Komu je strat book přidělený — jeho jméno a Steam ID se vyplní do PDF">${(sb.players && sb.players.length > 1) ? `<option value="__multi" selected>👥 ${sb.players.length} hráči</option>` : ''}<option value=""${!(sb.players && sb.players.length) ? ' selected' : ''}>👥 celá sestava</option>${users.map(u => `<option value="${escapeHtml(u.username)}"${sb.players && sb.players.length === 1 && sb.players[0] === u.username ? ' selected' : ''}>👤 ${escapeHtml(u.displayName || u.username)}</option>`).join('')}</select>${String(sb.file).indexOf('ghpriv:') === 0 ? '<span title="Uloženo v soukromém repu" style="font-size:11px;color:#3fb950;font-weight:700;">🔒 soukromé</span>' : '<span title="Soubor je ve veřejném úložišti — nastav SB_PRIVATE_REPO ve Workeru a nahraj znovu" style="font-size:11px;color:#f0a020;font-weight:700;">⚠ veřejné úložiště</span>'}<button type="button" class="admin-edit-btn pb-sb-open" data-map="${escapeHtml(m.name)}" data-id="${escapeHtml(sb.id)}">Stáhnout</button><button type="button" class="admin-delete-btn pb-sb-del" data-map="${escapeHtml(m.name)}" data-id="${escapeHtml(sb.id)}">Smazat</button></div>`).join('')}
         <details style="margin-top:6px;"><summary style="cursor:pointer;font-size:12.5px;color:var(--turquoise);font-weight:700;">+ Nahrát STRAT BOOK (PDF)</summary>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center;">
             <input type="text" class="pb-sb-title" placeholder="Název (např. ${escapeHtml(m.name)} T-side v1)" style="flex:1;min-width:180px;background:var(--bg-2);border:1px solid var(--line);color:var(--ice);font-size:12.5px;padding:8px 10px;border-radius:8px;">
@@ -7284,12 +7479,74 @@
       const visibility = wrapEl.querySelector('.pb-sb-vis').value;
       btn.disabled = true;
       try{
-        const stored = await pbUploadBinary(path, file, `Strat book ${m.name}: ${title}`, p => { msg.textContent = 'Nahrávám… ' + Math.round(p * 100) + ' %'; });
+        const stored = await pbUploadStratbook(path, file, p => { msg.textContent = 'Nahrávám… ' + Math.round(p * 100) + ' %'; });
         msg.textContent = 'Ukládám…';
         await pbSave(d => { const mm = d.maps.find(x => x.name === m.name); mm.stratbooks = (mm.stratbooks || []).concat([{ id, title, file: stored, players, visibility, uploadedAt: new Date().toISOString() }]); }, `Strat book ${m.name}: ${title}`);
         renderAdminPlaybookMaps();
       }catch(e){ msg.textContent = '⚠ ' + e.message; btn.disabled = false; }
     }));
+    box.querySelectorAll('.pb-sb-assign').forEach(sel => sel.addEventListener('change', async () => {
+      if(sel.value === '__multi') return;
+      sel.disabled = true;
+      try{ await pbSave(d => { const mm = d.maps.find(x => x.name === sel.dataset.map); const sb = mm && (mm.stratbooks || []).find(x => x.id === sel.dataset.id); if(sb) sb.players = sel.value ? [sel.value] : []; }, 'Přiřazení strat booku hráči'); sel.disabled = false; sel.style.outline = '2px solid #3fb950'; setTimeout(() => { sel.style.outline = ''; }, 1200); }
+      catch(e){ alert(e.message); sel.disabled = false; }
+    }));
+    box.querySelectorAll('.pb-sb-open').forEach(btn => btn.addEventListener('click', () => sbOpenConsent(btn.dataset.map, btn.dataset.id)));
+    const bulkFiles = document.getElementById('pbaBulkFiles'), bulkList = document.getElementById('pbaBulkList');
+    const userOpts = '<option value="">celá sestava</option>' + users.map(u => `<option value="${escapeHtml(u.username)}">${escapeHtml(u.displayName || u.username)}</option>`).join('');
+    bulkFiles.addEventListener('change', () => {
+      const files = Array.from(bulkFiles.files || []);
+      if(!files.length){ bulkList.innerHTML = ''; return; }
+      bulkList.innerHTML = `<table><thead><tr><th>Soubor</th><th>Mapa</th><th>Role / název</th><th>Pro hráče</th><th></th></tr></thead><tbody>${files.map((f, i) => {
+        const mp = sbDetectMap(f.name);
+        return `<tr data-i="${i}"><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(f.name)}</td>
+          <td><select class="sbk-map"><option value="">— nepoznáno —</option>${PLAYBOOK_MAP_NAMES.map(n => `<option${n === mp ? ' selected' : ''}>${n}</option>`).join('')}</select></td>
+          <td><input type="text" class="sbk-role" value="${escapeHtml(sbRoleFromName(f.name, mp))}"></td>
+          <td><select class="sbk-player">${userOpts}</select></td>
+          <td class="sbk-st">${mp ? '' : '<span class="bad">vyber mapu</span>'}</td></tr>`;
+      }).join('')}</tbody></table><button type="button" class="submit-btn" id="pbaBulkGo" style="padding:9px 16px;font-size:13px;">Nahrát vše (${files.length})</button> <span class="admin-hint" id="pbaBulkMsg" style="margin:0;"></span>`;
+      bulkList.querySelectorAll('.sbk-map').forEach(sel => sel.addEventListener('change', () => { sel.closest('tr').querySelector('.sbk-st').innerHTML = sel.value ? '' : '<span class="bad">vyber mapu</span>'; }));
+      document.getElementById('pbaBulkGo').addEventListener('click', async ev => {
+        const go = ev.currentTarget, bmsg = document.getElementById('pbaBulkMsg');
+        const rows = Array.from(bulkList.querySelectorAll('tbody tr'));
+        if(rows.some(r => !r.querySelector('.sbk-map').value)){ bmsg.textContent = 'U všech souborů vyber mapu.'; return; }
+        go.disabled = true;
+        const vis = document.getElementById('pbaBulkVis').value, added = [];
+        let warnPublic = false;
+        for(const r of rows){
+          const f = files[parseInt(r.dataset.i, 10)], st = r.querySelector('.sbk-st');
+          const map = r.querySelector('.sbk-map').value, role = r.querySelector('.sbk-role').value.trim();
+          const player = r.querySelector('.sbk-player').value;
+          const id = 'sb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+          try{
+            if(f.size > 60 * 1048576) throw new Error('moc velké');
+            const stored = await pbUploadStratbook(`stratbooks/${map.toLowerCase()}-${id}.pdf`, f, p => { st.textContent = Math.round(p * 100) + ' %'; });
+            if(String(stored).indexOf('ghpriv:') !== 0) warnPublic = true;
+            added.push({ map, sb: { id, role, title: `${map} CT · ${role || f.name.replace(/\.pdf$/i, '')}`, file: stored, players: player ? [player] : [], visibility: vis, uploadedAt: new Date().toISOString(), sourceName: f.name } });
+            st.innerHTML = '<span class="ok">✔</span>';
+          }catch(e){ st.innerHTML = `<span class="bad" title="${escapeHtml(e.message)}">✖ ${escapeHtml(e.message).slice(0, 60)}</span>`; }
+        }
+        if(added.length){
+          bmsg.textContent = 'Ukládám do playbooku…';
+          try{
+            await pbSave(d => { added.forEach(a => { const mm = d.maps.find(x => x.name === a.map); if(mm) mm.stratbooks = (mm.stratbooks || []).concat([a.sb]); }); }, `Hromadně nahráno ${added.length} strat booků`);
+            bmsg.textContent = `✔ Nahráno ${added.length}/${rows.length}.` + (warnPublic ? ' ⚠ Pozor: Worker nemá SB_PRIVATE_REPO, soubory jsou ve veřejném úložišti.' : '');
+            setTimeout(renderAdminPlaybookMaps, warnPublic ? 6000 : 1500);
+          }catch(e){ bmsg.textContent = '⚠ ' + e.message; go.disabled = false; }
+        }else{ bmsg.textContent = 'Nic se nenahrálo.'; go.disabled = false; }
+      });
+    });
+    document.getElementById('pbaLogBtn').addEventListener('click', async () => {
+      const lg = document.getElementById('pbaLog');
+      if(lg.innerHTML){ lg.innerHTML = ''; return; }
+      lg.innerHTML = '<div class="admin-hint">Načítám…</div>';
+      try{
+        const r = await fetch(STEAM_API_URL + '/stratbook/log', { headers: { 'X-Session-Token': getSessionToken() || '' } });
+        if(!r.ok) throw new Error(r.status === 404 ? 'nasaď nový worker.js' : 'chyba ' + r.status);
+        const rows = await r.json();
+        lg.innerHTML = rows.length ? `<table><thead><tr><th>Kdy</th><th>Hráč</th><th>Strat book</th><th>ID kopie</th><th>IP</th></tr></thead><tbody>${rows.map(x => `<tr><td>${escapeHtml(new Date(x.at).toLocaleString('cs-CZ'))}</td><td>${escapeHtml(x.display_name || x.username)}</td><td>${escapeHtml((x.map || '') + ' · ' + (x.title || ''))}</td><td><b>${escapeHtml(x.id)}</b></td><td>${escapeHtml(x.ip || '')} ${escapeHtml(x.country || '')}</td></tr>`).join('')}</tbody></table>` : '<div class="admin-hint">Zatím nikdo nic nestáhl.</div>';
+      }catch(e){ lg.innerHTML = `<div class="admin-hint">⚠ Záznam se nepodařilo načíst: ${escapeHtml(e.message)}</div>`; }
+    });
     box.querySelectorAll('.pb-sb-del').forEach(btn => btn.addEventListener('click', async () => {
       if(!confirm('Smazat tento strat book z webu?')) return;
       btn.disabled = true;
