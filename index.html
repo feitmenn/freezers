@@ -6569,6 +6569,7 @@
     if(!path) return [];
     if(/^https?:|^data:/.test(path)) return [path];
     if(path.indexOf('r2:') === 0) return [STEAM_API_URL + '/media/' + path.slice(3)]; // Cloudflare R2 přes Worker
+    if(path.indexOf('ghrel:') === 0) return [`https://github.com/${GH_OWNER}/${GH_REPO}/releases/download/media/${path.slice(6)}`]; // GitHub Releases (zdarma)
     const raw = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}`;
     // web běží ze stejného repa (GitHub/Cloudflare Pages) → relativní cesta má správný typ souboru (lepší pro Safari)
     return /^https?:$/.test(location.protocol) && !/github\.io$/.test(location.hostname) ? [path, raw] : [raw];
@@ -6997,15 +6998,19 @@
   let pbEditingId = null;
   /* Nahrání videa / PDF. 1) Cloudflare R2 přes Worker (/media/upload) — rychlé, bez limitu GitHubu.
      2) Když Worker R2 ještě nemá (404), zkusí se GitHub repo. Vrací cestu, kterou uložíme do playbook.json. */
-  function pbUploadToR2(path, file, onProgress){
+  function pbUploadToR2(path, file, onProgress, endpoint, prefix){
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open('PUT', STEAM_API_URL + '/media/upload?path=' + encodeURIComponent(path));
+      xhr.open('PUT', STEAM_API_URL + (endpoint || '/media/upload') + '?path=' + encodeURIComponent(path));
       xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
       xhr.setRequestHeader('X-Session-Token', getSessionToken() || '');
       xhr.upload.onprogress = e => { if(e.lengthComputable && onProgress) onProgress(e.loaded / e.total); };
       xhr.onload = () => {
-        if(xhr.status >= 200 && xhr.status < 300) return resolve('r2:' + path);
+        if(xhr.status >= 200 && xhr.status < 300){
+          let stored = (prefix || 'r2:') + path;
+          try{ const j = JSON.parse(xhr.responseText); if(j.stored) stored = j.stored; }catch(_){}
+          return resolve(stored);
+        }
         if(xhr.status === 404 || xhr.status === 405 || xhr.status === 501) return resolve(null); // Worker zatím R2 nemá
         let msg = 'Upload na R2 selhal (' + xhr.status + ')';
         try{ const j = JSON.parse(xhr.responseText); if(j.error) msg += ': ' + j.error; }catch(_){}
@@ -7018,6 +7023,9 @@
   async function pbUploadBinary(path, file, message, onProgress){
     const r2 = await pbUploadToR2(path, file, onProgress);
     if(r2) return r2;
+    // zdarma: GitHub Releases (velké soubory bez kontroly pravidel repa) — endpoint /media-gh/upload ve Workeru
+    const rel = await pbUploadToR2(path, file, onProgress, '/media-gh/upload', 'ghrel:');
+    if(rel) return rel;
     await pbUploadToGithub(path, file, message, onProgress);
     return path;
   }
