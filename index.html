@@ -7011,12 +7011,12 @@
           try{ const j = JSON.parse(xhr.responseText); if(j.stored) stored = j.stored; }catch(_){}
           return resolve(stored);
         }
-        if(xhr.status === 404 || xhr.status === 405 || xhr.status === 501) return resolve(null); // Worker zatím R2 nemá
+        if(xhr.status === 404 || xhr.status === 405 || xhr.status === 501){ pbUploadToR2.last = xhr.status; return resolve(null); } // endpoint ve Workeru zatím není
         let msg = 'Upload na R2 selhal (' + xhr.status + ')';
         try{ const j = JSON.parse(xhr.responseText); if(j.error) msg += ': ' + j.error; }catch(_){}
         reject(new Error(msg));
       };
-      xhr.onerror = () => resolve(null);
+      xhr.onerror = () => { pbUploadToR2.last = 0; resolve(null); };
       xhr.send(file);
     });
   }
@@ -7026,6 +7026,13 @@
     // zdarma: GitHub Releases (velké soubory bez kontroly pravidel repa) — endpoint /media-gh/upload ve Workeru
     const rel = await pbUploadToR2(path, file, onProgress, '/media-gh/upload', 'ghrel:');
     if(rel) return rel;
+    // GitHub „contents“ unese jen malé soubory — velké už sem neposíláme (končilo to chybou 422 / 409)
+    if(file.size > 15 * 1048576){
+      const st = pbUploadToR2.last;
+      throw new Error(st === 0
+        ? 'Nepodařilo se spojit s Workerem pro nahrávání (kód 0). Zkontroluj, že je nasazený nový worker.js, a obnov stránku (Ctrl+F5).'
+        : 'Worker zatím neumí nahrávat velké soubory (kód ' + st + '). Nasaď nový worker.js: Cloudflare → Workers & Pages → freezers-steam-auth → Edit code → vložit → Deploy.');
+    }
     await pbUploadToGithub(path, file, message, onProgress);
     return path;
   }
