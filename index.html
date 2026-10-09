@@ -1941,6 +1941,8 @@
   .pba-sb-row span{flex:1;}
   .pba-players{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:4px 10px;font-size:12px;margin:6px 0;max-height:150px;overflow:auto;}
   .pba-players label{display:flex;align-items:center;gap:5px;}
+  .pbx-link{border:1px solid var(--line);background:transparent;color:var(--ice-dim);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;margin:-4px 0 12px;font-family:'Inter',sans-serif;}
+  .pbx-link:hover{color:var(--turquoise);border-color:var(--turquoise);}
 </style>
 </head>
 <body>
@@ -1951,6 +1953,7 @@
 </script>
 <script>
   /* Logo je v HTML jen jednou (dřív 4× ≈ 600 kB). Nastaví se všem <img data-fz-logo> i glow efektu. */
+  window.fzSlug = function(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'x'; };
   window.FZ_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0yNCAtMjQgNjQ4IDU2Ny42IiB3aWR0aD0iNjQ4IiBoZWlnaHQ9IjU2OCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1Y2M4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjhmZWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4YjhkZjciLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2YTZmZTYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjxwb2x5Z29uIHBvaW50cz0iMC4wLDAuMCA2MDAuMCwwLjAgNTUwLjMsODYuMCAxNTIuMCw4Ni4wIDIwMS43LDE3Mi4wIDMwMC4wLDE3Mi4wIDE5OS43LDM0NS44IiBmaWxsPSJ1cmwoI2EpIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjxwb2x5Z29uIHBvaW50cz0iNDAyLjcsMTcyLjAgNTAwLjcsMTcyLjAgNDUxLjAsMjU4LjAgMzUzLjAsMjU4LjAiIGZpbGw9InVybCgjYikiLz4KPHBvbHlnb24gcG9pbnRzPSIzMDMuNCwzNDQuMCA0MDEuNCwzNDQuMCAzMDAuMCw1MTkuNiAyNTEuMCw0MzQuNyIgZmlsbD0idXJsKCNiKSIvPgo8L3N2Zz4=';
   window.FZ_CAL_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0yNCAtMjQgNjQ4IDU2Ny42IiB3aWR0aD0iNjQ4IiBoZWlnaHQ9IjU2OCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1Y2M4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjhmZWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4YjhkZjciLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2YTZmZTYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjxwb2x5Z29uIHBvaW50cz0iMC4wLDAuMCA2MDAuMCwwLjAgNTUwLjMsODYuMCAxNTIuMCw4Ni4wIDIwMS43LDE3Mi4wIDMwMC4wLDE3Mi4wIDE5OS43LDM0NS44IiBmaWxsPSJ1cmwoI2EpIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjxwb2x5Z29uIHBvaW50cz0iNDAyLjcsMTcyLjAgNTAwLjcsMTcyLjAgNDUxLjAsMjU4LjAgMzUzLjAsMjU4LjAiIGZpbGw9InVybCgjYikiLz4KPHBvbHlnb24gcG9pbnRzPSIzMDMuNCwzNDQuMCA0MDEuNCwzNDQuMCAzMDAuMCw1MTkuNiAyNTEuMCw0MzQuNyIgZmlsbD0idXJsKCNiKSIvPgo8L3N2Zz4=';
   document.addEventListener('DOMContentLoaded', function(){
@@ -1966,7 +1969,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span class="fz-rail-tip">Domů</span>
   </button>
-  <button type="button" class="fz-rail-btn" data-route="#/novinky" aria-label="Novinky">
+  <button type="button" class="fz-rail-btn" data-route="/novinky" aria-label="Novinky">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
     <span class="fz-rail-tip">Novinky</span>
   </button>
@@ -2123,7 +2126,7 @@
           <div class="hub-center-head">
             <h3>Novinky</h3>
             <span class="live-dot">LIVE FEED</span>
-            <a class="hub-all-news" href="#/novinky">Všechny novinky →</a>
+            <a class="hub-all-news" href="/novinky">Všechny novinky →</a>
           </div>
 
           <!-- Novinky se generují automaticky přes admin panel (Ctrl+F). Obsah níže je jen záložní stav. -->
@@ -3332,7 +3335,7 @@
       return;
     }
     feed.innerHTML = items.slice().reverse().map((item, ri) => `
-      <a class="news-item" href="#/clanek/${items.length - 1 - ri}" style="display:block;text-decoration:none;color:inherit;">
+      <a class="news-item" href="/novinky/${items.length - 1 - ri}-${fzSlug(item.title)}" style="display:block;text-decoration:none;color:inherit;">
         ${item.image ? `<img class="n-image" src="${item.image}" alt="">` : ''}
         <div class="n-date">${formatDate(item.date)}</div>
         <h4>${escapeHtml(item.title)}</h4>
@@ -3540,6 +3543,7 @@
     try{ ADMIN_TAB_LOADERS[name] && ADMIN_TAB_LOADERS[name](); }catch(e){ console.error(e); }
   }
   function openAdminPanel(){
+    if(window.fzAdminOpened) window.fzAdminOpened();
     adminTabsLoaded = {};
     const u = document.getElementById('epUser');
     if(u) u.textContent = (memberUsername || '') + (memberRole ? ' · ' + (ROLE_LABELS[memberRole] || memberRole) : '');
@@ -3547,9 +3551,11 @@
     const active = document.querySelector('#adminTabs .admin-tab.active');
     loadAdminTab(active ? active.dataset.tab : 'news');
     document.getElementById('adminPanelOverlay').classList.add('show');
+    if(window.fzAdminTab) window.fzAdminTab(active ? active.dataset.tab : 'home');
   }
   function closeAdminPanel(){
     document.getElementById('adminPanelOverlay').classList.remove('show');
+    if(window.fzOnOverlayClose) window.fzOnOverlayClose('adminPanelOverlay');
   }
 
   // Přepínání záložek (Google-style tabs)
@@ -3562,7 +3568,7 @@
     });
     const activeBtn = tabs.querySelector('.admin-tab[data-tab="' + name + '"]');
     if(activeBtn && activeBtn.scrollIntoView) activeBtn.scrollIntoView({ block:'nearest', inline:'nearest' });
-    if(document.getElementById('adminPanelOverlay').classList.contains('show')) loadAdminTab(name);
+    if(document.getElementById('adminPanelOverlay').classList.contains('show')){ loadAdminTab(name); if(window.fzAdminTab) window.fzAdminTab(name); }
   }
   document.getElementById('adminTabs').addEventListener('click', function(e){
     const tab = e.target.closest('.admin-tab');
@@ -3590,6 +3596,7 @@
   });
   function closeOverlay(overlay){
     overlay.classList.remove('show');
+    if(window.fzOnOverlayClose) window.fzOnOverlayClose(overlay.id);
     // OPRAVA: zavření playbooku kliknutím vedle / Escapem nechávalo YouTube video hrát na pozadí
     if(overlay.id === 'playbookDetailOverlay' && typeof destroyPbPlayer === 'function'){
       destroyPbPlayer();
@@ -5283,19 +5290,19 @@
     const k = b.dataset.tb;
     const more = document.getElementById('fzMore');
     if(k !== 'more') more.hidden = true;
-    if(k === 'app'){ fzOpenApp(); return; }
+    if(k === 'app'){ window.fzNavigate('/clenska-sekce/rozvrh'); return; }
     if(k === 'more'){ syncMoreMenu(); more.hidden = !more.hidden; setTabbarActive(more.hidden ? '' : 'more'); return; }
     fzCloseApp();
     setTabbarActive(k);
-    if(k === 'home'){ if(window.fzExitRoutes) window.fzExitRoutes(); window.scrollTo({ top:0, behavior:'smooth' }); }
-    if(k === 'news'){ location.hash = '#/novinky'; }
-    if(k === 'playbooky'){ if(window.fzExitRoutes) window.fzExitRoutes(); scrollToSection('playbooky'); }
+    if(k === 'home') window.fzNavigate('/');
+    if(k === 'news') window.fzNavigate('/novinky');
+    if(k === 'playbooky') window.fzNavigate('/clenska-sekce/playbook');
   }));
   document.getElementById('fzMore').addEventListener('click', e => {
     const more = document.getElementById('fzMore');
     if(e.target === more){ more.hidden = true; setTabbarActive(''); return; }
     const a = e.target.closest('a[data-close]');
-    if(a){ e.preventDefault(); more.hidden = true; fzCloseApp(); if(window.fzExitRoutes) window.fzExitRoutes(); scrollToSection(a.getAttribute('href').slice(1)); setTabbarActive(''); }
+    if(a){ e.preventDefault(); e.stopPropagation(); more.hidden = true; fzCloseApp(); window.fzNavigate(window.FZ_SECTION_PATH[a.getAttribute('href').slice(1)] || '/'); setTabbarActive(''); }
   });
   document.getElementById('fzMoreTheme').addEventListener('click', () => document.getElementById('themeToggleNav').click());
   document.getElementById('fzMoreAdmin').addEventListener('click', () => { document.getElementById('fzMore').hidden = true; openAdminLogin(); });
@@ -5306,7 +5313,7 @@
   });
   // Na telefonu otevře přihlášenému hráči web rovnou v rozvrhu (jako appka Bakaláři)
   function maybeAutoOpenApp(){
-    if(isMobileView() && memberUsername && memberRole !== 'normal' && !location.hash) fzOpenApp();
+    if(isMobileView() && memberUsername && memberRole !== 'normal' && (!window.fzPath || window.fzPath() === '/')) fzOpenApp();
   }
 
   /* ---------- PDF / tisk: vytiskne jen rozvrh na A4 na šířku ---------- */
@@ -6540,6 +6547,7 @@
     try{
       playbookCache = await loadPlaybookData();
       document.getElementById('playbookCalBadge').textContent = 'Zobrazuješ: ' + (CATEGORY_LABELS[memberCategory] || 'Main');
+      if(window.fzPbApplyRoute && window.fzPbApplyRoute()) return;
       renderPlaybookGrid();
     }catch(e){
       grid.innerHTML = `<div class="news-empty"><h4>Chyba při načítání</h4><p>${escapeHtml(e.message)}</p></div>`;
@@ -6572,7 +6580,7 @@
     if(path.indexOf('ghrel:') === 0) return [`https://github.com/${GH_OWNER}/${GH_REPO}/releases/download/media/${path.slice(6)}`]; // GitHub Releases (zdarma)
     const raw = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}`;
     // web běží ze stejného repa (GitHub/Cloudflare Pages) → relativní cesta má správný typ souboru (lepší pro Safari)
-    return /^https?:$/.test(location.protocol) && !/github\.io$/.test(location.hostname) ? [path, raw] : [raw];
+    return /^https?:$/.test(location.protocol) && !/github\.io$/.test(location.hostname) ? ['/' + path, raw] : [raw];
   }
   function pbMe(){
     const s = (typeof loadMemberSession === 'function' && loadMemberSession()) || {};
@@ -6705,7 +6713,7 @@
         </button>`;
       }).join('')}</div>`;
       view.querySelectorAll('.pbx-map').forEach(b => {
-        b.addEventListener('click', () => pbxOpenMap(b.dataset.map, b));
+        b.addEventListener('click', () => { window.fzNavigate('/clenska-sekce/playbook/' + fzSlug(b.dataset.map), { noRoute: true }); pbxOpenMap(b.dataset.map, b); });
         b.addEventListener('pointermove', e => {
           if(e.pointerType !== 'mouse') return;
           const r = b.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
@@ -6738,12 +6746,16 @@
         <button type="button" class="pbx-chip mine${pbxState.mine ? ' on' : ''}" data-k="mine">🎯 Jen moje úkoly</button>
       </div>
       <div class="pbx-cards">${list.length ? list.map(pbxCard).join('') : `<div class="pbx-empty"><b>🗺️</b>${pbxState.mine ? 'Tady pro tebe zatím žádný úkol není.' : 'Zatím žádné strategie.'}</div>`}</div>`;
-    document.getElementById('pbxBack').addEventListener('click', () => { pbxState.view = 'maps'; pbxState.q = ''; pbxState.mine = false; renderPlaybookGrid(); document.getElementById('playbooky').scrollIntoView({ behavior:'smooth', block:'start' }); });
+    document.getElementById('pbxBack').addEventListener('click', () => { window.fzNavigate('/clenska-sekce/playbook', { noRoute: true }); pbxState.view = 'maps'; pbxState.q = ''; pbxState.mine = false; renderPlaybookGrid(); document.getElementById('playbooky').scrollIntoView({ behavior:'smooth', block:'start' }); });
     view.querySelectorAll('.pbx-chip').forEach(b => b.addEventListener('click', () => {
       if(b.dataset.k === 'mine') pbxState.mine = !pbxState.mine; else pbxState[b.dataset.k] = b.dataset.v;
       pbxRenderView(false);
     }));
-    view.querySelectorAll('.pbx-card').forEach(c => c.addEventListener('click', () => openPlaybookDetail(c.dataset.id, c)));
+    view.querySelectorAll('.pbx-card').forEach(c => c.addEventListener('click', () => {
+      const en = playbookCache.entries.find(e => e.id === c.dataset.id);
+      if(en) window.fzNavigate('/clenska-sekce/playbook/' + fzSlug(en.map) + '/' + fzSlug(en.title), { noRoute: true });
+      openPlaybookDetail(c.dataset.id, c);
+    }));
   }
 
   // FLIP: dlaždice mapy se „roztáhne“ do hlavičky mapy
@@ -6893,6 +6905,7 @@
         <div class="pbx-d-right">
           <div class="pbx-d-tags"><em>${escapeHtml(en.map)}</em>${side ? `<em style="--tc:${side.c}">${side.label} strana</em>` : ''}${kind ? `<em style="--tc:${kind.c}">${kind.label}</em>` : ''}<em>${CATEGORY_LABELS[en.visibility] || 'Main'}</em></div>
           <h3 class="pbx-d-title">${escapeHtml(en.title)}</h3>
+          <button type="button" class="pbx-link" id="pbxCopyLink">🔗 Kopírovat odkaz pro tým</button>
           ${parsed.mine.length ? `<div class="pbx-d-mine"><div class="pbx-d-mine-h">🎯 Tvůj úkol</div>${parsed.mine.map(x => `<div class="pbd-line">${x.sec !== null ? `<button type="button" class="pb-ts pbd-ts" data-sec="${x.sec}">${pbFmt(x.sec)}</button>` : ''}<span>${x.html}</span></div>`).join('')}</div>` : ''}
           <div class="pbx-d-desc">${parsed.html || '<p class="bk-muted">Bez popisu.</p>'}</div>
         </div>
@@ -6905,6 +6918,13 @@
       btn.classList.remove('hit'); void btn.offsetWidth; btn.classList.add('hit');
       if(window.innerWidth < 900){ const p = document.getElementById('pbxPlayerHost'); if(p) p.scrollIntoView({ behavior:'smooth', block:'start' }); }
     }));
+    const cl = document.getElementById('pbxCopyLink');
+    if(cl) cl.addEventListener('click', () => {
+      const link = location.origin + '/clenska-sekce/playbook/' + fzSlug(en.map) + '/' + fzSlug(en.title);
+      (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => { cl.textContent = '✔ Zkopírováno'; }).catch(() => { prompt('Zkopíruj odkaz:', link); });
+      setTimeout(() => { cl.textContent = '🔗 Kopírovat odkaz pro tým'; }, 2200);
+    });
+    document.title = en.title + ' — Playbook — Freezers';
     const ov = document.getElementById('playbookDetailOverlay');
     ov.classList.add('show');
     const card = ov.querySelector('.modal-card');
@@ -7905,9 +7925,10 @@
       btn.addEventListener('click', function(e){
         e.preventDefault();
         if(btn.hasAttribute('data-route')){
-          location.hash = btn.getAttribute('data-route');
+          window.fzNavigate(btn.getAttribute('data-route'));
           return;
         }
+        if(window.fzNavigate && window.FZ_SECTION_PATH){ window.fzNavigate(window.FZ_SECTION_PATH[btn.getAttribute('data-target')] || '/'); return; }
         if(document.body.classList.contains('page-open') && window.fzExitRoutes) window.fzExitRoutes();
         const target = btn.getAttribute('data-target');
         if(target === 'top'){
@@ -7928,6 +7949,7 @@
       if(document.body.classList.contains('page-open')) return;
       if(target === lastActive) return; // PERF: nesahat na DOM / title, když se nic nezměnilo
       lastActive = target;
+      if(window.fzSpyUrl) window.fzSpyUrl(target);
       let label = '';
       buttons.forEach(b => {
         const on = b.getAttribute('data-target') === target;
@@ -8166,11 +8188,9 @@
     }
     function catOf(item){ return String(item.category || 'NOVINKY').toUpperCase(); }
     function exitRoutes(){
-      if(location.hash === '#/novinky' || location.hash.indexOf('#/clanek') === 0){
-        try{ history.pushState(null, '', location.pathname + location.search); }
-        catch(e){ location.hash = ''; }
-      }
+      const was = document.body.classList.contains('page-open');
       closePages();
+      if(was && window.fzPath && window.fzPath().indexOf('/novinky') === 0) window.fzNavigate('/', { replace: true, noRoute: true });
     }
     window.fzExitRoutes = exitRoutes;
     async function ensureNews(){
@@ -8269,7 +8289,8 @@
       });
       newsPage.querySelectorAll('[data-open]').forEach(function(el){
         el.addEventListener('click', function(){
-          location.hash = '#/clanek/' + el.getAttribute('data-open');
+          const i = +el.getAttribute('data-open');
+          window.fzNavigate('/novinky/' + i + '-' + fzSlug((items[i] || {}).title));
         });
       });
       if(featured.length) startCarousel(featured.length);
@@ -8278,7 +8299,7 @@
     async function renderArticle(idx){
       const items = await ensureNews();
       const it = items[idx];
-      if(!it){ location.hash = '#/novinky'; return; }
+      if(!it){ window.fzNavigate('/novinky', { replace: true }); return; }
       const body = it.content || it.description || '';
       articlePage.innerHTML =
         '<div class="fz-article">' +
@@ -8289,35 +8310,160 @@
           (it.image ? '<img class="hero" src="' + escapeHtml(it.image) + '" alt="">' : '') +
           '<div class="fz-article-text">' + body.split(/\n+/).filter(function(p){ return p.trim(); }).map(function(par){ return '<p>' + escapeHtml(par) + '</p>'; }).join('') + '</div>' +
         '</div>';
-      articlePage.querySelector('#articleBack').addEventListener('click', function(){ location.hash = '#/novinky'; });
+      articlePage.querySelector('#articleBack').addEventListener('click', function(){ window.fzNavigate('/novinky'); });
       document.title = it.title + ' — Freezers Esports';
     }
 
-    function setRouteActive(hash){
-      document.querySelectorAll('.fz-rail [data-route]').forEach(function(b){
-        b.classList.toggle('active', (hash === '#/novinky' || hash.indexOf('#/clanek') === 0) && b.getAttribute('data-route') === '#/novinky');
-      });
+    function setRouteActive(on){
+      document.querySelectorAll('.fz-rail [data-route]').forEach(function(b){ b.classList.toggle('active', !!on); });
     }
-
-    async function route(){
-      const hash = location.hash;
-      if(hash === '#/novinky'){
-        openPage(newsPage);
-        setRouteActive(hash);
+    // volá globální router (adresy /novinky a /novinky/3-nazev-clanku)
+    window.fzNewsRoute = async function(seg){
+      if(!seg){ if(document.body.classList.contains('page-open')) closePages(); return; }
+      if(seg === 'list'){
+        openPage(newsPage); setRouteActive(true);
         document.title = 'Novinky — Freezers Esports';
         await renderNewsPage();
-      } else if(hash.indexOf('#/clanek/') === 0){
-        const idx = parseInt(hash.split('/')[2], 10);
-        openPage(articlePage);
-        setRouteActive(hash);
+      }else{
+        const idx = parseInt(seg, 10);
+        openPage(articlePage); setRouteActive(true);
         await renderArticle(idx);
-      } else {
-        closePages();
       }
+    };
+  })();
+</script>
+
+<script>
+  /* ============ ROUTER: hezké adresy (freezers-esport.eu/clenska-sekce/playbook/inferno/…) ============
+     Na GitHub Pages funguje díky souboru 404.html (kopie index.html). Lokálně (file://) jede přes #/cesta. */
+  (function(){
+    const FILE = location.protocol === 'file:';
+    const SECTION_PATH = { top:'/', hub:'/', about:'/o-nas', roster:'/roster', staff:'/staff', influenceri:'/influenceri', kalendar:'/clenska-sekce/rozvrh',
+      playbooky:'/clenska-sekce/playbook', skiny:'/skiny', partneri:'/partneri', faq:'/faq', nabor:'/nabor', kontakt:'/kontakt' };
+    const PATH_SECTION = {}; Object.keys(SECTION_PATH).forEach(k => { if(k !== 'hub' && k !== 'top') PATH_SECTION[SECTION_PATH[k]] = k; });
+    const TITLES = { about:'O nás', roster:'Roster', staff:'Staff', influenceri:'Influenceři', kalendar:'Rozvrh', playbooky:'Playbook', skiny:'Skiny', partneri:'Partneři', faq:'FAQ', nabor:'Nábor', kontakt:'Kontakt' };
+    const ADMIN_TABS = { home:'', calendar:'rozvrh', excuses:'omluvenky', attendance:'dochazka', news:'novinky', roster:'roster', accounts:'ucty', playbooky:'playbooky', scrim:'scrim', partners:'partneri', influenceri:'influenceri' };
+    const ADMIN_BY_SLUG = {}; Object.keys(ADMIN_TABS).forEach(k => ADMIN_BY_SLUG[ADMIN_TABS[k]] = k);
+    window.FZ_SECTION_PATH = SECTION_PATH;
+
+    function getPath(){
+      if(FILE){ const h = location.hash; return h.indexOf('#/') === 0 ? decodeURI(h.slice(1)) : '/'; }
+      let p = decodeURI(location.pathname).replace(/\/index\.html$/, '/').replace(/\/404\.html$/, '/');
+      p = p.replace(/\/+$/, ''); return p || '/';
     }
-    window.addEventListener('hashchange', route);
-    window.addEventListener('popstate', route);
-    route();
+    function setPath(p, replace){
+      const url = FILE ? (location.pathname + location.search + (p === '/' ? '' : '#' + p)) : (encodeURI(p) + location.search);
+      try{ history[replace ? 'replaceState' : 'pushState']({ fz: 1 }, '', url); }catch(e){}
+    }
+    window.fzPath = getPath;
+    let spyHold = Date.now() + 2500;   // při načtení / programovém scrollu nepřepisovat adresu
+    function scrollToSection(id, instant){
+      const el = id === 'top' ? null : document.getElementById(id);
+      const header = document.querySelector('header.nav');
+      const y = el ? el.getBoundingClientRect().top + window.pageYOffset - (header ? header.offsetHeight : 60) - 8 : 0;
+      spyHold = Date.now() + 1400;
+      window.scrollTo({ top: y, behavior: instant ? 'auto' : 'smooth' });
+    }
+    window.fzNavigate = function(p, opt){
+      opt = opt || {};
+      if(p !== getPath()) setPath(p, !!opt.replace);
+      if(!opt.noRoute) route(false);
+    };
+    window.fzSpyUrl = function(target){
+      if(Date.now() < spyHold) return;
+      if(document.body.classList.contains('page-open') || document.querySelector('.modal-overlay.show') || document.body.classList.contains('app-open')) return;
+      const want = SECTION_PATH[target] || '/';
+      const cur = getPath();
+      if(cur === want || (want !== '/' && cur.indexOf(want + '/') === 0)) return;
+      setPath(want, true);
+      document.title = (TITLES[target] ? TITLES[target] + ' — ' : '') + 'Freezers Esports';
+    };
+    // admin
+    let adminPrev = '/';
+    window.fzAdminOpened = function(){ const p = getPath(); if(p.indexOf('/admin') !== 0) adminPrev = p; };
+    window.fzAdminTab = function(tab){ const sl = ADMIN_TABS[tab]; setPath('/admin' + (sl ? '/' + sl : ''), getPath().indexOf('/admin') === 0); };
+    window.fzOnOverlayClose = function(id){
+      const p = getPath();
+      if(id === 'adminPanelOverlay' && p.indexOf('/admin') === 0) setPath(adminPrev || '/', true);
+      if(id === 'playbookDetailOverlay'){ const seg = p.split('/').filter(Boolean); if(seg[0] === 'clenska-sekce' && seg[1] === 'playbook' && seg[3]) setPath('/clenska-sekce/playbook/' + seg[2], true); }
+    };
+    // playbook podle adresy
+    window.fzPbApplyRoute = function(){
+      const seg = getPath().split('/').filter(Boolean);
+      if(seg[0] !== 'clenska-sekce' || seg[1] !== 'playbook' || typeof playbookCache === 'undefined' || !playbookCache) return false;
+      const mapName = seg[2] ? PLAYBOOK_MAP_NAMES.find(n => fzSlug(n) === seg[2]) : null;
+      const want = mapName ? 'map:' + mapName : 'maps';
+      const cur = pbxState.view === 'map' ? 'map:' + pbxState.map : pbxState.view;
+      if(want !== cur || !document.querySelector('#playbookGrid .pbx-view')){
+        if(mapName){ pbxState.view = 'map'; pbxState.map = mapName; } else { pbxState.view = 'maps'; pbxState.q = ''; pbxState.mine = false; }
+        renderPlaybookGrid();
+      }
+      const ov = document.getElementById('playbookDetailOverlay');
+      if(mapName && seg[3]){
+        const en = playbookCache.entries.find(e => e.map === mapName && (fzSlug(e.title) === seg[3] || e.id === seg[3]));
+        if(en && !(ov.classList.contains('show') && ov.dataset.id === en.id)){ openPlaybookDetail(en.id); ov.dataset.id = en.id; document.title = en.title + ' — Playbook — Freezers'; }
+      }else if(ov.classList.contains('show')){ ov.classList.remove('show'); destroyPbPlayer(); }
+      return true;
+    };
+
+    async function route(initial){
+      // staré adresy s # (#/novinky, #/clanek/3, #roster) → nové
+      const h = location.hash;
+      if(!FILE || h.indexOf('#/') !== 0){
+        if(h === '#/novinky'){ setPath('/novinky', true); }
+        else if(/^#\/clanek\/\d+/.test(h)){ setPath('/novinky/' + h.split('/')[2], true); }
+        else if(/^#[a-z]+$/.test(h) && SECTION_PATH[h.slice(1)]){ setPath(SECTION_PATH[h.slice(1)], true); }
+      }
+      const p = getPath();
+      const seg = p.split('/').filter(Boolean);
+      // co k adrese nepatří, zavřít
+      if(seg[0] !== 'novinky' && window.fzNewsRoute) window.fzNewsRoute(null);
+      if(seg[0] !== 'admin' && document.getElementById('adminPanelOverlay').classList.contains('show')) document.getElementById('adminPanelOverlay').classList.remove('show');
+      if(!(seg[0] === 'clenska-sekce' && seg[1] === 'rozvrh') && window.fzCloseApp && document.body.classList.contains('app-open')) window.fzCloseApp();
+      const pbOv = document.getElementById('playbookDetailOverlay');
+      if(!(seg[0] === 'clenska-sekce' && seg[1] === 'playbook' && seg[3]) && pbOv.classList.contains('show')){ pbOv.classList.remove('show'); destroyPbPlayer(); }
+
+      if(seg[0] === 'novinky'){ if(window.fzNewsRoute) await window.fzNewsRoute(seg[1] ? seg[1] : 'list'); return; }
+      if(seg[0] === 'admin'){
+        const tab = ADMIN_BY_SLUG[seg[1] || ''] || 'home';
+        const go = () => {
+          if(memberRole === 'owner' || memberRole === 'admin'){ openAdminPanel(); activateAdminTab(tab); }
+          else openAdminLogin();
+        };
+        initial ? setTimeout(go, 600) : go();
+        return;
+      }
+      if(seg[0] === 'clenska-sekce'){
+        if(seg[1] === 'rozvrh' && window.innerWidth <= 760 && memberUsername && memberRole !== 'normal' && window.fzOpenApp){ window.fzOpenApp(); return; }
+        const sec = seg[1] === 'playbook' ? 'playbooky' : 'kalendar';
+        if(sec === 'playbooky' && window.fzPbApplyRoute) window.fzPbApplyRoute();
+        document.title = (TITLES[sec] || '') + ' — Freezers Esports';
+        if(initial){ setTimeout(() => scrollToSection(sec, true), 350); setTimeout(() => scrollToSection(sec, true), 1300); }
+        else if(!seg[3]) scrollToSection(sec);
+        return;
+      }
+      const sec = PATH_SECTION[p];
+      if(sec){
+        document.title = TITLES[sec] + ' — Freezers Esports';
+        if(initial){ setTimeout(() => scrollToSection(sec, true), 350); setTimeout(() => scrollToSection(sec, true), 1300); } else scrollToSection(sec);
+        return;
+      }
+      if(p === '/'){ if(!initial) scrollToSection('top'); document.title = 'Freezers Esports'; return; }
+      // neznámá adresa → domů
+      setPath('/', true);
+    }
+    window.addEventListener('popstate', () => route(false));
+    if(FILE) window.addEventListener('hashchange', () => { if(location.hash.indexOf('#/') === 0) route(false); });
+    // odkazy na webu: /cesta a #sekce → router (bez znovunačtení stránky)
+    document.addEventListener('click', e => {
+      if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest('a[href]');
+      if(!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      const href = a.getAttribute('href');
+      if(href.charAt(0) === '/' && href.charAt(1) !== '/'){ e.preventDefault(); window.fzNavigate(href); return; }
+      if(/^#[a-z]+$/.test(href) && SECTION_PATH[href.slice(1)]){ e.preventDefault(); window.fzNavigate(SECTION_PATH[href.slice(1)]); }
+    });
+    route(true);
   })();
 </script>
 
