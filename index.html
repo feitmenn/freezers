@@ -1768,6 +1768,29 @@
   .ak3-tip{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);font-size:11px;color:#8ea6c2;letter-spacing:.1em;text-transform:uppercase;pointer-events:none;}
   @media (max-width:600px){ .ak3-lbl span{font-size:11px;padding:4px 9px;} .ak3-host{min-height:280px;} .ak3-ammo{font-size:11px;} }
 
+  /* ============ POVINNÁ OZNÁMENÍ ============ */
+  #fzPushOverlay{z-index:400;}
+  .fzp-card{max-width:480px;width:100%;text-align:left;border-radius:18px !important;border:2px solid #f59e0b !important;}
+  .fzp-head{display:flex;gap:12px;align-items:center;margin-bottom:12px;}
+  .fzp-ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#f59e0b,#ef4444);flex:none;animation:fzpRing 1.6s ease-in-out infinite;}
+  @keyframes fzpRing{0%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-12deg)}30%{transform:rotate(8deg)}40%{transform:rotate(0)}}
+  .fzp-kicker{font:800 11px 'Inter',sans-serif;letter-spacing:.12em;color:#f59e0b;}
+  .fzp-head h3{margin:2px 0 0;font-family:'Chakra Petch',sans-serif;letter-spacing:.04em;}
+  #fzPushBody p{font-size:14px;line-height:1.55;margin:0 0 12px;}
+  .fzp-btn{width:100%;border:0;border-radius:12px;padding:14px;font:800 15px 'Inter',sans-serif;color:#fff;cursor:pointer;background:linear-gradient(135deg,#1d74c4,#7c3aed);box-shadow:0 10px 24px rgba(29,116,196,.35);margin:2px 0 10px;}
+  .fzp-btn:disabled{opacity:.6;cursor:wait;}
+  .fzp-steps{margin:0 0 12px 18px;padding:0;font-size:14px;line-height:1.6;}
+  .fzp-small{font-size:12.5px !important;opacity:.75;}
+  .fzp-ok{font-size:17px !important;font-weight:800;color:#22c55e;}
+  .fzp-msg{font-size:13px;color:#ef4444;min-height:4px;margin-bottom:6px;}
+  .fzp-later{background:transparent;border:0;color:var(--ice-dim,#8aa);font:600 12.5px 'Inter',sans-serif;cursor:pointer;text-decoration:underline;padding:4px 0;}
+  .fzp-admin{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:14px;font-size:13px;}
+  .fzp-admin b{font-weight:800;}
+  .fzp-admin .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+  .fzp-admin .chips span{border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;border:1px solid var(--line);}
+  .fzp-admin .on{color:#22c55e;border-color:color-mix(in srgb,#22c55e 45%,transparent) !important;}
+  .fzp-admin .off{color:#ef4444;border-color:color-mix(in srgb,#ef4444 45%,transparent) !important;}
+
   /* ============ TÝMOVÝ CHAT ============ */
   .fzc-fab{position:fixed;right:22px;bottom:22px;z-index:180;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;color:#fff;
     background:linear-gradient(135deg,#1d74c4,#7c3aed);box-shadow:0 10px 28px rgba(29,116,196,.45);display:none;align-items:center;justify-content:center;transition:transform .2s cubic-bezier(.2,.9,.2,1);}
@@ -3149,6 +3172,7 @@
     </div>
 
     <div class="admin-tab-panel" data-panel="calendar">
+      <div class="fzp-admin" id="fzPushAdmin">🔔 Načítám, kdo má zapnutá oznámení…</div>
       <h3>Přidat do rozvrhu</h3>
       <p class="admin-hint">Každá hodina se uloží zvlášť (hráči pak omlouvají po hodinách). Navazující hodiny stejného typu se v rozvrhu spojí do jednoho bloku jako v Bakalářích. Tip: v rozvrhu můžeš kliknout na prázdné políčko a formulář se předvyplní.</p>
       <form id="adminEventForm">
@@ -3529,6 +3553,15 @@
     </div>
     </main>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="fzPushOverlay" data-noclose="1">
+  <div class="modal-card fzp-card">
+    <div class="fzp-head"><span class="fzp-ic">🔔</span><div><div class="fzp-kicker">POVINNÉ PRO ČLENY</div><h3>Zapni si oznámení</h3></div></div>
+    <div id="fzPushBody"></div>
+    <div class="fzp-msg" id="fzPushMsg"></div>
+    <button type="button" class="fzp-later" id="fzPushLater">Připomenout za 10 minut</button>
   </div>
 </div>
 
@@ -3979,7 +4012,7 @@
     news: () => renderAdminList(),
     roster: () => renderAdminRosterList(),
     accounts: () => renderAdminUserList(),
-    calendar: () => renderAdminEventList(),
+    calendar: () => { renderAdminEventList(); fzPushAdminStatus(); },
     attendance: () => { renderAdminEventList(); renderAttendanceOverview(); },
     excuses: () => renderAdminExcusesList(),
     zapasy: () => renderAdminMatches(),
@@ -4047,6 +4080,7 @@
     }
   });
   function closeOverlay(overlay){
+    if(overlay.dataset.noclose) return; // povinná okna (oznámení) nejdou zavřít kliknutím vedle / Escapem
     overlay.classList.remove('show');
     if(window.fzOnOverlayClose) window.fzOnOverlayClose(overlay.id);
     // OPRAVA: zavření playbooku kliknutím vedle / Escapem nechávalo YouTube video hrát na pozadí
@@ -4776,6 +4810,7 @@
     renderSkinsSection();
     if(window.fzMatchesRefresh) window.fzMatchesRefresh();
     if(window.fzChatRefresh) window.fzChatRefresh();
+    if(window.fzPushCheck) setTimeout(() => window.fzPushCheck(), 1500);
   }
   document.getElementById('openMemberLoginNav')?.addEventListener('click', function(e){
     e.preventDefault();
@@ -5205,6 +5240,7 @@
     renderSkinsSection();
     if(window.fzMatchesRefresh) window.fzMatchesRefresh();
     if(window.fzChatRefresh) window.fzChatRefresh();
+    if(window.fzPushCheck) setTimeout(() => window.fzPushCheck(), 1500);
     if(typeof maybeAutoOpenApp === 'function') maybeAutoOpenApp();
   }
 
@@ -6262,7 +6298,11 @@
       if(cal === calViewCategory && calendarLoadedFor === cal){ calendarEventsCache = saved; renderCalendarGrid(); }
       renderAdminEventList();
       submitBtn.textContent = 'Přidáno ✔';
-      setTimeout(() => { submitBtn.textContent = 'Přidat do rozvrhu'; }, 1500);
+      // oznámení členům dané sestavy
+      fzPushApi('/push/calendar', { cal, title, date: newEvents[0].date, hours, weeks, mandatory })
+        .then(r => { submitBtn.textContent = `Přidáno ✔ · 📣 oznámení ${r.sent}×`; })
+        .catch(() => {});
+      setTimeout(() => { submitBtn.textContent = 'Přidat do rozvrhu'; }, 3000);
     }catch(err){
       alert('Nepodařilo se přidat akci: ' + err.message);
       submitBtn.textContent = 'Přidat do rozvrhu';
@@ -6612,6 +6652,7 @@
     renderSkinsSection();
     if(window.fzMatchesRefresh) window.fzMatchesRefresh();
     if(window.fzChatRefresh) window.fzChatRefresh();
+    if(window.fzPushCheck) setTimeout(() => window.fzPushCheck(), 1500);
     maybeAutoOpenApp();
   }
   restoreMemberSession();
@@ -7363,6 +7404,106 @@
     if(fzmaPendingEdit){ const id = fzmaPendingEdit; fzmaPendingEdit = null; fzmaEdit(id); }
   }
 
+  /* ============ PUSH OZNÁMENÍ (povinná pro členy) ============ */
+  const fzPush = { checked: false, snoozeUntil: 0 };
+  function fzPushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+  function fzIsIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+  function fzIsStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
+  function fzB64uToU8(s){ s = s.replace(/-/g, '+').replace(/_/g, '/'); s += '='.repeat((4 - s.length % 4) % 4); const b = atob(s); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+  async function fzPushApi(path, body){
+    const res = await fetch(STEAM_API_URL + path, body ? { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Session-Token': getSessionToken() || '' }, body: JSON.stringify(body) } : { headers: { 'X-Session-Token': getSessionToken() || '' } });
+    let j = null; try{ j = await res.json(); }catch(_){}
+    if(!res.ok){ const e = new Error((j && j.error) || ('Chyba ' + res.status)); e.status = res.status; throw e; }
+    return j;
+  }
+  async function fzPushSubscribe(){
+    const reg = await navigator.serviceWorker.register('/sw.js');
+    await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub){
+      const { key } = await fzPushApi('/push/key');
+      sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: fzB64uToU8(key) });
+    }
+    await fzPushApi('/push/subscribe', { sub: sub.toJSON() });
+    try{ localStorage.setItem('fz_push_ok_' + memberUsername, String(Date.now())); }catch(_){}
+    return sub;
+  }
+  function fzPushState(){
+    if(fzIsIOS() && !fzIsStandalone()) return 'ios-install';
+    if(!fzPushSupported()) return 'unsupported';
+    if(Notification.permission === 'denied') return 'denied';
+    if(Notification.permission === 'granted') return 'granted';
+    return 'ask';
+  }
+  function fzPushModal(state){
+    const ov = document.getElementById('fzPushOverlay');
+    const box = document.getElementById('fzPushBody');
+    const chrome = /chrome|edg/i.test(navigator.userAgent) && !/firefox/i.test(navigator.userAgent);
+    const steps = {
+      'ask': `<p>Členové Freezers <b>musí mít zapnutá oznámení</b>. Přijde ti upozornění, když se <b>něco přidá do rozvrhu</b>, a připomínka <b>hodinu před tréninkem</b> nebo zápasem.</p>
+        <button type="button" class="fzp-btn" id="fzPushEnable">🔔 Zapnout oznámení</button>
+        <p class="fzp-small">Prohlížeč se zeptá na povolení — klikni na <b>Povolit</b>.</p>`,
+      'denied': `<p>Oznámení máš <b>zablokovaná</b> v prohlížeči. Pro členy jsou <b>povinná</b>, musíš je povolit:</p>
+        <ol class="fzp-steps">${chrome ? '<li>Klikni na ikonu <b>⚙/🔒 vlevo v adresním řádku</b> (vedle freezers-esport.eu).</li><li>U <b>Oznámení</b> nastav <b>Povolit</b>.</li>' : '<li>Klikni na ikonu <b>zámku 🔒</b> vlevo v adresním řádku.</li><li>U <b>Oznámení / Notifications</b> zruš blokování a dej <b>Povolit</b>.</li>'}<li>Obnov stránku (F5).</li></ol>
+        <p class="fzp-small">V aplikaci na telefonu: Nastavení telefonu → Aplikace → Freezers (nebo prohlížeč) → Oznámení → Povolit.</p>
+        <button type="button" class="fzp-btn" id="fzPushReload">↻ Hotovo, obnovit stránku</button>`,
+      'ios-install': `<p>Na iPhonu fungují oznámení <b>jen v aplikaci Freezers na ploše</b>. Je to povinné, zabere to 20 sekund:</p>
+        <ol class="fzp-steps"><li>Otevři web v <b>Safari</b>.</li><li>Klepni na <b>Sdílet</b> (čtvereček se šipkou nahoru).</li><li>Zvol <b>Přidat na plochu</b> → Přidat.</li><li>Otevři <b>Freezers z plochy</b> a přihlas se — tam oznámení zapneš.</li></ol>
+        <p class="fzp-small">Potřebuješ iOS 16.4 nebo novější.</p>`,
+      'unsupported': `<p>Tenhle prohlížeč oznámení neumí. Členové je mít <b>musí</b> — otevři web v <b>Chrome, Edge nebo Firefoxu</b>, nebo si ho nainstaluj jako aplikaci (menu → Nainstalovat aplikaci).</p>`
+    };
+    box.innerHTML = steps[state] || '';
+    document.getElementById('fzPushMsg').textContent = '';
+    ov.classList.add('show');
+    const en = document.getElementById('fzPushEnable');
+    if(en) en.addEventListener('click', async () => {
+      en.disabled = true; document.getElementById('fzPushMsg').textContent = 'Čekám na povolení…';
+      try{
+        const p = await Notification.requestPermission();
+        if(p !== 'granted'){ fzPushModal(p === 'denied' ? 'denied' : 'ask'); return; }
+        await fzPushSubscribe();
+        box.innerHTML = '<p class="fzp-ok">✅ Hotovo! Oznámení jsou zapnutá.</p><p class="fzp-small">Za chvilku ti přijde zkušební oznámení.</p>';
+        document.getElementById('fzPushMsg').textContent = '';
+        fzPushApi('/push/test', {}).catch(() => {});
+        setTimeout(() => ov.classList.remove('show'), 2600);
+      }catch(e){ en.disabled = false; document.getElementById('fzPushMsg').textContent = '⚠ ' + e.message + (e.status === 404 ? ' — admin musí nasadit nový worker.js.' : ''); }
+    });
+    const rl = document.getElementById('fzPushReload'); if(rl) rl.addEventListener('click', () => location.reload());
+  }
+  async function fzPushCheck(force){
+    if(!memberUsername || memberRole === 'normal' || !getSessionToken()){ return; }
+    const st = fzPushState();
+    if(st === 'granted'){
+      // tiše obnovit odběr (nové zařízení / jiný účet / prošlý odběr)
+      try{ await fzPushSubscribe(); }catch(e){ console.warn('push:', e.message); }
+      return;
+    }
+    if(!force && Date.now() < fzPush.snoozeUntil) return;
+    fzPushModal(st);
+  }
+  window.fzPushCheck = fzPushCheck;
+  async function fzPushAdminStatus(){
+    const box = document.getElementById('fzPushAdmin'); if(!box) return;
+    try{
+      const [st, users] = await Promise.all([fzPushApi('/push/status'), ghFetchPublic(USERS_FILE)]);
+      const on = new Map((st.users || []).map(u => [u.username, u]));
+      const members = (users || []).filter(u => ['main', 'academy', 'admin', 'owner'].includes(u.role));
+      const offs = members.filter(u => !on.has(u.username)), ons = members.filter(u => on.has(u.username));
+      box.innerHTML = `🔔 <b>Oznámení zapnutá: ${ons.length}/${members.length}</b> členů${offs.length ? ` · <span style="color:#ef4444;font-weight:700;">${offs.length} je nemá</span>` : ' · všichni ✔'}
+        <div class="chips">${ons.map(u => `<span class="on" title="${on.get(u.username).devices} zařízení">✔ ${escapeHtml(u.displayName || u.username)}</span>`).join('')}${offs.map(u => `<span class="off">✖ ${escapeHtml(u.displayName || u.username)}</span>`).join('')}</div>`;
+    }catch(e){ box.innerHTML = '🔔 Přehled oznámení: ' + escapeHtml(e.status === 404 ? 'nasaď nový worker.js' : e.message); }
+  }
+  (function initPushModal(){
+    const ov = document.getElementById('fzPushOverlay');
+    document.getElementById('fzPushLater').addEventListener('click', () => {
+      ov.classList.remove('show');
+      fzPush.snoozeUntil = Date.now() + 10 * 60000;
+      setTimeout(() => fzPushCheck(), 10 * 60000 + 500);
+    });
+  })();
+  // po přihlášení / načtení stránky
+  setTimeout(() => fzPushCheck(), 2500);
+
   /* ============ TÝMOVÝ CHAT ============ */
   const fzc = { on: false, open: false, ch: 'tym', lastId: 0, msgs: new Map(), channels: [], me: null, timer: null, fails: 0, reply: null, noMore: {}, read: {}, sending: false, loaded: false };
   const fzcEl = id => document.getElementById(id);
@@ -7549,6 +7690,7 @@
     fzcEl('fzcReadAll').addEventListener('click', () => { fzc.channels.forEach(c => { const l = fzcChList(c.id); if(l.length) fzc.read[c.id] = l[l.length - 1].id; }); fzcSaveRead(); fzcRenderChannels(); fzcUpdateBadges(); fzcEl('fzcMenu').hidden = true; });
     fzcEl('fzcNotif').addEventListener('click', async () => {
       fzcEl('fzcMenu').hidden = true;
+      if(window.fzPushCheck && !('Notification' in window && Notification.permission === 'granted')){ window.fzPushCheck(true); return; }
       if(!('Notification' in window)){ fzcEl('fzcStatus').textContent = 'Tenhle prohlížeč upozornění neumí. Na iPhonu nejdřív přidej web na plochu.'; return; }
       const p = await Notification.requestPermission();
       fzcEl('fzcStatus').textContent = p === 'granted' ? '🔔 Upozornění zapnutá (když máš web nebo aplikaci otevřenou na pozadí).' : 'Upozornění jsou zakázaná v prohlížeči.';
