@@ -2118,7 +2118,17 @@
   .pbd-warn{color:#ef4444;font-weight:700;}
   .pbd-warn::before{content:'⚠';margin-right:2px;}
   .pbd-gap{height:6px;}
-  .pbd-b{color:var(--turquoise);}
+  .pbd-b{font-weight:800;}
+  .pbd-i{font-style:italic;}
+  .pbd-u2{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;}
+  .pbd-mk{background:color-mix(in srgb,#facc15 40%,transparent);color:inherit;border-radius:4px;padding:0 3px;}
+  .pbc-red{color:#f87171}.pbc-orange{color:#fb923c}.pbc-yellow{color:#facc15}.pbc-green{color:#4ade80}.pbc-cyan{color:#22d3ee}.pbc-blue{color:#60a5fa}.pbc-purple{color:#c084fc}.pbc-pink{color:#f472b6}.pbc-white{color:#fff}.pbc-gray{color:#94a3b8}
+  body.theme-light .pbc-red{color:#dc2626} body.theme-light .pbc-orange{color:#ea580c} body.theme-light .pbc-yellow{color:#b45309} body.theme-light .pbc-green{color:#16a34a} body.theme-light .pbc-cyan{color:#0891b2} body.theme-light .pbc-blue{color:#2563eb} body.theme-light .pbc-purple{color:#9333ea} body.theme-light .pbc-pink{color:#db2777} body.theme-light .pbc-white{color:#1b2a3a} body.theme-light .pbc-gray{color:#64748b}
+  .pba-fmt{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0 0 6px;padding:5px;border:1px solid var(--line);border-radius:10px;background:var(--bg-2);}
+  .pba-fmt button{min-width:30px;height:30px;border:1px solid transparent;background:transparent;color:var(--ice);border-radius:7px;cursor:pointer;font:700 14px 'Inter',sans-serif;padding:0 7px;}
+  .pba-fmt button:hover{background:rgba(127,127,127,.15);border-color:var(--line);}
+  .pba-fmt .sw{min-width:24px;width:24px;height:24px;border-radius:50%;border:2px solid rgba(127,127,127,.35);padding:0;}
+  .pba-fmt .sep{width:1px;height:22px;background:var(--line);margin:0 4px;}
   .pbd-p{display:inline-flex;align-items:center;gap:3px;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.04em;padding:0 8px;border-radius:7px;background:color-mix(in srgb, var(--pc) 22%, transparent);color:var(--pc);border:1px solid color-mix(in srgb, var(--pc) 55%, transparent);line-height:20px;}
   body.theme-light .pbd-p{color:color-mix(in srgb, var(--pc) 70%, #000);}
   .pbd-p.me{background:var(--pc);color:#0b0f17 !important;}
@@ -3482,10 +3492,21 @@
           <label for="pb-desc">Popisek (stručně — každý řádek = jeden krok)</label>
           <div class="pba-help">
             <code>0:12</code> na začátku řádku = klikací čas (skočí ve videu) · <code>@FILAS</code> = hráč (uvidí to jako „Tvůj úkol“) ·
-            <code>#smoke #flash #molly #he</code> = granáty · <code>## Nadpis</code> · <code>!důležité</code> · <code>**tučně**</code>
+            <code>#smoke #flash #molly #he</code> = granáty · <code>## Nadpis</code> · <code>!důležité</code> · <code>**tučně**</code> · <code>[red]barva[/red]</code> — nebo označ text a klikni na tlačítko v liště
             <br>Příklad: <code>0:05 @FILAS #smoke CT, @AC #flash nad B</code>
           </div>
           <div class="pba-chips" id="pbPlayerChips"></div>
+          <div class="pba-fmt" id="pbFmtBar" role="toolbar" aria-label="Formátování textu">
+            <button type="button" data-w="**|**" title="Tučně (Ctrl+B)"><b>B</b></button>
+            <button type="button" data-w="*|*" title="Kurzíva (Ctrl+I)"><i>I</i></button>
+            <button type="button" data-w="__|__" title="Podtržení (Ctrl+U)"><u>U</u></button>
+            <button type="button" data-w="==|==" title="Zvýraznit" style="background:color-mix(in srgb,#facc15 40%,transparent)">A</button>
+            <span class="sep"></span>
+            <span id="pbFmtColors" style="display:contents"></span>
+            <span class="sep"></span>
+            <input type="color" id="pbFmtCustom" value="#ff8800" title="Vlastní barva" style="width:30px;height:28px;border:0;background:transparent;padding:0;cursor:pointer;">
+            <button type="button" id="pbFmtClear" title="Odstranit formátování z označeného textu">⌫ Tx</button>
+          </div>
           <textarea id="pb-desc" rows="7" placeholder="## Rozestavení&#10;0:00 @FILAS #smoke CT z T spawnu&#10;0:08 @AC #flash nad banán&#10;0:15 @Krabík77 entry na B, ostatní tradují&#10;!Když padne entry, rotujeme mid"></textarea>
           <div style="display:flex;gap:8px;margin-top:6px;"><button type="button" class="btn-ghost" id="pbInsertTime" style="padding:6px 12px;font-size:12px;">+ vložit čas z náhledu videa</button></div>
         </div>
@@ -7698,6 +7719,21 @@
   function pbIsMine(en){ const me = pbMe(); return me.length && pbTagsOf(en.description).some(t => me.includes(t.toLowerCase())); }
   function pbFmt(sec){ sec = Math.max(0, Math.floor(sec || 0)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60; return (h ? h + ':' + String(m).padStart(2,'0') : m) + ':' + String(s).padStart(2,'0'); }
 
+  /* Formátování popisku: **tučně**, *kurzíva*, __podtržení__, ==zvýraznění==, [red]barva[/red] nebo [#ff8800]…[/] */
+  const PB_TXT_COLORS = { red: 'Červená', orange: 'Oranžová', yellow: 'Žlutá', green: 'Zelená', cyan: 'Tyrkysová', blue: 'Modrá', purple: 'Fialová', pink: 'Růžová', white: 'Bílá', gray: 'Šedá' };
+  function pbFormat(h){
+    // barvy (mohou se vnořovat; zavírací tag [/red] nebo jen [/])
+    for(let i = 0; i < 4; i++){
+      h = h.replace(/\[(red|orange|yellow|green|cyan|blue|purple|pink|white|gray)\]([\s\S]*?)\[\/(?:\1)?\]/gi, (w, c, t) => `<span class="pbc pbc-${c.toLowerCase()}">${t}</span>`);
+      h = h.replace(/\[(#[0-9a-f]{3}(?:[0-9a-f]{3})?)\]([\s\S]*?)\[\/\]/gi, (w, c, t) => `<span class="pbc" style="color:${c}">${t}</span>`);
+    }
+    h = h.replace(/\*\*(.+?)\*\*/g, '<b class="pbd-b">$1</b>');
+    h = h.replace(/(^|[^*\w])\*(?!\s)([^*]+?)\*(?![*\w])/g, '$1<i class="pbd-i">$2</i>');
+    h = h.replace(/__(.+?)__/g, '<u class="pbd-u2">$1</u>');
+    h = h.replace(/==(.+?)==/g, '<mark class="pbd-mk">$1</mark>');
+    return h;
+  }
+  function pbStripFmt(t){ return String(t || '').replace(/\[(?:\/?(?:red|orange|yellow|green|cyan|blue|purple|pink|white|gray)?|#[0-9a-f]{3,6})\]/gi, '').replace(/\*\*|__|==/g, ''); }
   /* Popisek → barevné HTML + kapitoly pro přehrávač */
   function pbParseDesc(desc){
     const me = pbMe();
@@ -7715,8 +7751,7 @@
       const m = line.match(/^\[?(\d{1,2}:\d{2}(?::\d{2})?)\]?\s*[-–—]?\s*/);
       let lead = '';
       if(m){ tsSec = tsToSeconds(m[1]); line = line.slice(m[0].length); }
-      let h = escapeHtml(line);
-      h = h.replace(/\*\*(.+?)\*\*/g, '<b class="pbd-b">$1</b>');
+      let h = pbFormat(escapeHtml(line));
       // časy uvnitř řádku
       h = h.replace(/(^|[\s(])(\d{1,2}:\d{2}(?::\d{2})?)(?=$|[\s),.])/g, (w, pre, ts) => `${pre}<button type="button" class="pb-ts" data-sec="${tsToSeconds(ts)}">${ts}</button>`);
       let isMine = false;
@@ -7727,7 +7762,7 @@
       h = h.replace(/#(smoke|flash|molly|molotov|he|decoy)\b/gi, (w, u) => { const x = PB_UTIL[u.toLowerCase()]; return `<span class="pbd-u" style="--uc:${x.c}">${x.i} ${u.toLowerCase() === 'he' ? 'HE' : u.toLowerCase()}</span>`; });
       if(tsSec !== null){
         lead = `<button type="button" class="pb-ts pbd-ts" data-sec="${tsSec}">${pbFmt(tsSec)}</button>`;
-        chapters.push({ sec: tsSec, label: line.replace(/[@#*!]/g, '').slice(0, 60) });
+        chapters.push({ sec: tsSec, label: pbStripFmt(line).replace(/[@#*!]/g, '').slice(0, 60) });
       }
       if(isMine){ cls += ' pbd-mine'; mine.push({ sec: tsSec, html: h }); }
       return `<div class="${cls}">${lead}<span>${h}</span></div>`;
@@ -7774,7 +7809,7 @@
     const tags = pbTagsOf(en.description);
     const hasVid = !!(en.videoFile || en.videoLink);
     const mine = pbIsMine(en);
-    const brief = playbookBrief(String(en.description || '').replace(/^\[?\d{1,2}:\d{2}(?::\d{2})?\]?\s*/gm, '').replace(/[@#*!]/g, ''));
+    const brief = playbookBrief(pbStripFmt(String(en.description || '')).replace(/^\[?\d{1,2}:\d{2}(?::\d{2})?\]?\s*/gm, '').replace(/[@#*!]/g, ''));
     return `<button type="button" class="pbx-card${mine ? ' mine' : ''}" data-id="${escapeHtml(en.id)}" style="--i:${i};--kc:${kind ? kind.c : '#64748b'}">
       <span class="pbx-card-ic">${hasVid ? '▶' : '📄'}</span>
       <span class="pbx-card-b">
@@ -8317,6 +8352,33 @@
     const desc = document.getElementById('pb-desc'), prev = document.getElementById('pbDescPreview');
     const paint = () => { prev.innerHTML = pbParseDesc(desc.value).html || '<span class="admin-hint">Tady uvidíš, jak bude popisek vypadat.</span>'; };
     desc.addEventListener('input', paint); paint();
+    // lišta formátování
+    const wrapSel = (pre, post) => {
+      const a = desc.selectionStart, b = desc.selectionEnd, sel = desc.value.slice(a, b) || 'text';
+      desc.value = desc.value.slice(0, a) + pre + sel + post + desc.value.slice(b);
+      desc.focus(); desc.selectionStart = a + pre.length; desc.selectionEnd = a + pre.length + sel.length; paint();
+    };
+    document.getElementById('pbFmtColors').innerHTML = Object.keys(PB_TXT_COLORS).map(c => `<button type="button" class="sw" data-c="${c}" title="${PB_TXT_COLORS[c]}" style="background:${({ red:'#ef4444', orange:'#f97316', yellow:'#facc15', green:'#22c55e', cyan:'#06b6d4', blue:'#3b82f6', purple:'#a855f7', pink:'#ec4899', white:'#ffffff', gray:'#94a3b8' })[c]}"></button>`).join('');
+    document.getElementById('pbFmtBar').addEventListener('mousedown', e => { if(e.target.closest('button')) e.preventDefault(); }); // nezrušit označení v textu
+    document.getElementById('pbFmtBar').addEventListener('click', e => {
+      const btn = e.target.closest('button'); if(!btn) return;
+      if(btn.dataset.w){ const [pre, post] = btn.dataset.w.split('|'); wrapSel(pre, post); }
+      else if(btn.dataset.c) wrapSel('[' + btn.dataset.c + ']', '[/' + btn.dataset.c + ']');
+      else if(btn.id === 'pbFmtClear'){
+        const a = desc.selectionStart, b = desc.selectionEnd; if(a === b) return;
+        const clean = pbStripFmt(desc.value.slice(a, b)).replace(/(^|[^*])\*([^*]+)\*/g, '$1$2');
+        desc.value = desc.value.slice(0, a) + clean + desc.value.slice(b);
+        desc.focus(); desc.selectionStart = a; desc.selectionEnd = a + clean.length; paint();
+      }
+    });
+    document.getElementById('pbFmtCustom').addEventListener('change', e => wrapSel('[' + e.target.value + ']', '[/]'));
+    desc.addEventListener('keydown', e => {
+      if(!(e.ctrlKey || e.metaKey)) return;
+      const k = e.key.toLowerCase();
+      if(k === 'b'){ e.preventDefault(); wrapSel('**', '**'); }
+      else if(k === 'i'){ e.preventDefault(); wrapSel('*', '*'); }
+      else if(k === 'u'){ e.preventDefault(); wrapSel('__', '__'); }
+    });
     document.querySelectorAll('input[name="pb-vsrc"]').forEach(r => r.addEventListener('change', () => {
       const f = document.querySelector('input[name="pb-vsrc"]:checked').value === 'file';
       document.getElementById('pbFileField').style.display = f ? '' : 'none';
