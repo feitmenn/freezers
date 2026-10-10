@@ -1761,6 +1761,130 @@
   .ak3-tip{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);font-size:11px;color:#8ea6c2;letter-spacing:.1em;text-transform:uppercase;pointer-events:none;}
   @media (max-width:600px){ .ak3-lbl span{font-size:11px;padding:4px 9px;} .ak3-host{min-height:280px;} .ak3-ammo{font-size:11px;} }
 
+  /* ============ HISTORIE ZÁPASŮ A SCRIMŮ ============ */
+  .fzm{
+    --ep-bg:#0e1218; --ep-side:#141a23; --ep-card:#171e29; --ep-line:rgba(255,255,255,.08); --ep-ink:#e6edf6; --ep-mut:#93a3b8; --ep-hover:rgba(255,255,255,.05); --ep-accent:#3b9cff;
+    --win:#22c55e; --loss:#ef4444; --draw:#94a3b8;
+    border:1px solid var(--ep-line);border-radius:18px;overflow:hidden;background:var(--ep-bg);color:var(--ep-ink);font-family:'Inter',sans-serif;
+  }
+  body.theme-light .fzm{--ep-bg:#f1f4f8; --ep-side:#ffffff; --ep-card:#ffffff; --ep-line:#e2e8f0; --ep-ink:#1b2a3a; --ep-mut:#64748b; --ep-hover:#f1f6fc; --ep-accent:#1d74c4; --win:#16a34a; --loss:#dc2626; box-shadow:0 2px 14px rgba(18,22,28,.06);}
+  .fzm-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;background:var(--ep-side);border-bottom:1px solid var(--ep-line);}
+  .fzm-tabs{display:flex;gap:4px;background:var(--ep-bg);border:1px solid var(--ep-line);border-radius:12px;padding:3px;}
+  .fzm-tab{border:0;background:transparent;color:var(--ep-mut);font:inherit;font-weight:700;font-size:13px;padding:8px 14px;border-radius:9px;cursor:pointer;transition:background .2s,color .2s;}
+  .fzm-tab.on{background:var(--ep-accent);color:#fff;}
+  .fzm-tab .n{opacity:.75;font-weight:600;margin-left:4px;}
+  .fzm-sel{background:var(--ep-card);border:1px solid var(--ep-line);color:var(--ep-ink);border-radius:10px;padding:8px 10px;font:inherit;font-size:12.5px;}
+  .fzm-sp{flex:1;}
+  .fzm-body{padding:16px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start;}
+  @media (max-width:980px){ .fzm-body{grid-template-columns:minmax(0,1fr);} }
+  /* statistiky */
+  .fzm-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px;}
+  @media (max-width:640px){ .fzm-stats{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .fzm-stat{background:var(--ep-card);border:1px solid var(--ep-line);border-radius:14px;padding:12px 14px;}
+  .fzm-stat small{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ep-mut);}
+  .fzm-stat b{display:block;font-family:'Chakra Petch',sans-serif;font-size:26px;line-height:1.15;margin-top:2px;}
+  .fzm-stat span{font-size:12px;color:var(--ep-mut);}
+  .fzm-stat b span{font-size:inherit;color:inherit;}
+  .fzm-wl b .w{color:var(--win)} .fzm-wl b .l{color:var(--loss)} .fzm-wl b .d{color:var(--draw)}
+  .fzm-form{display:flex;gap:4px;margin-top:6px;}
+  .fzm-form i{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800;color:#fff;}
+  .fzm-form i.W{background:var(--win)} .fzm-form i.L{background:var(--loss)} .fzm-form i.D{background:var(--draw)}
+  /* karty */
+  .fzm-list{display:flex;flex-direction:column;gap:10px;}
+  .fzm-month{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ep-mut);margin:8px 2px 0;}
+  .fzm-card{position:relative;display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--ep-card);border:1px solid var(--ep-line);border-radius:16px;padding:12px 14px 12px 18px;overflow:hidden;
+    transition:transform .2s cubic-bezier(.2,.9,.2,1), box-shadow .25s, border-color .2s;animation:fzmIn .5s cubic-bezier(.2,.9,.2,1) backwards;animation-delay:calc(var(--i,0) * 45ms);}
+  .fzm-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--rc,var(--draw));}
+  .fzm-card.W{--rc:var(--win)} .fzm-card.L{--rc:var(--loss)} .fzm-card.D{--rc:var(--draw)} .fzm-card.U{--rc:var(--ep-accent)}
+  .fzm-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.18);border-color:color-mix(in srgb,var(--rc) 45%,var(--ep-line));}
+  @keyframes fzmIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .fzm-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:12px;color:var(--ep-mut);margin-bottom:8px;}
+  .fzm-badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 9px;font-weight:800;font-size:11px;letter-spacing:.04em;background:color-mix(in srgb,var(--k) 15%,transparent);color:var(--k);border:1px solid color-mix(in srgb,var(--k) 35%,transparent);}
+  .fzm-fmt{font-weight:800;color:var(--ep-ink);border:1px solid var(--ep-line);border-radius:6px;padding:1px 6px;font-size:11px;}
+  .fzm-main{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;}
+  .fzm-team{display:flex;align-items:center;gap:10px;min-width:0;}
+  .fzm-team.them{flex-direction:row-reverse;text-align:right;}
+  .fzm-team b{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .fzm-team small{display:block;font-size:11.5px;color:var(--ep-mut);}
+  .fzm-team > span{min-width:0;}
+  .fzm-logo{width:40px;height:40px;border-radius:10px;flex:none;object-fit:contain;background:var(--ep-bg);border:1px solid var(--ep-line);padding:3px;}
+  .fzm-logo.ini{display:grid;place-items:center;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:14px;color:#fff;background:linear-gradient(135deg,var(--tc,#475569),#1e293b);border:0;}
+  .fzm-score{display:flex;flex-direction:column;align-items:center;min-width:92px;}
+  .fzm-score > div{display:flex;align-items:center;gap:6px;font-family:'Chakra Petch',sans-serif;font-size:30px;font-weight:700;line-height:1;}
+  .fzm-score .w{color:var(--win)} .fzm-score .l{color:var(--loss)} .fzm-score .d{color:var(--draw)}
+  .fzm-score i{font-style:normal;color:var(--ep-mut);font-size:22px;}
+  .fzm-score small{font-size:10.5px;font-weight:800;letter-spacing:.1em;margin-top:3px;color:var(--rc);}
+  .fzm-maps{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .fzm-map{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:4px 8px;font-size:12px;font-weight:600;background:var(--ep-bg);border:1px solid var(--ep-line);}
+  .fzm-map b{font-variant-numeric:tabular-nums;}
+  .fzm-map.W b{color:var(--win)} .fzm-map.L b{color:var(--loss)} .fzm-map.D b{color:var(--draw)}
+  .fzm-map .pk{font-size:10px;color:var(--ep-mut);font-weight:700;}
+  .fzm-empty{padding:30px;text-align:center;color:var(--ep-mut);background:var(--ep-card);border:1px dashed var(--ep-line);border-radius:16px;}
+  .fzm-more{margin:6px auto 0;display:block;border:1px solid var(--ep-line);background:var(--ep-card);color:var(--ep-ink);font:inherit;font-weight:700;font-size:13px;border-radius:999px;padding:8px 18px;cursor:pointer;}
+  /* boční panel */
+  .fzm-side{display:flex;flex-direction:column;gap:12px;position:sticky;top:84px;}
+  .fzm-box{background:var(--ep-card);border:1px solid var(--ep-line);border-radius:16px;padding:12px 14px;}
+  .fzm-box h4{margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ep-mut);}
+  .fzm-mrow{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12.5px;padding:4px 0;}
+  .fzm-mrow b{font-weight:700;}
+  .fzm-bar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--loss) 30%,transparent);overflow:hidden;}
+  .fzm-bar i{display:block;height:100%;background:var(--win);border-radius:99px;}
+  .fzm-mrow > span:last-child{text-align:right;color:var(--ep-mut);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .fzm-up{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--ep-line);font-size:12.5px;cursor:pointer;}
+  .fzm-up:last-child{border-bottom:0;}
+  .fzm-up time{font-weight:800;color:var(--ep-accent);min-width:52px;}
+  .fzm-lock{padding:24px;text-align:center;}
+  .fzm-lock b{display:block;font-size:16px;margin-bottom:4px;}
+  /* detail */
+  #fzmDetailOverlay .modal-card{max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:0;}
+  .fzm-d{color:var(--ink,inherit);}
+  .fzm-d-hero{position:relative;padding:22px 22px 18px;background:linear-gradient(135deg,#0d1626,#14243c);color:#fff;}
+  .fzm-d-hero.W{background:linear-gradient(135deg,#0d1626,#0f3b2a)} .fzm-d-hero.L{background:linear-gradient(135deg,#0d1626,#3b1218)}
+  .fzm-d-hero .fzm-meta{color:rgba(255,255,255,.75);padding-right:40px;}
+  .fzm-d-hero .fzm-fmt{color:#fff;border-color:rgba(255,255,255,.3);}
+  .fzm-d-hero .fzm-team b{font-size:19px;}
+  .fzm-d-hero .fzm-team small{color:rgba(255,255,255,.7);}
+  .fzm-d-hero .fzm-logo{width:58px;height:58px;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);}
+  .fzm-d-hero .fzm-score > div{font-size:44px;}
+  .fzm-d-hero .fzm-score small{color:#fff;opacity:.9;}
+  .fzm-d-body{padding:18px 22px 22px;display:flex;flex-direction:column;gap:16px;}
+  .fzm-d-maps{display:grid;gap:8px;}
+  .fzm-d-map{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;position:relative;overflow:hidden;}
+  .fzm-d-map::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rc,#94a3b8);}
+  .fzm-d-map.W{--rc:#22c55e} .fzm-d-map.L{--rc:#ef4444}
+  .fzm-d-map b.n{font-family:'Chakra Petch',sans-serif;letter-spacing:.06em;text-transform:uppercase;font-size:15px;}
+  .fzm-d-map small{color:var(--ice-dim,#8aa);font-size:12px;}
+  .fzm-d-map .sc{font-family:'Chakra Petch',sans-serif;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .fzm-d-map.W .sc{color:#22c55e} .fzm-d-map.L .sc{color:#ef4444}
+  .fzm-d h5{margin:0 0 8px;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ice-dim,#8aa);}
+  .fzm-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .fzm-chips span{border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12.5px;font-weight:600;}
+  .fzm-links{display:flex;flex-wrap:wrap;gap:8px;}
+  .fzm-links a{border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;color:inherit;text-decoration:none;}
+  .fzm-links a:hover{border-color:var(--turquoise,#2dd4bf);}
+  .fzm-note{white-space:pre-wrap;font-size:13.5px;line-height:1.55;border-left:3px solid var(--line);padding-left:12px;}
+  .fzm-d-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.12);border:0;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px;z-index:2;}
+  @media (max-width:600px){
+    .fzm-score{min-width:64px;} .fzm-score > div{font-size:24px;} .fzm-logo{width:34px;height:34px;}
+    .fzm-team,.fzm-team.them{flex-direction:column;text-align:center;gap:4px;} .fzm-team b{font-size:13px;white-space:normal;line-height:1.2;display:block;} .fzm-team small{font-size:10.5px;}
+    .fzm-top .fzm-sel{flex:1 1 30%;min-width:0;} .fzm-tabs{width:100%;} .fzm-tab{flex:1;}
+    .fzm-d-hero .fzm-score > div{font-size:32px;} .fzm-d-hero .fzm-logo{width:42px;height:42px;} .fzm-d-hero .fzm-team b{font-size:15px;}
+    .fzm-side{position:static;}
+  }
+  /* admin */
+  .fzma-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+  .fzma-row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 64px 14px 64px;gap:8px;align-items:center;margin-bottom:6px;}
+  .fzma-row select,.fzma-row input{width:100%;}
+  .fzma-row .vs{text-align:center;color:var(--ice-dim);font-weight:700;}
+  .fzma-prev{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;margin:6px 0 12px;font-size:13px;}
+  .fzma-prev b{font-family:'Chakra Petch',sans-serif;font-size:20px;}
+  .fzma-teams{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+  .fzma-team{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;}
+  .fzma-team img,.fzma-team .fzm-logo{width:30px;height:30px;}
+  .fzma-team b{flex:1;font-size:13px;}
+  .fzma-lineup{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;}
+  .fzma-lineup label{display:flex;align-items:center;gap:5px;}
+
   /* ============ PLAYBOOK VE STYLU EDUPAGE ============ */
   .pbx{
     --ep-bg:#0e1218; --ep-side:#141a23; --ep-card:#171e29; --ep-line:rgba(255,255,255,.08); --ep-ink:#e6edf6; --ep-mut:#93a3b8; --ep-hover:rgba(255,255,255,.05); --ep-accent:#3b9cff;
@@ -2041,6 +2165,10 @@
   <button type="button" class="fz-rail-btn" data-target="kalendar" aria-label="Kalendář">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <span class="fz-rail-tip">Kalendář</span>
+  </button>
+  <button type="button" class="fz-rail-btn" data-target="zapasy" aria-label="Zápasy">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+    <span class="fz-rail-tip">Zápasy</span>
   </button>
   <button type="button" class="fz-rail-btn" data-target="playbooky" aria-label="Playbooky">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -2445,6 +2573,23 @@
   </div>
 </div>
 
+<section class="section" id="zapasy">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-kicker">VÝSLEDKY</div>
+      <h2 class="section-title">Historie zápasů</h2>
+      <p class="section-sub">Oficiální zápasy, ligy a turnaje Freezers. Scrimy vidí jen přihlášení členové týmu.</p>
+    </div>
+    <div id="fzmRoot" class="fzm"><div class="fzm-empty" style="margin:16px;">Načítám zápasy…</div></div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="fzmDetailOverlay">
+  <div class="modal-card">
+    <div id="fzmDetailContent"></div>
+  </div>
+</div>
+
 <section class="section" id="playbooky">
   <div class="wrap">
     <div class="section-head">
@@ -2741,6 +2886,7 @@
       <button type="button" class="admin-tab" data-tab="roster" role="tab" style="--ic:#7c3aed"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="ep-lbl">Roster</span></button>
       <button type="button" class="admin-tab" data-tab="accounts" role="tab" style="--ic:#475569"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="ep-lbl">Účty</span></button>
       <button type="button" class="admin-tab" data-tab="playbooky" role="tab" style="--ic:#db2777"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span class="ep-lbl">Playbooky</span></button>
+      <button type="button" class="admin-tab" data-tab="zapasy" role="tab" style="--ic:#16a34a"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span><span class="ep-lbl">Zápasy</span></button>
       <button type="button" class="admin-tab" data-tab="scrim" role="tab" style="--ic:#0d9488"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span><span class="ep-lbl">Scrim server</span></button>
       <button type="button" class="admin-tab" data-tab="partners" role="tab" style="--ic:#ca8a04"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><span class="ep-lbl">Partneři</span></button>
       <button type="button" class="admin-tab" data-tab="influenceri" role="tab" style="--ic:#9333ea"><span class="ep-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span><span class="ep-lbl">Influenceři</span></button>
@@ -2983,6 +3129,102 @@
     <div class="admin-tab-panel" data-panel="excuses">
       <h3>Omluvenky</h3>
       <div id="adminExcusesList"></div>
+    </div>
+
+    <div class="admin-tab-panel" data-panel="zapasy">
+      <h3 id="fzmaFormTitle">Přidat zápas / scrim</h3>
+      <p class="admin-hint">Vyplň soupeře, formát a skóre na mapách — kdo vyhrál, se spočítá samo. Scrimy uvidí jen členové, zápasy a turnaje všichni.</p>
+      <form id="fzmaForm">
+        <div class="field-row">
+          <div class="field">
+            <label for="fzma-kind">Typ</label>
+            <select id="fzma-kind">
+              <option value="scrim">Scrim (jen pro členy)</option>
+              <option value="match">Zápas</option>
+              <option value="league">Liga</option>
+              <option value="cup">Turnaj / CUP</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fzma-date">Datum a čas</label>
+            <input type="datetime-local" id="fzma-date" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fzma-team">Soupeř</label>
+            <select id="fzma-team" required></select>
+          </div>
+          <div class="field">
+            <label for="fzma-format">Formát</label>
+            <select id="fzma-format">
+              <option value="BO1">BO1</option>
+              <option value="BO2">BO2</option>
+              <option value="BO3" selected>BO3</option>
+              <option value="BO5">BO5</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fzma-roster">Naše sestava</label>
+            <select id="fzma-roster"><option value="main">Main</option><option value="academy">Academy</option></select>
+          </div>
+          <div class="field">
+            <label for="fzma-event">Turnaj / liga / poznámka k zápasu (nepovinné)</label>
+            <input type="text" id="fzma-event" placeholder="např. ESEA Open · Season 52 / Tipsport Conquest">
+          </div>
+        </div>
+        <div class="field">
+          <label>Mapy a skóre <span class="admin-hint" style="margin:0;">(Freezers : soupeř · nehrané mapy nech prázdné)</span></label>
+          <div class="fzma-row" style="font-size:11px;font-weight:700;color:var(--ice-dim);margin-bottom:2px;"><span>Mapa</span><span>Pick</span><span>Freezers</span><span></span><span>Soupeř</span></div>
+          <div id="fzmaMaps"></div>
+        </div>
+        <div class="fzma-prev" id="fzmaPrev"></div>
+        <div class="field">
+          <label>Kdo hrál <span class="admin-hint" style="margin:0;">(nepovinné)</span></label>
+          <div class="fzma-lineup" id="fzmaLineup"></div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fzma-vod">VOD / záznam (odkaz, nepovinné)</label>
+            <input type="url" id="fzma-vod" placeholder="https://youtube.com/…">
+          </div>
+          <div class="field">
+            <label for="fzma-link">Odkaz na zápas (Faceit / HLTV / liga, nepovinné)</label>
+            <input type="url" id="fzma-link" placeholder="https://www.faceit.com/…">
+          </div>
+        </div>
+        <div class="field">
+          <label for="fzma-note">Poznámky (nepovinné)</label>
+          <textarea id="fzma-note" rows="3" placeholder="Co fungovalo, co ne, MVP…"></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="fzmaSubmit">Uložit zápas</button>
+        <button type="button" class="admin-edit-btn" id="fzmaCancel" style="display:none;margin-left:8px;">Zrušit úpravu</button>
+        <span class="admin-hint" id="fzmaMsg" style="margin-left:8px;"></span>
+      </form>
+
+      <div class="admin-divider"></div>
+      <h3>Týmy (soupeři)</h3>
+      <p class="admin-hint">Tým nahraješ jednou (název, zkratka, logo) a pak ho jen vybíráš u zápasů.</p>
+      <div class="fzma-teams" id="fzmaTeams"></div>
+      <form id="fzmaTeamForm">
+        <div class="field-row">
+          <div class="field"><label for="fzmat-name">Název týmu</label><input type="text" id="fzmat-name" placeholder="např. Nordic Esports" required></div>
+          <div class="field"><label for="fzmat-tag">Zkratka (nepovinné)</label><input type="text" id="fzmat-tag" maxlength="6" placeholder="NRD"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="fzmat-logo">Logo (PNG/JPG, nepovinné)</label><input type="file" id="fzmat-logo" accept="image/*"></div>
+          <div class="field"><label for="fzmat-country">Země (nepovinné)</label><input type="text" id="fzmat-country" maxlength="20" placeholder="CZ"></div>
+        </div>
+        <button type="submit" class="submit-btn" id="fzmatSubmit">Přidat tým</button>
+        <button type="button" class="admin-edit-btn" id="fzmatCancel" style="display:none;margin-left:8px;">Zrušit úpravu</button>
+        <span class="admin-hint" id="fzmatMsg" style="margin-left:8px;"></span>
+      </form>
+
+      <div class="admin-divider"></div>
+      <h3>Uložené zápasy a scrimy</h3>
+      <div id="fzmaList" class="admin-list"></div>
     </div>
 
     <div class="admin-tab-panel" data-panel="scrim">
@@ -3235,7 +3477,7 @@
 </nav>
 <div class="fz-more" id="fzMore" hidden>
   <div class="fz-more-card">
-    <a href="#roster" data-close>Roster</a><a href="#staff" data-close>Staff</a><a href="#skiny" data-close>Skiny</a>
+    <a href="#zapasy" data-close>Zápasy</a><a href="#roster" data-close>Roster</a><a href="#staff" data-close>Staff</a><a href="#skiny" data-close>Skiny</a>
     <a href="#partneri" data-close>Partneři</a><a href="#nabor" data-close>Nábor</a><a href="#kontakt" data-close>Kontakt</a>
     <button type="button" id="fzMoreTheme">◐ Světlý / tmavý režim</button>
     <button type="button" id="fzMoreAdmin" hidden>⚙ Admin panel</button>
@@ -3546,7 +3788,7 @@
   const EP_TILE_DESC = {
     calendar:'Přidat trénink, faceit, scrim…', excuses:'Schválit / zamítnout omluvenky', attendance:'Kdo byl a kdo chyběl',
     news:'Napsat novinku na web', roster:'Hráči v sestavách', accounts:'Kdo se může přihlásit', playbooky:'Strategie a videa',
-    scrim:'Zapnout banner se serverem', partners:'Loga sponzorů', influenceri:'Streameři a tvůrci'
+    zapasy:'Výsledky zápasů a scrimů', scrim:'Zapnout banner se serverem', partners:'Loga sponzorů', influenceri:'Streameři a tvůrci'
   };
   async function renderAdminHome(){
     const hello = document.getElementById('epHello');
@@ -3598,6 +3840,7 @@
     calendar: () => renderAdminEventList(),
     attendance: () => { renderAdminEventList(); renderAttendanceOverview(); },
     excuses: () => renderAdminExcusesList(),
+    zapasy: () => renderAdminMatches(),
     scrim: () => loadAdminScrimForm(),
     partners: () => renderAdminPartnersList(),
     influenceri: () => renderAdminInfluencersList(),
@@ -4389,6 +4632,7 @@
     playbookCache = null;
     document.getElementById('playbookGrid').innerHTML = '';
     renderSkinsSection();
+    if(window.fzMatchesRefresh) window.fzMatchesRefresh();
   }
   document.getElementById('openMemberLoginNav')?.addEventListener('click', function(e){
     e.preventDefault();
@@ -4816,6 +5060,7 @@
       checkAndShowNotifications();
     }
     renderSkinsSection();
+    if(window.fzMatchesRefresh) window.fzMatchesRefresh();
     if(typeof maybeAutoOpenApp === 'function') maybeAutoOpenApp();
   }
 
@@ -5726,7 +5971,7 @@
     let perms = null;
     try{ perms = decodeTokenPayload(getSessionToken()).permissions || null; }catch(_){}
     const restricted = memberRole !== 'owner' && perms && Array.isArray(perms.sections);
-    const need = { news:'news', roster:'roster', accounts:'accounts', attendance:'attendance', excuses:'attendance', scrim:'scrim', partners:'partners', influenceri:'influenceri' };
+    const need = { news:'news', roster:'roster', accounts:'accounts', attendance:'attendance', excuses:'attendance', scrim:'scrim', zapasy:'scrim', partners:'partners', influenceri:'influenceri' };
     let firstVisible = null, activeHidden = false;
     document.querySelectorAll('#adminTabs .admin-tab').forEach(t => {
       const k = t.dataset.tab;
@@ -6221,6 +6466,7 @@
     }
     // OPRAVA: po obnovení stránky zůstávala sekce Skiny ve stavu „Přihlas se“, i když byl hráč přihlášený
     renderSkinsSection();
+    if(window.fzMatchesRefresh) window.fzMatchesRefresh();
     maybeAutoOpenApp();
   }
   restoreMemberSession();
@@ -6572,6 +6818,405 @@
       submitBtn.textContent = 'Odeslat přihlášku';
     }
   });
+
+  /* ============ HISTORIE ZÁPASŮ A SCRIMŮ ============ */
+  const MATCHES_FILE = 'matches.json';
+  const FZM_MAPS = ['Ancient', 'Anubis', 'Dust2', 'Inferno', 'Mirage', 'Nuke', 'Train', 'Overpass', 'Vertigo', 'Cache'];
+  const FZM_KINDS = { scrim: { label: 'Scrim', c: '#0d9488' }, match: { label: 'Zápas', c: '#3b82f6' }, league: { label: 'Liga', c: '#d97706' }, cup: { label: 'Turnaj', c: '#a855f7' } };
+  const FZM_BO = { BO1: 1, BO2: 2, BO3: 3, BO5: 5 };
+  const FZM_RES_LABEL = { W: 'VÝHRA', L: 'PROHRA', D: 'REMÍZA', U: 'NADCHÁZEJÍCÍ' };
+  let fzmData = null;
+  let fzmaEditId = null, fzmaTeamEditId = null, fzmaPendingEdit = null, fzmaTeamLogo = undefined;
+  const fzmState = { tab: 'matches', roster: 'all', map: 'all', res: 'all', limit: 15 };
+
+  function fzmNorm(raw){
+    const d = (raw && typeof raw === 'object') ? raw : {};
+    return { teams: Array.isArray(d.teams) ? d.teams : [], matches: Array.isArray(d.matches) ? d.matches : [] };
+  }
+  function fzmIsMember(){ return !!memberUsername && memberRole !== 'normal'; }
+  function fzmIsAdmin(){ return memberRole === 'owner' || memberRole === 'admin'; }
+  function fzmTeam(id){ return (fzmData && fzmData.teams.find(t => t.id === id)) || { name: 'Neznámý tým', tag: '' }; }
+  function fzmNum(v){ return v === '' || v === null || v === undefined || isNaN(Number(v)) ? null : Number(v); }
+  function fzmMapRes(mp){
+    const a = fzmNum(mp.us), b = fzmNum(mp.them);
+    if(a === null || b === null) return null;
+    return a > b ? 'W' : a < b ? 'L' : 'D';
+  }
+  function fzmResult(m){
+    const played = (m.maps || []).filter(mp => mp.map && fzmMapRes(mp));
+    const w = played.filter(mp => fzmMapRes(mp) === 'W').length, l = played.filter(mp => fzmMapRes(mp) === 'L').length;
+    if(!played.length) return { res: 'U', us: '–', them: '–', w: 0, l: 0, played };
+    if(m.format === 'BO1' && played.length === 1){
+      const mp = played[0];
+      return { res: fzmMapRes(mp), us: fzmNum(mp.us), them: fzmNum(mp.them), w, l, played };
+    }
+    return { res: w > l ? 'W' : w < l ? 'L' : 'D', us: w, them: l, w, l, played };
+  }
+  function fzmDate(iso, withTime){
+    try{
+      const d = new Date(iso);
+      if(isNaN(d)) return '';
+      return d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' }) + (withTime ? ' · ' + d.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' }) : '');
+    }catch(_){ return ''; }
+  }
+  function fzmLogo(t, cls){
+    if(t && t.logo) return `<img class="fzm-logo ${cls || ''}" src="${escapeHtml(t.logo)}" alt="" loading="lazy">`;
+    const name = (t && (t.tag || t.name)) || '?';
+    let h = 0; for(const ch of name) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    const ini = (t && t.tag) ? t.tag.slice(0, 3) : name.split(/\s+/).map(w => w[0]).join('').slice(0, 2);
+    return `<span class="fzm-logo ini ${cls || ''}" style="--tc:hsl(${h % 360} 55% 42%)">${escapeHtml(ini.toUpperCase())}</span>`;
+  }
+  function fzmUs(m){ return `<span class="fzm-team us"><img class="fzm-logo" src="${escapeHtml(window.FZ_LOGO || '')}" alt=""><span><b>Freezers</b><small>${m.roster === 'academy' ? 'Academy' : 'Main'}</small></span></span>`; }
+  function fzmThem(m){ const t = fzmTeam(m.teamId); return `<span class="fzm-team them">${fzmLogo(t)}<span><b>${escapeHtml(t.name)}</b><small>${escapeHtml([t.tag, t.country].filter(Boolean).join(' · '))}</small></span></span>`; }
+  function fzmScore(r){
+    const cu = r.res === 'W' ? 'w' : r.res === 'L' ? 'l' : 'd', ct = r.res === 'W' ? 'l' : r.res === 'L' ? 'w' : 'd';
+    return `<span class="fzm-score"><div><b class="${r.res === 'U' ? '' : cu}">${r.us}</b><i>:</i><b class="${r.res === 'U' ? '' : ct}">${r.them}</b></div><small>${FZM_RES_LABEL[r.res]}</small></span>`;
+  }
+  function fzmMeta(m){
+    const k = FZM_KINDS[m.kind] || FZM_KINDS.match;
+    return `<div class="fzm-meta"><span class="fzm-badge" style="--k:${k.c}">${m.kind === 'scrim' ? '🔒 ' : ''}${k.label}</span><span class="fzm-fmt">${escapeHtml(m.format || 'BO1')}</span>${m.event ? `<span>${escapeHtml(m.event)}</span>` : ''}<span class="fzm-sp"></span><time>${fzmDate(m.date, true)}</time></div>`;
+  }
+  function fzmMapChips(r, m){
+    const list = (m.maps || []).filter(mp => mp.map);
+    if(!list.length) return '';
+    return `<div class="fzm-maps">${list.map(mp => { const x = fzmMapRes(mp); return `<span class="fzm-map ${x || ''}">${escapeHtml(mp.map)} ${x ? `<b>${fzmNum(mp.us)}:${fzmNum(mp.them)}</b>` : '<span class="pk">—</span>'}${mp.pick === 'decider' ? '<span class="pk">DEC</span>' : ''}</span>`; }).join('')}</div>`;
+  }
+  function fzmVisible(){
+    if(!fzmData) return [];
+    const mem = fzmIsMember();
+    return fzmData.matches.filter(m => m.kind !== 'scrim' || mem).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  }
+  function fzmFiltered(){
+    return fzmVisible().filter(m => (fzmState.tab === 'scrims' ? m.kind === 'scrim' : m.kind !== 'scrim'))
+      .filter(m => fzmState.roster === 'all' || (m.roster || 'main') === fzmState.roster)
+      .filter(m => fzmState.map === 'all' || (m.maps || []).some(mp => mp.map === fzmState.map))
+      .filter(m => fzmState.res === 'all' || fzmResult(m).res === fzmState.res);
+  }
+  function fzmStats(list){
+    const done = list.map(m => ({ m, r: fzmResult(m) })).filter(x => x.r.res !== 'U');
+    const W = done.filter(x => x.r.res === 'W').length, L = done.filter(x => x.r.res === 'L').length, D = done.filter(x => x.r.res === 'D').length;
+    let mw = 0, ml = 0, rd = 0; const per = {};
+    done.forEach(x => x.r.played.forEach(mp => {
+      const res = fzmMapRes(mp); if(res === 'W') mw++; if(res === 'L') ml++;
+      rd += fzmNum(mp.us) - fzmNum(mp.them);
+      const p = per[mp.map] || (per[mp.map] = { w: 0, l: 0, d: 0 }); p[res.toLowerCase()]++;
+    }));
+    return { W, L, D, n: done.length, wr: done.length ? Math.round(W / done.length * 100) : null, mw, ml, rd, per, form: done.slice(0, 5).map(x => x.r.res) };
+  }
+
+  function renderMatchesSection(){
+    const root = document.getElementById('fzmRoot');
+    if(!root) return;
+    if(!fzmData){ root.innerHTML = '<div class="fzm-empty" style="margin:16px;">Načítám zápasy…</div>'; return; }
+    const mem = fzmIsMember();
+    if(fzmState.tab === 'scrims' && !mem) fzmState.tab = 'matches';
+    const vis = fzmVisible();
+    const nM = vis.filter(m => m.kind !== 'scrim').length, nS = vis.filter(m => m.kind === 'scrim').length;
+    const tabList = vis.filter(m => (fzmState.tab === 'scrims' ? m.kind === 'scrim' : m.kind !== 'scrim'));
+    const usedMaps = FZM_MAPS.filter(n => tabList.some(m => (m.maps || []).some(mp => mp.map === n)));
+    const list = fzmFiltered();
+    const now = Date.now();
+    const done = list.filter(m => !(fzmResult(m).res === 'U' && new Date(m.date).getTime() > now));
+    const upcoming = vis.filter(m => fzmResult(m).res === 'U' && new Date(m.date).getTime() > now).sort((a, b) => String(a.date).localeCompare(String(b.date))).slice(0, 4);
+    const st = fzmStats(list);
+    const sel = (k, opts) => `<select class="fzm-sel" data-k="${k}">${opts.map(([v, l]) => `<option value="${v}"${fzmState[k] === v ? ' selected' : ''}>${l}</option>`).join('')}</select>`;
+    let lastMonth = '';
+    const cards = done.slice(0, fzmState.limit).map((m, i) => {
+      const r = fzmResult(m);
+      const mo = (() => { try{ return new Date(m.date).toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' }); }catch(_){ return ''; } })();
+      const head = mo !== lastMonth ? `<div class="fzm-month">${escapeHtml(mo)}</div>` : '';
+      lastMonth = mo;
+      return `${head}<button type="button" class="fzm-card ${r.res}" data-id="${escapeHtml(m.id)}" style="--i:${Math.min(i, 12)}">${fzmMeta(m)}<div class="fzm-main">${fzmUs(m)}${fzmScore(r)}${fzmThem(m)}</div>${fzmMapChips(r, m)}</button>`;
+    }).join('');
+    const perRows = Object.keys(st.per).sort((a, b) => (st.per[b].w + st.per[b].l + st.per[b].d) - (st.per[a].w + st.per[a].l + st.per[a].d)).map(k => {
+      const p = st.per[k], n = p.w + p.l + p.d, wr = n ? Math.round(p.w / n * 100) : 0;
+      return `<div class="fzm-mrow"><b>${escapeHtml(k)}</b><span class="fzm-bar"><i style="width:${wr}%"></i></span><span>${p.w}-${p.l}${p.d ? '-' + p.d : ''} · ${wr}%</span></div>`;
+    }).join('');
+    root.innerHTML = `
+      <div class="fzm-top">
+        <div class="fzm-tabs">
+          <button type="button" class="fzm-tab${fzmState.tab === 'matches' ? ' on' : ''}" data-tab="matches">🏆 Zápasy<span class="n">${nM}</span></button>
+          ${mem ? `<button type="button" class="fzm-tab${fzmState.tab === 'scrims' ? ' on' : ''}" data-tab="scrims">🔒 Scrimy<span class="n">${nS}</span></button>` : ''}
+        </div>
+        <span class="fzm-sp"></span>
+        ${sel('roster', [['all', 'Sestava: vše'], ['main', 'Main'], ['academy', 'Academy']])}
+        ${sel('map', [['all', 'Mapa: vše']].concat(usedMaps.map(n => [n, n])))}
+        ${sel('res', [['all', 'Výsledek: vše'], ['W', 'Výhry'], ['L', 'Prohry'], ['D', 'Remízy']])}
+        ${fzmIsAdmin() ? '<button type="button" class="fzm-sel" id="fzmAdd" style="cursor:pointer;font-weight:700;">＋ Přidat</button>' : ''}
+      </div>
+      <div class="fzm-body">
+        <div>
+          <div class="fzm-stats">
+            <div class="fzm-stat fzm-wl"><small>Bilance</small><b><span class="w">${st.W}</span>-<span class="l">${st.L}</span>${st.D ? `-<span class="d">${st.D}</span>` : ''}</b><span>${st.n} ${fzmState.tab === 'scrims' ? 'scrimů' : 'zápasů'}</span></div>
+            <div class="fzm-stat"><small>Winrate</small><b>${st.wr === null ? '–' : st.wr + ' %'}</b><span>série</span></div>
+            <div class="fzm-stat fzm-wl"><small>Mapy</small><b><span class="w">${st.mw}</span>-<span class="l">${st.ml}</span></b><span>kola ${st.rd > 0 ? '+' : ''}${st.rd}</span></div>
+            <div class="fzm-stat"><small>Forma</small><div class="fzm-form">${st.form.length ? st.form.map(x => `<i class="${x}">${x === 'W' ? 'V' : x === 'L' ? 'P' : 'R'}</i>`).join('') : '<span>–</span>'}</div><span>posledních ${st.form.length}</span></div>
+          </div>
+          <div class="fzm-list">${cards || `<div class="fzm-empty">${fzmState.tab === 'scrims' ? 'Zatím žádné scrimy.' : 'Zatím žádné zápasy.'}${fzmIsAdmin() ? '<br>Přidáš je v admin panelu → Zápasy.' : ''}</div>`}</div>
+          ${done.length > fzmState.limit ? `<button type="button" class="fzm-more" id="fzmMore">Načíst další (${done.length - fzmState.limit})</button>` : ''}
+        </div>
+        <aside class="fzm-side">
+          ${upcoming.length ? `<div class="fzm-box"><h4>📅 Nadcházející</h4>${upcoming.map(m => `<div class="fzm-up" data-id="${escapeHtml(m.id)}"><time>${fzmDate(m.date).replace(/\s?\d{4}$/, '')}</time><span>vs <b>${escapeHtml(fzmTeam(m.teamId).name)}</b> · ${escapeHtml(m.format)}${m.kind === 'scrim' ? ' · scrim' : ''}</span></div>`).join('')}</div>` : ''}
+          <div class="fzm-box"><h4>🗺️ Mapy</h4>${perRows || '<div style="font-size:12.5px;color:var(--ep-mut)">Zatím žádná data.</div>'}</div>
+          ${!mem ? `<div class="fzm-box fzm-lock"><b>🔒 Scrimy</b><span style="font-size:12.5px;color:var(--ep-mut)">Výsledky scrimů vidí jen přihlášení členové týmu.</span></div>` : ''}
+        </aside>
+      </div>`;
+    root.querySelectorAll('.fzm-tab').forEach(b => b.addEventListener('click', () => { fzmState.tab = b.dataset.tab; fzmState.map = 'all'; fzmState.limit = 15; renderMatchesSection(); }));
+    root.querySelectorAll('select.fzm-sel').forEach(s => s.addEventListener('change', () => { fzmState[s.dataset.k] = s.value; fzmState.limit = 15; renderMatchesSection(); }));
+    root.querySelectorAll('.fzm-card, .fzm-up').forEach(c => c.addEventListener('click', () => {
+      const m = fzmData.matches.find(x => x.id === c.dataset.id);
+      if(m) window.fzNavigate('/zapasy/' + fzCode(m.id));
+    }));
+    const more = document.getElementById('fzmMore'); if(more) more.addEventListener('click', () => { fzmState.limit += 15; renderMatchesSection(); });
+    const add = document.getElementById('fzmAdd'); if(add) add.addEventListener('click', () => window.fzNavigate('/admin/zapasy'));
+  }
+
+  function openMatchDetail(id){
+    const m = fzmData && fzmData.matches.find(x => x.id === id);
+    if(!m || (m.kind === 'scrim' && !fzmIsMember())) return false;
+    const r = fzmResult(m), t = fzmTeam(m.teamId);
+    const maps = (m.maps || []).filter(mp => mp.map);
+    const pickTxt = mp => mp.pick === 'us' ? 'pick Freezers' : mp.pick === 'them' ? 'pick ' + t.name : mp.pick === 'decider' ? 'decider' : '';
+    const links = [m.vod ? `<a href="${escapeHtml(m.vod)}" target="_blank" rel="noopener">▶ Záznam / VOD</a>` : '', m.link ? `<a href="${escapeHtml(m.link)}" target="_blank" rel="noopener">🔗 Zápas na webu ligy</a>` : ''].filter(Boolean).join('');
+    document.getElementById('fzmDetailContent').innerHTML = `
+      <div class="fzm fzm-d" style="border:0;border-radius:0;">
+        <div class="fzm-d-hero ${r.res}">
+          <button type="button" class="fzm-d-close" id="fzmDetailClose" aria-label="Zavřít">✕</button>
+          ${fzmMeta(m)}
+          <div class="fzm-main">${fzmUs(m)}${fzmScore(r)}${fzmThem(m)}</div>
+        </div>
+        <div class="fzm-d-body" style="background:var(--ep-bg);">
+          <div><h5>Mapy</h5><div class="fzm-d-maps">${maps.length ? maps.map((mp, i) => { const x = fzmMapRes(mp); return `<div class="fzm-d-map ${x || ''}" style="border-color:var(--ep-line)"><span><b class="n">${escapeHtml(mp.map)}</b><br><small>Mapa ${i + 1}${pickTxt(mp) ? ' · ' + escapeHtml(pickTxt(mp)) : ''}</small></span><small>${x ? FZM_RES_LABEL[x].toLowerCase() : 'nehráno'}</small><span class="sc">${x ? fzmNum(mp.us) + ' : ' + fzmNum(mp.them) : '–'}</span></div>`; }).join('') : '<div style="color:var(--ep-mut);font-size:13px;">Bez map.</div>'}</div></div>
+          ${(m.lineup || []).length ? `<div><h5>Sestava</h5><div class="fzm-chips">${m.lineup.map(n => `<span style="border-color:var(--ep-line)">${escapeHtml(n)}</span>`).join('')}</div></div>` : ''}
+          ${m.note ? `<div><h5>Poznámky</h5><div class="fzm-note" style="border-color:var(--ep-line)">${escapeHtml(m.note)}</div></div>` : ''}
+          ${links ? `<div><h5>Odkazy</h5><div class="fzm-links">${links}</div></div>` : ''}
+          ${fzmIsAdmin() ? `<div><button type="button" class="admin-edit-btn" id="fzmDetailEdit">✎ Upravit v adminu</button></div>` : ''}
+        </div>
+      </div>`;
+    const ov = document.getElementById('fzmDetailOverlay');
+    ov.classList.add('show'); ov.dataset.id = id;
+    document.getElementById('fzmDetailClose').addEventListener('click', () => closeOverlay(ov));
+    const ed = document.getElementById('fzmDetailEdit');
+    if(ed) ed.addEventListener('click', () => { ov.classList.remove('show'); fzmaPendingEdit = id; window.fzNavigate('/admin/zapasy'); });
+    document.title = `Freezers vs ${t.name} — Zápasy — Freezers Esports`;
+    return true;
+  }
+  let fzmRouteCode = null;
+  window.fzMatchesRoute = function(code){
+    fzmRouteCode = code || null;
+    const ov = document.getElementById('fzmDetailOverlay');
+    if(!code){ if(ov.classList.contains('show')) ov.classList.remove('show'); return; }
+    if(!fzmData) return; // otevře se po načtení
+    const m = fzmData.matches.find(x => fzCode(x.id) === code);
+    if(m && !(ov.classList.contains('show') && ov.dataset.id === m.id)) openMatchDetail(m.id);
+  };
+  async function loadMatchesSection(){
+    try{ fzmData = fzmNorm(await ghFetchPublic(MATCHES_FILE)); }
+    catch(e){ fzmData = fzmNorm(null); }
+    renderMatchesSection();
+    if(fzmRouteCode) window.fzMatchesRoute(fzmRouteCode);
+  }
+  window.fzMatchesRefresh = function(){ renderMatchesSection(); if(fzmRouteCode) window.fzMatchesRoute(fzmRouteCode); };
+  loadMatchesSection();
+
+  /* ---- Admin: zápasy, scrimy a týmy ---- */
+  function fzmaCompressLogo(file){
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const s = Math.min(1, 160 / Math.max(img.width, img.height));
+          const c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          let url = c.toDataURL('image/webp', 0.85);
+          if(url.indexOf('data:image/webp') !== 0) url = c.toDataURL('image/png');
+          resolve(url);
+        };
+        img.onerror = () => reject(new Error('Obrázek se nepodařilo načíst.'));
+        img.src = fr.result;
+      };
+      fr.onerror = () => reject(new Error('Soubor se nepodařilo přečíst.'));
+      fr.readAsDataURL(file);
+    });
+  }
+  function fzmaMapRows(keep){
+    const n = FZM_BO[document.getElementById('fzma-format').value] || 1;
+    const box = document.getElementById('fzmaMaps');
+    const prev = keep || Array.from(box.querySelectorAll('.fzma-row')).map(r => ({ map: r.querySelector('.m').value, pick: r.querySelector('.p').value, us: r.querySelector('.u').value, them: r.querySelector('.t').value }));
+    let h = '';
+    for(let i = 0; i < n; i++){
+      const p = prev[i] || {};
+      const defPick = n === 1 ? '' : (i === n - 1 && n % 2 === 1 ? 'decider' : (i % 2 === 0 ? 'us' : 'them'));
+      const pick = p.pick !== undefined ? p.pick : defPick;
+      h += `<div class="fzma-row"><select class="m"><option value="">— mapa ${i + 1} —</option>${FZM_MAPS.map(x => `<option${p.map === x ? ' selected' : ''}>${x}</option>`).join('')}</select>
+        <select class="p"><option value=""${pick === '' ? ' selected' : ''}>—</option><option value="us"${pick === 'us' ? ' selected' : ''}>pick náš</option><option value="them"${pick === 'them' ? ' selected' : ''}>pick soupeř</option><option value="decider"${pick === 'decider' ? ' selected' : ''}>decider</option></select>
+        <input type="number" class="u" min="0" max="99" value="${escapeHtml(p.us ?? '')}" placeholder="13"><span class="vs">:</span><input type="number" class="t" min="0" max="99" value="${escapeHtml(p.them ?? '')}" placeholder="9"></div>`;
+    }
+    box.innerHTML = h;
+    box.querySelectorAll('select, input').forEach(el => el.addEventListener('input', fzmaPreview));
+    fzmaPreview();
+  }
+  function fzmaReadMaps(){
+    return Array.from(document.querySelectorAll('#fzmaMaps .fzma-row')).map(r => ({ map: r.querySelector('.m').value, pick: r.querySelector('.p').value, us: fzmNum(r.querySelector('.u').value), them: fzmNum(r.querySelector('.t').value) }));
+  }
+  function fzmaPreview(){
+    const m = { format: document.getElementById('fzma-format').value, maps: fzmaReadMaps() };
+    const r = fzmResult(m), t = fzmTeam(document.getElementById('fzma-team').value);
+    const col = r.res === 'W' ? '#22c55e' : r.res === 'L' ? '#ef4444' : 'var(--ice-dim)';
+    document.getElementById('fzmaPrev').innerHTML = `Výsledek: <b>Freezers ${r.us} : ${r.them} ${escapeHtml(t.name)}</b> <span style="color:${col};font-weight:800;">${FZM_RES_LABEL[r.res]}</span>${r.res === 'U' ? '<span class="admin-hint" style="margin:0;">(bez skóre = nadcházející zápas)</span>' : ''}`;
+  }
+  function fzmaFillTeams(selected){
+    const s = document.getElementById('fzma-team');
+    const teams = (fzmData ? fzmData.teams : []).slice().sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+    s.innerHTML = (teams.length ? '<option value="">— vyber soupeře —</option>' : '<option value="">— nejdřív přidej tým dole —</option>') + teams.map(t => `<option value="${escapeHtml(t.id)}"${t.id === selected ? ' selected' : ''}>${escapeHtml(t.name)}${t.tag ? ' (' + escapeHtml(t.tag) + ')' : ''}</option>`).join('');
+  }
+  async function fzmaLineup(checked){
+    let r = (typeof rosterCache !== 'undefined' && rosterCache) || null;
+    if(!r && typeof fetchRosterPublic === 'function'){ try{ r = await fetchRosterPublic(); if(typeof rosterCache !== 'undefined' && !rosterCache) rosterCache = r; }catch(_){} }
+    const names = typeof pbRosterNames === 'function' ? pbRosterNames() : [];
+    const set = new Set(checked || []);
+    (checked || []).forEach(n => { if(!names.includes(n)) names.push(n); });
+    document.getElementById('fzmaLineup').innerHTML = names.length ? names.map(n => `<label><input type="checkbox" value="${escapeHtml(n)}"${set.has(n) ? ' checked' : ''}> ${escapeHtml(n)}</label>`).join('') : '<span class="admin-hint" style="margin:0;">Roster je prázdný.</span>';
+  }
+  function fzmaResetForm(){
+    fzmaEditId = null;
+    document.getElementById('fzmaForm').reset();
+    document.getElementById('fzmaFormTitle').textContent = 'Přidat zápas / scrim';
+    document.getElementById('fzmaSubmit').textContent = 'Uložit zápas';
+    document.getElementById('fzmaCancel').style.display = 'none';
+    const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    document.getElementById('fzma-date').value = d.toISOString().slice(0, 16);
+    document.getElementById('fzma-format').value = 'BO3';
+    fzmaFillTeams('');
+    fzmaMapRows([]);
+    fzmaLineup([]);
+  }
+  function fzmaEdit(id){
+    const m = fzmData && fzmData.matches.find(x => x.id === id);
+    if(!m) return;
+    fzmaEditId = id;
+    document.getElementById('fzma-kind').value = m.kind || 'match';
+    const d = new Date(m.date); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    document.getElementById('fzma-date').value = isNaN(d) ? '' : d.toISOString().slice(0, 16);
+    fzmaFillTeams(m.teamId);
+    document.getElementById('fzma-format').value = m.format || 'BO1';
+    document.getElementById('fzma-roster').value = m.roster || 'main';
+    document.getElementById('fzma-event').value = m.event || '';
+    document.getElementById('fzma-vod').value = m.vod || '';
+    document.getElementById('fzma-link').value = m.link || '';
+    document.getElementById('fzma-note').value = m.note || '';
+    fzmaMapRows((m.maps || []).map(mp => ({ map: mp.map, pick: mp.pick || '', us: mp.us ?? '', them: mp.them ?? '' })));
+    fzmaLineup(m.lineup || []);
+    document.getElementById('fzmaFormTitle').textContent = 'Upravit: Freezers vs ' + fzmTeam(m.teamId).name;
+    document.getElementById('fzmaSubmit').textContent = 'Uložit změny';
+    document.getElementById('fzmaCancel').style.display = '';
+    const main = document.getElementById('epMain'); if(main) main.scrollTop = 0;
+  }
+  function fzmaRenderLists(){
+    const teams = fzmData.teams.slice().sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+    const used = id => fzmData.matches.filter(m => m.teamId === id).length;
+    document.getElementById('fzmaTeams').innerHTML = teams.length ? teams.map(t => `<div class="fzma-team">${fzmLogo(t)}<b>${escapeHtml(t.name)}${t.tag ? ' <span class="admin-hint" style="margin:0;">' + escapeHtml(t.tag) + '</span>' : ''}</b><span class="admin-hint" style="margin:0;">${used(t.id)} zápasů</span><button type="button" class="admin-edit-btn fzmat-edit" data-id="${escapeHtml(t.id)}">Upravit</button><button type="button" class="admin-delete-btn fzmat-del" data-id="${escapeHtml(t.id)}">Smazat</button></div>`).join('') : '<div class="admin-empty">Zatím žádné týmy.</div>';
+    const list = fzmData.matches.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    document.getElementById('fzmaList').innerHTML = list.length ? list.map(m => { const r = fzmResult(m), k = FZM_KINDS[m.kind] || FZM_KINDS.match; return `<div class="admin-news-row"><div class="admin-news-row-text"><strong><span style="color:${k.c}">${k.label}</span> · Freezers ${r.us}:${r.them} ${escapeHtml(fzmTeam(m.teamId).name)} <span style="color:${r.res === 'W' ? '#22c55e' : r.res === 'L' ? '#ef4444' : 'inherit'}">${FZM_RES_LABEL[r.res]}</span></strong><span>${fzmDate(m.date, true)} · ${escapeHtml(m.format)} · ${m.roster === 'academy' ? 'Academy' : 'Main'}${m.event ? ' · ' + escapeHtml(m.event) : ''}</span></div><button type="button" class="admin-edit-btn fzma-edit" data-id="${escapeHtml(m.id)}">Upravit</button><button type="button" class="admin-delete-btn fzma-del" data-id="${escapeHtml(m.id)}">Smazat</button></div>`; }).join('') : '<div class="admin-empty">Zatím žádné zápasy.</div>';
+    document.querySelectorAll('.fzma-edit').forEach(b => b.addEventListener('click', () => fzmaEdit(b.dataset.id)));
+    document.querySelectorAll('.fzma-del').forEach(b => b.addEventListener('click', async () => {
+      if(!confirm('Smazat tento zápas?')) return;
+      b.disabled = true;
+      try{ await fzmaSave(d => { d.matches = d.matches.filter(x => x.id !== b.dataset.id); }, 'Smazání zápasu'); if(fzmaEditId === b.dataset.id) fzmaResetForm(); }
+      catch(e){ alert(e.message); b.disabled = false; }
+    }));
+    document.querySelectorAll('.fzmat-edit').forEach(b => b.addEventListener('click', () => {
+      const t = fzmData.teams.find(x => x.id === b.dataset.id); if(!t) return;
+      fzmaTeamEditId = t.id; fzmaTeamLogo = undefined;
+      document.getElementById('fzmat-name').value = t.name; document.getElementById('fzmat-tag').value = t.tag || ''; document.getElementById('fzmat-country').value = t.country || '';
+      document.getElementById('fzmatSubmit').textContent = 'Uložit tým'; document.getElementById('fzmatCancel').style.display = '';
+      document.getElementById('fzmat-name').focus();
+    }));
+    document.querySelectorAll('.fzmat-del').forEach(b => b.addEventListener('click', async () => {
+      const n = used(b.dataset.id);
+      if(!confirm(n ? `Tým má ${n} zápasů — u nich se ukáže „Neznámý tým“. Opravdu smazat?` : 'Smazat tým?')) return;
+      b.disabled = true;
+      try{ await fzmaSave(d => { d.teams = d.teams.filter(x => x.id !== b.dataset.id); }, 'Smazání týmu'); }
+      catch(e){ alert(e.message); b.disabled = false; }
+    }));
+  }
+  async function fzmaSave(mutate, message){
+    const saved = await ghUpdate(MATCHES_FILE, d => { d = fzmNorm(d); mutate(d); return d; }, message, { teams: [], matches: [] });
+    fzmData = fzmNorm(saved);
+    fzmaRenderLists(); fzmaFillTeams(document.getElementById('fzma-team').value); renderMatchesSection();
+    return fzmData;
+  }
+  let fzmaInited = false;
+  async function renderAdminMatches(){
+    if(!fzmaInited){
+      fzmaInited = true;
+      document.getElementById('fzma-format').addEventListener('change', () => fzmaMapRows());
+      document.getElementById('fzma-team').addEventListener('change', fzmaPreview);
+      document.getElementById('fzmaCancel').addEventListener('click', fzmaResetForm);
+      document.getElementById('fzmatCancel').addEventListener('click', () => { fzmaTeamEditId = null; document.getElementById('fzmaTeamForm').reset(); document.getElementById('fzmatSubmit').textContent = 'Přidat tým'; document.getElementById('fzmatCancel').style.display = 'none'; });
+      document.getElementById('fzmat-logo').addEventListener('change', async e => {
+        const f = e.target.files[0]; if(!f) return;
+        try{ fzmaTeamLogo = await fzmaCompressLogo(f); document.getElementById('fzmatMsg').textContent = '✔ logo připraveno'; }
+        catch(err){ document.getElementById('fzmatMsg').textContent = '⚠ ' + err.message; }
+      });
+      document.getElementById('fzmaTeamForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = document.getElementById('fzmatSubmit'), msg = document.getElementById('fzmatMsg');
+        const name = document.getElementById('fzmat-name').value.trim(); if(!name) return;
+        const tag = document.getElementById('fzmat-tag').value.trim().toUpperCase(), country = document.getElementById('fzmat-country').value.trim().toUpperCase();
+        btn.disabled = true; msg.textContent = 'Ukládám…';
+        const editId = fzmaTeamEditId, logo = fzmaTeamLogo, newId = 'tm_' + Date.now().toString(36);
+        try{
+          await fzmaSave(d => {
+            if(editId){ const t = d.teams.find(x => x.id === editId); if(t){ t.name = name; t.tag = tag; t.country = country; if(logo !== undefined) t.logo = logo; } }
+            else d.teams.push({ id: newId, name, tag, country, logo: logo || '' });
+          }, (editId ? 'Úprava týmu: ' : 'Nový tým: ') + name);
+          if(!editId) fzmaFillTeams(newId);
+          fzmaTeamEditId = null; fzmaTeamLogo = undefined; document.getElementById('fzmaTeamForm').reset();
+          document.getElementById('fzmatSubmit').textContent = 'Přidat tým'; document.getElementById('fzmatCancel').style.display = 'none';
+          msg.textContent = '✔ Uloženo'; fzmaPreview();
+        }catch(err){ msg.textContent = '⚠ ' + err.message; }
+        btn.disabled = false;
+      });
+      document.getElementById('fzmaForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = document.getElementById('fzmaSubmit'), msg = document.getElementById('fzmaMsg');
+        const teamId = document.getElementById('fzma-team').value;
+        if(!teamId){ msg.textContent = 'Vyber soupeře (nebo ho nejdřív přidej dole).'; return; }
+        const dt = document.getElementById('fzma-date').value;
+        const rec = {
+          kind: document.getElementById('fzma-kind').value,
+          date: dt ? new Date(dt).toISOString() : new Date().toISOString(),
+          teamId, format: document.getElementById('fzma-format').value,
+          roster: document.getElementById('fzma-roster').value,
+          event: document.getElementById('fzma-event').value.trim(),
+          maps: fzmaReadMaps().filter(mp => mp.map || mp.us !== null || mp.them !== null),
+          lineup: Array.from(document.querySelectorAll('#fzmaLineup input:checked')).map(c => c.value),
+          vod: document.getElementById('fzma-vod').value.trim(),
+          link: document.getElementById('fzma-link').value.trim(),
+          note: document.getElementById('fzma-note').value.trim()
+        };
+        if(rec.maps.some(mp => !mp.map && (mp.us !== null || mp.them !== null))){ msg.textContent = 'U skóre vyber i mapu.'; return; }
+        btn.disabled = true; msg.textContent = 'Ukládám…';
+        const editId = fzmaEditId;
+        try{
+          await fzmaSave(d => {
+            if(editId){ const i = d.matches.findIndex(x => x.id === editId); if(i >= 0) d.matches[i] = Object.assign({}, d.matches[i], rec, { updatedAt: new Date().toISOString() }); }
+            else d.matches.push(Object.assign({ id: 'mt_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), createdAt: new Date().toISOString() }, rec));
+          }, (editId ? 'Úprava zápasu vs ' : 'Zápas vs ') + fzmTeam(teamId).name);
+          msg.textContent = '✔ Uloženo';
+          fzmaResetForm();
+        }catch(err){ msg.textContent = '⚠ ' + err.message; }
+        btn.disabled = false;
+      });
+    }
+    document.getElementById('fzmaList').innerHTML = '<div class="admin-empty">Načítám…</div>';
+    try{ fzmData = fzmNorm(await ghFetchPublic(MATCHES_FILE)); }catch(_){ fzmData = fzmData || fzmNorm(null); }
+    fzmaResetForm();
+    fzmaRenderLists();
+    if(fzmaPendingEdit){ const id = fzmaPendingEdit; fzmaPendingEdit = null; fzmaEdit(id); }
+  }
 
   /* ============ PLAYBOOKY (sekce jen pro přihlášené členy) ============ */
 
@@ -8610,11 +9255,11 @@
      Na GitHub Pages funguje díky souboru 404.html (kopie index.html). Lokálně (file://) jede přes #/cesta. */
   (function(){
     const FILE = location.protocol === 'file:';
-    const SECTION_PATH = { top:'/', hub:'/', about:'/o-nas', roster:'/roster', staff:'/staff', influenceri:'/influenceri', kalendar:'/clenska-sekce/rozvrh',
+    const SECTION_PATH = { top:'/', hub:'/', about:'/o-nas', roster:'/roster', staff:'/staff', influenceri:'/influenceri', kalendar:'/clenska-sekce/rozvrh', zapasy:'/zapasy',
       playbooky:'/clenska-sekce/playbook', skiny:'/skiny', partneri:'/partneri', faq:'/faq', nabor:'/nabor', kontakt:'/kontakt' };
     const PATH_SECTION = {}; Object.keys(SECTION_PATH).forEach(k => { if(k !== 'hub' && k !== 'top') PATH_SECTION[SECTION_PATH[k]] = k; });
-    const TITLES = { about:'O nás', roster:'Roster', staff:'Staff', influenceri:'Influenceři', kalendar:'Rozvrh', playbooky:'Playbook', skiny:'Skiny', partneri:'Partneři', faq:'FAQ', nabor:'Nábor', kontakt:'Kontakt' };
-    const ADMIN_TABS = { home:'', calendar:'rozvrh', excuses:'omluvenky', attendance:'dochazka', news:'novinky', roster:'roster', accounts:'ucty', playbooky:'playbooky', scrim:'scrim', partners:'partneri', influenceri:'influenceri' };
+    const TITLES = { about:'O nás', roster:'Roster', staff:'Staff', influenceri:'Influenceři', kalendar:'Rozvrh', zapasy:'Zápasy', playbooky:'Playbook', skiny:'Skiny', partneri:'Partneři', faq:'FAQ', nabor:'Nábor', kontakt:'Kontakt' };
+    const ADMIN_TABS = { home:'', calendar:'rozvrh', excuses:'omluvenky', attendance:'dochazka', news:'novinky', roster:'roster', accounts:'ucty', playbooky:'playbooky', zapasy:'zapasy', scrim:'scrim', partners:'partneri', influenceri:'influenceri' };
     const ADMIN_BY_SLUG = {}; Object.keys(ADMIN_TABS).forEach(k => ADMIN_BY_SLUG[ADMIN_TABS[k]] = k);
     window.FZ_SECTION_PATH = SECTION_PATH;
 
@@ -8657,6 +9302,7 @@
     window.fzOnOverlayClose = function(id){
       const p = getPath();
       if(id === 'adminPanelOverlay' && p.indexOf('/admin') === 0) setPath(adminPrev || '/', true);
+      if(id === 'fzmDetailOverlay' && p.indexOf('/zapasy/') === 0){ setPath('/zapasy', true); document.title = 'Zápasy — Freezers Esports'; }
       if(id === 'playbookDetailOverlay'){ const seg = p.split('/').filter(Boolean); if(seg[0] === 'clenska-sekce' && seg[1] === 'playbook' && seg[3]) setPath('/clenska-sekce/playbook/' + seg[2], true); }
     };
     // playbook podle adresy
@@ -8696,7 +9342,15 @@
       const pbOv = document.getElementById('playbookDetailOverlay');
       if(!(seg[0] === 'clenska-sekce' && seg[1] === 'playbook' && seg[3]) && pbOv.classList.contains('show')){ pbOv.classList.remove('show'); destroyPbPlayer(); }
 
+      if(seg[0] !== 'zapasy' && window.fzMatchesRoute) window.fzMatchesRoute(null);
       if(seg[0] === 'novinky'){ if(window.fzNewsRoute) await window.fzNewsRoute(seg[1] ? seg[1] : 'list'); return; }
+      if(seg[0] === 'zapasy'){
+        document.title = TITLES.zapasy + ' — Freezers Esports';
+        if(window.fzMatchesRoute) window.fzMatchesRoute(seg[1] || null);
+        if(initial){ setTimeout(() => scrollToSection('zapasy', true), 350); setTimeout(() => scrollToSection('zapasy', true), 1300); }
+        else if(!seg[1]) scrollToSection('zapasy');
+        return;
+      }
       if(seg[0] === 'admin'){
         const tab = ADMIN_BY_SLUG[seg[1] || ''] || 'home';
         const go = () => {
