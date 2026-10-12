@@ -1,0 +1,86 @@
+@font-face{font-family:Chakra;src:url(fonts/Chakra-700.ttf);font-weight:700}
+@font-face{font-family:ChakraX;src:url(fonts/Chakra-ext-700.ttf);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/Inter-400.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/Inter-600.ttf);font-weight:600}
+@font-face{font-family:InterX;src:url(fonts/Inter-ext-400.ttf);font-weight:400}
+@font-face{font-family:InterX;src:url(fonts/Inter-ext-600.ttf);font-weight:600}
+:root{--bg:#0b0d12;--panel:#12151d;--panel2:#181c26;--line:rgba(255,255,255,.08);--ink:#e8edf4;--mut:#8b95a5;--tq:#2fe0c9;--vio:#9a5cff;--pink:#ff5fb0;--t:#f59e0b;--ct:#3b9cff}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font:400 13px Inter,InterX,system-ui,sans-serif;overflow:hidden;user-select:none}
+button{font:inherit;color:inherit}
+#app{display:grid;grid-template-columns:58px 1fr 236px;grid-template-rows:52px 1fr 50px;height:100vh}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:0 12px;background:var(--panel);border-bottom:1px solid var(--line);position:relative}
+.top::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--tq),var(--vio),var(--pink));opacity:.8}
+.brand{display:flex;align-items:center;gap:9px;min-width:170px}
+.brand img{width:26px;height:26px}
+.brand b{font:700 15px Chakra,ChakraX;letter-spacing:.03em}
+.maps{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.maps button{border:0;background:transparent;color:var(--mut);font:700 13px Chakra,ChakraX;padding:7px 11px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.maps button:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.maps button.on{color:#071513;background:var(--tq)}
+.tops{display:flex;align-items:center;gap:6px}
+.sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.ib{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:7px 11px;cursor:pointer;font-weight:600;font-size:12.5px;transition:border-color .15s,background .15s,transform .1s;white-space:nowrap}
+.ib:hover{border-color:rgba(255,255,255,.22)}
+.ib:active{transform:scale(.96)}
+.ib.sm{padding:4px 9px;min-width:30px}
+.ib.tg.on{background:var(--vio);border-color:var(--vio);color:#fff}
+.ib:focus-visible,.tool:focus-visible,.maps button:focus-visible{outline:2px solid var(--tq);outline-offset:1px}
+.tools{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0;overflow-y:auto}
+.tool{width:40px;height:40px;border-radius:10px;border:1px solid transparent;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--mut);position:relative;transition:background .15s,color .15s}
+.tool svg{width:20px;height:20px}
+.tool:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.tool.on{background:rgba(47,224,201,.14);border-color:rgba(47,224,201,.45);color:var(--tq)}
+.tool .k{position:absolute;right:3px;bottom:1px;font-size:9px;color:var(--mut);font-weight:600}
+.tools hr{width:28px;border:0;border-top:1px solid var(--line);margin:4px 0}
+.stage{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#141824,#0b0d12 70%)}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.stage.pan #cv{cursor:grab}.stage.panning #cv{cursor:grabbing}
+.drop{position:absolute;inset:12px;border:2px dashed var(--tq);border-radius:16px;background:rgba(11,13,18,.82);display:none;place-items:center;text-align:center;pointer-events:none}
+.drop b{display:block;font:700 22px Chakra,ChakraX;color:var(--tq)}.drop span{color:var(--mut)}
+.stage.dragging .drop{display:grid}
+.hint{position:absolute;left:14px;top:12px;font-size:12px;color:var(--mut);background:rgba(11,13,18,.7);padding:5px 10px;border-radius:8px;pointer-events:none}
+.zoom{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;background:rgba(18,21,29,.9);border:1px solid var(--line);border-radius:10px;padding:5px}
+.zoom span{min-width:46px;text-align:center;font-weight:600;font-size:12px;color:var(--mut)}
+.side{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:4px 14px 14px}
+.side section{padding:12px 0;border-bottom:1px solid var(--line)}
+.side section:last-child{border-bottom:0}
+.side h3{font:700 12.5px Chakra,ChakraX;letter-spacing:.04em;color:var(--mut);margin:4px 0 8px}
+.colors{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:6px}
+.colors button{aspect-ratio:1;border-radius:50%;border:2px solid rgba(255,255,255,.12);cursor:pointer;background:var(--c);transition:transform .12s}
+.colors button:hover{transform:scale(1.1)}
+.colors button.on{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--c)}
+.widths{display:flex;gap:6px}
+.widths button{flex:1;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);cursor:pointer;display:grid;place-items:center}
+.widths button i{display:block;width:60%;border-radius:9px;background:var(--ink)}
+.widths button.on{border-color:var(--tq);background:rgba(47,224,201,.1)}
+.toks{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:6px}
+.toks button,.utils button{height:34px;border-radius:9px;border:1px solid var(--line);background:var(--panel2);cursor:pointer;display:grid;place-items:center;font:700 13px Chakra,ChakraX;transition:border-color .15s,background .15s}
+.toks button i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;color:#0b0d12;font-size:12px}
+.toks button.on,.utils button.on{border-color:var(--tq);background:rgba(47,224,201,.12)}
+.utils{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.utils button{height:auto;padding:7px 4px;display:flex;flex-direction:column;gap:3px;font:600 11px Inter,InterX}
+.utils svg{width:20px;height:20px}
+.bgrow{display:flex;gap:6px}.bgrow .ib{flex:1}
+.note{font-size:11.5px;color:var(--mut);margin-top:8px;line-height:1.45}
+.keys p{font-size:11.5px;color:var(--mut);line-height:2}
+kbd{font:600 10.5px Inter,InterX;background:var(--panel2);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 5px;color:var(--ink);margin-right:2px}
+.steps{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--panel);border-top:1px solid var(--line)}
+.stlist{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:60vw}
+.st{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel2);border-radius:9px;padding:6px 8px 6px 10px;cursor:pointer;white-space:nowrap;font-weight:600;font-size:12.5px}
+.st b{font:700 12px Chakra,ChakraX;color:var(--vio)}
+.st.on{border-color:var(--vio);background:rgba(154,92,255,.16)}
+.st .x{border:0;background:transparent;color:var(--mut);cursor:pointer;font-size:13px;padding:0 2px;border-radius:4px}
+.st .x:hover{color:#ff7b7b}
+.st input{background:transparent;border:0;border-bottom:1px solid var(--tq);color:var(--ink);font:600 12.5px Inter,InterX;width:110px;outline:0}
+.grow{flex:1}
+.toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%) translateY(20px);background:#1d2230;border:1px solid var(--line);color:var(--ink);padding:9px 16px;border-radius:10px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.textbox{position:absolute;min-width:60px;background:rgba(11,13,18,.85);border:1px dashed var(--tq);color:#fff;font:700 18px Chakra,ChakraX;padding:2px 6px;outline:0;border-radius:4px;white-space:pre}
+/* mini režim */
+body.mini #app{grid-template-columns:44px 1fr;grid-template-rows:40px 1fr 42px}
+body.mini .side,body.mini .brand b,body.mini #btnNew,body.mini #btnOpen,body.mini #btnPng,body.mini .sep,body.mini .hint{display:none}
+body.mini .brand{min-width:0}
+body.mini .tool{width:34px;height:34px}
+body.mini .tool .k{display:none}
+@media (max-width:980px){#app{grid-template-columns:52px 1fr}.side{display:none}}

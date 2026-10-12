@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freezers Board</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand"><img src="img/logo.png" alt=""><b>Freezers Board</b></div>
+    <div class="maps" id="maps" role="tablist" aria-label="Mapa"></div>
+    <div class="tops">
+      <button class="ib" id="btnNew" title="Nová strategie (Ctrl+N)">Nová</button>
+      <button class="ib" id="btnOpen" title="Otevřít strategii (Ctrl+O)">Otevřít</button>
+      <button class="ib" id="btnSave" title="Uložit strategii (Ctrl+S)">Uložit</button>
+      <button class="ib" id="btnPng" title="Uložit jako obrázek (Ctrl+E)">PNG</button>
+      <span class="sep"></span>
+      <button class="ib tg" id="btnTop" title="Okno vždy navrchu – pro hraní přes hru">Navrchu</button>
+      <button class="ib tg" id="btnMini" title="Malé okno do rohu obrazovky">Mini</button>
+    </div>
+  </header>
+
+  <aside class="tools" id="tools" aria-label="Nástroje"></aside>
+
+  <main class="stage" id="stage">
+    <canvas id="cv"></canvas>
+    <div class="drop" id="drop"><div><b>Pusť obrázek radaru</b><span>nastaví se jako podklad pro tuhle mapu</span></div></div>
+    <div class="hint" id="hint"></div>
+    <div class="zoom">
+      <button class="ib sm" id="zOut" title="Oddálit">−</button>
+      <span id="zVal">100 %</span>
+      <button class="ib sm" id="zIn" title="Přiblížit">+</button>
+      <button class="ib sm" id="zFit" title="Celá mapa (0)">Celá</button>
+    </div>
+  </main>
+
+  <aside class="side" id="side">
+    <section>
+      <h3>Barva</h3>
+      <div class="colors" id="colors"></div>
+      <h3>Tloušťka</h3>
+      <div class="widths" id="widths"></div>
+    </section>
+    <section>
+      <h3>Hráči</h3>
+      <div class="toks" id="toksT"></div>
+      <div class="toks" id="toksCT"></div>
+      <h3>Granáty</h3>
+      <div class="utils" id="utils"></div>
+    </section>
+    <section>
+      <h3>Podklad mapy</h3>
+      <div class="bgrow">
+        <button class="ib" id="btnRadar">Nahrát radar</button>
+        <button class="ib" id="btnRadarDel" title="Vrátit výchozí podklad">Výchozí</button>
+      </div>
+      <p class="note" id="bgNote"></p>
+    </section>
+    <section class="keys">
+      <h3>Zkratky</h3>
+      <p><kbd>P</kbd> tužka <kbd>A</kbd> šipka <kbd>L</kbd> čára <kbd>R</kbd> obdélník <kbd>C</kbd> kruh <kbd>T</kbd> text <kbd>E</kbd> guma <kbd>V</kbd> výběr <kbd>H</kbd> posun</p>
+      <p><kbd>Ctrl+Z</kbd> zpět <kbd>Ctrl+Y</kbd> znovu <kbd>Del</kbd> smazat <kbd>Mezerník</kbd> + táhni = posun, kolečko = zoom</p>
+    </section>
+  </aside>
+
+  <footer class="steps">
+    <button class="ib sm" id="stPrev" title="Předchozí krok (←)">‹</button>
+    <div class="stlist" id="stlist"></div>
+    <button class="ib sm" id="stNext" title="Další krok (→)">›</button>
+    <button class="ib" id="stAdd" title="Nový krok – zkopíruje aktuální">+ Krok</button>
+    <span class="grow"></span>
+    <button class="ib" id="btnClear" title="Smazat vše v tomhle kroku">Vyčistit krok</button>
+  </footer>
+</div>
+<input type="file" id="fileOpen" accept=".fzboard,.json" hidden>
+<input type="file" id="fileRadar" accept="image/*" hidden>
+<div class="toast" id="toast" role="status"></div>
+<script src="js/neutralino.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
