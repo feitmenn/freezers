@@ -1,0 +1,73 @@
+{
+ "name": "Freezers Admin",
+ "short_name": "FZ Admin",
+ "description": "Admin panel Freezers Esports – omluvenky, docházka, Faceit statistiky, smlouvy.",
+ "id": "/admin",
+ "start_url": "/admin?app=1",
+ "scope": "/",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#0d1017",
+ "theme_color": "#0d1017",
+ "lang": "cs",
+ "icons": [
+  {
+   "src": "/app/admin-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/app/admin-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/app/admin-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Faceit statistiky",
+   "url": "/admin/faceit",
+   "icons": [
+    {
+     "src": "/app/admin-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Omluvenky",
+   "url": "/admin/omluvenky",
+   "icons": [
+    {
+     "src": "/app/admin-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Docházka",
+   "url": "/admin/dochazka",
+   "icons": [
+    {
+     "src": "/app/admin-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Smlouvy",
+   "url": "/admin/smlouvy",
+   "icons": [
+    {
+     "src": "/app/admin-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  }
+ ]
+}
