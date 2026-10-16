@@ -1,0 +1,160 @@
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Freezers Esports – Podmíněné vyloučení</title><style>
+@font-face{font-family:Chakra;src:url(Chakra-700.ttf);font-weight:700}
+@font-face{font-family:ChakraX;src:url(Chakra-ext-700.ttf);font-weight:700}
+@font-face{font-family:Inter;src:url(Inter-400.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(Inter-600.ttf);font-weight:600}
+@font-face{font-family:InterX;src:url(Inter-ext-400.ttf);font-weight:400}
+@font-face{font-family:InterX;src:url(Inter-ext-600.ttf);font-weight:600}
+@page{size:A4;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#111827;--mut:#5b6474;--line:#dfe3ea;--fill:#f4f6f9;--teal:#0e9f8c;--tl:#2fe0c9;--vio:#7c3aed;--pink:#e23c8f;--night:#0b0d12}
+body{font-family:Inter,InterX,sans-serif;color:var(--ink);font-size:9.6pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;position:relative;overflow:hidden;page-break-after:always;padding:0 16mm 0 16mm;background:#fff}
+.page:last-child{page-break-after:auto}
+.edge{position:absolute;left:0;top:0;bottom:0;width:4mm;background:linear-gradient(180deg,var(--tl),var(--vio) 55%,var(--pink))}
+.band{margin:0 -16mm 7mm;padding:11mm 16mm 9mm 20mm;background:var(--night);color:#fff;position:relative;overflow:hidden}
+.band::before{content:'';position:absolute;right:-30mm;top:-40mm;width:120mm;height:120mm;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.45),transparent 65%)}
+.band::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1.2mm;background:linear-gradient(90deg,var(--tl),var(--vio),var(--pink))}
+.band .row{display:flex;align-items:center;gap:7mm;position:relative}
+.band img{width:19mm;height:19mm}
+.band .org{font:700 9pt Chakra,ChakraX;letter-spacing:.18em;color:var(--tl)}
+.band h1{font:700 27pt/1.02 Chakra,ChakraX;letter-spacing:.01em;margin-top:1.5mm}
+.band .sub{color:#aeb6c4;font-size:9.5pt;margin-top:1.5mm}
+.band .meta{margin-left:auto;text-align:right;font-size:8.3pt;color:#aeb6c4;position:relative}
+.band .f{background:#1a1e27;border-bottom-color:#3a4252}
+.mini{margin:0 -16mm 7mm;padding:6mm 16mm 5mm 20mm;background:var(--night);color:#fff;display:flex;align-items:center;gap:5mm;position:relative}
+.mini::after{content:'';position:absolute;left:0;right:0;bottom:0;height:.8mm;background:linear-gradient(90deg,var(--tl),var(--vio),var(--pink))}
+.mini img{width:9mm;height:9mm}.mini b{font:700 11pt Chakra,ChakraX;letter-spacing:.02em}.mini span{margin-left:auto;color:#aeb6c4;font-size:8.3pt}
+h2{font:700 12.5pt Chakra,ChakraX;display:flex;align-items:center;gap:3mm;margin:4.6mm 0 2.6mm;letter-spacing:.01em}
+h2 i{font-style:normal;width:7.5mm;height:7.5mm;border-radius:2mm;display:grid;place-items:center;background:var(--night);color:var(--tl);font-size:10pt}
+h2 small{font:400 8.5pt Inter,InterX;color:var(--mut);margin-left:auto}
+.g{display:grid;gap:2.6mm 4mm;margin-bottom:2.6mm}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}.g21{grid-template-columns:2fr 1fr}.g12{grid-template-columns:1fr 2fr}.g211{grid-template-columns:2fr 1fr 1fr}
+label.l{display:block;font-size:7.6pt;font-weight:600;color:var(--mut);margin-bottom:1mm;letter-spacing:.01em}
+.f{display:block;height:8.2mm;background:var(--fill);border:0;border-bottom:.45mm solid #c9cfd9;border-radius:1.4mm 1.4mm 0 0}
+.f.ml{height:auto}
+.cbs{display:flex;flex-wrap:wrap;gap:2mm 4.5mm;padding-top:.6mm}
+.cbi{display:inline-flex;align-items:center;gap:1.8mm;font-size:9pt}
+.cb{width:4.4mm;height:4.4mm;border:.45mm solid #9aa3b2;border-radius:1mm;background:#fff;flex:none}
+.box{border:1px solid var(--line);border-radius:3mm;padding:4mm 4.5mm;margin-bottom:3mm;background:#fff}
+.box.tint{background:linear-gradient(135deg,rgba(47,224,201,.08),rgba(124,58,237,.06));border-color:rgba(124,58,237,.18)}
+.box.dark{background:var(--night);color:#e7ebf1;border:0}
+.box.dark label.l{color:#9aa4b4}.box.dark .f{background:#1a1e27;border-bottom-color:#3a4252}
+.staff-tag{display:inline-block;font:700 8pt Chakra,ChakraX;letter-spacing:.14em;color:var(--night);background:var(--tl);padding:1mm 2.6mm;border-radius:1mm;margin-bottom:3mm}
+.foot{position:absolute;left:20mm;right:16mm;bottom:8mm;display:flex;justify-content:space-between;font-size:7.6pt;color:#8a93a3;border-top:1px solid var(--line);padding-top:2.4mm}
+.foot b{color:var(--ink);font-weight:600}
+p{margin:0 0 2mm}
+.art{margin-bottom:3.2mm;break-inside:avoid}
+.art h3{font:700 10.6pt Chakra,ChakraX;margin-bottom:1.4mm;display:flex;gap:2.5mm;align-items:baseline}
+.art h3 span{color:var(--vio);min-width:8mm}
+.art ol{margin:0 0 0 13mm;padding:0}.art ol li{margin:0 0 1.2mm;padding-left:1mm}
+.art p{margin-left:10.5mm}
+.lead{font-size:9.6pt;color:#323a48;margin-bottom:3mm}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-bottom:3mm}
+.party h4{font:700 9pt Chakra,ChakraX;letter-spacing:.12em;color:var(--teal);margin-bottom:2.2mm}
+.who{font:700 13pt Chakra,ChakraX;margin-bottom:1mm}
+.small{font-size:8.2pt;color:var(--mut)}
+.kv{display:grid;grid-template-columns:24mm 1fr;gap:1.2mm 3mm;font-size:9pt}.kv dt{color:var(--mut)}.kv dd{font-weight:600}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:3mm;overflow:hidden;margin-bottom:4mm}
+.summary>div{padding:3mm 3.5mm;border-right:1px solid var(--line)}.summary>div:last-child{border-right:0}
+.summary .k{font-size:7.4pt;color:var(--mut);font-weight:600;margin-bottom:1mm}
+.summary .v{font:700 12pt Chakra,ChakraX}
+.summary .f{height:7mm}
+table.ext{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:3mm;overflow:hidden;font-size:8.6pt}
+table.ext th{background:var(--night);color:#cfd6e2;font-weight:600;text-align:left;padding:2.2mm 3mm;font-size:8pt}
+table.ext td{padding:1.2mm 3mm;border-top:1px solid var(--line);height:9.5mm;vertical-align:middle}
+table.ext{table-layout:fixed}table.ext th:nth-child(1){width:12mm}table.ext th:nth-child(2),table.ext th:nth-child(3){width:36mm}
+table.ext td.n{font:700 11pt Chakra,ChakraX;color:var(--vio);width:12mm}
+table.ext .f{height:7.5mm}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:3mm 6mm}
+.sg{border:1px solid var(--line);border-radius:3mm;padding:4mm 4.5mm 3.5mm}
+.sg h4{font:700 8.8pt Chakra,ChakraX;letter-spacing:.12em;color:var(--teal);margin-bottom:2mm}
+.sg .nm{font:700 12pt Chakra,ChakraX}.sg .rl{font-size:8.4pt;color:var(--mut);margin-bottom:6mm}
+.sg{position:relative}.sg.org .rl{margin-bottom:14mm}.sgimg{position:absolute;left:5mm;bottom:5.4mm;height:14.5mm;max-width:58mm;object-fit:contain;object-position:left bottom}
+.sg .line{border-top:.45mm solid var(--ink);padding-top:1.4mm;font-size:7.8pt;color:var(--mut);display:flex;justify-content:space-between}
+.rules{columns:2;column-gap:7mm}
+.rule{break-inside:avoid;margin-bottom:3.6mm}
+.rule h3{font:700 10.4pt Chakra,ChakraX;margin-bottom:1.4mm;display:flex;align-items:center;gap:2.4mm}
+.rule h3 span{font-size:8.5pt;color:#fff;background:var(--vio);border-radius:1mm;padding:.3mm 1.8mm}
+.rule ul{margin:0 0 0 4.2mm;padding:0}.rule li{margin-bottom:1mm;font-size:9pt}
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:2.4mm;margin:2mm 0 3mm}
+.step{border-radius:2.4mm;padding:3mm;color:#fff;min-height:24mm}
+.step b{display:block;font:700 10.5pt Chakra,ChakraX;margin-bottom:1mm}.step span{font-size:8.2pt;opacity:.92;line-height:1.35;display:block}
+.s1{background:#0f766e}.s2{background:#b45309}.s3{background:#b91c1c}.s4{background:#111827}
+.hl{background:linear-gradient(transparent 58%,rgba(47,224,201,.35) 58%);font-weight:600}
+.note{font-size:8.2pt;color:var(--mut)}
+
+.q{margin-bottom:1.6mm;break-inside:avoid}
+.qt{display:flex;gap:2.5mm;font-size:9.4pt;font-weight:600;margin-bottom:1.1mm}
+.qt span{color:var(--vio);font:700 9pt Chakra,ChakraX;min-width:7mm}
+.blk h2{margin-top:3.2mm;margin-bottom:2mm}
+table.score{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:3mm;overflow:hidden;margin-bottom:3mm}
+table.score td{padding:1.5mm 4mm;border-top:1px solid var(--line);font-size:9.4pt;font-weight:600}
+table.score tr:first-child td{border-top:0}
+table.score td:first-child{width:62mm}
+table.score .cbs{gap:2mm 6mm}
+.chip{display:inline-block;font-size:7.6pt;font-weight:600;color:var(--vio);border:1px solid rgba(124,58,237,.35);border-radius:10mm;padding:.2mm 2.2mm;margin-left:1.5mm;vertical-align:1px}
+
+.cdown{display:grid;grid-template-columns:1fr auto;gap:1.5mm 5mm;align-items:center;background:linear-gradient(135deg,#0f1420,#1b1430);color:#fff;border-radius:2.4mm;padding:2.2mm 5mm;margin:0 0 2.5mm}
+.cd-t b{display:block;font:700 10.5pt Chakra,ChakraX}.cd-t span{font-size:8.4pt;color:#aeb6c4}
+.cd-v{display:flex;gap:5mm}.cd-v div{text-align:center}.cd-v b{display:block;font:700 15pt Chakra,ChakraX;color:#2fe0c9;line-height:1}.cd-v span{font-size:7.6pt;color:#aeb6c4}
+.cd-bar{grid-column:1/-1;height:1.4mm;background:rgba(255,255,255,.12);border-radius:2mm;overflow:hidden}.cd-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2fe0c9,#9a5cff,#ff5fb0)}
+.fv{padding:1.6mm 2.4mm;font:600 9.6pt Inter,InterX;color:#111827;line-height:1.45;height:auto!important;min-height:7mm;overflow-wrap:anywhere;white-space:pre-wrap}
+.band .fv,.dark .fv{color:#fff}
+[data-f="c_steamid"].fv,[data-f="c_email"].fv,[data-f="steamid"].fv{font-size:8.2pt;letter-spacing:-.01em}
+.cb.on{background:#0e9f8c;border-color:#0e9f8c}
+#bar{position:fixed;top:0;left:0;right:0;z-index:9;display:flex;gap:10px;align-items:center;justify-content:center;padding:10px;background:#0b0d12;color:#fff;font:600 13px Inter,InterX,sans-serif}
+#bar button{border:0;border-radius:8px;padding:9px 16px;font:700 13px Inter,InterX,sans-serif;cursor:pointer;background:#2fe0c9;color:#071513}
+@media screen{body{background:#2a2f3a;padding:60px 0 30px}.page{margin:0 auto 18px;box-shadow:0 10px 40px rgba(0,0,0,.4)}}
+@media print{#bar{display:none}}
+</style></head><body><div id="bar"><span>Podmíněné vyloučení je vyplněné.</span><button onclick="print()">Uložit jako PDF / tisk</button></div><section class="page"><div class="edge"></div><div class="band"><div class="row"><img src="logo.png" alt=""><div><div class="org">FREEZERS ESPORTS</div><h1 style="font-size:25pt;white-space:nowrap">Podmíněné vyloučení</h1><div class="sub">Rozhodnutí vedení · dočasné vyřazení z týmu na 7 dní</div></div>
+      <div class="meta">Číslo rozhodnutí<div style="width:44mm;margin-top:1.5mm"><div><span class="f" data-f="cislo" data-t="tx" data-tip="Číslo rozhodnutí" style="height:7.2mm"></span></div></div></div></div></div>
+    <div class="box tint" style="padding:4mm 5mm;margin-bottom:3mm"><p style="margin:0;font-size:10.2pt;line-height:1.5">Vedení <b>Freezers Esports</b> rozhodlo o <span class="hl">podmíněném vyloučení</span> níže uvedeného člena na dobu <b>7 dní</b>. Rozhodnutí platí dnem vydání a člen ho nepodepisuje.</p></div>
+    <h2><i>1</i>Člen</h2>
+    <div class="g g211"><div><label class="l">Jméno a příjmení</label><span class="f" data-f="jmeno" data-t="tx" data-tip="Jméno a příjmení"></span></div><div><label class="l">Přezdívka</label><span class="f" data-f="nick" data-t="tx" data-tip="Přezdívka"></span></div><div><label class="l">Soupiska</label><span class="f" data-f="soupiska" data-t="tx" data-tip="Soupiska"></span></div></div>
+    <div class="g g2"><div><label class="l">Discord</label><span class="f" data-f="discord" data-t="tx" data-tip="Discord"></span></div><div><label class="l">SteamID64</label><span class="f" data-f="steamid" data-t="tx" data-tip="SteamID64"></span></div></div>
+    <h2><i>2</i>Doba vyloučení<small>7 dní</small></h2>
+    <div class="summary" style="grid-template-columns:1fr 1fr 1fr">
+      <div><div class="k">Od</div><div><span class="f" data-f="od" data-t="tx" data-tip="Vyloučení od" style="height:7mm"></span></div></div>
+      <div><div class="k">Do (včetně)</div><div><span class="f" data-f="do" data-t="tx" data-tip="Vyloučení do" style="height:7mm"></span></div></div>
+      <div><div class="k">Délka</div><div class="v">7 dní</div></div>
+    </div>
+    <h2><i>3</i>Důvod</h2>
+    <div class="box"><div class="cbs"><span class="cbi"><span class="cb" data-f="d_chovani" data-t="cb" data-tip="Chování / toxicita"></span>Chování / toxicita</span><span class="cbi"><span class="cb" data-f="d_dochazka" data-t="cb" data-tip="Neomluvená absence"></span>Neomluvená absence</span><span class="cbi"><span class="cb" data-f="d_pravidla" data-t="cb" data-tip="Porušení pravidel týmu"></span>Porušení pravidel týmu</span><span class="cbi"><span class="cb" data-f="d_komunikace" data-t="cb" data-tip="Komunikace s vedením"></span>Komunikace s vedením</span><span class="cbi"><span class="cb" data-f="d_jine" data-t="cb" data-tip="Jiné"></span>Jiné</span></div>
+      <div style="margin-top:3mm"><div><label class="l">Popis – co se stalo a kdy</label><span class="f ml" data-f="duvod" data-t="ml" data-tip="Popis – co se stalo a kdy" style="height:22mm"></span></div></div></div>
+    <h2><i>4</i>Co vyloučení znamená</h2>
+    <div class="art"><ol style="margin-left:5mm">
+      <li>Po dobu 7 dní člen <b>nehraje zápasy, scrimy ani tréninky</b> za Freezers a nepoužívá tag Freezers.</li>
+      <li>Přístup do členské sekce webu, týmového chatu a stratbooků může být na tuto dobu omezen.</li>
+      <li>Člen <b>zůstává členem týmu</b> a po uplynutí doby se automaticky vrací, pokud splní podmínky níže.</li>
+      <li>Pokud v době vyloučení nebo do 30 dní po návratu podmínky poruší, následuje <span class="hl">vyřazení z týmu</span>, případně blacklist podle Pravidel týmu.</li>
+    </ol></div>
+    <div class="foot"><span><b>Freezers Esports</b> · Podmíněné vyloučení</span><span>freezers-esport.eu</span><span>Strana 1 / 2</span></div></section><section class="page"><div class="edge"></div><div class="mini"><img src="logo.png" alt=""><b>Podmíněné vyloučení</b><span>podmínky a schválení</span></div>
+    <h2><i>5</i>Podmínky návratu</h2>
+    <div class="box"><div><label class="l">Co musí člen splnit (např. omluva, docházka, chování)</label><span class="f ml" data-f="podminky" data-t="ml" data-tip="Co musí člen splnit (např. omluva, docházka, chování)" style="height:30mm"></span></div></div>
+    <h2><i>6</i>Schválilo vedení</h2>
+    <div class="sig">
+      <div class="sg org"><h4>VEDE A SCHVÁLIL</h4><div class="nm">Filip Maštera „FILAS“</div><div class="rl">CEO, Freezers Esports</div><img class="sgimg" src="sig-filas.png" alt=""><div class="line"><span>podepsáno elektronicky</span><span>CEO</span></div></div>
+      <div class="sg org"><h4>SCHVÁLIL</h4><div class="nm">Mirek Buryan „SeinZZZ“</div><div class="rl">Manager, Freezers Esports</div><img class="sgimg" src="sig-buryan.png" alt=""><div class="line"><span>podepsáno elektronicky</span><span>Manager</span></div></div>
+    </div>
+    <div class="g g2" style="margin-top:3mm"><div><label class="l">Vydáno dne</label><span class="f" data-f="vydano" data-t="tx" data-tip="Vydáno dne"></span></div><div class="small" style="align-self:end;padding-bottom:1mm">Člen rozhodnutí nepodepisuje – platí doručením (Discord / e-mail).</div></div>
+    <div class="foot"><span><b>Freezers Esports</b> · Podmíněné vyloučení</span><span>freezers-esport.eu</span><span>Strana 2 / 2</span></div></section><script>(function(){
+var V={};try{V=JSON.parse(localStorage.getItem('fzDocFill')||'{}')}catch(e){}
+document.title=(V._title||'Dokument')+' – '+(V.c_nick||V.nick||V.c_jmeno||V.jmeno||'Freezers');
+document.querySelectorAll('[data-f]').forEach(function(el){var k=el.dataset.f;
+ if(el.dataset.t==='cb'){if(V[k]){el.classList.add('on');el.innerHTML='<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="4"><path d="M5 12l5 5 9-10"/></svg>'}return}
+ if(V[k]){el.textContent=V[k];el.classList.add('fv')}});
+if(V.jine_text){var j=document.querySelector('[data-f="d_jine"]');if(j&&j.parentElement)j.parentElement.lastChild.textContent='Jiné: '+V.jine_text;}
+if(!document.getElementById('cdown'))return;
+function pd(s){var m=/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})/.exec(s||'');return m?new Date(+m[3],m[2]-1,+m[1]):null}
+var a=pd(V.zacatek),b=pd(V.konec);
+function tick(){if(!a||!b)return;var n=new Date();n.setHours(0,0,0,0);
+ var M=0,D=0,note;
+ if(n<a){note='smlouva začne '+V.zacatek;M=3;D=0}
+ else if(n>=b){note='smlouva skončila '+V.konec+' – prodloužit?'}
+ else{var t=new Date(n);while(true){var x=new Date(t);x.setMonth(x.getMonth()+1);if(x<=b){t=x;M++}else break}D=Math.round((b-t)/864e5);note='ke dni '+n.toLocaleDateString('cs-CZ')+' zbývá do '+V.konec}
+ document.getElementById('cdM').textContent=M;document.getElementById('cdD').textContent=D;document.getElementById('cdNote').textContent=note;
+ var p=Math.max(0,Math.min(1,(n-a)/(b-a)));document.getElementById('cdBar').style.width=(100-p*100)+'%'}
+tick();setInterval(tick,6e4);
+})();
+</script></body></html>

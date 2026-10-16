@@ -99,15 +99,15 @@ table.score .cbs{gap:2mm 6mm}
 .cd-t b{display:block;font:700 10.5pt Chakra,ChakraX}.cd-t span{font-size:8.4pt;color:#aeb6c4}
 .cd-v{display:flex;gap:5mm}.cd-v div{text-align:center}.cd-v b{display:block;font:700 15pt Chakra,ChakraX;color:#2fe0c9;line-height:1}.cd-v span{font-size:7.6pt;color:#aeb6c4}
 .cd-bar{grid-column:1/-1;height:1.4mm;background:rgba(255,255,255,.12);border-radius:2mm;overflow:hidden}.cd-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2fe0c9,#9a5cff,#ff5fb0)}
-.fv{padding:1.6mm 2.4mm;font:600 9.6pt Inter,InterX;color:#111827;line-height:1.45;height:auto!important;min-height:7mm;overflow-wrap:anywhere}
+.fv{padding:1.6mm 2.4mm;font:600 9.6pt Inter,InterX;color:#111827;line-height:1.45;height:auto!important;min-height:7mm;overflow-wrap:anywhere;white-space:pre-wrap}
 .band .fv,.dark .fv{color:#fff}
-[data-f="c_steamid"].fv,[data-f="c_email"].fv{font-size:8.2pt;letter-spacing:-.01em}
+[data-f="c_steamid"].fv,[data-f="c_email"].fv,[data-f="steamid"].fv{font-size:8.2pt;letter-spacing:-.01em}
 .cb.on{background:#0e9f8c;border-color:#0e9f8c}
 #bar{position:fixed;top:0;left:0;right:0;z-index:9;display:flex;gap:10px;align-items:center;justify-content:center;padding:10px;background:#0b0d12;color:#fff;font:600 13px Inter,InterX,sans-serif}
 #bar button{border:0;border-radius:8px;padding:9px 16px;font:700 13px Inter,InterX,sans-serif;cursor:pointer;background:#2fe0c9;color:#071513}
 @media screen{body{background:#2a2f3a;padding:60px 0 30px}.page{margin:0 auto 18px;box-shadow:0 10px 40px rgba(0,0,0,.4)}}
 @media print{#bar{display:none}}
-</style></head><body><div id="bar"><span id="barMsg">Smlouva je vyplněná.</span><button onclick="print()">Uložit jako PDF / tisk</button></div><section class="page"><div class="edge"></div><div class="band"><div class="row"><img src="logo.png" alt=""><div><div class="org">FREEZERS ESPORTS</div><h1 style="font-size:21pt;white-space:nowrap">Smlouva o členství v týmu</h1><div class="sub">Counter-Strike 2 · na dobu určitou 3 měsíců s možností prodloužení</div></div>
+</style></head><body><div id="bar"><span>Smlouva je vyplněné.</span><button onclick="print()">Uložit jako PDF / tisk</button></div><section class="page"><div class="edge"></div><div class="band"><div class="row"><img src="logo.png" alt=""><div><div class="org">FREEZERS ESPORTS</div><h1 style="font-size:21pt;white-space:nowrap">Smlouva o členství v týmu</h1><div class="sub">Counter-Strike 2 · na dobu určitou 3 měsíců s možností prodloužení</div></div>
       <div class="meta">Číslo smlouvy<div style="width:44mm;margin-top:1.5mm"><div><span class="f" data-f="cislo" data-t="tx" data-tip="Číslo smlouvy" style="height:7.2mm"></span></div></div></div></div></div>
     <div class="box tint" style="padding:4mm 5mm;margin-bottom:4mm"><p style="margin:0;font-size:10.4pt;line-height:1.5"><b>Freezers Esports</b>, vedené <b>CEO Filipem Mašterou „FILAS“</b> a <b>Managerem Mirkem Buryanem „SeinZZZ“</b>, tímto <span class="hl">přijímá níže uvedeného hráče do týmu</span> za podmínek této smlouvy.</p></div>
     <div class="parties">
@@ -154,10 +154,12 @@ table.score .cbs{gap:2mm 6mm}
     <div class="box tint" style="padding:3.5mm 4.5mm"><b>Pravidla platí pro každého člena od okamžiku, kdy se připojí do týmu.</b> Nic se nepodepisuje – vstupem do týmu je člen přijímá.</div>
     <div class="foot"><span><b>Freezers Esports</b> · Smlouva o členství v týmu</span><span>freezers-esport.eu</span><span>Strana 4 / 4</span></div></section><script>(function(){
 var V={};try{V=JSON.parse(localStorage.getItem('fzDocFill')||'{}')}catch(e){}
-document.title='Smlouva – '+(V.c_nick||V.c_jmeno||'Freezers');
+document.title=(V._title||'Dokument')+' – '+(V.c_nick||V.nick||V.c_jmeno||V.jmeno||'Freezers');
 document.querySelectorAll('[data-f]').forEach(function(el){var k=el.dataset.f;
  if(el.dataset.t==='cb'){if(V[k]){el.classList.add('on');el.innerHTML='<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="#fff" stroke-width="4"><path d="M5 12l5 5 9-10"/></svg>'}return}
  if(V[k]){el.textContent=V[k];el.classList.add('fv')}});
+if(V.jine_text){var j=document.querySelector('[data-f="d_jine"]');if(j&&j.parentElement)j.parentElement.lastChild.textContent='Jiné: '+V.jine_text;}
+if(!document.getElementById('cdown'))return;
 function pd(s){var m=/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})/.exec(s||'');return m?new Date(+m[3],m[2]-1,+m[1]):null}
 var a=pd(V.zacatek),b=pd(V.konec);
 function tick(){if(!a||!b)return;var n=new Date();n.setHours(0,0,0,0);
